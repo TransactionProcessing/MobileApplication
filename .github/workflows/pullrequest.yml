@@ -1,0 +1,30 @@
+name: Build and Test Pull Requests
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    name: "Build and Test Pull Requests"
+    env:
+        ASPNETCORE_ENVIRONMENT: "Production"
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup Nuget
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: Restore Nuget Packages
+      run: nuget restore TransactionMobile\TransactionMobile.sln
+
+    - name: Setup MSBuild
+      uses: warrenbuckley/Setup-MSBuild@v1
+      
+    - name: Build Code
+      run: msbuild dotnet TransactionMobile\TransactionMobile.sln -p:Configuration=Release
+
