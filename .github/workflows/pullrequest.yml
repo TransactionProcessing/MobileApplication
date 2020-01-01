@@ -29,4 +29,4 @@ jobs:
       run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
 
     - name: Run Unit Tests
-      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\xunit.console.exe TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
+      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
