@@ -26,5 +26,5 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
       
     - name: Build Code
-      run: msbuild dotnet TransactionMobile\TransactionMobile.sln -p:Configuration=Release
+      run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
 
