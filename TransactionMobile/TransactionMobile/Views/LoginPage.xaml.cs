@@ -93,7 +93,7 @@
         private void Email_Completed(Object sender,
                                      EventArgs e)
         {
-            //this.PasswordEntry.Focus();
+            this.PasswordEntry.Focus();
         }
 
         /// <summary>
