@@ -8,6 +8,8 @@ namespace TransactionMobile.iOS
 {
     using Common;
     using InstabugLib;
+    using Syncfusion.XForms.iOS.Border;
+    using Syncfusion.XForms.iOS.Buttons;
 
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
@@ -28,8 +30,10 @@ namespace TransactionMobile.iOS
 
             Instabug.StartWithToken("8b2be04a38a0948fa3af42dec91a4685",
                                     IBGInvocationEvent.Shake);
-            
+
             global::Xamarin.Forms.Forms.Init();
+            SfBorderRenderer.Init();
+            SfButtonRenderer.Init();
             LoadApplication(new App(this.Device));
             
             return base.FinishedLaunching(app, options);

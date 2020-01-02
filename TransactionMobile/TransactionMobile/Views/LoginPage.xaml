@@ -84,7 +84,8 @@
                             PlaceholderColor="{DynamicResource Gray-700}"
                             Style="{StaticResource EntryStyle}"
                             Text="{Binding Email}"
-                            TextColor="{DynamicResource Gray-900}" />
+                            TextColor="{DynamicResource Gray-900}"
+                            AutomationId="EmailEntry"/>
                     </border:SfBorder>
 
                     <!--  Entry to get password from user  -->
@@ -100,7 +101,8 @@
                             PlaceholderColor="{DynamicResource Gray-700}"
                             Style="{StaticResource EntryStyle}"
                             Text="{Binding Password}"
-                            TextColor="{DynamicResource Gray-900}" />
+                            TextColor="{DynamicResource Gray-900}"
+                            AutomationId="PasswordEntry"/>
                     </border:SfBorder>
 
                     <!--  Forgot password link  -->
@@ -124,7 +126,8 @@
                         Grid.Row="5"
                         Margin="0,16"
                         Style="{StaticResource SfButtonStyle}"
-                        Text="LOG IN"/>
+                        Text="LOG IN"
+                        AutomationId="LoginButton"/>
 
                 </Grid>
 

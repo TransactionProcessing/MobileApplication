@@ -40,6 +40,8 @@ namespace TransactionMobile
             App.Container = Bootstrapper.Run();
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
+
+            MainPage = new ContentPage();
         }
 
         /// <summary>
