@@ -60,3 +60,6 @@ jobs:
           
     - name: Restore Nuget Packages
       run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln
+
+    - name: Build Code
+      run: msbuild TransactionMobile/TransactionMobile.sln -p:Configuration=Release
