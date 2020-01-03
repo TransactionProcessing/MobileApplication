@@ -29,7 +29,7 @@ jobs:
       run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
 
     - name: Run Unit Tests
-      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
+      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
       
     - name: Build APK
       run: msbuild TransactionMobile\TransactionMobile.Android\TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
@@ -63,6 +63,9 @@ jobs:
 
     - name: Build Code
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+
+    - name: Run Unit Tests
+      run: /TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
 
     - name: Upload iOS App
       uses: actions/upload-artifact@v1
