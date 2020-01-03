@@ -35,7 +35,9 @@ jobs:
       run: msbuild TransactionMobile\TransactionMobile.Android\TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
 
     - name: Create AVD
-      run: C:\Program Files (x86)\Android\android-sdk\AVD Manager.exe create avd -n test -k "system-images;android-25"
+      run: |
+        cd "C:\Program Files (x86)\Android\android-sdk\tools\bin"
+        avdmanager create avd -n test -k "system-images;android-25;x86"
       
     #- name: Run Integration Tests
     #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
