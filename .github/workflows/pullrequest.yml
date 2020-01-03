@@ -24,9 +24,10 @@ jobs:
 
     - name: Setup MSBuild
       uses: warrenbuckley/Setup-MSBuild@v1
-      #msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release -t:restore
+      
     - name: Build Code
       run: |
+        msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release -t:restore
         msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
 
     - name: Run Unit Tests
