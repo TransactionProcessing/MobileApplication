@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-
+          
     - name: Setup Nuget
       uses: warrenbuckley/Setup-Nuget@v1
 
@@ -33,14 +33,14 @@ jobs:
       
     - name: Build APK
       run: msbuild TransactionMobile\TransactionMobile.Android\TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
-
-    - name: Create AVD
-      run: |
-        cd "C:\Program Files (x86)\Android\android-sdk\tools\bin"
-        .\sdkmanager "android-25"
-        .\sdkmanager --licenses
-        .\avdmanager.bat create avd -n test -k "android-25"
-      
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with: 
+        name: androidapk
+        path: TransactionMobile\TransactionMobile.Android\bin\Debug\com.transactionprocessing.transactionmobile-Signed.apk        
+    
+  
     #- name: Run Integration Tests
     #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
       
