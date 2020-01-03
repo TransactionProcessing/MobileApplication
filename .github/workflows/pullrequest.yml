@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with: 
         name: androidapk
-        path: TransactionMobile\TransactionMobile.Android\bin\Debug\com.transactionprocessing.transactionmobile-Signed.apk        
+        path: TransactionMobile\TransactionMobile.Android\bin\Release\com.transactionprocessing.transactionmobile-Signed.apk        
     
   
     #- name: Run Integration Tests
