@@ -37,9 +37,9 @@ jobs:
     - name: Create AVD
       run: |
         cd "C:\Program Files (x86)\Android\android-sdk\tools\bin"
-        .\sdkmanager "system-images;android-25;google_apis;x86"
+        .\sdkmanager "android-25"
         .\sdkmanager --licenses
-        .\avdmanager.bat create avd -n test -k "system-images;android-25;x86"
+        .\avdmanager.bat create avd -n test -k "android-25"
       
     #- name: Run Integration Tests
     #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
