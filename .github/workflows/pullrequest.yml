@@ -55,8 +55,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - uses: olegtarasov/download-nuget@v1
     - name: Setup Nuget
-      
+      uses: olegtarasov/download-nuget@v1
+          
     - name: Restore Nuget Packages
       run: mono $NUGET_EXE restore TransactionMobile\TransactionMobile.sln
