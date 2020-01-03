@@ -27,7 +27,7 @@ jobs:
       
     - name: Build Code
       run: |
-        msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release -t:restore
+        msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release -r
 
     - name: Run Unit Tests
       run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
