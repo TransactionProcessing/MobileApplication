@@ -86,10 +86,10 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: androidapk
-        path: TransactionMobile\TransactionMobile.Android\bin\Release\com.transactionprocessing.transactionmobile-Signed.ap
+        path: TransactionMobile/TransactionMobile.Android/bin/Release/com.transactionprocessing.transactionmobile-Signed.ap
 
     - name: Build Code
-      run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
+      run: msbuild TransactionMobile/TransactionMobile.sln -p:Configuration=Release
 
     - name: Run Integration Tests
       run: /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
