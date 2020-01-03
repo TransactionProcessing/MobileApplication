@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: "Build and Test Pull Requests"
+    name: "Build and Test Pull Requests - Android"
     env:
         ASPNETCORE_ENVIRONMENT: "Production"
 
@@ -30,3 +30,10 @@ jobs:
 
     - name: Run Unit Tests
       run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
+      
+    - name: Build APK
+      run: msbuild TransactionMobile\TransactionMobile.Android\TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
+      
+    - name: Run Integration Tests
+      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.IntegrationTests.dll /include:Android
+      
