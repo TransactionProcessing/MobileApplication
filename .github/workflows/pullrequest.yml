@@ -64,8 +64,8 @@ jobs:
     - name: Build Code
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
-    - name: Upload IPA
+    - name: Upload iOS App
       uses: actions/upload-artifact@v1
       with: 
-        name: iOSipa
-        path: TransactionMobile\TransactionMobile.iOS\bin\Release\TransactionMobile.iOS.ipa
+        name: iOSApp
+        path: TransactionMobile\TransactionMobile.iOS\bin\Release\TransactionMobile.iOS.app
