@@ -37,6 +37,8 @@ jobs:
     - name: Create AVD
       run: |
         cd "C:\Program Files (x86)\Android\android-sdk\tools\bin"
+        .\sdkmanager "system-images;android-25;google_apis;x86"
+        .\sdkmanager --licenses
         .\avdmanager.bat create avd -n test -k "system-images;android-25;x86"
       
     #- name: Run Integration Tests
