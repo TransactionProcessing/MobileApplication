@@ -62,4 +62,10 @@ jobs:
       run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln
 
     - name: Build Code
-      run: msbuild TransactionMobile/TransactionMobile.sln -p:Configuration=Release -target:iPhoneSimulator
+      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+
+    - name: Upload IPA
+      uses: actions/upload-artifact@v1
+      with: 
+        name: iOSipa
+        path: TransactionMobile\TransactionMobile.iOS\bin\Release\TransactionMobile.iOS.ipa
