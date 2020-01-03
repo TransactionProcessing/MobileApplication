@@ -8,15 +8,16 @@ namespace TransactionMobile.UnitTests.Presenters
 {
     using Common;
     using Moq;
+    using NUnit.Framework;
     using Pages;
     using Shouldly;
     using TransactionMobile.Presenters;
     using ViewModels;
-    using Xunit;
 
+    [TestFixture]
     public class LoginPresenterTests
     {
-        [Fact]
+        [Test]
         public void LoginPresenter_CanBeCreated_IsCreated()
         {
             Mock<ILoginPage> loginPage = new Mock<ILoginPage>();
