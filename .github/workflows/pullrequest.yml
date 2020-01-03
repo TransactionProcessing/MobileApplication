@@ -16,17 +16,18 @@ jobs:
     steps:
     - uses: actions/checkout@v1
           
-    - name: Setup Nuget
-      uses: warrenbuckley/Setup-Nuget@v1
+    #- name: Setup Nuget
+      #uses: warrenbuckley/Setup-Nuget@v1
 
-    - name: Restore Nuget Packages
-      run: nuget restore TransactionMobile\TransactionMobile.sln
+    #- name: Restore Nuget Packages
+    #  run: nuget restore TransactionMobile\TransactionMobile.sln
 
     - name: Setup MSBuild
       uses: warrenbuckley/Setup-MSBuild@v1
-      
+      #msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release -t:restore
     - name: Build Code
-      run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
+      run: |
+        msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
 
     - name: Run Unit Tests
       run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\xunit.runner.console.2.4.1\tools\net472\xunit.console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
