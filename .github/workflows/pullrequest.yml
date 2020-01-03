@@ -68,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with: 
         name: iOSApp
-        path: TransactionMobile/TransactionMobile.iOS/bin/Release/TransactionMobile.iOS.app
+        path: TransactionMobile/TransactionMobile.iOS/bin/iPhoneSimulator/Release/TransactionMobile.iOS.app
