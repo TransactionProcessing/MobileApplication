@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    #- uses: malinskiy/action-android/install-sdk@release/0.0.5
-    #- run: adb devices
-    #- run: echo $ANDROID_HOME
+    - uses: malinskiy/action-android/install-sdk@release/0.0.5
+    - run: adb devices
+    - run: echo $ANDROID_HOME
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
