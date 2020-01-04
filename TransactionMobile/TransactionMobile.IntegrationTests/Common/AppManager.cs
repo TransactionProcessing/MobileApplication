@@ -48,7 +48,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             if (Platform == Platform.Android)
             {
-                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.Android\bin\Release");
+                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.Android/bin/Release");
                 app = ConfigureApp
                       .Android
                       // Used to run a .apk file:
@@ -58,7 +58,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             if (Platform == Platform.iOS)
             {
-                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS\bin\iPhoneSimulator\Release");
+                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 app = ConfigureApp
                       .iOS
                       // Used to run a .app file on an ios simulator:
