@@ -45,3 +45,6 @@ jobs:
           api: 29
           tag: default
           abi: x86
+          
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v1
