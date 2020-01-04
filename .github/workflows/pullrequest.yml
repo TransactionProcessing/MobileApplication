@@ -19,7 +19,7 @@ jobs:
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
     - run: echo $ANDROID_HOME
-    - run: sdkmanager --list
+    - run: /Users/runner/android-sdk/bin/sdkmanager --list
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
@@ -45,7 +45,3 @@ jobs:
           api: 29
           tag: default
           abi: x86
-    
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v1   
