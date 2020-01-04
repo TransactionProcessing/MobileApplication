@@ -7,8 +7,8 @@ on:
 jobs:
   build:
     name: "Nightly Build"  
-env:
-        ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+    env:
+      ANDROID_HOME: "/Users/runner/Library/Android/sdk"
     runs-on: macos-latest
 
     steps:
