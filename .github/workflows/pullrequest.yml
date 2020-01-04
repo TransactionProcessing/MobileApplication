@@ -34,7 +34,7 @@ jobs:
     - name: Run Integration Tests - Android
     #  run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
 
-      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.3
+      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
       with:
           cmd: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
           api: 29
