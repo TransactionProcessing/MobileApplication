@@ -32,6 +32,9 @@ namespace TransactionMobile.iOS
                                     IBGInvocationEvent.Shake);
 
             global::Xamarin.Forms.Forms.Init();
+
+            Xamarin.Calabash.Start();
+
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             LoadApplication(new App(this.Device));
