@@ -5,91 +5,31 @@ on:
     branches:
     - master
 
-jobs:
-  buildandroid:
-    name: "Build and Test Pull Requests - Android"
-    env:
-        ASPNETCORE_ENVIRONMENT: "Production"
+jobs:  
+    #- name: Run Integration Tests
+    #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"         
+  build:
+    name: "Build and Test Pull Requests"
 
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v1
-          
+    
     - name: Setup Nuget
-      uses: warrenbuckley/Setup-Nuget@v1
-
+      uses: olegtarasov/download-nuget@v1
+          
     - name: Restore Nuget Packages
-      run: nuget restore TransactionMobile\TransactionMobile.sln
+      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln
 
-    - name: Setup MSBuild
-      uses: warrenbuckley/Setup-MSBuild@v1
-      
     - name: Build Code
-      run: msbuild TransactionMobile\TransactionMobile.sln -p:Configuration=Release
+      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.UnitTests\bin\Release\TransactionMobile.UnitTests.dll
-      
+      run: /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+
     - name: Build APK
       run: msbuild TransactionMobile\TransactionMobile.Android\TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
-    
-    - name: Upload APK
-      uses: actions/upload-artifact@v1
-      with: 
-        name: androidapk
-        path: TransactionMobile\TransactionMobile.Android\bin\Release\com.transactionprocessing.transactionmobile-Signed.apk        
-    
-  
-    #- name: Run Integration Tests
-    #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
-      
-
-  #buildios:
-    #name: "Build and Test Pull Requests - iOS"
-    #env:
-     #   ASPNETCORE_ENVIRONMENT: "Production"
-
-    #runs-on: macos-latest
-
-    #steps:
-    #- uses: actions/checkout@v1
-    
-    #- name: Setup Nuget
-      #uses: olegtarasov/download-nuget@v1
-          
-    #- name: Restore Nuget Packages
-      #run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln
-
-    #- name: Build Code
-      #run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
-
-    #- name: Run Unit Tests
-      #run: /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
-
-    #- name: Upload iOS App
-      #uses: actions/upload-artifact@v1
-      #with: 
-        #name: iOSApp
-        #path: TransactionMobile/TransactionMobile.iOS/bin/iPhoneSimulator/Release/TransactionMobile.iOS.app
-        
-  integrationtestandroid:
-    needs: [buildandroid]
-    name: "Run Specflow - Android"    
-    
-    runs-on: macos-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-  
-    - name: Download APK
-      uses: actions/download-artifact@v1
-      with:
-        name: androidapk
-        path: TransactionMobile/TransactionMobile.Android/bin/Release/com.transactionprocessing.transactionmobile-Signed.ap
-
-    - name: Build Code
-      run: msbuild TransactionMobile/TransactionMobile.sln -p:Configuration=Release
-
-    - name: Run Integration Tests
-      run: /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"    
+            
+    - name: Run Integration Tests - Android
+      run: /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"
