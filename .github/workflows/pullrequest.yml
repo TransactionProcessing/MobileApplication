@@ -22,8 +22,6 @@ jobs:
           brew install bash
           brew install socat
           brew install hyperkit
-          sudo mv "/Library/Little Snitch" "/Library/Little Snitch.backup"
-          sudo killall lsd
 
     - name: "[Pre] Install Docker"
       shell: bash
