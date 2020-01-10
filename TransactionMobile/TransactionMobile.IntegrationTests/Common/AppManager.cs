@@ -41,6 +41,22 @@ namespace TransactionMobile.IntegrationTests.Common
             }
         }
 
+        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl)
+        {
+            if (AppManager.platform == Platform.Android)
+            {
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                AppManager.app.Invoke("SetConfiguration", configuration);
+            }
+            else if(AppManager.platform == Platform.iOS)
+            {
+                AppManager.app.Invoke("SetClientId:", clientId );
+                AppManager.app.Invoke("SetClientSecret:", clientSecret );
+                AppManager.app.Invoke("SetSecurityServiceUrl:", securityServiceUri );
+                AppManager.app.Invoke("SetTransactionProcessorAclUrl:", transactionProcessorAclUrl);
+            }
+        }
+
         public static void StartApp()
         {
             string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -122,7 +138,7 @@ namespace TransactionMobile.IntegrationTests.Common
         {
             var message = "Unable to verify on page: " + this.GetType().Name;
             
-            //Assert.DoesNotThrow(() => app.WaitForElement(Trait.Current, timeout: timeout), message);
+            Assert.DoesNotThrow(() => app.WaitForElement(Trait.Current, timeout: timeout), message);
         }
 
         /// <summary>
@@ -134,7 +150,7 @@ namespace TransactionMobile.IntegrationTests.Common
             timeout = timeout ?? TimeSpan.FromSeconds(5);
             var message = "Unable to verify *not* on page: " + this.GetType().Name;
 
-            //Assert.DoesNotThrow(() => app.WaitForNoElement(Trait.Current, timeout: timeout), message);
+            Assert.DoesNotThrow(() => app.WaitForNoElement(Trait.Current, timeout: timeout), message);
         }
     }
 

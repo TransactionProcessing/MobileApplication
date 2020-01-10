@@ -5,7 +5,9 @@ namespace TransactionMobile
     using System;
     using Common;
     using Pages;
+    using Plugin.Toast;
     using Presenters;
+    using SecurityService.DataTransferObjects.Responses;
     using Unity;
     using Unity.Lifetime;
 
@@ -20,6 +22,10 @@ namespace TransactionMobile
         /// </summary>
         public static IUnityContainer Container;
 
+        /// <summary>
+        /// The token response
+        /// </summary>
+        public static TokenResponse TokenResponse;
 
         /// <summary>
         /// The device
@@ -27,12 +33,19 @@ namespace TransactionMobile
         private readonly IDevice Device;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="App"/> class.
+        /// The configuration
+        /// </summary>
+        public static IConfiguration Configuration;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="App" /> class.
         /// </summary>
         /// <param name="device">The device.</param>
+        /// <param name="configuration">The configuration.</param>
         public App(IDevice device)
         {
             this.Device = device;
+
             InitializeComponent();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTkwMDU4QDMxMzcyZTM0MmUzMENHeFNiTzVPdWtQdk5td09TY0RjRVhUQ1hORFF5cFFKMW5QdnN0RDRLMGc9");
@@ -41,7 +54,16 @@ namespace TransactionMobile
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
 
-            MainPage = new ContentPage();
+            //if (this.Configuration.ClientId == null && this.Configuration.ClientSecret == null && this.Configuration.SecurityService == null &&
+            //    this.Configuration.TransactionProcessorACL == null)
+            //{
+            //    this.Configuration = new DevelopmentConfiguration();
+            //    App.Container.RegisterInstance(this.Configuration, new ContainerControlledLifetimeManager());
+            //}
+            //else
+            //{
+            //    App.Container.RegisterInstance(this.Configuration, new ContainerControlledLifetimeManager());
+            //}
         }
 
         /// <summary>

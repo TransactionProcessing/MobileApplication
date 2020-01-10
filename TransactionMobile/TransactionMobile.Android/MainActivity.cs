@@ -7,7 +7,12 @@
     using Android.Runtime;
     using Com.Instabug.Library;
     using Com.Instabug.Library.Invocation;
+    using Com.Instabug.Library.UI.Onboarding;
     using Common;
+    using Java.Interop;
+    using Plugin.Toast;
+    using Unity;
+    using Unity.Lifetime;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
     using Platform = Xamarin.Essentials.Platform;
@@ -29,6 +34,11 @@
         /// The device
         /// </summary>
         private IDevice Device;
+
+        /// <summary>
+        /// The configuration
+        /// </summary>
+        private IConfiguration Configuration;
 
         #endregion
 
@@ -64,7 +74,7 @@
                 .SetInvocationEvents(InstabugInvocationEvent.FloatingButton, InstabugInvocationEvent.Shake)
                 .Build();
 
-            //Instabug.SetWelcomeMessageState(WelcomeMessage.State.Disabled);
+            Instabug.SetWelcomeMessageState(WelcomeMessage.State.Disabled);
 
             base.OnCreate(savedInstanceState);
 
@@ -72,6 +82,23 @@
             Forms.Init(this, savedInstanceState);
             this.LoadApplication(new App(this.Device));
         }
+
+        [Export("SetConfiguration")]
+        public void SetConfiguration(String configuration)
+        {
+            var configItems = configuration.Split(',');
+            var configurationObject = new Configuration
+                                      {
+                                          ClientId = configItems[0],
+                                          ClientSecret = configItems[1],
+                                          SecurityService = configItems[2],
+                                          TransactionProcessorACL = configItems[3]
+                                      };
+
+            App.Configuration = configurationObject;
+        }
+
+        
 
         #endregion
     }

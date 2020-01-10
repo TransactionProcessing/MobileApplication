@@ -10,6 +10,7 @@
     /// <seealso cref="TransactionMobile.Common.IDevice" />
     public class AndroidDevice : IDevice
     {
+       
         #region Methods
 
         /// <summary>
@@ -19,7 +20,7 @@
         {
             Instabug.LogoutUser();
         }
-
+        
         /// <summary>
         /// Sets the instabug user data.
         /// </summary>
