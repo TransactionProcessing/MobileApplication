@@ -6,8 +6,6 @@ on:
     - master
 
 jobs:  
-    #- name: Run Integration Tests
-    #  run: D:\a\MobileApplication\MobileApplication\TransactionMobile\packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe TransactionMobile\TransactionMobile.IntegrationTests\bin\Release\TransactionMobile.IntegrationTests.dll --where "cat == Android"         
   build:
     name: "Build and Test Pull Requests"
     env:
@@ -28,7 +26,7 @@ jobs:
       uses: olegtarasov/download-nuget@v1
           
     - name: Restore Nuget Packages
-      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln
+      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/transactionprocessing/api/v3/index.json
 
     - name: Build Code
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
