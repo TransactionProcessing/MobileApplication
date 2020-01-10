@@ -52,7 +52,7 @@ namespace TransactionMobile.IntegrationTests.Common
                 app = ConfigureApp
                       .Android
                       // Used to run a .apk file:
-                      .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile-Signed.apk"))
+                      .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk"))
                       .StartApp();
             }
 
