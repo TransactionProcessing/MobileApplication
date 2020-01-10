@@ -38,9 +38,9 @@ jobs:
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release
             
     - name: Setup Docker
-        run: |
-          brew install docker-machine docker
-          sudo docker –version
+      run: |
+        brew install docker-machine docker
+        sudo docker â€“version
 
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
