@@ -21,6 +21,7 @@ jobs:
           brew install coreutils
           brew install bash
           brew install socat
+          brew install hyperkit
 
     - name: "[Pre] Install Docker"
       shell: bash
