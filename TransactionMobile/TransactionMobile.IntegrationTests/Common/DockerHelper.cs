@@ -608,24 +608,24 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
-            if (this.Containers.Any())
-            {
-                foreach (IContainerService containerService in this.Containers)
-                {
-                    containerService.StopOnDispose = true;
-                    containerService.RemoveOnDispose = true;
-                    containerService.Dispose();
-                }
-            }
+            //if (this.Containers.Any())
+            //{
+            //    foreach (IContainerService containerService in this.Containers)
+            //    {
+            //        containerService.StopOnDispose = true;
+            //        containerService.RemoveOnDispose = true;
+            //        containerService.Dispose();
+            //    }
+            //}
 
-            if (this.TestNetworks.Any())
-            {
-                foreach (INetworkService networkService in this.TestNetworks)
-                {
-                    networkService.Stop();
-                    networkService.Remove(true);
-                }
-            }
+            //if (this.TestNetworks.Any())
+            //{
+            //    foreach (INetworkService networkService in this.TestNetworks)
+            //    {
+            //        networkService.Stop();
+            //        networkService.Remove(true);
+            //    }
+            //}
         }
 
         #endregion
