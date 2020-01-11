@@ -18,17 +18,17 @@
         {
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
-            (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
+            //(String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
-            // Setup a network for the DB Server
-            Setup.DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
+            //// Setup a network for the DB Server
+            //Setup.DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
 
-            // Start the Database Server here
-            Setup.DbConnectionStringWithNoDatabase = DockerHelper.StartSqlContainerWithOpenConnection("shareddatabasesqlserver",
-                                                                                                      "stuartferguson/subscriptionservicedatabasesqlserver",
-                                                                                                      Setup.DatabaseServerNetwork,
-                                                                                                      "",
-                                                                                                      dockerCredentials);
+            //// Start the Database Server here
+            //Setup.DbConnectionStringWithNoDatabase = DockerHelper.StartSqlContainerWithOpenConnection("shareddatabasesqlserver",
+            //                                                                                          "stuartferguson/subscriptionservicedatabasesqlserver",
+            //                                                                                          Setup.DatabaseServerNetwork,
+            //                                                                                          "",
+            //                                                                                          dockerCredentials);
         }
 
         public static String GetConnectionString(String databaseName)
