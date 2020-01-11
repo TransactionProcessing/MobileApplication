@@ -13,6 +13,7 @@ namespace TransactionMobile.IntegrationTests
     public class LoginSteps
     {
         LoginPage loginPage = new LoginPage();
+        HomePage homePage = new HomePage();
 
         [Given(@"I am on the Login Screen")]
         public void GivenIAmOnTheLoginScreen()
@@ -41,7 +42,7 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public void ThenTheMerchantHomePageIsDisplayed()
         {
-            // TODO:
+            this.homePage.AssertOnPage();
         }
     }
 }

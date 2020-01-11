@@ -13,8 +13,8 @@ namespace TransactionMobile.IntegrationTests.Pages
     {
         protected override PlatformQuery Trait => new PlatformQuery
                                                   {
-                                                      Android = x => x.Marked("menu_add_task"),
-                                                      iOS = x => x.Marked("Tasky")
+                                                      Android = x => x.Marked("Log In"),
+                                                      iOS = x => x.Marked("Log In")
                                                   };
 
         private readonly Query EmailAddressEntry;
@@ -47,3 +47,5 @@ namespace TransactionMobile.IntegrationTests.Pages
         }
     }
 }
+
+//HomePageLabel

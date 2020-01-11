@@ -10,6 +10,22 @@
         #region Properties
 
         /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client identifier.
+        /// </value>
+        String ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client secret.
+        /// </summary>
+        /// <value>
+        /// The client secret.
+        /// </value>
+        String ClientSecret { get; set; }
+
+        /// <summary>
         /// Gets or sets the security service.
         /// </summary>
         /// <value>

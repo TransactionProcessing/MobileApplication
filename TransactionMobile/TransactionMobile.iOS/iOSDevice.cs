@@ -19,7 +19,7 @@
         {
             Instabug.LogOut();
         }
-
+        
         /// <summary>
         /// Sets the instabug user data.
         /// </summary>
