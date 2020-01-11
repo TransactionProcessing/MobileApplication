@@ -39,7 +39,7 @@ jobs:
           DOCKER_HOST="$(         docker-machine env default | grep DOCKER_HOST         | sed -e 's/.*="//g' -e 's/"$//g' )"
           DOCKER_CERT_PATH="$(    docker-machine env default | grep DOCKER_CERT_PATH    | sed -e 's/.*="//g' -e 's/"$//g' )"
           DOCKER_MACHINE_NAME="$( docker-machine env default | grep DOCKER_MACHINE_NAME | sed -e 's/.*="//g' -e 's/"$//g' )"
-          DOCKER_IP="$( docker-machine ip default );
+          DOCKER_IP="$( docker-machine ip default )";
           # Export variable (this other targets)
           # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/development-tools-for-github-actions#set-an-environment-variable-set-env
           echo ::set-env name=DOCKER_TLS_VERIFY::${DOCKER_TLS_VERIFY}
