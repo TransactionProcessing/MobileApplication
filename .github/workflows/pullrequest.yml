@@ -26,10 +26,10 @@ jobs:
     - name: "[Pre] Install Docker"
       shell: bash
       run: |
-          brew install docker docker-machine-driver-generic
-          sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-generic/bin/docker-machine-driver-generic
-          sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-v/bin/docker-machine-driver-generic
-          while ! docker-machine create --driver generic default; do
+          brew install docker docker-machine-driver-xhyve
+          sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+          sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-v/bin/docker-machine-driver-xhyve
+          while ! docker-machine create --driver xhyve default; do
             docker-machine rm -f default
             sleep 1;
           done
