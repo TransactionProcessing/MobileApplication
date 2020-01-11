@@ -53,7 +53,7 @@ jobs:
     - name: "[Pre] Setup Docker machine"
       shell: bash
       run: |
-          # Setup DNS records
+          ## Setup DNS records
           echo "127.0.0.1  localhost" | sudo tee -a /etc/hosts
 
           # Portforwarding from DOCKER_HOST to local
