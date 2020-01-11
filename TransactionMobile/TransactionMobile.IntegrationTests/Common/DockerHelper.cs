@@ -67,7 +67,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateManagementContainer.Build().Start();//.WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Estate Management Container Started");
 
@@ -95,7 +95,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .ExposePort(DockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-                                                                 .Start().WaitForPort("2113/tcp", 30000);
+                                                                 .Start();//.WaitForPort("2113/tcp", 30000);
 
             //logger.LogInformation("Event Store Container Started");
 
@@ -143,7 +143,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = securityServiceContainer.Build().Start().WaitForPort("5001/tcp", 30000);
+            IContainerService builtContainer = securityServiceContainer.Build().Start();//.WaitForPort("5001/tcp", 30000);
             Thread.Sleep(20000); // This hack is in till health checks implemented :|
 
             //logger.LogInformation("Security Service Container Started");
@@ -221,7 +221,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             // Now build and return the container                
             IContainerService builtContainer =
-                transactionProcessorACLContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
+                transactionProcessorACLContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Transaction Processor Container ACL Started");
 
@@ -270,7 +270,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
+            IContainerService builtContainer = transactionProcessorContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Transaction Processor Container Started");
 
