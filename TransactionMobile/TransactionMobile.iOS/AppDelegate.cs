@@ -71,14 +71,14 @@
         [Export("SetConfiguration:")]
         public void SetConfiguration(NSString configuration)
         {
-            var configItems = configuration.ToString().Split(',');
-            var configurationObject = new Configuration
-                                      {
-                                          ClientId = configItems[0],
-                                          ClientSecret = configItems[1],
-                                          SecurityService = configItems[2],
-                                          TransactionProcessorACL = configItems[3]
-                                      };
+            String[] configItems = configuration.ToString().Split(',');
+            Configuration configurationObject = new Configuration
+                                                {
+                                                    ClientId = configItems[0],
+                                                    ClientSecret = configItems[1],
+                                                    SecurityService = configItems[2],
+                                                    TransactionProcessorACL = configItems[3]
+                                                };
 
             App.Configuration = configurationObject;
         }
