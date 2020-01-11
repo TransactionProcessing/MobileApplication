@@ -108,6 +108,6 @@ jobs:
     - name: Run Integration Tests - iOS
       run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"
     
-    #- name: Setup tmate session
-      #if: failure()
-      #uses: mxschmitt/action-tmate@v1
+    - name: Setup tmate session
+      if: failure()
+      uses: mxschmitt/action-tmate@v1
