@@ -50,10 +50,8 @@ namespace TransactionMobile.IntegrationTests.Common
             }
             else if(AppManager.platform == Platform.iOS)
             {
-                AppManager.app.Invoke("SetClientId:", clientId );
-                AppManager.app.Invoke("SetClientSecret:", clientSecret );
-                AppManager.app.Invoke("SetSecurityServiceUrl:", securityServiceUri );
-                AppManager.app.Invoke("SetTransactionProcessorAclUrl:", transactionProcessorAclUrl);
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                AppManager.app.Invoke("SetConfiguration:", configuration);
             }
         }
 

@@ -20,6 +20,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using EstateManagement.Client;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
+    using TechTalk.SpecFlow.Plugins;
 
     public abstract class DockerHelper
     {
@@ -67,7 +68,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateManagementContainer.Build().Start();//.WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Estate Management Container Started");
 
@@ -95,7 +96,9 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .ExposePort(DockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-                                                                 .Start().WaitForPort("2113/tcp", 30000);
+                                                                 .Start();//.WaitForPort("2113/tcp", 30000);
+
+            Thread.Sleep(20000);
 
             //logger.LogInformation("Event Store Container Started");
 
@@ -143,7 +146,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = securityServiceContainer.Build().Start().WaitForPort("5001/tcp", 30000);
+            IContainerService builtContainer = securityServiceContainer.Build().Start();//.WaitForPort("5001/tcp", 30000);
             Thread.Sleep(20000); // This hack is in till health checks implemented :|
 
             //logger.LogInformation("Security Service Container Started");
@@ -221,7 +224,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             // Now build and return the container                
             IContainerService builtContainer =
-                transactionProcessorACLContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
+                transactionProcessorACLContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Transaction Processor Container ACL Started");
 
@@ -270,7 +273,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
+            IContainerService builtContainer = transactionProcessorContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
 
             //logger.LogInformation("Transaction Processor Container Started");
 
@@ -303,8 +306,8 @@ namespace TransactionMobile.IntegrationTests.Common
         {
             IContainerService databaseServerContainer = new Builder().UseContainer().WithName(containerName).UseImage(imageName)
                                                                      .WithEnvironment("ACCEPT_EULA=Y", "SA_PASSWORD=thisisalongpassword123!").ExposePort(1433)
-                                                                     .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start()
-                                                                     .WaitForPort("1433/tcp", 30000);
+                                                                     .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start();
+                                                                     //.WaitForPort("1433/tcp", 30000);
 
             IPEndPoint sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
 
@@ -527,7 +530,7 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TestNetworks.Add(testNetwork);
             IContainerService eventStoreContainer =
                 DockerHelper.SetupEventStoreContainer(eventStoreContainerName, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
-
+            
             IContainerService estateManagementContainer = DockerHelper.SetupEstateManagementContainer(estateManagementApiContainerName,
                                                                                                       "stuartferguson/estatemanagement",
                                                                                                       new List<INetworkService>
@@ -584,9 +587,14 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TransactionProcessorACLPort = transactionProcessorACLContainer.ToHostExposedEndpoint("5003/tcp").Port;
 
             // Setup the base address resolvers
-            String EstateManagementBaseAddressResolver(String api) => $"http://127.0.0.1:{this.EstateManagementApiPort}";
-            String SecurityServiceBaseAddressResolver(String api) => $"http://127.0.0.1:{this.SecurityServicePort}";
-            String TransactionProcessorAclBaseAddressResolver(String api) => $"http://127.0.0.1:{this.TransactionProcessorACLPort}";
+            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(localhostaddress))
+            {
+                localhostaddress = "127.0.0.1";
+            }
+            String EstateManagementBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.EstateManagementApiPort}";
+            String SecurityServiceBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.SecurityServicePort}";
+            String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.TransactionProcessorACLPort}";
 
             HttpClient httpClient = new HttpClient();
             this.EstateClient = new EstateClient(EstateManagementBaseAddressResolver, httpClient);
@@ -603,24 +611,24 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
-            if (this.Containers.Any())
-            {
-                foreach (IContainerService containerService in this.Containers)
-                {
-                    containerService.StopOnDispose = true;
-                    containerService.RemoveOnDispose = true;
-                    containerService.Dispose();
-                }
-            }
+            //if (this.Containers.Any())
+            //{
+            //    foreach (IContainerService containerService in this.Containers)
+            //    {
+            //        containerService.StopOnDispose = true;
+            //        containerService.RemoveOnDispose = true;
+            //        containerService.Dispose();
+            //    }
+            //}
 
-            if (this.TestNetworks.Any())
-            {
-                foreach (INetworkService networkService in this.TestNetworks)
-                {
-                    networkService.Stop();
-                    networkService.Remove(true);
-                }
-            }
+            //if (this.TestNetworks.Any())
+            //{
+            //    foreach (INetworkService networkService in this.TestNetworks)
+            //    {
+            //        networkService.Stop();
+            //        networkService.Remove(true);
+            //    }
+            //}
         }
 
         #endregion
