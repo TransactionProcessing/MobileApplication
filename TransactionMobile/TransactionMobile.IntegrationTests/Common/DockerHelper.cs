@@ -20,6 +20,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using EstateManagement.Client;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
+    using TechTalk.SpecFlow.Plugins;
 
     public abstract class DockerHelper
     {
@@ -96,6 +97,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
                                                                  .Start();//.WaitForPort("2113/tcp", 30000);
+
+            Thread.Sleep(20000);
 
             //logger.LogInformation("Event Store Container Started");
 
@@ -527,7 +530,7 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TestNetworks.Add(testNetwork);
             IContainerService eventStoreContainer =
                 DockerHelper.SetupEventStoreContainer(eventStoreContainerName, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
-
+            
             IContainerService estateManagementContainer = DockerHelper.SetupEstateManagementContainer(estateManagementApiContainerName,
                                                                                                       "stuartferguson/estatemanagement",
                                                                                                       new List<INetworkService>
