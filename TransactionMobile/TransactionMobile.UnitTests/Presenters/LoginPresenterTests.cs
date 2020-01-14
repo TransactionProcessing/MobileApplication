@@ -11,6 +11,7 @@ namespace TransactionMobile.UnitTests.Presenters
     using NUnit.Framework;
     using Pages;
     using SecurityService.Client;
+    using Services;
     using Shouldly;
     using TransactionMobile.Presenters;
     using ViewModels;
@@ -25,8 +26,9 @@ namespace TransactionMobile.UnitTests.Presenters
             LoginViewModel loginViewModel = new LoginViewModel();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
-
-            LoginPresenter loginPresenter = new LoginPresenter(loginPage.Object,loginViewModel, device.Object, securityServiceClient.Object);
+            Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
+            LoginPresenter loginPresenter =
+                new LoginPresenter(loginPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object);
 
             loginPresenter.ShouldNotBeNull();
         }

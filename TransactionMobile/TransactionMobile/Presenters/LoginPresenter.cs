@@ -8,6 +8,9 @@
     using Plugin.Toast;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
+    using Services;
+    using TransactionProcessorACL.DataTransferObjects;
+    using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;
     using Xamarin.Forms;
 
@@ -39,6 +42,8 @@
         /// </summary>
         private readonly ISecurityServiceClient SecurityServiceClient;
 
+        private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
+
         #endregion
 
         #region Constructors
@@ -50,15 +55,18 @@
         /// <param name="loginViewModel">The login view model.</param>
         /// <param name="device">The device.</param>
         /// <param name="securityServiceClient">The security service client.</param>
+        /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
         public LoginPresenter(ILoginPage loginPage,
                               LoginViewModel loginViewModel,
                               IDevice device,
-                              ISecurityServiceClient securityServiceClient)
+                              ISecurityServiceClient securityServiceClient,
+                              ITransactionProcessorACLClient transactionProcessorAclClient)
         {
             this.LoginPage = loginPage;
             this.LoginViewModel = loginViewModel;
             this.Device = device;
             this.SecurityServiceClient = securityServiceClient;
+            this.TransactionProcessorAclClient = transactionProcessorAclClient;
         }
 
         #endregion
@@ -86,6 +94,8 @@
         {
             try
             {
+                await this.GetConfiguration();
+
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                         this.LoginViewModel.Password,
@@ -99,12 +109,50 @@
                 // Set the details for Instabug
                 this.Device.SetInstabugUserDetails(this.LoginViewModel.EmailAddress, this.LoginViewModel.EmailAddress);
 
+                // Do the intial logon transaction
+                await this.PerformLogonTransaction();
+
                 // Go to signed in page
                 Application.Current.MainPage = new AppShell();
             }
             catch(Exception ex)
             {
                 CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again!");
+            }
+        }
+
+        /// <summary>
+        /// Performs the logon transaction.
+        /// </summary>
+        /// <exception cref="Exception">Error during logon transaction</exception>
+        private async Task PerformLogonTransaction()
+        {
+            LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
+                                                                            {
+                                                                                IMEINumber = "123456",
+                                                                                RequireConfigurationInResponse = false,
+                                                                                TransactionDateTime = DateTime.Now,
+                                                                                TransactionNumber = "1" // TODO: Need to hold txn number somewhere
+                                                                            };
+
+            LogonTransactionResponseMessage response = await this.TransactionProcessorAclClient.PerformLogonTransaction(App.TokenResponse.AccessToken, logonTransactionRequestMessage, CancellationToken.None);
+
+            if (response.ResponseCode != "0000")
+            {
+                throw new Exception("Error during logon transaction");
+            }
+        }
+
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        private async Task GetConfiguration()
+        {
+            // TODO: this may well make a server call of some kind in future....
+
+            if (App.Configuration == null)
+            {
+                App.Configuration = new DevelopmentConfiguration();
             }
         }
 

@@ -60,7 +60,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
                                                                       .UseImage(imageName).ExposePort(DockerHelper.EstateManagementDockerPort)
-                                                                      .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
+                                                                      .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
             {
@@ -215,7 +215,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                 .UseNetwork(new List<INetworkService>
                                                                             {
                                                                                 networkService
-                                                                            }.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
+                                                                            }.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
             {
@@ -265,7 +265,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
                                                                           .UseImage(imageName).ExposePort(DockerHelper.TransactionProcessorDockerPort)
-                                                                          .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
+                                                                          .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
             {
@@ -611,24 +611,24 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
-            //if (this.Containers.Any())
-            //{
-            //    foreach (IContainerService containerService in this.Containers)
-            //    {
-            //        containerService.StopOnDispose = true;
-            //        containerService.RemoveOnDispose = true;
-            //        containerService.Dispose();
-            //    }
-            //}
+            if (this.Containers.Any())
+            {
+                foreach (IContainerService containerService in this.Containers)
+                {
+                    containerService.StopOnDispose = true;
+                    containerService.RemoveOnDispose = true;
+                    containerService.Dispose();
+                }
+            }
 
-            //if (this.TestNetworks.Any())
-            //{
-            //    foreach (INetworkService networkService in this.TestNetworks)
-            //    {
-            //        networkService.Stop();
-            //        networkService.Remove(true);
-            //    }
-            //}
+            if (this.TestNetworks.Any())
+            {
+                foreach (INetworkService networkService in this.TestNetworks)
+                {
+                    networkService.Stop();
+                    networkService.Remove(true);
+                }
+            }
         }
 
         #endregion
