@@ -6,6 +6,7 @@
     using Plugin.Toast;
     using Presenters;
     using SecurityService.Client;
+    using Services;
     using Unity;
     using Unity.Injection;
     using Unity.Lifetime;
@@ -26,6 +27,7 @@
 
             // Common Registrations
             unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new SingletonLifetimeManager());
+            unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new SingletonLifetimeManager());
             HttpClient httpClient = new HttpClient();
             unityContainer.RegisterInstance(httpClient, new SingletonLifetimeManager());
             unityContainer.RegisterType<Func<String, String>>(new InjectionFactory(c => new Func<String, String>(configSetting =>
@@ -35,10 +37,10 @@
 
                                                                                                                          IConfiguration config = App.Configuration;
 
-                                                                                                                         //if (configSetting == "ManagementAPI")
-                                                                                                                         //{
-                                                                                                                         //    return config.TransactionProcessorACL;
-                                                                                                                         //}
+                                                                                                                         if (configSetting == "TransactionProcessorACL")
+                                                                                                                         {
+                                                                                                                             return config.TransactionProcessorACL;
+                                                                                                                         }
 
                                                                                                                          if (configSetting == "SecurityService")
                                                                                                                          {
