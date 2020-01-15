@@ -113,6 +113,7 @@ jobs:
       uses: mxschmitt/action-tmate@v1
 
   buildios:
+    needs: buildandroid
     name: "Build and Test Pull Requests - iOS"
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
