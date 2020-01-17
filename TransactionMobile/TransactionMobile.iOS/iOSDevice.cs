@@ -3,6 +3,7 @@
     using System;
     using Common;
     using InstabugLib;
+    using UIKit;
 
     /// <summary>
     /// 
@@ -38,6 +39,15 @@
                                            String emailAddress)
         {
             Instabug.IdentifyUserWithEmail(userName, emailAddress);
+        }
+
+        /// <summary>
+        /// Gets the device identifier.
+        /// </summary>
+        /// <returns></returns>
+        public String GetDeviceIdentifier()
+        {
+            return UIDevice.CurrentDevice.IdentifierForVendor.AsString();
         }
 
         #endregion

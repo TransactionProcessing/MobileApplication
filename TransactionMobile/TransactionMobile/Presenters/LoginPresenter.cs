@@ -129,7 +129,8 @@
         {
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
-                                                                                IMEINumber = "123456",
+                                                                                // TODO: Need to rename this field 
+                                                                                IMEINumber = this.Device.GetDeviceIdentifier(),
                                                                                 RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
                                                                                 TransactionNumber = "1" // TODO: Need to hold txn number somewhere

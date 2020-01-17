@@ -508,8 +508,21 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <param name="scenarioName">Name of the scenario.</param>
         public override async Task StartContainersForScenarioRun(String scenarioName)
         {
-            String traceFolder = FdOs.IsWindows() ? $"D:\\home\\txnproc\\trace\\{scenarioName}" : $"//home//txnproc//trace//{scenarioName}";
+            String traceFolder = String.Empty;
 
+            if (FdOs.IsWindows())
+            {
+                traceFolder = $"D:\\home\\txnproc\\trace\\{scenarioName}";
+            }
+            else if (FdOs.IsLinux())
+            {
+                traceFolder = $"//home//txnproc//trace//{scenarioName}";
+            }
+            else if (FdOs.IsOsx())
+            {
+                traceFolder = $"//Users//runner//trace//{scenarioName}";
+            }
+            
             Logging.Enabled();
 
             Guid testGuid = Guid.NewGuid();

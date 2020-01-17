@@ -1,6 +1,9 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using Android.Content;
+    using Android.OS;
+    using Android.Provider;
     using Com.Instabug.Library;
     using Common;
 
@@ -41,6 +44,25 @@
                                            String emailAddress)
         {
             Instabug.IdentifyUser(userName, emailAddress);
+        }
+
+        public String GetDeviceIdentifier()
+        {
+            String id = Android.OS.Build.Serial;
+            if (string.IsNullOrWhiteSpace(id) || id == Build.Unknown || id == "0")
+            {
+                try
+                {
+                    Context context = Android.App.Application.Context;
+                    id = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+                }
+                catch (Exception ex)
+                {
+                    Android.Util.Log.Warn("DeviceInfo", "Unable to get id: " + ex.ToString());
+                }
+            }
+
+            return id;
         }
 
         #endregion
