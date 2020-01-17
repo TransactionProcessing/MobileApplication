@@ -95,7 +95,7 @@ jobs:
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
@@ -103,7 +103,7 @@ jobs:
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
       with:
-          cmd: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
+          cmd: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
           api: 29
           tag: default
           abi: x86   
@@ -195,10 +195,10 @@ jobs:
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
     - name: Run Integration Tests - iOS
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
    
     - name: Setup tmate session
       if: failure()
