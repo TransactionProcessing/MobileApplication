@@ -26,6 +26,8 @@ jobs:
     - name: "[Pre] Install Docker"
       shell: bash
       run: |
+          mkdir -p /Users/runner/.docker/machine/cache
+          curl -Lo ~/.docker/machine/cache/boot2docker.iso https://github.com/boot2docker/boot2docker/releases/download/v19.03.5/boot2docker.iso
           brew install docker docker-machine-driver-xhyve
           sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
@@ -95,7 +97,7 @@ jobs:
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
@@ -103,7 +105,7 @@ jobs:
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
       with:
-          cmd: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
+          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
           api: 29
           tag: default
           abi: x86   
@@ -133,6 +135,8 @@ jobs:
     - name: "[Pre] Install Docker"
       shell: bash
       run: |
+          mkdir -p /Users/runner/.docker/machine/cache
+          curl -Lo ~/.docker/machine/cache/boot2docker.iso https://github.com/boot2docker/boot2docker/releases/download/v19.03.5/boot2docker.iso
           brew install docker docker-machine-driver-xhyve
           sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
@@ -195,10 +199,10 @@ jobs:
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
     - name: Run Integration Tests - iOS
-      run: mono /Users/runner/runners/2.163.1/work/MobileApplication/MobileApplication/TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
    
     - name: Setup tmate session
       if: failure()
