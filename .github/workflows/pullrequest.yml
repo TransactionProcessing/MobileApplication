@@ -22,7 +22,8 @@ jobs:
           brew install bash
           brew install socat
           brew install hyperkit
-
+          mkdir -p /Users/runner/trace
+          
     - name: "[Pre] Install Docker"
       shell: bash
       run: |
@@ -131,6 +132,7 @@ jobs:
           brew install bash
           brew install socat
           brew install hyperkit
+          mkdir -p /Users/runner/trace
 
     - name: "[Pre] Install Docker"
       shell: bash
