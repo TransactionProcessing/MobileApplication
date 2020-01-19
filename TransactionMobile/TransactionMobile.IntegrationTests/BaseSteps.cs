@@ -205,6 +205,9 @@ namespace TransactionMobile.IntegrationTests
             var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress.Replace("127.0.0.1", ipAddress.ToString());
             var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress.Replace("127.0.0.1", ipAddress.ToString()); ;
 
+            Console.WriteLine($"securityService [{securityService}]");
+            Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
+
             AppManager.SetConfiguration(merchantClient.ClientId, merchantClient.ClientSecret,
                                         securityService, transactionProcessorAcl);
         }
