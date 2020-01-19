@@ -129,8 +129,7 @@
         {
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
-                                                                                // TODO: Need to rename this field 
-                                                                                IMEINumber = this.Device.GetDeviceIdentifier(),
+                                                                                DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                                 RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
                                                                                 TransactionNumber = "1" // TODO: Need to hold txn number somewhere
