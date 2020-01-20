@@ -202,7 +202,7 @@ jobs:
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
       with:
           cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
-          api: 29
+          api: 24
           tag: default
           abi: x86   
    
