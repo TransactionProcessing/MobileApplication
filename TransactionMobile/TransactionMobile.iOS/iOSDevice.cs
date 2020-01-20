@@ -47,7 +47,7 @@
         /// <returns></returns>
         public String GetDeviceIdentifier()
         {
-            return UIDevice.CurrentDevice.IdentifierForVendor.AsString();
+            return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
 
         #endregion
