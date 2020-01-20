@@ -59,7 +59,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"urls=http://*:{DockerHelper.EstateManagementDockerPort}");
 
             ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                      .UseImage(imageName).ExposePort(DockerHelper.EstateManagementDockerPort)
+                                                                      .UseImage(imageName, true).ExposePort(DockerHelper.EstateManagementDockerPort)
                                                                       .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -131,7 +131,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add("urls=http://*:5001");
 
             ContainerBuilder securityServiceContainer = new Builder().UseContainer().WithName(containerName)
-                                                                     .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName)
+                                                                     .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName, true)
                                                                      .ExposePort(DockerHelper.SecurityServiceDockerPort).UseNetwork(new List<INetworkService>
                                                                                                                                     {
                                                                                                                                         networkService
@@ -211,7 +211,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             ContainerBuilder transactionProcessorACLContainer = new Builder()
                                                                 .UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImage(imageName).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
+                                                                .UseImage(imageName,true).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
                                                                 .UseNetwork(new List<INetworkService>
                                                                             {
                                                                                 networkService
@@ -264,7 +264,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorDockerPort}");
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                          .UseImage(imageName).ExposePort(DockerHelper.TransactionProcessorDockerPort)
+                                                                          .UseImage(imageName, true).ExposePort(DockerHelper.TransactionProcessorDockerPort)
                                                                           .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -618,6 +618,8 @@ namespace TransactionMobile.IntegrationTests.Common
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
+
+            Thread.Sleep(25000);
         }
 
         /// <summary>
