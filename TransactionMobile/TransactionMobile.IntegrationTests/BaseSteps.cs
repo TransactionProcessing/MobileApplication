@@ -203,8 +203,8 @@ namespace TransactionMobile.IntegrationTests
             Console.WriteLine("After where x.ToString().Contains(\"192.\")");
             var ipString = ipAddress.ToString();
             Console.WriteLine($"IP Address [{ipString}]");
-            var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress.Replace("127.0.0.1", ipString);
-            var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress.Replace("127.0.0.1", ipString); ;
+            var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress.Replace("127.0.0.1", "192.168.64.1");
+            var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress.Replace("127.0.0.1", "192.168.64.1"); ;
 
             Console.WriteLine($"securityService [{securityService}]");
             Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
