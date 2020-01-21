@@ -50,6 +50,7 @@ namespace TransactionMobile.IntegrationTests
             {
                 String error = this.loginPage.GetErrorLabel();
                 Console.WriteLine(error);
+                throw new Exception(error);
             }
             
         }
