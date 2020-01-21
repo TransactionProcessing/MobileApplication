@@ -70,7 +70,7 @@
         /// <param name="failureMessage">The failure message.</param>
         public void SetSignInFailureMessage(String failureMessage)
         {
-            this.ErrorLabel.Text = failureMessage;
+            
         }
 
         /// <summary>

@@ -42,17 +42,7 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public void ThenTheMerchantHomePageIsDisplayed()
         {
-            try
-            {
-                this.homePage.AssertOnPage();
-            }
-            catch(Exception e)
-            {
-                String error = this.loginPage.GetErrorLabel();
-                Console.WriteLine(error);
-                throw new Exception(error);
-            }
-            
+            this.homePage.AssertOnPage(TimeSpan.FromSeconds(15));
         }
     }
 }

@@ -47,20 +47,5 @@ namespace TransactionMobile.IntegrationTests.Pages
             app.WaitForElement(this.LoginButton);
             app.Tap(this.LoginButton);
         }
-
-        public String GetErrorLabel()
-        {
-            app.WaitForElement(this.ErrorLabel);
-            var x = app.Query(this.ErrorLabel).SingleOrDefault();
-
-            if (x != null)
-            {
-                return x.Text;
-            }
-
-            return String.Empty;
-        }
     }
 }
-
-//HomePageLabel

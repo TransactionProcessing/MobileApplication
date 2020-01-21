@@ -129,21 +129,6 @@
                         Style="{StaticResource SfButtonStyle}"
                         Text="LOG IN"
                         AutomationId="LoginButton"/>
-
-                    <Label
-                        x:Name="ErrorLabel"
-                        Grid.Row="4"
-                        Margin="0,16"
-                        FontFamily="{StaticResource Montserrat-SemiBold}"
-                        FontSize="12"
-                        HorizontalOptions="End"
-                        Text="FORGOT PASSWORD?"
-                        TextColor="{DynamicResource Gray-800}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" CommandParameter="{x:Reference ForgotPasswordLabel}" />
-                        </Label.GestureRecognizers>
-                    </Label>
-
                 </Grid>
 
             </StackLayout>

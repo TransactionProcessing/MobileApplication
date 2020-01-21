@@ -112,7 +112,7 @@ jobs:
           abi: x86   
    
     - name: Setup tmate session
-      #if: failure()
+      if: failure()
       uses: mxschmitt/action-tmate@v1
 
 
