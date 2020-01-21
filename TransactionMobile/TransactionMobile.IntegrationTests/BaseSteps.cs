@@ -200,8 +200,14 @@ namespace TransactionMobile.IntegrationTests
             }
 
             var ipAddress = ipAddressList.Where(x => x.ToString().Contains("192.")).First();
-            var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress.Replace("127.0.0.1", ipAddress.ToString());
-            var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress.Replace("127.0.0.1", ipAddress.ToString()); ;
+            Console.WriteLine("After where x.ToString().Contains(\"192.\")");
+            var ipString = ipAddress.ToString();
+            Console.WriteLine($"IP Address [{ipString}]");
+            var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress; //.Replace("192.168.64.2", "192.168.64.1");
+            var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress; //.Replace("192.168.64.2", "192.168.64.1"); ;
+
+            Console.WriteLine($"securityService [{securityService}]");
+            Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
 
             AppManager.SetConfiguration(merchantClient.ClientId, merchantClient.ClientSecret,
                                         securityService, transactionProcessorAcl);

@@ -22,7 +22,8 @@ jobs:
           brew install bash
           brew install socat
           brew install hyperkit
-
+          mkdir -p /Users/runner/trace
+          
     - name: "[Pre] Install Docker"
       shell: bash
       run: |
@@ -106,7 +107,7 @@ jobs:
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
       with:
           cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.10.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
-          api: 29
+          api: 24
           tag: default
           abi: x86   
    
@@ -114,8 +115,8 @@ jobs:
       if: failure()
       uses: mxschmitt/action-tmate@v1
 
+
   buildios:
-    needs: buildandroid
     name: "Build and Test Pull Requests - iOS"
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
@@ -131,6 +132,7 @@ jobs:
           brew install bash
           brew install socat
           brew install hyperkit
+          mkdir -p /Users/runner/trace
 
     - name: "[Pre] Install Docker"
       shell: bash
@@ -207,3 +209,4 @@ jobs:
     - name: Setup tmate session
       if: failure()
       uses: mxschmitt/action-tmate@v1
+

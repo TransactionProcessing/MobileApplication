@@ -71,10 +71,10 @@
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.0.0.6.1\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.0.0.6.2\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.0.0.6.1\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.0.0.6.2\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Shouldly, Version=3.0.2.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
       <HintPath>..\packages\Shouldly.3.0.2\lib\net451\Shouldly.dll</HintPath>
@@ -212,7 +212,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TransactionProcessorACL.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransactionProcessorACL.DataTransferObjects.0.0.3.1\lib\netstandard2.0\TransactionProcessorACL.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\TransactionProcessorACL.DataTransferObjects.0.0.4\lib\netstandard2.0\TransactionProcessorACL.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.4.4.0.991265\lib\netstandard2.0\Xamarin.Forms.Core.dll</HintPath>

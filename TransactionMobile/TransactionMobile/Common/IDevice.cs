@@ -28,6 +28,12 @@
         void SetInstabugUserDetails(String userName,
                                     String emailAddress);
 
+        /// <summary>
+        /// Gets the device identifier.
+        /// </summary>
+        /// <returns></returns>
+        String GetDeviceIdentifier();
+
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Presenters
 {
     using System;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
@@ -129,7 +130,7 @@
         {
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
-                                                                                IMEINumber = "123456",
+                                                                                DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                                 RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
                                                                                 TransactionNumber = "1" // TODO: Need to hold txn number somewhere

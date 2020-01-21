@@ -42,7 +42,7 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public void ThenTheMerchantHomePageIsDisplayed()
         {
-            this.homePage.AssertOnPage();
+            this.homePage.AssertOnPage(TimeSpan.FromSeconds(15));
         }
     }
 }

@@ -59,7 +59,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"urls=http://*:{DockerHelper.EstateManagementDockerPort}");
 
             ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                      .UseImage(imageName).ExposePort(DockerHelper.EstateManagementDockerPort)
+                                                                      .UseImage(imageName, true).ExposePort(DockerHelper.EstateManagementDockerPort)
                                                                       .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -131,7 +131,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add("urls=http://*:5001");
 
             ContainerBuilder securityServiceContainer = new Builder().UseContainer().WithName(containerName)
-                                                                     .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName)
+                                                                     .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName, true)
                                                                      .ExposePort(DockerHelper.SecurityServiceDockerPort).UseNetwork(new List<INetworkService>
                                                                                                                                     {
                                                                                                                                         networkService
@@ -211,7 +211,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             ContainerBuilder transactionProcessorACLContainer = new Builder()
                                                                 .UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImage(imageName).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
+                                                                .UseImage(imageName,true).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
                                                                 .UseNetwork(new List<INetworkService>
                                                                             {
                                                                                 networkService
@@ -264,7 +264,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorDockerPort}");
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                          .UseImage(imageName).ExposePort(DockerHelper.TransactionProcessorDockerPort)
+                                                                          .UseImage(imageName, true).ExposePort(DockerHelper.TransactionProcessorDockerPort)
                                                                           .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -508,7 +508,21 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <param name="scenarioName">Name of the scenario.</param>
         public override async Task StartContainersForScenarioRun(String scenarioName)
         {
-            String traceFolder = FdOs.IsWindows() ? $"D:\\home\\txnproc\\trace\\{scenarioName}" : $"//home//txnproc//trace//{scenarioName}";
+            String traceFolder = String.Empty;
+
+            if (FdOs.IsWindows())
+            {
+                traceFolder = $"D:\\home\\txnproc\\trace\\{scenarioName}";
+            }
+            else if (FdOs.IsLinux())
+            {
+                traceFolder = $"//home//txnproc//trace//{scenarioName}";
+            }
+            else if (FdOs.IsOsx())
+            {
+                traceFolder = $"//Users//runner//trace//{scenarioName}";
+            }
+            Console.WriteLine(traceFolder);
 
             Logging.Enabled();
 
@@ -604,6 +618,8 @@ namespace TransactionMobile.IntegrationTests.Common
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
+
+            Thread.Sleep(25000);
         }
 
         /// <summary>
@@ -611,24 +627,24 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
-            if (this.Containers.Any())
-            {
-                foreach (IContainerService containerService in this.Containers)
-                {
-                    containerService.StopOnDispose = true;
-                    containerService.RemoveOnDispose = true;
-                    containerService.Dispose();
-                }
-            }
+            //if (this.Containers.Any())
+            //{
+            //    foreach (IContainerService containerService in this.Containers)
+            //    {
+            //        containerService.StopOnDispose = true;
+            //        containerService.RemoveOnDispose = true;
+            //        containerService.Dispose();
+            //    }
+            //}
 
-            if (this.TestNetworks.Any())
-            {
-                foreach (INetworkService networkService in this.TestNetworks)
-                {
-                    networkService.Stop();
-                    networkService.Remove(true);
-                }
-            }
+            //if (this.TestNetworks.Any())
+            //{
+            //    foreach (INetworkService networkService in this.TestNetworks)
+            //    {
+            //        networkService.Stop();
+            //        networkService.Remove(true);
+            //    }
+            //}
         }
 
         #endregion

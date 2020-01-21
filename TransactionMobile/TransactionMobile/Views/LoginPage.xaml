@@ -129,7 +129,6 @@
                         Style="{StaticResource SfButtonStyle}"
                         Text="LOG IN"
                         AutomationId="LoginButton"/>
-
                 </Grid>
 
             </StackLayout>
