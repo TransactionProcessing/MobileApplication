@@ -20,12 +20,14 @@ namespace TransactionMobile.IntegrationTests.Pages
         private readonly Query EmailAddressEntry;
         private readonly Query PasswordEntry;
         private readonly Query LoginButton;
+        private readonly Query ErrorLabel;
 
         public LoginPage()
         {
             this.EmailAddressEntry = x => x.Marked("EmailEntry");
             this.PasswordEntry= x => x.Marked("PasswordEntry");
             this.LoginButton = x => x.Marked("LoginButton");
+            this.ErrorLabel = x => x.Marked("ErrorLabel");
         }
 
         public void EnterEmailAddress(String emailAddress)
@@ -44,6 +46,19 @@ namespace TransactionMobile.IntegrationTests.Pages
         {
             app.WaitForElement(this.LoginButton);
             app.Tap(this.LoginButton);
+        }
+
+        public String GetErrorLabel()
+        {
+            app.WaitForElement(this.ErrorLabel);
+            var x = app.Query(this.ErrorLabel).SingleOrDefault();
+
+            if (x != null)
+            {
+                return x.Text;
+            }
+
+            return String.Empty;
         }
     }
 }

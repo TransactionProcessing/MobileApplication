@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Presenters
 {
     using System;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
@@ -117,6 +118,15 @@
             }
             catch(Exception ex)
             {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine(ex.Message);
+                if (ex.InnerException != null)
+                {
+                    stringBuilder.AppendLine(ex.InnerException.Message);
+                }
+                this.LoginPage.SetSignInFailureMessage(stringBuilder.ToString());
+
+
                 CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again!");
             }
         }
