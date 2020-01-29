@@ -251,6 +251,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                            String hostFolder,
                                                                            (String URL, String UserName, String Password)? dockerCredentials,
                                                                            String securityServiceContainerName,
+                                                                           String estateManagementContainerName,
                                                                            String eventStoreContainerName,
                                                                            (String clientId, String clientSecret) clientDetails)
         {
@@ -261,7 +262,10 @@ namespace TransactionMobile.IntegrationTests.Common
                 .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
+            environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{DockerHelper.EstateManagementDockerPort}");
             environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorDockerPort}");
+            environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
+            environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
                                                                           .UseImage(imageName, true).ExposePort(DockerHelper.TransactionProcessorDockerPort)
@@ -572,8 +576,9 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                               traceFolder,
                                                                                                               dockerCredentials,
                                                                                                               securityServiceContainerName,
+                                                                                                              estateManagementApiContainerName,
                                                                                                               eventStoreContainerName,
-                                                                                                              (null, null));
+                                                                                                              ("serviceClient", "Secret1"));
 
             IContainerService transactionProcessorACLContainer = DockerHelper.SetupTransactionProcessorACLContainer(transactionProcessorACLContainerName,
                                                                                                                     "stuartferguson/transactionprocessoracl",

@@ -3,6 +3,7 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.IntegrationTests
 {
+    using System.Threading.Tasks;
     using Features;
     using NUnit.Framework;
     using Pages;
@@ -16,9 +17,9 @@ namespace TransactionMobile.IntegrationTests
         HomePage homePage = new HomePage();
 
         [Given(@"I am on the Login Screen")]
-        public void GivenIAmOnTheLoginScreen()
+        public async Task GivenIAmOnTheLoginScreen()
         {
-            this.loginPage.AssertOnPage();
+            await this.loginPage.AssertOnPage();
         }
         
         [When(@"I enter '(.*)' as the Email Address")]
@@ -40,9 +41,9 @@ namespace TransactionMobile.IntegrationTests
         }
         
         [Then(@"the Merchant Home Page is displayed")]
-        public void ThenTheMerchantHomePageIsDisplayed()
+        public async Task ThenTheMerchantHomePageIsDisplayed()
         {
-            this.homePage.AssertOnPage(TimeSpan.FromSeconds(15));
+            await this.homePage.AssertOnPage(TimeSpan.FromSeconds(15));
         }
     }
 }
