@@ -47,7 +47,7 @@
       <HintPath>..\packages\BoDi.1.4.1\lib\net45\BoDi.dll</HintPath>
     </Reference>
     <Reference Include="ClientProxyBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClientProxyBase.0.0.7\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
+      <HintPath>..\packages\ClientProxyBase.0.0.8.1\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
     </Reference>
     <Reference Include="Cucumber.Messages, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b10c5988214f940c, processorArchitecture=MSIL">
       <HintPath>..\packages\Cucumber.Messages.6.0.1\lib\net45\Cucumber.Messages.dll</HintPath>
@@ -56,10 +56,10 @@
       <HintPath>..\packages\Ductus.FluentDocker.2.7.3\lib\net452\Ductus.FluentDocker.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.0.0.7\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.0.0.8\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.0.0.7\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.0.0.8\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Gherkin, Version=6.0.0.0, Culture=neutral, PublicKeyToken=86496cfa5b4a5851, processorArchitecture=MSIL">
       <HintPath>..\packages\Gherkin.6.0.0\lib\net45\Gherkin.dll</HintPath>

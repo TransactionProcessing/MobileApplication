@@ -192,19 +192,9 @@ namespace TransactionMobile.IntegrationTests
 
             var merchantClient = this.TestingContext.GetClientDetails("merchantClient");
 
-            IEnumerable<IPAddress> ipAddressList = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(x => x.AddressFamily == AddressFamily.InterNetwork);
-            
-            foreach (IPAddress ip in ipAddressList)
-            {
-                Console.WriteLine($"IP Address [{ip}]");
-            }
-
-            var ipAddress = ipAddressList.Where(x => x.ToString().Contains("192.")).First();
-            Console.WriteLine("After where x.ToString().Contains(\"192.\")");
-            var ipString = ipAddress.ToString();
-            Console.WriteLine($"IP Address [{ipString}]");
-            var securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress; //.Replace("192.168.64.2", "192.168.64.1");
-            var transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress; //.Replace("192.168.64.2", "192.168.64.1"); ;
+            // TODO: Handle local test running
+            String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
+            String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
 
             Console.WriteLine($"securityService [{securityService}]");
             Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
