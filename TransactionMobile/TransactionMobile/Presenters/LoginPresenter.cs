@@ -121,9 +121,7 @@
             {
                 CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again!");
 
-                LogifyAlert client = LogifyAlert.Instance;
-                client.ApiKey = "D9F4E19D277D40B48DD1EB1B95097CAA";
-                client.Send(ex);
+                throw ex;
             }
         }
 
