@@ -66,6 +66,9 @@
     <PackageReference Include="instabug-for-android">
       <Version>8.6.3</Version>
     </PackageReference>
+    <PackageReference Include="Logify.Alert.Xamarin.Android">
+      <Version>1.0.52</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.Buttons">
       <Version>17.4.0.40</Version>
     </PackageReference>

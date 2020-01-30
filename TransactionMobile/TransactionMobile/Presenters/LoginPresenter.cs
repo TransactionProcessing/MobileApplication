@@ -5,6 +5,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
+    using DevExpress.Logify.Web;
     using Pages;
     using Plugin.Toast;
     using SecurityService.Client;
@@ -96,14 +97,14 @@
             try
             {
                 await this.GetConfiguration();
-
+                
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                         this.LoginViewModel.Password,
                                                                                         App.Configuration.ClientId,
                                                                                         App.Configuration.ClientSecret,
                                                                                         CancellationToken.None);
-
+                
                 // Cache the user token
                 App.TokenResponse = tokenResponse;
 
@@ -119,6 +120,10 @@
             catch(Exception ex)
             {
                 CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again!");
+
+                LogifyAlert client = LogifyAlert.Instance;
+                client.ApiKey = "D9F4E19D277D40B48DD1EB1B95097CAA";
+                client.Send(ex);
             }
         }
 

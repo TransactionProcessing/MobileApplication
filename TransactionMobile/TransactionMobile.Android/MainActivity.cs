@@ -9,6 +9,7 @@
     using Com.Instabug.Library.Invocation;
     using Com.Instabug.Library.UI.Onboarding;
     using Common;
+    using DevExpress.Logify.Xamarin;
     using Java.Interop;
     using Plugin.Toast;
     using Unity;
@@ -65,6 +66,10 @@
         /// <param name="savedInstanceState">State of the saved instance.</param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            LogifyAlert client = LogifyAlert.Instance;
+            client.ApiKey = "D9F4E19D277D40B48DD1EB1B95097CAA";
+            client.StartExceptionsHandling();
+
             FormsAppCompatActivity.TabLayoutResource = Resource.Layout.Tabbar;
             FormsAppCompatActivity.ToolbarResource = Resource.Layout.Toolbar;
 
