@@ -50,6 +50,13 @@
             return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
 
+        public void AddDebugInformation(String debug)
+        {
+            this.DebugInformation += $"{debug}|";
+        }
+
+        public String DebugInformation { get; private set; }
+
         #endregion
     }
 }

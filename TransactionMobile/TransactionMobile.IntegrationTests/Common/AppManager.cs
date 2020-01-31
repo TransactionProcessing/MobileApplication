@@ -58,6 +58,23 @@ namespace TransactionMobile.IntegrationTests.Common
             }
         }
 
+        public static String GetDebug()
+        {
+            String debug = null;
+            if (AppManager.platform == Platform.Android)
+            {
+                debug = AppManager.app.Invoke("GetDebugInformation").ToString();
+            }
+            //else if (AppManager.platform == Platform.iOS)
+            //{
+            //    String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+            //    Console.WriteLine($"Configuration is {configuration}");
+            //    AppManager.app.Invoke("SetConfiguration:", configuration);
+            //}
+
+            return debug;
+        }
+
         public static void StartApp()
         {
             string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -70,6 +87,7 @@ namespace TransactionMobile.IntegrationTests.Common
                       .Android
                       // Used to run a .apk file:
                       .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk"))
+                      //.Debug()
                       .StartApp();
             }
 

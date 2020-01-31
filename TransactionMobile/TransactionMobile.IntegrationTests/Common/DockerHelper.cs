@@ -632,6 +632,15 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
+            var debug = AppManager.GetDebug();
+            if (debug != null)
+            {
+                var lines = debug.Split('|');
+                foreach (String line in lines)
+                {
+                    Console.WriteLine(line);
+                }
+            }
             //if (this.Containers.Any())
             //{
             //    foreach (IContainerService containerService in this.Containers)

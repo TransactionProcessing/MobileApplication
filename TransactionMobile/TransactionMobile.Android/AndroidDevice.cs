@@ -65,6 +65,14 @@
             return id;
         }
 
+        public String DebugInformation { get; private set; }
+
+        public void AddDebugInformation(String debug)
+        {
+            this.DebugInformation += $"{debug}|";
+        }
+
+
         #endregion
     }
 }

@@ -103,7 +103,11 @@
             App.Configuration = configurationObject;
         }
 
-        
+        [Export("GetDebugInformation")]
+        public String GetDebugInformation()
+        {
+            return this.Device.DebugInformation;
+        }
 
         #endregion
     }
