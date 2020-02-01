@@ -5,7 +5,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
-    using DevExpress.Logify.Web;
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
