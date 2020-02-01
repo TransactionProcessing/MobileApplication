@@ -48,8 +48,9 @@
         /// </summary>
         public async Task Start()
         {
+            this.Device.AddDebugInformation("About to Init Transactions Page");
             this.TransactionsPage.Init();
-
+            this.Device.AddDebugInformation("About to Push Transactions Page");
             await Shell.Current.Navigation.PushAsync((Page)this.TransactionsPage);
         }
 

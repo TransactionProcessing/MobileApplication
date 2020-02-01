@@ -42,7 +42,7 @@
         protected override PlatformQuery Trait =>
             new PlatformQuery
             {
-                Android = x => x.Marked("This is my home!"),
+                Android = x => x.Text("This is my home!"),
                 iOS = x => x.Marked("This is my home!")
             };
 
