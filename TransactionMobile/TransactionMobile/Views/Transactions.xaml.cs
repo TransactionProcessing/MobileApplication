@@ -9,19 +9,25 @@ using Xamarin.Forms.Xaml;
 
 namespace TransactionMobile.Views
 {
+    using Common;
     using Pages;
+    using Unity;
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TransactionsPage : ContentPage, ITransactionsPage, IPage
     {
+        private readonly IDevice Device;
+
         public TransactionsPage()
         {
+            this.Device = (IDevice)App.Container.Resolve(typeof(IDevice));
             InitializeComponent();
+            this.Device.AddDebugInformation("In TransactionsPage ctor");
         }
 
         public void Init()
         {
-            
+            this.Device.AddDebugInformation("In TransactionsPage init");
         }
     }
 }

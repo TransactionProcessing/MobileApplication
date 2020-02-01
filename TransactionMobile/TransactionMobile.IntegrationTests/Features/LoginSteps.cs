@@ -43,7 +43,7 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public async Task ThenTheMerchantHomePageIsDisplayed()
         {
-            await this.homePage.AssertOnPage(TimeSpan.FromSeconds(15));
+            await this.homePage.AssertOnPage(TimeSpan.FromSeconds(60));
         }
     }
 }

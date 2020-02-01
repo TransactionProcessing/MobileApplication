@@ -65,6 +65,14 @@
             return id;
         }
 
+        public String DebugInformation { get; private set; }
+
+        public void AddDebugInformation(String debug)
+        {
+            this.DebugInformation += $"{DateTime.Now:yyyy-MM-dd hh:mm:ss.fff},{debug}|";
+        }
+
+
         #endregion
     }
 }

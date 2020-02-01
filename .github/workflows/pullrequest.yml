@@ -110,6 +110,7 @@ jobs:
           api: 24
           tag: default
           abi: x86   
+          verbose: false
    
     - name: Setup tmate session
       if: failure()

@@ -34,6 +34,21 @@
         /// <returns></returns>
         String GetDeviceIdentifier();
 
+        /// <summary>
+        /// Adds the debug information.
+        /// </summary>
+        void AddDebugInformation(String debug);
+
+        /// <summary>
+        /// Gets the debug information.
+        /// </summary>
+        /// <value>
+        /// The debug information.
+        /// </value>
+        String DebugInformation { get; }
+
+
+
         #endregion
     }
 }

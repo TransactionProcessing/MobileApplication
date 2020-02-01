@@ -609,7 +609,7 @@ namespace TransactionMobile.IntegrationTests.Common
             String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
             if (String.IsNullOrEmpty(localhostaddress))
             {
-                localhostaddress = "127.0.0.1";
+                localhostaddress = "192.168.1.67";
             }
             String EstateManagementBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.EstateManagementApiPort}";
             String SecurityServiceBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.SecurityServicePort}";
@@ -632,6 +632,15 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public override async Task StopContainersForScenarioRun()
         {
+            var debug = AppManager.GetDebug();
+            if (debug != null)
+            {
+                var lines = debug.Split('|');
+                foreach (String line in lines)
+                {
+                    Console.WriteLine(line);
+                }
+            }
             //if (this.Containers.Any())
             //{
             //    foreach (IContainerService containerService in this.Containers)
