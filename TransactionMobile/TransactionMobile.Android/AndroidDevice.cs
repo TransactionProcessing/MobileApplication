@@ -69,7 +69,7 @@
 
         public void AddDebugInformation(String debug)
         {
-            this.DebugInformation += $"{DateTime.Now:g},{debug}|";
+            this.DebugInformation += $"{DateTime.Now:yyyy-MM-dd hh:mm:ss.fff},{debug}|";
         }
 
 
