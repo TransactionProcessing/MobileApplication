@@ -11,15 +11,16 @@ namespace TransactionMobile.Views
 {
     using Common;
     using Pages;
+    using Unity;
 
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TransactionsPage : ContentPage, ITransactionsPage, IPage
     {
         private readonly IDevice Device;
 
-        public TransactionsPage(IDevice device)
+        public TransactionsPage()
         {
-            this.Device = device;
+            this.Device = (IDevice)App.Container.Resolve(typeof(IDevice));
             InitializeComponent();
             this.Device.AddDebugInformation("In TransactionsPage ctor");
         }
