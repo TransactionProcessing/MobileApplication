@@ -843,13 +843,17 @@ namespace TransactionMobile.IntegrationTests.Common
             logger.LogInformation("About to start SQL Server Container");
             IContainerService databaseServerContainer = new Builder().UseContainer().WithName(containerName).UseImage(imageName)
                                                                      .WithEnvironment("ACCEPT_EULA=Y", $"SA_PASSWORD={sqlPassword}").ExposePort(1433)
-                                                                     .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start()
-                                                                     .WaitForPort("1433/tcp", 30000);
+                                                                     .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start();
+                                                                     //.WaitForPort("1433/tcp", 30000);
 
             logger.LogInformation("SQL Server Container Started");
 
             logger.LogInformation("About to SQL Server Container is running");
-            IPEndPoint sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
+            IPEndPoint sqlServerEndpoint = null;
+            Retry.For(async () =>
+                      {
+                          sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
+                      }).Wait();
 
             // Try opening a connection
             Int32 maxRetries = 10;
