@@ -855,7 +855,13 @@ namespace TransactionMobile.IntegrationTests.Common
             Int32 maxRetries = 10;
             Int32 counter = 1;
 
-            String server = "127.0.0.1";
+            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(localhostaddress))
+            {
+                localhostaddress = "192.168.1.67";
+            }
+
+            String server = localhostaddress;
             String database = "SubscriptionServiceConfiguration";
             String user = sqlUserName;
             String password = sqlPassword;
