@@ -14,9 +14,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BooleanToColorConverter x:Key="ColorConverter" />
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
 

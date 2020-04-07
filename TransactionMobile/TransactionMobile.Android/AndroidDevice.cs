@@ -1,11 +1,13 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using System.Collections.Generic;
     using Android.Content;
     using Android.OS;
     using Android.Provider;
-    using Com.Instabug.Library;
+    //using Com.Instabug.Library;
     using Common;
+    using Microsoft.AppCenter.Analytics;
 
     /// <summary>
     /// 
@@ -21,7 +23,7 @@
         /// </summary>
         public void ClearInstabugUserData()
         {
-            Instabug.LogoutUser();
+            //Instabug.LogoutUser();
         }
         
         /// <summary>
@@ -32,7 +34,7 @@
         {
             // TODO: May protect overwriting 
             // TODO: Max length 1000 chars
-            Instabug.UserData = userData;
+            //Instabug.UserData = userData;
         }
 
         /// <summary>
@@ -43,7 +45,7 @@
         public void SetInstabugUserDetails(String userName,
                                            String emailAddress)
         {
-            Instabug.IdentifyUser(userName, emailAddress);
+            //Instabug.IdentifyUser(userName, emailAddress);
         }
 
         public String GetDeviceIdentifier()
@@ -70,6 +72,10 @@
         public void AddDebugInformation(String debug)
         {
             this.DebugInformation += $"{DateTime.Now:yyyy-MM-dd hh:mm:ss.fff},{debug}|";
+            Analytics.TrackEvent("DebugEvent", new Dictionary<String, String>()
+                                               {
+                                                   { $"{DateTime.Now:yyyy-MM-dd hh:mm:ss.fff}", debug}
+                                               });
         }
 
 

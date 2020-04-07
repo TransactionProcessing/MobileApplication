@@ -3,6 +3,7 @@
     using System;
     using Common;
     using Ductus.FluentDocker.Services;
+    using Ductus.FluentDocker.Services.Extensions;
     using Shouldly;
     using TechTalk.SpecFlow;
 
@@ -13,27 +14,47 @@
         private static String DbConnectionStringWithNoDatabase;
         public static INetworkService DatabaseServerNetwork;
 
+        public static String SqlServerContainerName = "shareddatabasesqlserver";
+
+        public const String SqlUserName = "sa";
+
+        public const String SqlPassword = "thisisalongpassword123!";
+
         [BeforeTestRun]
         protected static void GlobalSetup()
         {
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
-            //(String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
+            (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
-            //// Setup a network for the DB Server
-            //Setup.DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
+            // Setup a network for the DB Server
+            DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
 
-            //// Start the Database Server here
-            //Setup.DbConnectionStringWithNoDatabase = DockerHelper.StartSqlContainerWithOpenConnection("shareddatabasesqlserver",
-            //                                                                                          "stuartferguson/subscriptionservicedatabasesqlserver",
-            //                                                                                          Setup.DatabaseServerNetwork,
-            //                                                                                          "",
-            //                                                                                          dockerCredentials);
+            TestingLogger logger = new TestingLogger();
+            //logger.Initialise(LogManager.GetLogger("Specflow"), "Specflow");
+            //LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+
+            // Start the Database Server here
+            DatabaseServerContainer = DockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+                                                                                       logger,
+                                                                                       "stuartferguson/subscriptionservicedatabasesqlserver",
+                                                                                       Setup.DatabaseServerNetwork,
+                                                                                       "",
+                                                                                       dockerCredentials,
+                                                                                       Setup.SqlUserName,
+                                                                                       Setup.SqlPassword);
         }
 
         public static String GetConnectionString(String databaseName)
         {
-            return $"{Setup.DbConnectionStringWithNoDatabase} database={databaseName};";
+            return $"server={Setup.DatabaseServerContainer.Name};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
+        }
+
+        public static String GetLocalConnectionString(String databaseName)
+        {
+            Int32 databaseHostPort = Setup.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
+
+            return $"server=localhost,{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
         }
     }
 }

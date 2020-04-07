@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Views
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -13,6 +14,7 @@
     /// <seealso cref="TransactionMobile.Pages.ILoginPage" />
     /// <seealso cref="TransactionMobile.Pages.IPage" />
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [ExcludeFromCodeCoverage]
     public partial class LoginPage : ContentPage, ILoginPage, IPage
     {
         #region Fields
@@ -27,7 +29,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginPage"/> class.
+        /// Initializes a new instance of the <see cref="LoginPage" /> class.
         /// </summary>
         public LoginPage()
         {
@@ -70,7 +72,6 @@
         /// <param name="failureMessage">The failure message.</param>
         public void SetSignInFailureMessage(String failureMessage)
         {
-            
         }
 
         /// <summary>
@@ -90,7 +91,7 @@
         /// Handles the Completed event of the Email control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void Email_Completed(Object sender,
                                      EventArgs e)
         {
@@ -101,7 +102,7 @@
         /// Handles the TextChanged event of the Email control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs" /> instance containing the event data.</param>
         private void Email_TextChanged(Object sender,
                                        TextChangedEventArgs e)
         {
@@ -112,7 +113,7 @@
         /// Handles the Clicked event of the Login control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void Login_Clicked(Object sender,
                                    EventArgs e)
         {
@@ -123,7 +124,7 @@
         /// Handles the Completed event of the Password control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void Password_Completed(Object sender,
                                         EventArgs e)
         {
@@ -134,7 +135,7 @@
         /// Handles the TextChanged event of the Password control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs" /> instance containing the event data.</param>
         private void Password_TextChanged(Object sender,
                                           TextChangedEventArgs e)
         {

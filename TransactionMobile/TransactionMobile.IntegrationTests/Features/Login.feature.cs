@@ -19,7 +19,7 @@ namespace TransactionMobile.IntegrationTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
+    [NUnit.Framework.TestFixtureAttribute(TestName="Login")]
     [NUnit.Framework.DescriptionAttribute("Login")]
     [NUnit.Framework.CategoryAttribute("login")]
     [NUnit.Framework.CategoryAttribute("base")]
@@ -163,7 +163,7 @@ namespace TransactionMobile.IntegrationTests.Features
                         "RequireCustomTerminalNumber"});
             table6.AddRow(new string[] {
                         "Test Estate 1",
-                        "Test Operator 1",
+                        "Safaricom",
                         "True",
                         "True"});
 #line 29
@@ -214,7 +214,7 @@ namespace TransactionMobile.IntegrationTests.Features
                         "TerminalNumber",
                         "EstateName"});
             table9.AddRow(new string[] {
-                        "Test Operator 1",
+                        "Safaricom",
                         "Test Merchant 1",
                         "00000001",
                         "10000001",
@@ -224,7 +224,7 @@ namespace TransactionMobile.IntegrationTests.Features
 #line hidden
         }
         
-        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.TestCaseAttribute(TestName="Login as Merchant")]
         [NUnit.Framework.DescriptionAttribute("Login as Merchant")]
         [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void LoginAsMerchant()
@@ -266,7 +266,7 @@ this.FeatureBackground();
  testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 50
- testRunner.When("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 51
  testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

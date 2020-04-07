@@ -3,7 +3,11 @@
 namespace TransactionMobile
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Common;
+    using Microsoft.AppCenter;
+    using Microsoft.AppCenter.Analytics;
+    using Microsoft.AppCenter.Crashes;
     using Pages;
     using Plugin.Toast;
     using Presenters;
@@ -15,6 +19,7 @@ namespace TransactionMobile
     /// 
     /// </summary>
     /// <seealso cref="Xamarin.Forms.Application" />
+    [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
         /// <summary>
@@ -74,8 +79,16 @@ namespace TransactionMobile
         /// </remarks>
         protected override async void OnStart()
         {
+            //AppCenter.Start("android=9a0cb953-7e00-4918-b2e1-a58326ace637;" +
+            //                "uwp={Your UWP App secret here};" +
+            //                "ios={Your iOS App secret here}",
+            //                typeof(Analytics), typeof(Crashes));
+
+            AppCenter.Start("android=9a0cb953-7e00-4918-b2e1-a58326ace637;",
+                            typeof(Analytics), typeof(Crashes));
+
             // Handle when your app starts
-           ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
+            ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
 
             // show the login page
             await loginPresenter.Start();

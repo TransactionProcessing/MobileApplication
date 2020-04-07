@@ -14,6 +14,8 @@ namespace TransactionMobile.UnitTests.Presenters
     using Services;
     using Shouldly;
     using TransactionMobile.Presenters;
+    using TransactionMobile.Services;
+    using TransactionMobile.ViewModels;
     using ViewModels;
 
     [TestFixture]
@@ -23,12 +25,13 @@ namespace TransactionMobile.UnitTests.Presenters
         public void LoginPresenter_CanBeCreated_IsCreated()
         {
             Mock<ILoginPage> loginPage = new Mock<ILoginPage>();
+            Mock<IMainPage> mainPage = new Mock<IMainPage>();
             LoginViewModel loginViewModel = new LoginViewModel();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
             LoginPresenter loginPresenter =
-                new LoginPresenter(loginPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object);
+                new LoginPresenter(loginPage.Object, mainPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object);
 
             loginPresenter.ShouldNotBeNull();
         }
