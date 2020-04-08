@@ -13,6 +13,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using System.IO;
     using System.Net;
     using System.Threading;
+    using Android.Media;
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services.Extensions;
     using TechTalk.SpecFlow.Plugins;
@@ -866,7 +867,8 @@ namespace TransactionMobile.IntegrationTests.Common
             //}
 
             String server = "127.0.0.1";
-            String database = "SubscriptionServiceConfiguration";
+            //String database = "SubscriptionServiceConfiguration";
+            String database = "master";
             String user = sqlUserName;
             String password = sqlPassword;
             String port = sqlServerEndpoint.Port.ToString();
@@ -884,9 +886,15 @@ namespace TransactionMobile.IntegrationTests.Common
                     connection.Open();
 
                     SqlCommand command = connection.CreateCommand();
-                    command.CommandText = "SELECT * FROM EventStoreServer";
-                    command.ExecuteNonQuery();
-
+                    //command.CommandText = "SELECT * FROM EventStoreServer";
+                    //command.ExecuteNonQuery();
+                    command.CommandText = "select * from sys.databases";
+                    var dataReader= command.ExecuteReader(CommandBehavior.Default);
+                    while (dataReader.Read())
+                    {
+                        Console.WriteLine(dataReader.GetValue(0));
+                    }
+                    
                     logger.LogInformation("Connection Opened");
 
                     connection.Close();
