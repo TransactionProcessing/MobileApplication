@@ -17,10 +17,16 @@ namespace TransactionMobile.IntegrationTests.Common
     {
         public void LogInformation(String message)
         {
+            Console.WriteLine(message);
         }
 
         public void LogError(Exception ex)
         {
+            Console.WriteLine(ex.Message);
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine(ex.InnerException.Message);
+            }
         }
     }
 }
