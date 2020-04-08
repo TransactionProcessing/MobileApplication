@@ -1,22 +1,16 @@
-﻿using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TransactionMobile.IntegrationTests.Common
+﻿namespace TransactionMobile.IntegrationTests.Common
 {
+    using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
-    using System.IO;
     using System.Net;
     using System.Threading;
-    using Android.Media;
+    using System.Threading.Tasks;
+    using Ductus.FluentDocker.Builders;
     using Ductus.FluentDocker.Model.Builders;
+    using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
-    using TechTalk.SpecFlow.Plugins;
 
     //public abstract class DockerHelper
     //{
@@ -454,8 +448,6 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables
                 .Add($"ConnectionStrings:EstateReportingReadModel=\"server={sqlServerContainerName};user id={sqlServerUserName};password={sqlServerPassword};database=EstateReportingReadModel\"");
 
-
-
             ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
                                                                       .UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.EstateManagementDockerPort)
                                                                       .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
@@ -845,16 +837,13 @@ namespace TransactionMobile.IntegrationTests.Common
             IContainerService databaseServerContainer = new Builder().UseContainer().WithName(containerName).UseImage(imageName)
                                                                      .WithEnvironment("ACCEPT_EULA=Y", $"SA_PASSWORD={sqlPassword}").ExposePort(1433)
                                                                      .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start();
-                                                                     //.WaitForPort("1433/tcp", 30000);
+            //.WaitForPort("1433/tcp", 30000);
 
             logger.LogInformation("SQL Server Container Started");
 
             logger.LogInformation("About to SQL Server Container is running");
             IPEndPoint sqlServerEndpoint = null;
-            Retry.For(async () =>
-                      {
-                          sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
-                      }).Wait();
+            Retry.For(async () => { sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp"); }).Wait();
 
             // Try opening a connection
             Int32 maxRetries = 10;
@@ -889,19 +878,19 @@ namespace TransactionMobile.IntegrationTests.Common
                     //command.CommandText = "SELECT * FROM EventStoreServer";
                     //command.ExecuteNonQuery();
                     command.CommandText = "select * from sys.databases";
-                    var dataReader= command.ExecuteReader(CommandBehavior.Default);
+                    var dataReader = command.ExecuteReader(CommandBehavior.Default);
                     while (dataReader.Read())
                     {
                         Console.WriteLine(dataReader.GetValue(0));
                     }
-                    
+
                     logger.LogInformation("Connection Opened");
 
                     connection.Close();
                     logger.LogInformation("SQL Server Container Running");
                     break;
                 }
-                catch (SqlException ex)
+                catch(SqlException ex)
                 {
                     if (connection.State == ConnectionState.Open)
                     {
