@@ -840,7 +840,6 @@
             IContainerService databaseServerContainer = new Builder().UseContainer().WithName(containerName).UseImage(imageName)
                                                                      .WithEnvironment("ACCEPT_EULA=Y", $"SA_PASSWORD={sqlPassword}").ExposePort(1433)
                                                                      .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start();
-            //.WaitForPort("1433/tcp", 30000);
 
             logger.LogInformation("SQL Server Container Started");
 
@@ -852,7 +851,13 @@
             Int32 maxRetries = 10;
             Int32 counter = 1;
 
-            String server = "127.0.0.1";
+            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(localhostaddress))
+            {
+                localhostaddress = "192.168.1.67";
+            }
+
+            String server = localhostaddress;
             //String database = "SubscriptionServiceConfiguration";
             String database = "master";
             String user = sqlUserName;

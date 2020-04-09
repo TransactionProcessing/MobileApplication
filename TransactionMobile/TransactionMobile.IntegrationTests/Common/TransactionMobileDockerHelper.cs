@@ -279,7 +279,6 @@
             this.TransactionProcessorACLPort = transactionProcessorACLContainer.ToHostExposedEndpoint("5003/tcp").Port;
 
             // Setup the base address resolvers
-            // Setup the base address resolvers
             String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
             if (String.IsNullOrEmpty(localhostaddress))
             {
