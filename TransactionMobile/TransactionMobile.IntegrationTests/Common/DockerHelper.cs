@@ -14,9 +14,6 @@
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
-    using Java.IO;
-    using Shouldly;
-    using Console = System.Console;
 
     //public abstract class DockerHelper
     //{
@@ -907,10 +904,10 @@
             // Create the SS database here
             // Read the SQL File
             String sqlToExecute = null;
-            string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string sqlFileLocation = Path.Combine(executableLocation, "DbScripts");
+            String executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String sqlFileLocation = Path.Combine(executableLocation, "DbScripts");
             var files = Directory.GetFiles(sqlFileLocation).OrderBy(x => x);
-            
+
             try
             {
                 SqlConnection ssconnection = new SqlConnection(connectionString);
@@ -932,17 +929,18 @@
                     sscommand.CommandText = sqlToExecute;
                     sscommand.ExecuteNonQuery();
                 }
-                
+
                 connection.Close();
 
                 Console.WriteLine("SS Database Created");
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 if (connection.State == ConnectionState.Open)
                 {
                     connection.Close();
                 }
+
                 Console.WriteLine(e);
                 throw;
             }
