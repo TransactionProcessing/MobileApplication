@@ -52,7 +52,13 @@
         {
             Int32 databaseHostPort = Setup.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
 
-            return $"server=localhost,{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
+            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(localhostaddress))
+            {
+                localhostaddress = "192.168.1.67";
+            }
+
+            return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
         }
     }
 }
