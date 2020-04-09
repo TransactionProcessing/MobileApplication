@@ -184,7 +184,6 @@
     <Compile Include="Common\SpecflowTableHelper.cs" />
     <Compile Include="Common\TestingContext.cs" />
     <Compile Include="Common\TransactionMobileDockerHelper.cs" />
-    <Compile Include="Features\Login.feature.cs" />
     <Compile Include="Features\LoginFeature.cs" />
     <Compile Include="Features\LoginSteps.cs" />
     <Compile Include="Features\SafaricomTopupSteps.cs" />
