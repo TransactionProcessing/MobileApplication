@@ -17,7 +17,7 @@
     using SecurityService.Client;
     using TransactionMobile.Services;
 
-    public class TransactionMobileDockerHelper : DockerHelper
+    public partial class TransactionMobileDockerHelper
     {
         #region Fields
 
@@ -155,7 +155,7 @@
         /// Starts the containers for scenario run.
         /// </summary>
         /// <param name="scenarioName">Name of the scenario.</param>
-        public override async Task StartContainersForScenarioRun(String scenarioName)
+        public async Task StartContainersForScenarioRun(String scenarioName)
         {
             String traceFolder = FdOs.IsWindows() ? $"D:\\home\\txnproc\\trace\\{scenarioName}" : $"//home//txnproc//trace//{scenarioName}";
 
@@ -178,76 +178,76 @@
 
             (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
-            INetworkService testNetwork = DockerHelper.SetupTestNetwork();
+            INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
             IContainerService eventStoreContainer =
-                DockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
+                TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
 
-            IContainerService estateManagementContainer = DockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
-                                                                                                      "stuartferguson/estatemanagement", new List<INetworkService>
-                                                                                                                          {
-                                                                                                                              testNetwork,
-                                                                                                                              Setup.DatabaseServerNetwork
-                                                                                                                          }, traceFolder, null,
-                                                                                                      this.SecurityServiceContainerName,
-                                                                                                      this.EventStoreContainerName,
-                                                                                                      Setup.SqlServerContainerName,
-                                                                                                      "sa",
-                                                                                                      "thisisalongpassword123!",
-                                                                                                      ("serviceClient", "Secret1"),
-                                                                                                      true);
+            IContainerService estateManagementContainer = TransactionMobileDockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
+                                                                                                                       "stuartferguson/estatemanagement", new List<INetworkService>
+                                                                                                                                                          {
+                                                                                                                                                              testNetwork,
+                                                                                                                                                              Setup.DatabaseServerNetwork
+                                                                                                                                                          }, traceFolder, null,
+                                                                                                                       this.SecurityServiceContainerName,
+                                                                                                                       this.EventStoreContainerName,
+                                                                                                                       Setup.SqlServerContainerName,
+                                                                                                                       "sa",
+                                                                                                                       "thisisalongpassword123!",
+                                                                                                                       ("serviceClient", "Secret1"),
+                                                                                                                       true);
 
-            IContainerService securityServiceContainer = DockerHelper.SetupSecurityServiceContainer(this.SecurityServiceContainerName,
-                                                                                                    this.Logger,
-                                                                                                    "stuartferguson/securityservice",
-                                                                                                    testNetwork,
-                                                                                                    traceFolder,
-                                                                                                    dockerCredentials,
-                                                                                                    true);
+            IContainerService securityServiceContainer = TransactionMobileDockerHelper.SetupSecurityServiceContainer(this.SecurityServiceContainerName,
+                                                                                                                     this.Logger,
+                                                                                                                     "stuartferguson/securityservice",
+                                                                                                                     testNetwork,
+                                                                                                                     traceFolder,
+                                                                                                                     dockerCredentials,
+                                                                                                                     true);
 
-            IContainerService transactionProcessorContainer = DockerHelper.SetupTransactionProcessorContainer(this.TransactionProcessorContainerName,
-                                                                                                              this.Logger,
-                                                                                                              "stuartferguson/transactionprocessor",
-                                                                                                              new List<INetworkService>
-                                                                                                              {
-                                                                                                                  testNetwork
-                                                                                                              },
-                                                                                                              traceFolder,
-                                                                                                              dockerCredentials,
-                                                                                                              this.SecurityServiceContainerName,
-                                                                                                              this.EstateManagementContainerName,
-                                                                                                              this.EventStoreContainerName,
-                                                                                                              ("serviceClient", "Secret1"),
-                                                                                                              this.TestHostContainerName,
-                                                                                                              true);
+            IContainerService transactionProcessorContainer = TransactionMobileDockerHelper.SetupTransactionProcessorContainer(this.TransactionProcessorContainerName,
+                                                                                                                               this.Logger,
+                                                                                                                               "stuartferguson/transactionprocessor",
+                                                                                                                               new List<INetworkService>
+                                                                                                                               {
+                                                                                                                                   testNetwork
+                                                                                                                               },
+                                                                                                                               traceFolder,
+                                                                                                                               dockerCredentials,
+                                                                                                                               this.SecurityServiceContainerName,
+                                                                                                                               this.EstateManagementContainerName,
+                                                                                                                               this.EventStoreContainerName,
+                                                                                                                               ("serviceClient", "Secret1"),
+                                                                                                                               this.TestHostContainerName,
+                                                                                                                               true);
 
-            IContainerService estateReportingContainer = DockerHelper.SetupEstateReportingContainer(this.EstateReportingContainerName,
-                                                                                                    this.Logger,
-                                                                                                    "stuartferguson/estatereporting",
-                                                                                                    new List<INetworkService>
-                                                                                                    {
-                                                                                                        testNetwork,
-                                                                                                        Setup.DatabaseServerNetwork
-                                                                                                    },
-                                                                                                    traceFolder,
-                                                                                                    dockerCredentials,
-                                                                                                    this.SecurityServiceContainerName,
-                                                                                                    Setup.SqlServerContainerName,
-                                                                                                    "sa",
-                                                                                                    "thisisalongpassword123!",
-                                                                                                    ("serviceClient", "Secret1"),
-                                                                                                    true);
+            IContainerService estateReportingContainer = TransactionMobileDockerHelper.SetupEstateReportingContainer(this.EstateReportingContainerName,
+                                                                                                                     this.Logger,
+                                                                                                                     "stuartferguson/estatereporting",
+                                                                                                                     new List<INetworkService>
+                                                                                                                     {
+                                                                                                                         testNetwork,
+                                                                                                                         Setup.DatabaseServerNetwork
+                                                                                                                     },
+                                                                                                                     traceFolder,
+                                                                                                                     dockerCredentials,
+                                                                                                                     this.SecurityServiceContainerName,
+                                                                                                                     Setup.SqlServerContainerName,
+                                                                                                                     "sa",
+                                                                                                                     "thisisalongpassword123!",
+                                                                                                                     ("serviceClient", "Secret1"),
+                                                                                                                     true);
 
-            IContainerService transactionProcessorACLContainer = DockerHelper.SetupTransactionProcessorACLContainer(this.TransactionProcessorACLContainerName,
-                                                                                                                    this.Logger,
-                                                                                                                    "stuartferguson/transactionprocessoracl",
-                                                                                                                    testNetwork,
-                                                                                                                    traceFolder,
-                                                                                                                    null,
-                                                                                                                    this.SecurityServiceContainerName,
-                                                                                                                    this.TransactionProcessorContainerName,
-                                                                                                                    ("serviceClient", "Secret1"),
-                                                                                                                    true);
+            IContainerService transactionProcessorACLContainer = TransactionMobileDockerHelper.SetupTransactionProcessorACLContainer(this.TransactionProcessorACLContainerName,
+                                                                                                                                     this.Logger,
+                                                                                                                                     "stuartferguson/transactionprocessoracl",
+                                                                                                                                     testNetwork,
+                                                                                                                                     traceFolder,
+                                                                                                                                     null,
+                                                                                                                                     this.SecurityServiceContainerName,
+                                                                                                                                     this.TransactionProcessorContainerName,
+                                                                                                                                     ("serviceClient", "Secret1"),
+                                                                                                                                     true);
 
             IContainerService testhostContainer = SetupTestHostContainer(this.TestHostContainerName,
                                                                          this.Logger,
@@ -301,23 +301,23 @@
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
 
-            IContainerService subscriptionServiceContainer = DockerHelper.SetupSubscriptionServiceContainer(this.SubscriptionServiceContainerName,
-                                                                                                            this.Logger,
-                                                                                                            "stuartferguson/subscriptionservicehost",
-                                                                                                            new List<INetworkService>
-                                                                                                            {
-                                                                                                                testNetwork,
-                                                                                                                Setup.DatabaseServerNetwork
-                                                                                                            },
-                                                                                                            traceFolder,
-                                                                                                            dockerCredentials,
-                                                                                                            this.SecurityServiceContainerName,
-                                                                                                            Setup.SqlServerContainerName,
-                                                                                                            "sa",
-                                                                                                            "thisisalongpassword123!",
-                                                                                                            this.TestId,
-                                                                                                            ("serviceClient", "Secret1"),
-                                                                                                            true);
+            IContainerService subscriptionServiceContainer = TransactionMobileDockerHelper.SetupSubscriptionServiceContainer(this.SubscriptionServiceContainerName,
+                                                                                                                             this.Logger,
+                                                                                                                             "stuartferguson/subscriptionservicehost",
+                                                                                                                             new List<INetworkService>
+                                                                                                                             {
+                                                                                                                                 testNetwork,
+                                                                                                                                 Setup.DatabaseServerNetwork
+                                                                                                                             },
+                                                                                                                             traceFolder,
+                                                                                                                             dockerCredentials,
+                                                                                                                             this.SecurityServiceContainerName,
+                                                                                                                             Setup.SqlServerContainerName,
+                                                                                                                             "sa",
+                                                                                                                             "thisisalongpassword123!",
+                                                                                                                             this.TestId,
+                                                                                                                             ("serviceClient", "Secret1"),
+                                                                                                                             true);
 
             this.Containers.Add(subscriptionServiceContainer);
         }
@@ -374,7 +374,7 @@
 
         protected async Task InsertEventStoreServer(SqlConnection openConnection, String eventStoreContainerName)
         {
-            String esConnectionString = $"ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;";
+            String esConnectionString = $"ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;";
             SqlCommand command = openConnection.CreateCommand();
             command.CommandText = $"INSERT INTO EventStoreServer(EventStoreServerId, ConnectionString,Name) SELECT '{this.TestId}', '{esConnectionString}', 'TestEventStore'";
             command.CommandType = CommandType.Text;
@@ -423,7 +423,7 @@
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>
-        public override async Task StopContainersForScenarioRun()
+        public async Task StopContainersForScenarioRun()
         {
             String debug = AppManager.GetDebug();
 

@@ -28,19 +28,19 @@
             (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
             // Setup a network for the DB Server
-            DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
+            DatabaseServerNetwork = TransactionMobileDockerHelper.SetupTestNetwork("sharednetwork", true);
 
             TestingLogger logger = new TestingLogger();
 
             // Start the Database Server here
-            DatabaseServerContainer = DockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
-                                                                                       logger,
-                                                                                       "justin2004/mssql_server_tiny",
-                                                                                       Setup.DatabaseServerNetwork,
-                                                                                       "",
-                                                                                       dockerCredentials,
-                                                                                       Setup.SqlUserName,
-                                                                                       Setup.SqlPassword);
+            DatabaseServerContainer = TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+                                                                                                        logger,
+                                                                                                        "justin2004/mssql_server_tiny",
+                                                                                                        Setup.DatabaseServerNetwork,
+                                                                                                        "",
+                                                                                                        dockerCredentials,
+                                                                                                        Setup.SqlUserName,
+                                                                                                        Setup.SqlPassword);
         }
 
         public static String GetConnectionString(String databaseName)

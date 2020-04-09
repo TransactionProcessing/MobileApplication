@@ -14,399 +14,8 @@
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
-
-    //public abstract class DockerHelper
-    //{
-    //    #region Methods
-
-    //    /// <summary>
-    //    /// Setups the estate management container.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkServices">The network services.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <param name="dockerCredentials">The docker credentials.</param>
-    //    /// <param name="securityServiceContainerName">Name of the security service container.</param>
-    //    /// <param name="eventStoreContainerName">Name of the event store container.</param>
-    //    /// <param name="clientDetails">The client details.</param>
-    //    /// <returns></returns>
-    //    public static IContainerService SetupEstateManagementContainer(String containerName,
-    //                                                                   //ILogger logger,
-    //                                                                   String imageName,
-    //                                                                   List<INetworkService> networkServices,
-    //                                                                   String hostFolder,
-    //                                                                   (String URL, String UserName, String Password)? dockerCredentials,
-    //                                                                   String securityServiceContainerName,
-    //                                                                   String eventStoreContainerName,
-    //                                                                   (String clientId, String clientSecret) clientDetails)
-    //    {
-    //        //logger.LogInformation("About to Start Estate Management Container");
-
-    //        List<String> environmentVariables = new List<String>();
-    //        environmentVariables
-    //            .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
-    //        environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"urls=http://*:{DockerHelper.EstateManagementDockerPort}");
-
-    //        ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-    //                                                                  .UseImage(imageName, true).ExposePort(DockerHelper.EstateManagementDockerPort)
-    //                                                                  .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
-
-    //        if (dockerCredentials.HasValue)
-    //        {
-    //            estateManagementContainer.WithCredential(dockerCredentials.Value.URL, dockerCredentials.Value.UserName, dockerCredentials.Value.Password);
-    //        }
-
-    //        // Now build and return the container                
-    //        IContainerService builtContainer = estateManagementContainer.Build().Start();//.WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
-
-    //        //logger.LogInformation("Estate Management Container Started");
-
-    //        return builtContainer;
-    //    }
-
-    //    /// <summary>
-    //    /// Setups the event store container.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkService">The network service.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <returns></returns>
-    //    public static IContainerService SetupEventStoreContainer(String containerName,
-    //                                                             //ILogger logger,
-    //                                                             String imageName,
-    //                                                             INetworkService networkService,
-    //                                                             String hostFolder)
-    //    {
-    //        //logger.LogInformation("About to Start Event Store Container");
-
-    //        IContainerService eventStoreContainer = new Builder().UseContainer().UseImage(imageName).ExposePort(DockerHelper.EventStoreHttpDockerPort)
-    //                                                             .ExposePort(DockerHelper.EventStoreTcpDockerPort).WithName(containerName)
-    //                                                             .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
-    //                                                             .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-    //                                                             .Start();//.WaitForPort("2113/tcp", 30000);
-
-    //        Thread.Sleep(20000);
-
-    //        //logger.LogInformation("Event Store Container Started");
-
-    //        return eventStoreContainer;
-    //    }
-
-    //    /// <summary>
-    //    /// Setups the security service container.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkService">The network service.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <param name="dockerCredentials">The docker credentials.</param>
-    //    /// <returns></returns>
-    //    public static IContainerService SetupSecurityServiceContainer(String containerName,
-    //                                                                  //ILogger logger,
-    //                                                                  String imageName,
-    //                                                                  INetworkService networkService,
-    //                                                                  String hostFolder,
-    //                                                                  (String URL, String UserName, String Password)? dockerCredentials)
-    //    {
-    //        //logger.LogInformation("About to Start Security Container");
-
-    //        List<String> environmentVariables = new List<String>();
-    //        environmentVariables.Add($"ServiceOptions:PublicOrigin=http://{containerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"ServiceOptions:IssuerUrl=http://{containerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add("ASPNETCORE_ENVIRONMENT=IntegrationTest");
-    //        environmentVariables.Add("urls=http://*:5001");
-
-    //        ContainerBuilder securityServiceContainer = new Builder().UseContainer().WithName(containerName)
-    //                                                                 .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName, true)
-    //                                                                 .ExposePort(DockerHelper.SecurityServiceDockerPort).UseNetwork(new List<INetworkService>
-    //                                                                                                                                {
-    //                                                                                                                                    networkService
-    //                                                                                                                                }.ToArray()).Mount(hostFolder,
-    //                                                                                                                                                   "/home/txnproc/trace",
-    //                                                                                                                                                   MountType
-    //                                                                                                                                                       .ReadWrite);
-
-    //        if (dockerCredentials.HasValue)
-    //        {
-    //            securityServiceContainer.WithCredential(dockerCredentials.Value.URL, dockerCredentials.Value.UserName, dockerCredentials.Value.Password);
-    //        }
-
-    //        // Now build and return the container                
-    //        IContainerService builtContainer = securityServiceContainer.Build().Start();//.WaitForPort("5001/tcp", 30000);
-    //        Thread.Sleep(20000); // This hack is in till health checks implemented :|
-
-    //        //logger.LogInformation("Security Service Container Started");
-
-    //        return builtContainer;
-    //    }
-
-    //    /// <summary>
-    //    /// Setups the test network.
-    //    /// </summary>
-    //    /// <param name="networkName">Name of the network.</param>
-    //    /// <param name="reuseIfExists">if set to <c>true</c> [reuse if exists].</param>
-    //    /// <returns></returns>
-    //    public static INetworkService SetupTestNetwork(String networkName = null,
-    //                                                   Boolean reuseIfExists = false)
-    //    {
-    //        networkName = string.IsNullOrEmpty(networkName) ? $"testnetwork{Guid.NewGuid()}" : networkName;
-
-    //        // Build a network
-    //        NetworkBuilder networkService = new Builder().UseNetwork(networkName);
-
-    //        if (reuseIfExists)
-    //        {
-    //            networkService.ReuseIfExist();
-    //        }
-
-    //        return networkService.Build();
-    //    }
-
-    //    /// <summary>
-    //    /// Setups the transaction processor acl container.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkService">The network service.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <param name="dockerCredentials">The docker credentials.</param>
-    //    /// <param name="securityServiceContainerName">Name of the security service container.</param>
-    //    /// <param name="transactionProcessorContainerName">Name of the transaction processor container.</param>
-    //    /// <param name="clientDetails">The client details.</param>
-    //    /// <returns></returns>
-    //    public static IContainerService SetupTransactionProcessorACLContainer(String containerName,
-    //                                                                          //ILogger logger,
-    //                                                                          String imageName,
-    //                                                                          INetworkService networkService,
-    //                                                                          String hostFolder,
-    //                                                                          (String URL, String UserName, String Password)? dockerCredentials,
-    //                                                                          String securityServiceContainerName,
-    //                                                                          String transactionProcessorContainerName,
-    //                                                                          (String clientId, String clientSecret) clientDetails)
-    //    {
-    //        //logger.LogInformation("About to Start Transaction Processor ACL Container");
-
-    //        List<String> environmentVariables = new List<String>();
-    //        environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorACLDockerPort}");
-    //        environmentVariables.Add($"AppSettings:TransactionProcessorApi=http://{transactionProcessorContainerName}:{DockerHelper.TransactionProcessorDockerPort}");
-    //        environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
-    //        environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
-
-    //        ContainerBuilder transactionProcessorACLContainer = new Builder()
-    //                                                            .UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-    //                                                            .UseImage(imageName,true).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
-    //                                                            .UseNetwork(new List<INetworkService>
-    //                                                                        {
-    //                                                                            networkService
-    //                                                                        }.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
-
-    //        if (dockerCredentials.HasValue)
-    //        {
-    //            transactionProcessorACLContainer.WithCredential(dockerCredentials.Value.URL, dockerCredentials.Value.UserName, dockerCredentials.Value.Password);
-    //        }
-
-    //        // Now build and return the container                
-    //        IContainerService builtContainer =
-    //            transactionProcessorACLContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
-
-    //        //logger.LogInformation("Transaction Processor Container ACL Started");
-
-    //        return builtContainer;
-    //    }
-
-    //    /// <summary>
-    //    /// Setups the transaction processor container.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkServices">The network services.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <param name="dockerCredentials">The docker credentials.</param>
-    //    /// <param name="securityServiceContainerName">Name of the security service container.</param>
-    //    /// <param name="eventStoreContainerName">Name of the event store container.</param>
-    //    /// <param name="clientDetails">The client details.</param>
-    //    /// <returns></returns>
-    //    public static IContainerService SetupTransactionProcessorContainer(String containerName,
-    //                                                                       //ILogger logger,
-    //                                                                       String imageName,
-    //                                                                       List<INetworkService> networkServices,
-    //                                                                       String hostFolder,
-    //                                                                       (String URL, String UserName, String Password)? dockerCredentials,
-    //                                                                       String securityServiceContainerName,
-    //                                                                       String estateManagementContainerName,
-    //                                                                       String eventStoreContainerName,
-    //                                                                       (String clientId, String clientSecret) clientDetails)
-    //    {
-    //        //logger.LogInformation("About to Start Transaction Processor Container");
-
-    //        List<String> environmentVariables = new List<String>();
-    //        environmentVariables
-    //            .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
-    //        environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{DockerHelper.SecurityServiceDockerPort}");
-    //        environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{DockerHelper.EstateManagementDockerPort}");
-    //        environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorDockerPort}");
-    //        environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
-    //        environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
-
-    //        ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-    //                                                                      .UseImage(imageName, true).ExposePort(DockerHelper.TransactionProcessorDockerPort)
-    //                                                                      .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
-
-    //        if (dockerCredentials.HasValue)
-    //        {
-    //            transactionProcessorContainer.WithCredential(dockerCredentials.Value.URL, dockerCredentials.Value.UserName, dockerCredentials.Value.Password);
-    //        }
-
-    //        // Now build and return the container                
-    //        IContainerService builtContainer = transactionProcessorContainer.Build().Start();//.WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
-
-    //        //logger.LogInformation("Transaction Processor Container Started");
-
-    //        return builtContainer;
-    //    }
-
-    //    /// <summary>
-    //    /// Starts the containers for scenario run.
-    //    /// </summary>
-    //    /// <param name="scenarioName">Name of the scenario.</param>
-    //    /// <returns></returns>
-    //    public abstract Task StartContainersForScenarioRun(String scenarioName);
-
-    //    /// <summary>
-    //    /// Starts the SQL container with open connection.
-    //    /// </summary>
-    //    /// <param name="containerName">Name of the container.</param>
-    //    /// <param name="logger">The logger.</param>
-    //    /// <param name="imageName">Name of the image.</param>
-    //    /// <param name="networkService">The network service.</param>
-    //    /// <param name="hostFolder">The host folder.</param>
-    //    /// <param name="dockerCredentials">The docker credentials.</param>
-    //    /// <returns></returns>
-    //    public static String StartSqlContainerWithOpenConnection(String containerName,
-    //                                                             //ILogger logger,
-    //                                                             String imageName,
-    //                                                             INetworkService networkService,
-    //                                                             String hostFolder,
-    //                                                             (String URL, String UserName, String Password)? dockerCredentials)
-    //    {
-    //        IContainerService databaseServerContainer = new Builder().UseContainer().WithName(containerName).UseImage(imageName)
-    //                                                                 .WithEnvironment("ACCEPT_EULA=Y", "SA_PASSWORD=thisisalongpassword123!").ExposePort(1433)
-    //                                                                 .UseNetwork(networkService).KeepContainer().KeepRunning().ReuseIfExists().Build().Start();
-    //                                                                 //.WaitForPort("1433/tcp", 30000);
-
-    //        IPEndPoint sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp");
-
-    //        // Try opening a connection
-    //        Int32 maxRetries = 10;
-    //        Int32 counter = 1;
-
-    //        String server = "127.0.0.1";
-    //        String database = "SubscriptionServiceConfiguration";
-    //        String user = "sa";
-    //        String password = "thisisalongpassword123!";
-    //        String port = sqlServerEndpoint.Port.ToString();
-
-    //        String connectionString = $"server={server},{port};user id={user}; password={password}; database={database};";
-
-    //        SqlConnection connection = new SqlConnection(connectionString);
-
-    //        using (StreamWriter sw = new StreamWriter("C:\\Temp\\testlog.log", true))
-    //        {
-    //            while (counter <= maxRetries)
-    //            {
-    //                try
-    //                {
-    //                    sw.WriteLine($"Attempt {counter}");
-    //                    sw.WriteLine(DateTime.Now);
-
-    //                    connection.Open();
-
-    //                    SqlCommand command = connection.CreateCommand();
-    //                    command.CommandText = "SELECT * FROM EventStoreServers";
-    //                    command.ExecuteNonQuery();
-
-    //                    sw.WriteLine("Connection Opened");
-
-    //                    connection.Close();
-
-    //                    break;
-    //                }
-    //                catch (SqlException ex)
-    //                {
-    //                    if (connection.State == ConnectionState.Open)
-    //                    {
-    //                        connection.Close();
-    //                    }
-
-    //                    sw.WriteLine(ex);
-    //                    Thread.Sleep(20000);
-    //                }
-    //                finally
-    //                {
-    //                    counter++;
-    //                }
-    //            }
-    //        }
-
-    //        return $"server={containerName};user id={user}; password={password};";
-    //    }
-
-    //    /// <summary>
-    //    /// Stops the containers for scenario run.
-    //    /// </summary>
-    //    /// <returns></returns>
-    //    public abstract Task StopContainersForScenarioRun();
-
-    //    #endregion
-
-    //    #region Others
-
-    //    /// <summary>
-    //    /// The estate management docker port
-    //    /// </summary>
-    //    public const Int32 EstateManagementDockerPort = 5000;
-
-    //    /// <summary>
-    //    /// The event store HTTP docker port
-    //    /// </summary>
-    //    public const Int32 EventStoreHttpDockerPort = 2113;
-
-    //    /// <summary>
-    //    /// The event store TCP docker port
-    //    /// </summary>
-    //    public const Int32 EventStoreTcpDockerPort = 1113;
-
-    //    /// <summary>
-    //    /// The security service docker port
-    //    /// </summary>
-    //    public const Int32 SecurityServiceDockerPort = 5001;
-
-    //    /// <summary>
-    //    /// The transaction processor acl docker port
-    //    /// </summary>
-    //    public const Int32 TransactionProcessorACLDockerPort = 5003;
-
-    //    /// <summary>
-    //    /// The transaction processor docker port
-    //    /// </summary>
-    //    public const Int32 TransactionProcessorDockerPort = 5002;
-
-    //    #endregion
-    //}
-
-    public abstract class DockerHelper
+    
+    public partial class TransactionMobileDockerHelper
     {
         #region Methods
 
@@ -438,21 +47,21 @@
                                                                        String sqlServerPassword,
                                                                        (String clientId, String clientSecret) clientDetails,
                                                                        Boolean forceLatestImage = false,
-                                                                       Int32 securityServicePort = DockerHelper.SecurityServiceDockerPort)
+                                                                       Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
         {
             logger.LogInformation("About to Start Estate Management Container");
 
             List<String> environmentVariables = new List<String>();
             environmentVariables
-                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
+                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
-            environmentVariables.Add($"urls=http://*:{DockerHelper.EstateManagementDockerPort}");
+            environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.EstateManagementDockerPort}");
             environmentVariables
                 .Add($"ConnectionStrings:EstateReportingReadModel=\"server={sqlServerContainerName};user id={sqlServerUserName};password={sqlServerPassword};database=EstateReportingReadModel\"");
 
             ContainerBuilder estateManagementContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                      .UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.EstateManagementDockerPort)
+                                                                      .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.EstateManagementDockerPort)
                                                                       .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -461,7 +70,7 @@
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{DockerHelper.EstateManagementDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateManagementDockerPort}/tcp", 30000);
 
             logger.LogInformation("Estate Management Container Started");
 
@@ -497,19 +106,19 @@
                                                                       String sqlServerPassword,
                                                                       (String clientId, String clientSecret) clientDetails,
                                                                       Boolean forceLatestImage = false,
-                                                                      Int32 securityServicePort = DockerHelper.SecurityServiceDockerPort)
+                                                                      Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
         {
             logger.LogInformation("About to Start Estate Reporting Container");
 
             List<String> environmentVariables = new List<String>();
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
-            environmentVariables.Add($"urls=http://*:{DockerHelper.EstateReportingDockerPort}");
+            environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.EstateReportingDockerPort}");
             environmentVariables
                 .Add($"ConnectionStrings:EstateReportingReadModel=\"server={sqlServerContainerName};user id={sqlServerUserName};password={sqlServerPassword};database=EstateReportingReadModel\"");
 
             ContainerBuilder estateReportingContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                     .UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.EstateReportingDockerPort)
+                                                                     .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.EstateReportingDockerPort)
                                                                      .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -518,7 +127,7 @@
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateReportingContainer.Build().Start().WaitForPort($"{DockerHelper.EstateReportingDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateReportingContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateReportingDockerPort}/tcp", 30000);
 
             logger.LogInformation("Estate Reporting Container Started");
 
@@ -544,8 +153,8 @@
         {
             logger.LogInformation("About to Start Event Store Container");
 
-            IContainerService eventStoreContainer = new Builder().UseContainer().UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.EventStoreHttpDockerPort)
-                                                                 .ExposePort(DockerHelper.EventStoreTcpDockerPort).WithName(containerName)
+            IContainerService eventStoreContainer = new Builder().UseContainer().UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.EventStoreHttpDockerPort)
+                                                                 .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
                                                                  .Start().WaitForPort("2113/tcp", 30000);
@@ -577,20 +186,20 @@
             logger.LogInformation("About to Start Security Container");
 
             List<String> environmentVariables = new List<String>();
-            environmentVariables.Add($"ServiceOptions:PublicOrigin=http://{containerName}:{DockerHelper.SecurityServiceDockerPort}");
-            environmentVariables.Add($"ServiceOptions:IssuerUrl=http://{containerName}:{DockerHelper.SecurityServiceDockerPort}");
+            environmentVariables.Add($"ServiceOptions:PublicOrigin=http://{containerName}:{TransactionMobileDockerHelper.SecurityServiceDockerPort}");
+            environmentVariables.Add($"ServiceOptions:IssuerUrl=http://{containerName}:{TransactionMobileDockerHelper.SecurityServiceDockerPort}");
             environmentVariables.Add("ASPNETCORE_ENVIRONMENT=IntegrationTest");
             environmentVariables.Add("urls=http://*:5001");
 
             ContainerBuilder securityServiceContainer = new Builder().UseContainer().WithName(containerName)
                                                                      .WithEnvironment(environmentVariables.ToArray()).UseImage(imageName, forceLatestImage)
-                                                                     .ExposePort(DockerHelper.SecurityServiceDockerPort).UseNetwork(new List<INetworkService>
-                                                                                                                                    {
-                                                                                                                                        networkService
-                                                                                                                                    }.ToArray()).Mount(hostFolder,
-                                                                                                                                                       "/home/txnproc/trace",
-                                                                                                                                                       MountType
-                                                                                                                                                           .ReadWrite);
+                                                                     .ExposePort(TransactionMobileDockerHelper.SecurityServiceDockerPort).UseNetwork(new List<INetworkService>
+                                                                                                                                                     {
+                                                                                                                                                         networkService
+                                                                                                                                                     }.ToArray()).Mount(hostFolder,
+                                                                                                                                                                        "/home/txnproc/trace",
+                                                                                                                                                                        MountType
+                                                                                                                                                                            .ReadWrite);
 
             if (dockerCredentials.HasValue)
             {
@@ -637,7 +246,7 @@
                                                                           Guid eventStoreServerId,
                                                                           (String clientId, String clientSecret) clientDetails,
                                                                           Boolean forceLatestImage = false,
-                                                                          Int32 securityServicePort = DockerHelper.SecurityServiceDockerPort)
+                                                                          Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
         {
             logger.LogInformation("About to Start Subscription Service Container");
 
@@ -712,21 +321,21 @@
                                                                               String transactionProcessorContainerName,
                                                                               (String clientId, String clientSecret) clientDetails,
                                                                               Boolean forceLatestImage = false,
-                                                                              Int32 securityServicePort = DockerHelper.SecurityServiceDockerPort)
+                                                                              Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
         {
             logger.LogInformation("About to Start Transaction Processor ACL Container");
 
             List<String> environmentVariables = new List<String>();
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
-            environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorACLDockerPort}");
-            environmentVariables.Add($"AppSettings:TransactionProcessorApi=http://{transactionProcessorContainerName}:{DockerHelper.TransactionProcessorDockerPort}");
+            environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.TransactionProcessorACLDockerPort}");
+            environmentVariables.Add($"AppSettings:TransactionProcessorApi=http://{transactionProcessorContainerName}:{TransactionMobileDockerHelper.TransactionProcessorDockerPort}");
             environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
             environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
 
             ContainerBuilder transactionProcessorACLContainer = new Builder()
                                                                 .UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                .UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.TransactionProcessorACLDockerPort)
+                                                                .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.TransactionProcessorACLDockerPort)
                                                                 .UseNetwork(new List<INetworkService>
                                                                             {
                                                                                 networkService
@@ -739,7 +348,7 @@
 
             // Now build and return the container                
             IContainerService builtContainer =
-                transactionProcessorACLContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
+                transactionProcessorACLContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
 
             logger.LogInformation("Transaction Processor Container ACL Started");
 
@@ -775,24 +384,24 @@
                                                                            (String clientId, String clientSecret) clientDetails,
                                                                            String testhostContainerName,
                                                                            Boolean forceLatestImage = false,
-                                                                           Int32 securityServicePort = DockerHelper.SecurityServiceDockerPort)
+                                                                           Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
         {
             logger.LogInformation("About to Start Transaction Processor Container");
 
             List<String> environmentVariables = new List<String>();
             environmentVariables
-                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{DockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
+                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
-            environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{DockerHelper.EstateManagementDockerPort}");
+            environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{TransactionMobileDockerHelper.EstateManagementDockerPort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
-            environmentVariables.Add($"urls=http://*:{DockerHelper.TransactionProcessorDockerPort}");
+            environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.TransactionProcessorDockerPort}");
             environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
             environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
 
             environmentVariables.Add($"OperatorConfiguration:Safaricom:Url=http://{testhostContainerName}:9000/api/safaricom");
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
-                                                                          .UseImage(imageName, forceLatestImage).ExposePort(DockerHelper.TransactionProcessorDockerPort)
+                                                                          .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.TransactionProcessorDockerPort)
                                                                           .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
 
             if (dockerCredentials.HasValue)
@@ -801,19 +410,12 @@
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{DockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
+            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
 
             logger.LogInformation("Transaction Processor Container Started");
 
             return builtContainer;
         }
-
-        /// <summary>
-        /// Starts the containers for scenario run.
-        /// </summary>
-        /// <param name="scenarioName">Name of the scenario.</param>
-        /// <returns></returns>
-        public abstract Task StartContainersForScenarioRun(String scenarioName);
 
         /// <summary>
         /// Starts the SQL container with open connection.
@@ -952,12 +554,6 @@
 
             return databaseServerContainer;
         }
-
-        /// <summary>
-        /// Stops the containers for scenario run.
-        /// </summary>
-        /// <returns></returns>
-        public abstract Task StopContainersForScenarioRun();
 
         #endregion
 
