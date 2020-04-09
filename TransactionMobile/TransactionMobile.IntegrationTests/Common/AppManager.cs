@@ -187,7 +187,7 @@ namespace TransactionMobile.IntegrationTests.Common
         }
 
         [SetUp]
-        public virtual void BeforeEachTest()
+        public void BeforeEachTest()
         {
             AppManager.StartApp();
         }
