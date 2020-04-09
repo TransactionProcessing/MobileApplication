@@ -326,7 +326,7 @@
         public String SecurityServiceBaseAddress;
 
         public String TransactionProcessorACLBaseAddress;
-
+        
         protected async Task PopulateSubscriptionServiceConfiguration()
         {
             String connectionString = Setup.GetLocalConnectionString("SubscriptionServiceConfiguration");

@@ -31,13 +31,11 @@
             DatabaseServerNetwork = DockerHelper.SetupTestNetwork("sharednetwork", true);
 
             TestingLogger logger = new TestingLogger();
-            //logger.Initialise(LogManager.GetLogger("Specflow"), "Specflow");
-            //LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
 
             // Start the Database Server here
             DatabaseServerContainer = DockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
                                                                                        logger,
-                                                                                       "stuartferguson/subscriptionservicedatabasesqlserver",
+                                                                                       "justin2004/mssql_server_tiny",
                                                                                        Setup.DatabaseServerNetwork,
                                                                                        "",
                                                                                        dockerCredentials,

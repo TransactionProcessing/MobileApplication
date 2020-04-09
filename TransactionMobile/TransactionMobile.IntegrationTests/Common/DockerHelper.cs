@@ -4,13 +4,19 @@
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
+    using System.IO;
+    using System.Linq;
     using System.Net;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Ductus.FluentDocker.Builders;
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
+    using Java.IO;
+    using Shouldly;
+    using Console = System.Console;
 
     //public abstract class DockerHelper
     //{
@@ -849,12 +855,6 @@
             Int32 maxRetries = 10;
             Int32 counter = 1;
 
-            //String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
-            //if (String.IsNullOrEmpty(localhostaddress))
-            //{
-            //    localhostaddress = "192.168.1.67";
-            //}
-
             String server = "127.0.0.1";
             //String database = "SubscriptionServiceConfiguration";
             String database = "master";
@@ -875,10 +875,8 @@
                     connection.Open();
 
                     SqlCommand command = connection.CreateCommand();
-                    //command.CommandText = "SELECT * FROM EventStoreServer";
-                    //command.ExecuteNonQuery();
                     command.CommandText = "select * from sys.databases";
-                    var dataReader = command.ExecuteReader(CommandBehavior.Default);
+                    SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.Default);
                     while (dataReader.Read())
                     {
                         Console.WriteLine(dataReader.GetValue(0));
@@ -904,6 +902,49 @@
                 {
                     counter++;
                 }
+            }
+
+            // Create the SS database here
+            // Read the SQL File
+            String sqlToExecute = null;
+            string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string sqlFileLocation = Path.Combine(executableLocation, "DbScripts");
+            var files = Directory.GetFiles(sqlFileLocation).OrderBy(x => x);
+            
+            try
+            {
+                SqlConnection ssconnection = new SqlConnection(connectionString);
+                ssconnection.Open();
+                SqlCommand sscommand = ssconnection.CreateCommand();
+                sscommand.CommandText = "CREATE DATABASE SubscriptionServiceConfiguration";
+                sscommand.ExecuteNonQuery();
+
+                sscommand.CommandText = "USE SubscriptionServiceConfiguration";
+                sscommand.ExecuteNonQuery();
+
+                foreach (String file in files)
+                {
+                    using(StreamReader sr = new StreamReader(file))
+                    {
+                        sqlToExecute = sr.ReadToEnd();
+                    }
+
+                    sscommand.CommandText = sqlToExecute;
+                    sscommand.ExecuteNonQuery();
+                }
+                
+                connection.Close();
+
+                Console.WriteLine("SS Database Created");
+            }
+            catch (Exception e)
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+                Console.WriteLine(e);
+                throw;
             }
 
             return databaseServerContainer;
