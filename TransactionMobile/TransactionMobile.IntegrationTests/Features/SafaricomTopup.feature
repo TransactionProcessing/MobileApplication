@@ -24,29 +24,29 @@ Background:
 
 	Given I have created the following estates
 	| EstateName    |
-	| Test Estate 1 |
+	| Test Estate 2 |
 
 	Given I have created the following operators
 	| EstateName    | OperatorName | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
-	| Test Estate 1 | Safaricom    | True                        | True                        |
+	| Test Estate 2 | Safaricom    | True                        | True                        |
 
 	Given I create the following merchants
 	| MerchantName    | AddressLine1   | Town     | Region      | Country        | ContactName    | EmailAddress                 | EstateName    |
-	| Test Merchant 1 | Address Line 1 | TestTown | Test Region | United Kingdom | Test Contact 1 | testcontact1@merchant1.co.uk | Test Estate 1 |
+	| Test Merchant 2 | Address Line 1 | TestTown | Test Region | United Kingdom | Test Contact 1 | testcontact1@merchant2.co.uk | Test Estate 2 |
 
 	Given I have created the following security users
 	| EmailAddress                  | Password | GivenName    | FamilyName | EstateName    | MerchantName    |
-	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
+	| merchantuser@testmerchant2.co.uk | 123456   | TestMerchant | User1      | Test Estate 2 | Test Merchant 2 |
 
 	Given I have assigned the following  operator to the merchants
 	| OperatorName | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
-	| Safaricom    | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| Safaricom    | Test Merchant 2 | 00000001       | 10000001       | Test Estate 2 |
 	   
 @PRTest
 Scenario: Successful Safaricom Topup
 	Given I am on the Login Screen
 	
-	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	When I enter 'merchantuser@testmerchant2.co.uk' as the Email Address
 	And I enter '123456' as the Password
 	And I tap on Login
 	
@@ -68,30 +68,30 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
-Scenario: Failed Safaricom Topup
-	Given I am on the Login Screen
-	
-	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
-	And I enter '123456' as the Password
-	And I tap on Login
-	
-	Then the Merchant Home Page is displayed
-
-	Given I tap on the Transactions button
-	Then the Transactions Page is displayed
-	
-	Given I tap on the Mobile Topup button
-	Then the Mobile Topup Select Operator Page is displayed
-	
-	Given I tap on the Safaricom button
-	Then the Mobile Topup Topup Details Page is displayed
-	
-	When I enter the following topup details
-	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 100000.00     |
-	And I tap on Perform Topup
-	
-	Then The Topup Failed Screen will be displayed
+#Scenario: Failed Safaricom Topup
+#	Given I am on the Login Screen
+#	
+#	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+#	And I enter '123456' as the Password
+#	And I tap on Login
+#	
+#	Then the Merchant Home Page is displayed
+#
+#	Given I tap on the Transactions button
+#	Then the Transactions Page is displayed
+#	
+#	Given I tap on the Mobile Topup button
+#	Then the Mobile Topup Select Operator Page is displayed
+#	
+#	Given I tap on the Safaricom button
+#	Then the Mobile Topup Topup Details Page is displayed
+#	
+#	When I enter the following topup details
+#	| CustomerMobileNumber | TopupAmount |
+#	| 123456789            | 100000.00     |
+#	And I tap on Perform Topup
+#	
+#	Then The Topup Failed Screen will be displayed
 
 
 

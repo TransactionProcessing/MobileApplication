@@ -10,6 +10,7 @@ namespace TransactionMobile.IntegrationTests
     using System.Net.Sockets;
     using System.Threading;
     using Common;
+    using Ductus.FluentDocker.Services;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
     using NUnit.Framework;
@@ -61,24 +62,6 @@ namespace TransactionMobile.IntegrationTests
         {
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
 
-            if (this.ScenarioContext.TestError != null)
-            {
-                //// The test has failed, grab the logs from all the containers
-                //List<IContainerService> containers = new List<IContainerService>();
-                //containers.Add(this.TestingContext.DockerHelper.SecurityServiceContainer);
-                //containers.Add(this.TestingContext.DockerHelper.EstateManagementApiContainer);
-
-                //foreach (IContainerService containerService in containers)
-                //{
-                //    ConsoleStream<String> logStream = containerService.Logs();
-                //    IList<String> logData = logStream.ReadToEnd();
-
-                //    foreach (String s in logData)
-                //    {
-                //        this.TestingContext.Logger.LogWarning(s);
-                //    }
-                //}
-            }
             TestingLogger logger = new TestingLogger();
             logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);

@@ -435,6 +435,7 @@ namespace TransactionMobile.IntegrationTests.Common
         public async Task StopContainersForScenarioRun()
         {
             String debug = AppManager.GetDebug();
+            this.TestingContext.DockerHelper.Logger.LogInformation(debug);
 
             await CleanUpSubscriptionServiceConfiguration().ConfigureAwait(false);
 
