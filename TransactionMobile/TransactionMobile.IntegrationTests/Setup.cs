@@ -28,12 +28,17 @@
             // Setup a network for the DB Server
             Setup.DatabaseServerNetwork = TransactionMobileDockerHelper.SetupTestNetwork("sharednetwork", true);
 
-            //// Start the Database Server here
-            //Setup.DbConnectionStringWithNoDatabase = DockerHelper.StartSqlContainerWithOpenConnection("shareddatabasesqlserver",
-            //                                                                                          "stuartferguson/subscriptionservicedatabasesqlserver",
-            //                                                                                          Setup.DatabaseServerNetwork,
-            //                                                                                          "",
-            //                                                                                          dockerCredentials);
+            TestingLogger logger = new TestingLogger();
+
+            // Start the Database Server here
+            DatabaseServerContainer = TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+                                                                                                        logger,
+                                                                                                        "justin2004/mssql_server_tiny",
+                                                                                                        Setup.DatabaseServerNetwork,
+                                                                                                        "",
+                                                                                                        dockerCredentials,
+                                                                                                        Setup.SqlUserName,
+                                                                                                        Setup.SqlPassword);
         }
 
         public static String GetConnectionString(String databaseName)
