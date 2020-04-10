@@ -118,7 +118,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = testHostContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TestHostPort}/tcp", 30000);
+            IContainerService builtContainer = testHostContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TestHostPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Test Hosts Container Started");
 
@@ -155,6 +155,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
         #endregion
 
+        private static String LocalHostAddress;
         #region Methods
 
         /// <summary>
@@ -163,6 +164,13 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <param name="scenarioName">Name of the scenario.</param>
         public async Task StartContainersForScenarioRun(String scenarioName)
         {
+            // Setup the base address resolvers
+            TransactionMobileDockerHelper.LocalHostAddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(TransactionMobileDockerHelper.LocalHostAddress))
+            {
+                TransactionMobileDockerHelper.LocalHostAddress = "192.168.1.67";
+            }
+
             this.Logger.LogInformation("In StartContainersForScenarioRun");
             String traceFolder = FdOs.IsWindows() ? $"D:\\home\\txnproc\\trace\\{scenarioName}" : $"//home//txnproc//trace//{scenarioName}";
 
@@ -285,15 +293,9 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TransactionProcessorPort = transactionProcessorContainer.ToHostExposedEndpoint("5002/tcp").Port;
             this.TransactionProcessorACLPort = transactionProcessorACLContainer.ToHostExposedEndpoint("5003/tcp").Port;
 
-            // Setup the base address resolvers
-            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
-            if (String.IsNullOrEmpty(localhostaddress))
-            {
-                localhostaddress = "192.168.1.67";
-            }
-            String EstateManagementBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.EstateManagementApiPort}";
-            String SecurityServiceBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.SecurityServicePort}";
-            String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{localhostaddress}:{this.TransactionProcessorACLPort}";
+            String EstateManagementBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.EstateManagementApiPort}";
+            String SecurityServiceBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.SecurityServicePort}";
+            String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.TransactionProcessorACLPort}";
 
             this.SecurityServiceBaseAddress = SecurityServiceBaseAddressResolver(String.Empty);
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
@@ -513,7 +515,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateManagementDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateManagementDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Estate Management Container Started");
 
@@ -570,7 +572,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateReportingContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateReportingDockerPort}/tcp", 30000);
+            IContainerService builtContainer = estateReportingContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateReportingDockerPort}/tcp", 30000,TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Estate Reporting Container Started");
 
@@ -600,7 +602,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-                                                                 .Start().WaitForPort("2113/tcp", 30000);
+                                                                 .Start().WaitForPort("2113/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Event Store Container Started");
 
@@ -650,7 +652,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = securityServiceContainer.Build().Start().WaitForPort("5001/tcp", 30000);
+            IContainerService builtContainer = securityServiceContainer.Build().Start().WaitForPort("5001/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
             Thread.Sleep(20000); // This hack is in till health checks implemented :|
 
             logger.LogInformation("Security Service Container Started");
@@ -791,7 +793,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             // Now build and return the container                
             IContainerService builtContainer =
-                transactionProcessorACLContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000);
+                transactionProcessorACLContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Transaction Processor Container ACL Started");
 
@@ -853,7 +855,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorDockerPort}/tcp", 30000);
+            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
 
             logger.LogInformation("Transaction Processor Container Started");
 
