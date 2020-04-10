@@ -186,15 +186,24 @@
     <Compile Include="Features\Login.feature.cs" />
     <Compile Include="Features\LoginFeature.cs" />
     <Compile Include="Features\LoginSteps.cs" />
-    <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Features\SafaricomTopup.feature.cs" />
+    <Compile Include="Features\SafaricomTopupSteps.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
+    <Compile Include="Pages\MobileTopupFailedPage.cs" />
+    <Compile Include="Pages\MobileTopupPerformTopupPage.cs" />
+    <Compile Include="Pages\MobileTopupSelectOperatorPage.cs" />
+    <Compile Include="Pages\MobileTopupSuccessPage.cs" />
+    <Compile Include="Pages\TransactionsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Features\Login.feature" />
+    <None Include="Features\SafaricomTopup.feature">
+      <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
