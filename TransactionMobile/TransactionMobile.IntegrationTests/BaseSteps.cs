@@ -218,9 +218,26 @@ namespace TransactionMobile.IntegrationTests
                                                               EstateName = estateName
                                                           };
 
-                CreateEstateResponse response = await this.TestingContext.DockerHelper.EstateClient
+                CreateEstateResponse response = null;
+                try
+                {
+                    
+                 response = await this.TestingContext.DockerHelper.EstateClient
                                                           .CreateEstate(this.TestingContext.AccessToken, createEstateRequest, CancellationToken.None)
                                                           .ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    this.TestingContext.DockerHelper.Logger.LogInformation(e.Message);
+                    if (e.InnerException != null)
+                    {
+                        this.TestingContext.DockerHelper.Logger.LogInformation(e.InnerException.Message);
+                        if (e.InnerException.InnerException != null)
+                        {
+                            this.TestingContext.DockerHelper.Logger.LogInformation(e.InnerException.InnerException.Message);
+                        }
+                    }
+                }
 
                 response.ShouldNotBeNull();
                 response.EstateId.ShouldNotBe(Guid.Empty);

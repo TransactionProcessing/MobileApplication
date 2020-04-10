@@ -133,7 +133,7 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <summary>
         /// The logger
         /// </summary>
-        protected readonly TestingLogger Logger;
+        public readonly TestingLogger Logger;
 
         protected readonly TestingContext TestingContext;
 
