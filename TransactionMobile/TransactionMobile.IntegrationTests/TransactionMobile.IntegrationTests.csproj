@@ -180,6 +180,7 @@
     <Compile Include="Common\ClientDetails.cs" />
     <Compile Include="Common\DockerHelper.cs" />
     <Compile Include="Common\EstateDetails.cs" />
+    <Compile Include="Common\ILogger.cs" />
     <Compile Include="Common\SpecflowTableHelper.cs" />
     <Compile Include="Common\TestingContext.cs" />
     <Compile Include="Features\Login.feature.cs" />

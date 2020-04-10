@@ -48,20 +48,19 @@ namespace TransactionMobile.IntegrationTests
         {
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
-            //NlogLogger logger = new NlogLogger();
-            //logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-            //LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+            TestingLogger logger = new TestingLogger();
 
-            this.TestingContext.DockerHelper = new TransactionMobileDockerHelper();
-            //this.TestingContext.Logger = logger;
-            //this.TestingContext.Logger.LogInformation("About to Start Containers for Scenario Run");
+            this.TestingContext.DockerHelper = new TransactionMobileDockerHelper(logger, this.TestingContext);
+            logger.LogInformation($"About to Start Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StartContainersForScenarioRun(scenarioName).ConfigureAwait(false);
-            //this.TestingContext.Logger.LogInformation("Containers for Scenario Run Started");
+            logger.LogInformation($"Containers for Scenario Run Started  - {scenarioName}");
         }
 
         [AfterScenario()]
         public async Task StopSystem()
         {
+            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
+
             if (this.ScenarioContext.TestError != null)
             {
                 //// The test has failed, grab the logs from all the containers
@@ -80,10 +79,10 @@ namespace TransactionMobile.IntegrationTests
                 //    }
                 //}
             }
-
-            //this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
+            TestingLogger logger = new TestingLogger();
+            logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-            //this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+            logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
         }
     }
 
