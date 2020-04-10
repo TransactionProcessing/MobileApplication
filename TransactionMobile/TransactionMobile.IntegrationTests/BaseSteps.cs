@@ -49,14 +49,11 @@ namespace TransactionMobile.IntegrationTests
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
             TestingLogger logger = new TestingLogger();
-            //logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-            //LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
 
             this.TestingContext.DockerHelper = new TransactionMobileDockerHelper(logger,this.TestingContext);
-            //this.TestingContext.Logger = logger;
-            //this.TestingContext.Logger.LogInformation("About to Start Containers for Scenario Run");
+            logger.LogInformation($"About to Start Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StartContainersForScenarioRun(scenarioName).ConfigureAwait(false);
-            //this.TestingContext.Logger.LogInformation("Containers for Scenario Run Started");
+            logger.LogInformation($"Containers for Scenario Run Started  - {scenarioName}");
         }
 
         [AfterScenario()]

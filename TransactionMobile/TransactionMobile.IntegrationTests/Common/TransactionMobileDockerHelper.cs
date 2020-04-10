@@ -157,8 +157,9 @@
         /// <param name="scenarioName">Name of the scenario.</param>
         public async Task StartContainersForScenarioRun(String scenarioName)
         {
+            this.Logger.LogInformation("In StartContainersForScenarioRun");
             String traceFolder = FdOs.IsWindows() ? $"D:\\home\\txnproc\\trace\\{scenarioName}" : $"//home//txnproc//trace//{scenarioName}";
-
+            
             Logging.Enabled();
 
             Guid testGuid = Guid.NewGuid();
