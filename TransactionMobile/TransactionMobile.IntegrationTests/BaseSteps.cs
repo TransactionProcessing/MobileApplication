@@ -66,6 +66,7 @@ namespace TransactionMobile.IntegrationTests
             //logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
             //await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
             //logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
+
         }
     }
 
