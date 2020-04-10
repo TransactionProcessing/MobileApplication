@@ -118,7 +118,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = testHostContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TestHostPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+            IContainerService builtContainer = testHostContainer.Build().Start();
 
             logger.LogInformation("Test Hosts Container Started");
 
@@ -515,7 +515,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateManagementContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateManagementDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+            IContainerService builtContainer = estateManagementContainer.Build().Start();
 
             logger.LogInformation("Estate Management Container Started");
 
@@ -572,7 +572,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = estateReportingContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.EstateReportingDockerPort}/tcp", 30000,TransactionMobileDockerHelper.LocalHostAddress);
+            IContainerService builtContainer = estateReportingContainer.Build().Start();
 
             logger.LogInformation("Estate Reporting Container Started");
 
@@ -602,7 +602,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-                                                                 .Start().WaitForPort("2113/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+                                                                 .Start();
 
             logger.LogInformation("Event Store Container Started");
 
@@ -652,7 +652,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = securityServiceContainer.Build().Start().WaitForPort("5001/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+            IContainerService builtContainer = securityServiceContainer.Build().Start();
             Thread.Sleep(20000); // This hack is in till health checks implemented :|
 
             logger.LogInformation("Security Service Container Started");
@@ -793,7 +793,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             // Now build and return the container                
             IContainerService builtContainer =
-                transactionProcessorACLContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorACLDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+                transactionProcessorACLContainer.Build().Start();
 
             logger.LogInformation("Transaction Processor Container ACL Started");
 
@@ -855,7 +855,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = transactionProcessorContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.TransactionProcessorDockerPort}/tcp", 30000, TransactionMobileDockerHelper.LocalHostAddress);
+            IContainerService builtContainer = transactionProcessorContainer.Build().Start();
 
             logger.LogInformation("Transaction Processor Container Started");
 
