@@ -19,7 +19,7 @@ namespace TransactionMobile.IntegrationTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute(TestName="Login")]
+    [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Login")]
     [NUnit.Framework.CategoryAttribute("login")]
     [NUnit.Framework.CategoryAttribute("base")]
@@ -224,7 +224,7 @@ namespace TransactionMobile.IntegrationTests.Features
 #line hidden
         }
         
-        [NUnit.Framework.TestCaseAttribute(TestName="Login as Merchant")]
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Login as Merchant")]
         [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void LoginAsMerchant()

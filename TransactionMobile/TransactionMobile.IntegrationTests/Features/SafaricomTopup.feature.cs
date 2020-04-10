@@ -19,7 +19,7 @@ namespace TransactionMobile.IntegrationTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute(TestName="SafaricomTopup")]
+    [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("SafaricomTopup")]
     [NUnit.Framework.CategoryAttribute("login")]
     [NUnit.Framework.CategoryAttribute("safaricomtopup")]
@@ -227,7 +227,7 @@ namespace TransactionMobile.IntegrationTests.Features
 #line hidden
         }
         
-        [NUnit.Framework.TestCaseAttribute(TestName="Successful Safaricom Topup")]
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Successful Safaricom Topup")]
         [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulSafaricomTopup()
@@ -311,7 +311,7 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestCaseAttribute(TestName="Failed Safaricom Topup")]
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Failed Safaricom Topup")]
         public virtual void FailedSafaricomTopup()
         {
