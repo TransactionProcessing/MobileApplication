@@ -60,12 +60,12 @@ namespace TransactionMobile.IntegrationTests
         [AfterScenario()]
         public async Task StopSystem()
         {
-            //String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
+            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
 
-            //TestingLogger logger = new TestingLogger();
-            //logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
-            //await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-            //logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
+            TestingLogger logger = new TestingLogger();
+            logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
         }
     }
 
