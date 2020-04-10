@@ -197,11 +197,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DBScripts\1 - EFMigrationsHistory.sql" />
-    <Content Include="DBScripts\2 - CatchUpSubscription.sql" />
-    <Content Include="DBScripts\3 - EventStoreServer.sql" />
-    <Content Include="DBScripts\4 - Subscription.sql" />
-    <Content Include="DBScripts\5 - Indexes.sql" />
+    <Content Include="DBScripts\1 - EFMigrationsHistory.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DBScripts\2 - CatchUpSubscription.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DBScripts\3 - EventStoreServer.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DBScripts\4 - Subscription.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DBScripts\5 - Indexes.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
