@@ -178,14 +178,15 @@
     <Compile Include="BaseSteps.cs" />
     <Compile Include="Common\AppManager.cs" />
     <Compile Include="Common\ClientDetails.cs" />
-    <Compile Include="Common\DockerHelper.cs" />
     <Compile Include="Common\EstateDetails.cs" />
     <Compile Include="Common\ILogger.cs" />
     <Compile Include="Common\SpecflowTableHelper.cs" />
     <Compile Include="Common\TestingContext.cs" />
     <Compile Include="Common\TransactionMobileDockerHelper.cs" />
+    <Compile Include="Features\Login.feature.cs" />
     <Compile Include="Features\LoginFeature.cs" />
     <Compile Include="Features\LoginSteps.cs" />
+    <Compile Include="Features\SafaricomTopup.feature.cs" />
     <Compile Include="Features\SafaricomTopupSteps.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
