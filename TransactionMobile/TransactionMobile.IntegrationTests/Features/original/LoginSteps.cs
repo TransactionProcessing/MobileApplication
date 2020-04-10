@@ -14,7 +14,7 @@ namespace TransactionMobile.IntegrationTests
     public class LoginSteps
     {
         LoginPage loginPage = new LoginPage();
-        MainPage homePage = new MainPage();
+        HomePage homePage = new HomePage();
 
         [Given(@"I am on the Login Screen")]
         public async Task GivenIAmOnTheLoginScreen()

@@ -19,14 +19,4 @@ namespace TransactionMobile.IntegrationTests.Features
         {
         }
     }
-
-    [TestFixture(Platform.Android, Category = "Android")]
-    [TestFixture(Platform.iOS, Category = "iOS")]
-    public partial class SafaricomTopupFeature : BaseTestFixture
-    {
-        public SafaricomTopupFeature(Platform platform)
-            : base(platform)
-        {
-        }
-    }
 }

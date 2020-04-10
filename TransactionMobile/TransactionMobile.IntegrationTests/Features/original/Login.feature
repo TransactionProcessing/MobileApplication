@@ -27,8 +27,8 @@ Background:
 	| Test Estate 1 |
 
 	Given I have created the following operators
-	| EstateName    | OperatorName | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
-	| Test Estate 1 | Safaricom    | True                        | True                        |
+	| EstateName    | OperatorName    | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
+	| Test Estate 1 | Test Operator 1 | True                        | True                        |
 
 	Given I create the following merchants
 	| MerchantName    | AddressLine1   | Town     | Region      | Country        | ContactName    | EmailAddress                 | EstateName    |
@@ -39,13 +39,13 @@ Background:
 	| merchantuser@testmerchant1.co.uk | 123456   | TestMerchant | User1      | Test Estate 1 | Test Merchant 1 |
 
 	Given I have assigned the following  operator to the merchants
-	| OperatorName | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
-	| Safaricom    | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
+	| OperatorName    | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
+	| Test Operator 1 | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
 	   
 @PRTest
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
 	And I enter '123456' as the Password
-	And I tap on Login
+	When I tap on Login
 	Then the Merchant Home Page is displayed

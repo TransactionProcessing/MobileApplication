@@ -163,7 +163,7 @@ namespace TransactionMobile.IntegrationTests.Features
                         "RequireCustomTerminalNumber"});
             table6.AddRow(new string[] {
                         "Test Estate 1",
-                        "Safaricom",
+                        "Test Operator 1",
                         "True",
                         "True"});
 #line 29
@@ -214,7 +214,7 @@ namespace TransactionMobile.IntegrationTests.Features
                         "TerminalNumber",
                         "EstateName"});
             table9.AddRow(new string[] {
-                        "Safaricom",
+                        "Test Operator 1",
                         "Test Merchant 1",
                         "00000001",
                         "10000001",
@@ -266,7 +266,7 @@ this.FeatureBackground();
  testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 50
- testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 51
  testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
