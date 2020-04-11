@@ -42,7 +42,8 @@ Background:
 	| OperatorName | MerchantName    | MerchantNumber | TerminalNumber | EstateName    |
 	| Safaricom    | Test Merchant 1 | 00000001       | 10000001       | Test Estate 1 |
 	   
-@PRTest
+@AndroidPRTest
+@iOSPRTest
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address

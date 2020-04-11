@@ -68,30 +68,32 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
-#Scenario: Failed Safaricom Topup
-#	Given I am on the Login Screen
-#	
-#	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
-#	And I enter '123456' as the Password
-#	And I tap on Login
-#	
-#	Then the Merchant Home Page is displayed
-#
-#	Given I tap on the Transactions button
-#	Then the Transactions Page is displayed
-#	
-#	Given I tap on the Mobile Topup button
-#	Then the Mobile Topup Select Operator Page is displayed
-#	
-#	Given I tap on the Safaricom button
-#	Then the Mobile Topup Topup Details Page is displayed
-#	
-#	When I enter the following topup details
-#	| CustomerMobileNumber | TopupAmount |
-#	| 123456789            | 100000.00     |
-#	And I tap on Perform Topup
-#	
-#	Then The Topup Failed Screen will be displayed
+@AndroidPRTest
+@iOSPRTest
+Scenario: Failed Safaricom Topup
+	Given I am on the Login Screen
+	
+	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	And I enter '123456' as the Password
+	And I tap on Login
+	
+	Then the Merchant Home Page is displayed
+
+	Given I tap on the Transactions button
+	Then the Transactions Page is displayed
+	
+	Given I tap on the Mobile Topup button
+	Then the Mobile Topup Select Operator Page is displayed
+	
+	Given I tap on the Safaricom button
+	Then the Mobile Topup Topup Details Page is displayed
+	
+	When I enter the following topup details
+	| CustomerMobileNumber | TopupAmount |
+	| 123456789            | 100000.00     |
+	And I tap on Perform Topup
+	
+	Then The Topup Failed Screen will be displayed
 
 
 
