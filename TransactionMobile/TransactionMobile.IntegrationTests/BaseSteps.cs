@@ -10,7 +10,10 @@ namespace TransactionMobile.IntegrationTests
     using System.Net.Sockets;
     using System.Threading;
     using Common;
+    using Ductus.FluentDocker.Executors;
+    using Ductus.FluentDocker.Extensions;
     using Ductus.FluentDocker.Services;
+    using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
     using NUnit.Framework;
@@ -60,12 +63,29 @@ namespace TransactionMobile.IntegrationTests
         [AfterScenario()]
         public async Task StopSystem()
         {
-            //String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
+            TestingLogger logger = new TestingLogger();
+            if (this.ScenarioContext.TestError != null)
+            {
+                List<IContainerService> containers = this.TestingContext.DockerHelper.Containers.Where(c => c.Name == this.TestingContext.DockerHelper.EstateManagementContainerName).ToList();
 
-            //TestingLogger logger = new TestingLogger();
-            //logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
-            //await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-            //logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
+                // The test has failed, grab the logs from all the containers
+                foreach (IContainerService containerService in containers)
+                {
+                    ConsoleStream<String> logStream = containerService.Logs();
+                    IList<String> logData = logStream.ReadToEnd();
+
+                    foreach (String s in logData)
+                    {
+                        logger.LogInformation(s);
+                    }
+                }
+            }
+
+            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
+
+            logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
+            await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
+            logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
 
         }
     }

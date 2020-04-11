@@ -55,7 +55,7 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <summary>
         /// The containers
         /// </summary>
-        protected List<IContainerService> Containers;
+        public List<IContainerService> Containers;
 
         /// <summary>
         /// The estate management API port
@@ -84,7 +84,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
         protected String SecurityServiceContainerName;
 
-        protected String EstateManagementContainerName;
+        public String EstateManagementContainerName;
 
         protected String EventStoreContainerName;
 
