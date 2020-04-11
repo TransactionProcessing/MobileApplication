@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Common
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
     using Pages;
     using Plugin.Toast;
@@ -12,7 +13,9 @@
     using Unity.Lifetime;
     using ViewModels;
     using Views;
+    using Views.MobileTopup;
 
+    [ExcludeFromCodeCoverage]
     public class Bootstrapper
     {
         #region Methods
@@ -58,11 +61,18 @@
             unityContainer.RegisterType<ITransactionsPresenter, TransactionsPresenter>(new TransientLifetimeManager());
 
             // View registrations
+            unityContainer.RegisterType<IMainPage, MainPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IMobileTopupSelectOperatorPage, MobileTopupSelectOperatorPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IMobileTopupPerformTopupPage, MobileTopupPerformTopupPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
 
             // View model registrations
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<MobileTopupPerformTopupViewModel>(new TransientLifetimeManager());
 
             return unityContainer;
         }

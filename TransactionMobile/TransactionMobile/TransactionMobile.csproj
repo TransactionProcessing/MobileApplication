@@ -11,33 +11,64 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\PaymentFailure.svg" />
+    <None Remove="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.1.0" />
+    <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SecurityService.Client" Version="0.0.6.2" />
-    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="0.0.5" />
+    <PackageReference Include="SecurityService.Client" Version="0.0.9" />
+    <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="17.4.0.55" />
+    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="0.0.6" />
     <PackageReference Include="Xamarin.Forms" Version="4.4.0.991537" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
-    <PackageReference Include="Unity" Version="5.11.3" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.46" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.46" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.46" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
+    <PackageReference Include="Unity" Version="5.11.4" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.55" />
     <PackageReference Include="Plugin.Toast" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\Transactions.xaml.cs">
-      <DependentUpon>Transactions.xaml</DependentUpon>
+    <EmbeddedResource Include="Images\PaymentFailure.svg" />
+    <EmbeddedResource Include="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\MobileTopup\MobileTopupFailurePage.xaml.cs">
+      <DependentUpon>MobileTopupFailurePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
+      <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MobileTopup\MobileTopupSelectOperatorPage.xaml.cs">
+      <DependentUpon>MobileTopupSelectOperatorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MobileTopup\MobileTopupSuccessPage.xaml.cs">
+      <DependentUpon>MobileTopupSuccessPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TransactionsPage.xaml.cs">
+      <DependentUpon>TransactionsPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="AppShell.xaml">
+    <EmbeddedResource Update="Views\MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Transactions.xaml">
+    <EmbeddedResource Update="Views\MobileTopup\MobileTopupPerformTopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Styles.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <EmbeddedResource Update="Views\MobileTopup\MobileTopupSelectOperatorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TransactionsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>

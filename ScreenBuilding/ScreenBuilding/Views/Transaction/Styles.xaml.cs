@@ -1,10 +1,10 @@
-﻿namespace TransactionMobile.Views
-{
-    using Xamarin.Forms.Internals;
-    using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms.Internals;
+using Xamarin.Forms.Xaml;
 
+namespace ScreenBuilding.Views.Transaction
+{
     /// <summary>
-    /// Class helps to reduce repetitive markup, and allows an apps appearance to be more easily changed.
+    /// Class helps to reduce repetitive markup and allows to change the appearance of apps more easily.
     /// </summary>
     [Preserve(AllMembers = true)]
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,7 +15,7 @@
         /// </summary>
         public Styles()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

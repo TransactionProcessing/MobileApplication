@@ -1,11 +1,14 @@
 ﻿namespace TransactionMobile.iOS
 {
     using System;
+    using System.Threading.Tasks;
     using Common;
     using Foundation;
-    using InstabugLib;
+    using Microsoft.AppCenter.Crashes;
+    //using InstabugLib;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
+    using Syncfusion.XForms.iOS.TabView;
     using UIKit;
     using Xamarin;
     using Xamarin.Forms;
@@ -53,9 +56,10 @@
         public override Boolean FinishedLaunching(UIApplication app,
                                                   NSDictionary options)
         {
-            this.Device = new iOSDevice();
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
-            Instabug.StartWithToken("8b2be04a38a0948fa3af42dec91a4685", IBGInvocationEvent.Shake);
+            this.Device = new iOSDevice();
 
             Forms.Init();
 
@@ -63,9 +67,35 @@
 
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
+            SfTabViewRenderer.Init();
+            
             this.LoadApplication(new App(this.Device));
 
             return base.FinishedLaunching(app, options);
+        }
+
+        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+        {
+            var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
+            LogUnhandledException(newExc);
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
+            LogUnhandledException(newExc);
+        }
+
+        internal static void LogUnhandledException(Exception exception)
+        {
+            try
+            {
+                Crashes.TrackError(exception);
+            }
+            catch
+            {
+                // just suppress any error logging exceptions
+            }
         }
 
         [Export("SetConfiguration:")]

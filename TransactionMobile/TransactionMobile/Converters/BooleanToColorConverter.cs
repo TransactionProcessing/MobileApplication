@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Converters
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using Xamarin.Forms;
     using Xamarin.Forms.Internals;
@@ -10,6 +11,7 @@
     /// </summary>
     /// <seealso cref="Xamarin.Forms.IValueConverter" />
     [Preserve(AllMembers = true)]
+    [ExcludeFromCodeCoverage]
     public class BooleanToColorConverter : IValueConverter
     {
         #region Methods

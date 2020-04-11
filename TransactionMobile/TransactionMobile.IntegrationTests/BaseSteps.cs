@@ -10,6 +10,10 @@ namespace TransactionMobile.IntegrationTests
     using System.Net.Sockets;
     using System.Threading;
     using Common;
+    using Ductus.FluentDocker.Executors;
+    using Ductus.FluentDocker.Extensions;
+    using Ductus.FluentDocker.Services;
+    using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
     using NUnit.Framework;
@@ -48,42 +52,41 @@ namespace TransactionMobile.IntegrationTests
         {
             // Initialise a logger
             String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
-            //NlogLogger logger = new NlogLogger();
-            //logger.Initialise(LogManager.GetLogger(scenarioName), scenarioName);
-            //LogManager.AddHiddenAssembly(typeof(NlogLogger).Assembly);
+            TestingLogger logger = new TestingLogger();
 
-            this.TestingContext.DockerHelper = new TransactionMobileDockerHelper();
-            //this.TestingContext.Logger = logger;
-            //this.TestingContext.Logger.LogInformation("About to Start Containers for Scenario Run");
+            this.TestingContext.DockerHelper = new TransactionMobileDockerHelper(logger, this.TestingContext);
+            logger.LogInformation($"About to Start Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StartContainersForScenarioRun(scenarioName).ConfigureAwait(false);
-            //this.TestingContext.Logger.LogInformation("Containers for Scenario Run Started");
+            logger.LogInformation($"Containers for Scenario Run Started  - {scenarioName}");
         }
 
         [AfterScenario()]
         public async Task StopSystem()
         {
+            TestingLogger logger = new TestingLogger();
             if (this.ScenarioContext.TestError != null)
             {
-                //// The test has failed, grab the logs from all the containers
-                //List<IContainerService> containers = new List<IContainerService>();
-                //containers.Add(this.TestingContext.DockerHelper.SecurityServiceContainer);
-                //containers.Add(this.TestingContext.DockerHelper.EstateManagementApiContainer);
+                List<IContainerService> containers = this.TestingContext.DockerHelper.Containers.Where(c => c.Name == this.TestingContext.DockerHelper.EstateManagementContainerName).ToList();
 
-                //foreach (IContainerService containerService in containers)
-                //{
-                //    ConsoleStream<String> logStream = containerService.Logs();
-                //    IList<String> logData = logStream.ReadToEnd();
+                // The test has failed, grab the logs from all the containers
+                foreach (IContainerService containerService in containers)
+                {
+                    ConsoleStream<String> logStream = containerService.Logs();
+                    IList<String> logData = logStream.ReadToEnd();
 
-                //    foreach (String s in logData)
-                //    {
-                //        this.TestingContext.Logger.LogWarning(s);
-                //    }
-                //}
+                    foreach (String s in logData)
+                    {
+                        logger.LogInformation(s);
+                    }
+                }
             }
 
-            //this.TestingContext.Logger.LogInformation("About to Stop Containers for Scenario Run");
+            String scenarioName = this.ScenarioContext.ScenarioInfo.Title.Replace(" ", "");
+
+            logger.LogInformation($"About to Stop Containers for Scenario Run - {scenarioName}");
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
-            //this.TestingContext.Logger.LogInformation("Containers for Scenario Run Stopped");
+            logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
+
         }
     }
 
@@ -236,9 +239,26 @@ namespace TransactionMobile.IntegrationTests
                                                               EstateName = estateName
                                                           };
 
-                CreateEstateResponse response = await this.TestingContext.DockerHelper.EstateClient
+                CreateEstateResponse response = null;
+                try
+                {
+                    
+                 response = await this.TestingContext.DockerHelper.EstateClient
                                                           .CreateEstate(this.TestingContext.AccessToken, createEstateRequest, CancellationToken.None)
                                                           .ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    this.TestingContext.DockerHelper.Logger.LogInformation(e.Message);
+                    if (e.InnerException != null)
+                    {
+                        this.TestingContext.DockerHelper.Logger.LogInformation(e.InnerException.Message);
+                        if (e.InnerException.InnerException != null)
+                        {
+                            this.TestingContext.DockerHelper.Logger.LogInformation(e.InnerException.InnerException.Message);
+                        }
+                    }
+                }
 
                 response.ShouldNotBeNull();
                 response.EstateId.ShouldNotBe(Guid.Empty);
@@ -252,10 +272,14 @@ namespace TransactionMobile.IntegrationTests
             foreach (TableRow tableRow in table.Rows)
             {
                 EstateDetails estateDetails = this.TestingContext.GetEstateDetails(tableRow);
-
-                EstateResponse estate = await this.TestingContext.DockerHelper.EstateClient
-                                                  .GetEstate(this.TestingContext.AccessToken, estateDetails.EstateId, CancellationToken.None).ConfigureAwait(false);
-
+                EstateResponse estate = null;
+                await Retry.For(async () =>
+                                {
+                                    estate = await this.TestingContext.DockerHelper.EstateClient
+                                                                      .GetEstate(this.TestingContext.AccessToken, estateDetails.EstateId, CancellationToken.None).ConfigureAwait(false);
+                                });
+                
+                estate.ShouldNotBeNull();
                 estate.EstateName.ShouldBe(estateDetails.EstateName);
             }
         }

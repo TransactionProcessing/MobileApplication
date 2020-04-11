@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Converters
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Text.RegularExpressions;
     using Controls;
@@ -12,6 +13,7 @@
     /// </summary>
     /// <seealso cref="Xamarin.Forms.IValueConverter" />
     [Preserve(AllMembers = true)]
+    [ExcludeFromCodeCoverage]
     public class StringToBooleanConverter : IValueConverter
     {
         #region Methods

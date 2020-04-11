@@ -2,7 +2,7 @@
 {
     using System;
     using Common;
-    using InstabugLib;
+    //using InstabugLib;
     using UIKit;
 
     /// <summary>
@@ -18,7 +18,7 @@
         /// </summary>
         public void ClearInstabugUserData()
         {
-            Instabug.LogOut();
+            //Instabug.LogOut();
         }
         
         /// <summary>
@@ -27,7 +27,7 @@
         /// <param name="userData">The user data.</param>
         public void SetInstabugUserData(String userData)
         {
-            Instabug.SetUserData(userData);
+            //Instabug.SetUserData(userData);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@
         public void SetInstabugUserDetails(String userName,
                                            String emailAddress)
         {
-            Instabug.IdentifyUserWithEmail(userName, emailAddress);
+            //Instabug.IdentifyUserWithEmail(userName, emailAddress);
         }
 
         /// <summary>

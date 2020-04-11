@@ -11,6 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\PaymentFailure.svg" />
+    <None Remove="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\PaymentFailure.svg" />
+    <EmbeddedResource Include="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.40" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.40" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.40" />
@@ -29,6 +42,21 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Forms\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\History\MyOrdersPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\History\MyOrdersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PaymentFailurePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PaymentSuccessPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

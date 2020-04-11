@@ -1,15 +1,17 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using System.Threading.Tasks;
     using Android.App;
     using Android.Content.PM;
     using Android.OS;
     using Android.Runtime;
-    using Com.Instabug.Library;
-    using Com.Instabug.Library.Invocation;
-    using Com.Instabug.Library.UI.Onboarding;
+    //using Com.Instabug.Library;
+    //using Com.Instabug.Library.Invocation;
+    //using Com.Instabug.Library.UI.Onboarding;
     using Common;
     using Java.Interop;
+    using Microsoft.AppCenter.Crashes;
     using Plugin.Toast;
     using Unity;
     using Unity.Lifetime;
@@ -70,13 +72,10 @@
 
             this.Device = new AndroidDevice();
 
-            new Instabug.Builder(this.Application, "8b2be04a38a0948fa3af42dec91a4685")
-                .SetInvocationEvents(InstabugInvocationEvent.FloatingButton, InstabugInvocationEvent.Shake)
-                .Build();
-
-            Instabug.SetWelcomeMessageState(WelcomeMessage.State.Disabled);
-
             base.OnCreate(savedInstanceState);
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
@@ -105,5 +104,29 @@
         }
 
         #endregion
+
+        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+        {
+            Exception newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
+            LogUnhandledException(newExc);
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            Exception newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
+            LogUnhandledException(newExc);
+        }
+
+        internal static void LogUnhandledException(Exception exception)
+        {
+            try
+            {
+                Crashes.TrackError(exception);
+            }
+            catch
+            {
+                // just suppress any error logging exceptions
+            }
+        }
     }
 }
