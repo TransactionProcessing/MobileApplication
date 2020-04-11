@@ -614,7 +614,7 @@ namespace TransactionMobile.IntegrationTests.Common
             // Verify the Event Store is running
             await Retry.For(async () =>
                             {
-                                String url = $"http://127.0.0.1:{eventStoreHttpPort}/ping";
+                                String url = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/ping";
 
                                 HttpClient client = new HttpClient();
 
@@ -624,7 +624,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             await Retry.For(async () =>
                             {
-                                String url = $"http://127.0.0.1:{eventStoreHttpPort}/info";
+                                String url = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/info";
                                 HttpClient client = new HttpClient();
 
                                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
