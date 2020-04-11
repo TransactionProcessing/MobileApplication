@@ -10,9 +10,11 @@ namespace TransactionMobile.IntegrationTests.Common
 {
     using System.Data;
     using System.Data.SqlClient;
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Reflection;
     using System.Threading;
     using Ductus.FluentDocker.Common;
@@ -21,6 +23,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using EstateManagement.Client;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
+    using Shouldly;
     using TechTalk.SpecFlow.Plugins;
 
     public partial class TransactionMobileDockerHelper
@@ -196,7 +199,7 @@ namespace TransactionMobile.IntegrationTests.Common
             INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
             IContainerService eventStoreContainer =
-                TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
+                await TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
 
             IContainerService estateManagementContainer = TransactionMobileDockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
                                                                                                                        "stuartferguson/estatemanagement", new List<INetworkService>
@@ -590,7 +593,7 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <param name="hostFolder">The host folder.</param>
         /// <param name="forceLatestImage">if set to <c>true</c> [force latest image].</param>
         /// <returns></returns>
-        public static IContainerService SetupEventStoreContainer(String containerName,
+        public static async Task<IContainerService> SetupEventStoreContainer(String containerName,
                                                                  ILogger logger,
                                                                  String imageName,
                                                                  INetworkService networkService,
@@ -603,7 +606,36 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build()
-                                                                 .Start();
+                                                                 .WaitForPort("2113/tcp", 30000 /*30s*/).Start();
+
+            var eventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
+
+            // Verify the Event Store is running
+            await Retry.For(async () =>
+                            {
+                                String url = $"http://127.0.0.1:{eventStoreHttpPort}/ping";
+
+                                HttpClient client = new HttpClient();
+
+                                HttpResponseMessage pingResponse = await client.GetAsync(url).ConfigureAwait(false);
+                                pingResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+                            }).ConfigureAwait(false);
+
+            await Retry.For(async () =>
+                            {
+                                String url = $"http://127.0.0.1:{eventStoreHttpPort}/info";
+                                HttpClient client = new HttpClient();
+
+                                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+                                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Authorization", "Basic YWRtaW46Y2hhbmdlaXQ=");
+
+                                HttpResponseMessage infoResponse = await client.SendAsync(requestMessage, CancellationToken.None).ConfigureAwait(false);
+
+                                infoResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+                                String infoData = await infoResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                                logger.LogInformation(infoData);
+                            }).ConfigureAwait(false);
 
             logger.LogInformation("Event Store Container Started");
 
