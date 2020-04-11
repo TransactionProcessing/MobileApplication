@@ -605,8 +605,9 @@ namespace TransactionMobile.IntegrationTests.Common
             IContainerService eventStoreContainer = new Builder().UseContainer().UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.EventStoreHttpDockerPort)
                                                                  .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
                                                                  .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
-                                                                 .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite)
-                                                                 .WaitForPort("2113/tcp", 30000 /*30s*/).Build().Start();
+                                                                 .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build().Start();
+
+            await Task.Delay(20000);
 
             var eventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
 
