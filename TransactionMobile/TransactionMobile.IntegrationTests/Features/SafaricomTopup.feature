@@ -68,8 +68,6 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
-@AndroidPRTest
-@iOSPRTest
 Scenario: Failed Safaricom Topup
 	Given I am on the Login Screen
 	
