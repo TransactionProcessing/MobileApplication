@@ -22,9 +22,16 @@ jobs:
         #echo ${DOCKER_IP}
       run: |
           # Show info
+          while ! docker-machine  --github-api-token=${{ secrets.GITHUBAPITOKEN }} create --driver xhyve default; do
+            docker-machine rm -f default
+            sleep 1;
+          done
           docker-machine ls
           docker-machine env default
           docker version
+          DOCKER_IP="$( docker-machine ip default )";
+          echo ::set-env name=localhostaddress::${DOCKER_IP}
+          echo ${DOCKER_IP}
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
