@@ -27,6 +27,8 @@ jobs:
         curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine &&
         chmod +x /usr/local/bin/docker-machine
         docker-machine create --driver virtualbox dev
+        DOCKER_IP="$( docker-machine ip dev )";
+        echo ::set-env name=localhostaddress::${DOCKER_IP}
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
