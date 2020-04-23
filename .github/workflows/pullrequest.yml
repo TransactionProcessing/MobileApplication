@@ -16,10 +16,15 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: "[Pre] Install Docker"
+      #run: |
+        #DOCKER_IP="$( docker-machine ip default )";
+        #echo ::set-env name=localhostaddress::${DOCKER_IP}
+        #echo ${DOCKER_IP}
       run: |
-        DOCKER_IP="$( docker-machine ip default )";
-        echo ::set-env name=localhostaddress::${DOCKER_IP}
-        echo ${DOCKER_IP}
+          # Show info
+          docker-machine ls
+          docker-machine env default
+          docker version
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
