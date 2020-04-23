@@ -26,7 +26,7 @@ jobs:
         base=https://github.com/docker/machine/releases/download/v0.16.0 &&
         curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine &&
         chmod +x /usr/local/bin/docker-machine
-        docker-machine create --driver virtualbox dev
+        docker-machine create --driver virtualbox default
         DOCKER_IP="$( docker-machine ip dev )";
         echo ::set-env name=localhostaddress::${DOCKER_IP}
         mkdir -p /Users/runner/temp
