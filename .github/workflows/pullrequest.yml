@@ -21,7 +21,9 @@ jobs:
     - name: Create Docker VM
       shell: bash
       run: |
-        brew cask install docker-machine
+        base=https://github.com/docker/machine/releases/download/v0.16.0 &&
+        curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine &&
+        chmod +x /usr/local/bin/docker-machine
         docker-machine create --driver virtualbox dev
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
