@@ -18,8 +18,8 @@ jobs:
     - name: "[Pre] Install Docker"
       run: |
           # Show info
-          mkdir -p /Users/runner/.docker/machine/cache
-          curl -Lo ~/.docker/machine/cache/boot2docker.iso https://github.com/boot2docker/boot2docker/releases/download/v19.03.5/boot2docker.iso
+          #mkdir -p /Users/runner/.docker/machine/cache
+          #curl -Lo ~/.docker/machine/cache/boot2docker.iso https://github.com/boot2docker/boot2docker/releases/download/v19.03.5/boot2docker.iso
           brew install docker docker-machine-driver-xhyve
           sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
@@ -29,8 +29,8 @@ jobs:
             sleep 1;
           done
           docker-machine ls
-          docker-machine env default
-          docker version
+          #docker-machine env default
+          #docker version
           #DOCKER_IP="$( docker-machine ip default )";
           #echo ::set-env name=localhostaddress::${DOCKER_IP}
           #echo ${DOCKER_IP}
