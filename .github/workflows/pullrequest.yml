@@ -19,6 +19,7 @@ jobs:
       run: brew cask install virtualbox
       
     - name: Create Docker VM
+      shell: bash
       run: docker-machine create --driver virtualbox dev
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
@@ -131,22 +132,22 @@ jobs:
   #        #curl -sS -I 'http://localhost:80' || true
   #        #curl -sS -I 'https://localhost:443' || true
   #  
-    - name: Setup Nuget
-      uses: olegtarasov/download-nuget@v1
+  #  - name: Setup Nuget
+  #    uses: olegtarasov/download-nuget@v1
           
-    - name: Restore Nuget Packages
-      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
+  #  - name: Restore Nuget Packages
+  #    run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
-    - name: Build Code
-      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+  #  - name: Build Code
+  #    run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
-    - name: Run Unit Tests
-      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+  #  - name: Run Unit Tests
+  #    run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
-    - name: Run Integration Tests - iOS
-      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOSPRTest"   
+  #  - name: Run Integration Tests - iOS
+  #    run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOSPRTest"   
    
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v1
+  #  - name: Setup tmate session
+  #    if: failure()
+  #    uses: mxschmitt/action-tmate@v1
 
