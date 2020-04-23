@@ -16,12 +16,11 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: "[Pre] Install Docker"
-      #run: |
-        #DOCKER_IP="$( docker-machine ip default )";
-        #echo ::set-env name=localhostaddress::${DOCKER_IP}
-        #echo ${DOCKER_IP}
       run: |
           # Show info
+          brew install docker docker-machine-driver-xhyve
+          sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+          sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           while ! docker-machine  --github-api-token=${{ secrets.GITHUBAPITOKEN }} create --driver xhyve default; do
             docker-machine rm -f default
             sleep 1;
