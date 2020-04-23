@@ -34,7 +34,9 @@ jobs:
         tar xzvf /Users/runner/temp/docker-19.03.8.tgz
         sudo cp docker/docker /usr/local/bin/    
         docker-machine restart
-        eval $(docker-machine env default)  
+        eval $(docker-machine env default) 
+        docker info
+        docker network ls         
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
