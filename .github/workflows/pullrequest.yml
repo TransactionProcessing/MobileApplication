@@ -27,7 +27,7 @@ jobs:
         curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine &&
         chmod +x /usr/local/bin/docker-machine
         docker-machine create --driver virtualbox default
-        DOCKER_IP="$( docker-machine ip dev )";
+        DOCKER_IP="$( docker-machine ip default )";
         echo ::set-env name=localhostaddress::${DOCKER_IP}
         mkdir -p /Users/runner/temp
         curl -Lo ~/temp/docker-19.03.8.tgz  https://download.docker.com/mac/static/stable/x86_64/docker-19.03.8.tgz
