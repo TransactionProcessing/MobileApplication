@@ -20,7 +20,9 @@ jobs:
       
     - name: Create Docker VM
       shell: bash
-      run: docker-machine create --driver virtualbox dev
+      run: |
+        brew cask install docker-machine
+        docker-machine create --driver virtualbox dev
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
