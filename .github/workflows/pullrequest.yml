@@ -24,7 +24,7 @@ jobs:
           sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
           echo "Process Started"
-          while ! docker-machine  create --driver xhyve default; go
+          while ! docker-machine  create --driver xhyve default; do
             docker-machine rm -f default
             sleep 1;
           done
