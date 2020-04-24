@@ -17,10 +17,7 @@ jobs:
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
-    
-    - name: Install SoCat
-      run: brew install socat
-      
+          
     - name: Create Docker VM
       shell: bash
       run: |
@@ -40,29 +37,20 @@ jobs:
         eval $(docker-machine env default) 
         docker info
         docker network ls    
-        
-    - name: "[Pre] Setup Docker machine"
-      shell: bash
-      run: |
-          ## Setup DNS records
-          echo "127.0.0.1  localhost" | sudo tee -a /etc/hosts
-
-          # Portforwarding from DOCKER_HOST to local
-          HOST="$( echo "${DOCKER_HOST}" | sed -e 's|^tcp://||g' -e 's|:.*||g' )"
-          echo "${HOST}"
-          sudo socat -s -d -d tcp-listen:80,reuseaddr,fork tcp:${HOST}:80 &
-          sleep 2
-          sudo socat -s -d -d tcp-listen:443,reuseaddr,fork tcp:${HOST}:443 &
-          sleep 2
-          if ! netstat -an | grep -i LISTEN | grep -E '(:80)|(\.80)\s'; then
-            netstat -an | grep -i LISTEN;
-            false;
-          fi
-          if ! netstat -an | grep -i LISTEN | grep -E '(:443)|(\.443)\s'; then
-            netstat -an | grep -i LISTEN;
-            false;
-          fi        
-
+        # Export variable (this target)
+        DOCKER_TLS_VERIFY="$(   docker-machine env default | grep DOCKER_TLS_VERIFY   | sed -e 's/.*="//g' -e 's/"$//g' )"
+        DOCKER_HOST="$(         docker-machine env default | grep DOCKER_HOST         | sed -e 's/.*="//g' -e 's/"$//g' )"
+        DOCKER_CERT_PATH="$(    docker-machine env default | grep DOCKER_CERT_PATH    | sed -e 's/.*="//g' -e 's/"$//g' )"
+        DOCKER_MACHINE_NAME="$( docker-machine env default | grep DOCKER_MACHINE_NAME | sed -e 's/.*="//g' -e 's/"$//g' )"
+        DOCKER_IP="$( docker-machine ip default )";
+        # Export variable (this other targets)
+        # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/development-tools-for-github-actions#set-an-environment-variable-set-env
+        echo ::set-env name=DOCKER_TLS_VERIFY::${DOCKER_TLS_VERIFY}
+        echo ::set-env name=DOCKER_HOST::${DOCKER_HOST}
+        echo ::set-env name=DOCKER_CERT_PATH::${DOCKER_CERT_PATH}
+        echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
+        echo ::set-env name=localhostaddress::${DOCKER_IP}        
+   
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
     - run: echo $ANDROID_HOME
