@@ -98,8 +98,7 @@ namespace TransactionMobile.IntegrationTests.Common
                       .iOS
                       // Used to run a .app file on an ios simulator:
                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app"))
-                      // Used to run a .ipa file on a physical ios device:
-                      //.InstalledApp("com.company.bundleid")
+                      .DeviceIdentifier("321CFE02-DB77-4234-B7E6-A10BADE7FD1B") // iPhone 11
                       .StartApp();
             }
         }
