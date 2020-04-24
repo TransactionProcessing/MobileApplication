@@ -130,7 +130,9 @@ jobs:
         echo ::set-env name=DOCKER_CERT_PATH::${DOCKER_CERT_PATH}
         echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
         echo ::set-env name=localhostaddress::${DOCKER_IP}
-    
+    - name: testing
+      run: xcrun instruments -s devices
+      
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
           
