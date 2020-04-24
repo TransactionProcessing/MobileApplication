@@ -2,7 +2,8 @@
 
 ## Build Status
 
-[![Last Nightly Build Status Badge](https://github.com/StuartFerguson/MobileApplication/workflows/Nightly%20Build/badge.svg)](https://github.com/StuartFerguson/EstateAdministrationUI/workflows/Nightly%20Build/badge.svg)
+[![Last Nightly Build Status Badge](https://github.com/StuartFerguson/MobileApplication/workflows/Nightly%20Build%20-%20Android/badge.svg)](https://github.com/StuartFerguson/MobileApplication/workflows/Nightly%20Build%20-%20Android/badge.svg)
+[![Last Nightly Build Status Badge](https://github.com/StuartFerguson/MobileApplication/workflows/Nightly%20Build%20-%20iOS/badge.svg)](https://github.com/StuartFerguson/MobileApplication/workflows/Nightly%20Build%20-%20iOS/badge.svg)
 
 ## Release Status
 
