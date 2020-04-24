@@ -17,6 +17,9 @@ jobs:
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
+    
+    - name: Install SoCat
+      run: brew install socat
       
     - name: Create Docker VM
       shell: bash
