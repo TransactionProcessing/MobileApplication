@@ -36,7 +36,29 @@ jobs:
         docker-machine restart
         eval $(docker-machine env default) 
         docker info
-        docker network ls         
+        docker network ls    
+        
+    - name: "[Pre] Setup Docker machine"
+      shell: bash
+      run: |
+          ## Setup DNS records
+          echo "127.0.0.1  localhost" | sudo tee -a /etc/hosts
+
+          # Portforwarding from DOCKER_HOST to local
+          HOST="$( echo "${DOCKER_HOST}" | sed -e 's|^tcp://||g' -e 's|:.*||g' )"
+          echo "${HOST}"
+          sudo socat -s -d -d tcp-listen:80,reuseaddr,fork tcp:${HOST}:80 &
+          sleep 2
+          sudo socat -s -d -d tcp-listen:443,reuseaddr,fork tcp:${HOST}:443 &
+          sleep 2
+          if ! netstat -an | grep -i LISTEN | grep -E '(:80)|(\.80)\s'; then
+            netstat -an | grep -i LISTEN;
+            false;
+          fi
+          if ! netstat -an | grep -i LISTEN | grep -E '(:443)|(\.443)\s'; then
+            netstat -an | grep -i LISTEN;
+            false;
+          fi        
 
     - uses: malinskiy/action-android/install-sdk@release/0.0.5
     - run: adb devices
