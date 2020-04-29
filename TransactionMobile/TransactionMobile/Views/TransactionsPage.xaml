@@ -32,20 +32,18 @@
             
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"></RowDefinition>
-                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
 
 
                 <buttons:SfButton AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleMobileTopup}"/>
-                <buttons:SfButton AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="0" Grid.Column="1" Style="{StaticResource SfButtonStyleMobileWallet}"/>
+                <buttons:SfButton AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleMobileWallet}"/>
 
-                <buttons:SfButton AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleBillPayment}"/>
-                <buttons:SfButton AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Grid.Row="1" Grid.Column="1" Style="{StaticResource SfButtonStyleAdmin}"/>
+                <buttons:SfButton AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="2" Grid.Column="0" Style="{StaticResource SfButtonStyleBillPayment}"/>
+                <buttons:SfButton AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleAdmin}"/>
                 
             </Grid>
         </StackLayout>

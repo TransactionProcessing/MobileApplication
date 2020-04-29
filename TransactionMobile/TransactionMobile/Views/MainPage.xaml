@@ -31,20 +31,17 @@
                 TextColor="{DynamicResource Gray-900}" />
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"></RowDefinition>
-                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
-                    <ColumnDefinition Width="200"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
 
                 <buttons:SfButton AutomationId="TransactionsButton" x:Name="TransactionsButton" Text="Transactions" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleTransactions}"/>
-                <buttons:SfButton AutomationId="ReportsButton" x:Name="ReportsButton" Text="Reports" Grid.Row="0" Grid.Column="1" Style="{StaticResource SfButtonStyleReports}"/>
+                <buttons:SfButton AutomationId="ReportsButton" x:Name="ReportsButton" Text="Reports" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleReports}"/>
 
-                <buttons:SfButton AutomationId="ProfileButton" x:Name="ProfileButton" Text="Profile" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleProfile}"/>
-                <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="1" Grid.Column="1" Style="{StaticResource SfButtonStyleSupport}"/>
+                <buttons:SfButton AutomationId="ProfileButton" x:Name="ProfileButton" Text="Profile" Grid.Row="2" Grid.Column="0" Style="{StaticResource SfButtonStyleProfile}"/>
+                <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleSupport}"/>
 
             </Grid>
         </StackLayout>

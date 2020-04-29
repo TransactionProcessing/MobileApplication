@@ -70,19 +70,19 @@
             {
                 rowDefinitionCollection.Add(new RowDefinition
                                             {
-                                                Height = 100
+                                                Height = 80
                                             });
             }
 
             this.OperatorsGrid.RowDefinitions = rowDefinitionCollection;
 
-            this.OperatorsGrid.ColumnDefinitions = new ColumnDefinitionCollection
-                                                   {
-                                                       new ColumnDefinition
-                                                       {
-                                                           Width = 400
-                                                       }
-                                                   };
+            //this.OperatorsGrid.ColumnDefinitions = new ColumnDefinitionCollection
+            //                                       {
+            //                                           new ColumnDefinition
+            //                                           {
+            //                                               Width = 400
+            //                                           }
+            //                                       };
 
             Int32 rowCount = 0;
             foreach (String viewModelOperator in viewModel.Operators)
@@ -91,8 +91,8 @@
                                   {
                                       Text = viewModelOperator,
                                       HorizontalOptions = LayoutOptions.FillAndExpand,
-                                      HeightRequest = 100,
-                                      WidthRequest = 400,
+                                      //HeightRequest = 100,
+                                      //WidthRequest = 400,
                                       AutomationId = viewModelOperator,
                                       Command = new Command<SelectedItemChangedEventArgs>(this.Execute),
                                       CommandParameter = new SelectedItemChangedEventArgs(viewModelOperator, rowCount)

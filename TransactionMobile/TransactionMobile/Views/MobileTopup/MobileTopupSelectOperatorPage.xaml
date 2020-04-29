@@ -29,7 +29,8 @@
                 AutomationId="SelectOperatorLabel"
                 TextColor="{DynamicResource Gray-900}" />
 
-            <Grid x:Name="OperatorsGrid" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand"/>
+            <Grid x:Name="OperatorsGrid" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
