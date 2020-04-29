@@ -76,14 +76,6 @@
 
             this.OperatorsGrid.RowDefinitions = rowDefinitionCollection;
 
-            //this.OperatorsGrid.ColumnDefinitions = new ColumnDefinitionCollection
-            //                                       {
-            //                                           new ColumnDefinition
-            //                                           {
-            //                                               Width = 400
-            //                                           }
-            //                                       };
-
             Int32 rowCount = 0;
             foreach (String viewModelOperator in viewModel.Operators)
             {
