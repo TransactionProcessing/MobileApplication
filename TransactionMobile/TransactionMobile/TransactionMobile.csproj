@@ -32,17 +32,12 @@
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.55" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.55" />
     <PackageReference Include="Plugin.Toast" Version="2.1.2" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Images\PaymentFailure.svg" />
     <EmbeddedResource Include="Images\PaymentSuccess.svg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Microsoft.CSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
