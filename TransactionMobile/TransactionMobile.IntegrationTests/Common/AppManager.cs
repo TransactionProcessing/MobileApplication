@@ -47,34 +47,15 @@ namespace TransactionMobile.IntegrationTests.Common
             if (AppManager.platform == Platform.Android)
             {
                 String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
-                Console.WriteLine($"Configuration is {configuration}");
                 AppManager.app.Invoke("SetConfiguration", configuration);
             }
             else if(AppManager.platform == Platform.iOS)
             {
                 String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
-                Console.WriteLine($"Configuration is {configuration}");
                 AppManager.app.Invoke("SetConfiguration:", configuration);
             }
         }
-
-        public static String GetDebug()
-        {
-            String debug = null;
-            if (AppManager.platform == Platform.Android)
-            {
-                debug = AppManager.app.Invoke("GetDebugInformation").ToString();
-            }
-            //else if (AppManager.platform == Platform.iOS)
-            //{
-            //    String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
-            //    Console.WriteLine($"Configuration is {configuration}");
-            //    AppManager.app.Invoke("SetConfiguration:", configuration);
-            //}
-
-            return debug;
-        }
-
+        
         public static void StartApp()
         {
             string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

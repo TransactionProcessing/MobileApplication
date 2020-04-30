@@ -1,7 +1,9 @@
 ﻿namespace TransactionMobile.iOS
 {
     using System;
+    using System.Threading.Tasks;
     using Common;
+    using Events;
     //using InstabugLib;
     using UIKit;
 
@@ -14,34 +16,6 @@
         #region Methods
 
         /// <summary>
-        /// Clears the instabug user data.
-        /// </summary>
-        public void ClearInstabugUserData()
-        {
-            //Instabug.LogOut();
-        }
-        
-        /// <summary>
-        /// Sets the instabug user data.
-        /// </summary>
-        /// <param name="userData">The user data.</param>
-        public void SetInstabugUserData(String userData)
-        {
-            //Instabug.SetUserData(userData);
-        }
-
-        /// <summary>
-        /// Sets the instabug user details.
-        /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <param name="emailAddress">The email address.</param>
-        public void SetInstabugUserDetails(String userName,
-                                           String emailAddress)
-        {
-            //Instabug.IdentifyUserWithEmail(userName, emailAddress);
-        }
-
-        /// <summary>
         /// Gets the device identifier.
         /// </summary>
         /// <returns></returns>
@@ -49,14 +23,7 @@
         {
             return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
-
-        public void AddDebugInformation(String debug)
-        {
-            this.DebugInformation += $"{debug}|";
-        }
-
-        public String DebugInformation { get; private set; }
-
+        
         #endregion
     }
 }

@@ -3,8 +3,8 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Common;
+    using Events;
     using Pages;
-    using Unity;
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
 
@@ -21,22 +21,25 @@
         #region Fields
 
         /// <summary>
-        /// The device
+        /// The analysis logger
         /// </summary>
-        private readonly IDevice Device;
+        private readonly IAnalysisLogger AnalysisLogger;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionsPage"/> class.
+        /// Initializes a new instance of the <see cref="TransactionsPage" /> class.
         /// </summary>
-        public TransactionsPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        /// <param name="device">The device.</param>
+        public TransactionsPage(IAnalysisLogger analysisLogger,
+                                IDevice device)
         {
-            this.Device = (IDevice)App.Container.Resolve(typeof(IDevice));
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
-            this.Device.AddDebugInformation("In TransactionsPage ctor");
         }
 
         #endregion
@@ -72,7 +75,7 @@
         /// </summary>
         public void Init()
         {
-            this.Device.AddDebugInformation("In TransactionsPage init");
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
 
             this.MobileTopupButton.Clicked += this.MobileTopupButton_Clicked;
             this.MobileWalletButton.Clicked += this.MobileWalletButton_Clicked;
@@ -84,7 +87,7 @@
         /// Handles the Clicked event of the AdminButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void AdminButton_Clicked(Object sender,
                                          EventArgs e)
         {
@@ -95,7 +98,7 @@
         /// Handles the Clicked event of the BillPaymentButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void BillPaymentButton_Clicked(Object sender,
                                                EventArgs e)
         {
@@ -106,7 +109,7 @@
         /// Handles the Clicked event of the MobileTopupButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MobileTopupButton_Clicked(Object sender,
                                                EventArgs e)
         {
@@ -117,7 +120,7 @@
         /// Handles the Clicked event of the MobileWalletButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MobileWalletButton_Clicked(Object sender,
                                                 EventArgs e)
         {

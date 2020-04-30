@@ -6,7 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
-    using Microsoft.AppCenter.Crashes;
+    using Events;
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
@@ -24,6 +24,11 @@
     public class TransactionsPresenter : ITransactionsPresenter
     {
         #region Fields
+
+        /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The device
@@ -86,6 +91,7 @@
         /// <param name="mobileTopupPaymentFailedPage">The mobile topup payment failed page.</param>
         /// <param name="device">The device.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
+        /// <param name="analysisLogger">The analysis logger.</param>
         public TransactionsPresenter(ITransactionsPage transactionsPage,
                                      IMobileTopupSelectOperatorPage mobileTopupSelectOperatorPage,
                                      MobileTopupSelectOperatorViewModel mobileTopupSelectOperatorViewModel,
@@ -94,7 +100,8 @@
                                      IMobileTopupPaymentSuccessPage mobileTopupPaymentSuccessPage,
                                      IMobileTopupPaymentFailedPage mobileTopupPaymentFailedPage,
                                      IDevice device,
-                                     ITransactionProcessorACLClient transactionProcessorAclClient)
+                                     ITransactionProcessorACLClient transactionProcessorAclClient,
+                                     IAnalysisLogger analysisLogger)
         {
             this.TransactionsPage = transactionsPage;
             this.MobileTopupSelectOperatorPage = mobileTopupSelectOperatorPage;
@@ -105,6 +112,7 @@
             this.MobileTopupPaymentFailedPage = mobileTopupPaymentFailedPage;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
+            this.AnalysisLogger = analysisLogger;
         }
 
         #endregion
@@ -116,8 +124,6 @@
         /// </summary>
         public async Task Start()
         {
-            this.Device.AddDebugInformation("About to Init Transactions Page");
-
             this.TransactionsPage.MobileTopupButtonClick += this.TransactionsPage_MobileTopupButtonClick;
             this.TransactionsPage.MobileWalletButtonClick += this.TransactionsPage_MobileWalletButtonClick;
             this.TransactionsPage.BillPaymentButtonClick += this.TransactionsPage_BillPaymentButtonClick;
@@ -125,15 +131,13 @@
 
             this.TransactionsPage.Init();
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.TransactionsPage);
-
-            this.Device.AddDebugInformation("About to Push Transactions Page");
         }
 
         /// <summary>
         /// Handles the CancelButtonClicked event of the MobileTopupPaymentFailedPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private async void MobileTopupPaymentFailedPage_CancelButtonClicked(Object sender,
                                                                             EventArgs e)
         {
@@ -144,7 +148,7 @@
         /// Handles the CompleteButtonClicked event of the MobileTopupPaymentSuccessPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private async void MobileTopupPaymentSuccessPage_CompleteButtonClicked(Object sender,
                                                                                EventArgs e)
         {
@@ -155,18 +159,15 @@
         /// Handles the PerformTopupButtonClicked event of the MobileTopupPerformTopupPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private async void MobileTopupPerformTopupPage_PerformTopupButtonClicked(Object sender,
                                                                                  EventArgs e)
         {
-            // TODO: Do the topup
-            this.Device.AddDebugInformation("About to Do Topup");
-            Boolean topupResult = await this.PerformMobileTopup();
+            Boolean mobileTopupResult = await this.PerformMobileTopup();
 
-            this.Device.AddDebugInformation($"Topup Result is [{topupResult}]");
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
 
-            // TODO: Topup Status page
-            if (topupResult)
+            if (mobileTopupResult)
             {
                 this.MobileTopupPaymentSuccessPage.Init();
                 this.MobileTopupPaymentSuccessPage.CompleteButtonClicked += this.MobileTopupPaymentSuccessPage_CompleteButtonClicked;
@@ -184,12 +185,12 @@
         /// Handles the OperatorSelected event of the MobileTopupSelectOperatorPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectedItemChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectedItemChangedEventArgs" /> instance containing the event data.</param>
         private async void MobileTopupSelectOperatorPage_OperatorSelected(Object sender,
                                                                           SelectedItemChangedEventArgs e)
         {
             this.MobileTopupPerformTopupViewModel.OperatorName = e.SelectedItem as String;
-            this.MobileTopupPerformTopupPage.Init(this.MobileTopupPerformTopupViewModel, this.Device);
+            this.MobileTopupPerformTopupPage.Init(this.MobileTopupPerformTopupViewModel);
             this.MobileTopupPerformTopupPage.PerformTopupButtonClicked += this.MobileTopupPerformTopupPage_PerformTopupButtonClicked;
 
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPerformTopupPage);
@@ -212,13 +213,13 @@
                                                                           };
 
             String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);
-            this.Device.AddDebugInformation($"Sale Request is {requestJson}");
+            this.AnalysisLogger.TrackEvent(MessageSentToHostEvent.Create(App.Configuration.TransactionProcessorACL, requestJson, DateTime.Now));
 
             SaleTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformSaleTransaction(App.TokenResponse.AccessToken, saleTransactionRequestMessage, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            this.Device.AddDebugInformation($"Sale Response is {responseJson}");
+            this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
 
             if (response.ResponseCode != "0000")
             {
@@ -232,7 +233,7 @@
         /// Handles the AdminButtonClick event of the TransactionsPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void TransactionsPage_AdminButtonClick(Object sender,
                                                        EventArgs e)
         {
@@ -243,7 +244,7 @@
         /// Handles the BillPaymentButtonClick event of the TransactionsPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void TransactionsPage_BillPaymentButtonClick(Object sender,
                                                              EventArgs e)
         {
@@ -254,7 +255,7 @@
         /// Handles the MobileTopupButtonClick event of the TransactionsPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private async void TransactionsPage_MobileTopupButtonClick(Object sender,
                                                                    EventArgs e)
         {
@@ -272,7 +273,7 @@
         /// Handles the MobileWalletButtonClick event of the TransactionsPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         private void TransactionsPage_MobileWalletButtonClick(Object sender,
                                                               EventArgs e)
         {

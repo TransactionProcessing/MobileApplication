@@ -3,16 +3,15 @@
     using System;
     using System.Threading.Tasks;
     using Common;
+    using Events;
     using Foundation;
-    using Microsoft.AppCenter.Crashes;
-    //using InstabugLib;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
     using Syncfusion.XForms.iOS.TabView;
     using UIKit;
     using Xamarin;
     using Xamarin.Forms;
-    using Xamarin.Forms.Platform.iOS;
+    using Xamarin.Forms.Platform.iOS; //using InstabugLib;
 
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
@@ -27,14 +26,19 @@
         #region Fields
 
         /// <summary>
-        /// The device
+        /// The analysis logger
         /// </summary>
-        private IDevice Device;
+        private AppCenterAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The configuration
         /// </summary>
         private IConfiguration Configuration;
+
+        /// <summary>
+        /// The device
+        /// </summary>
+        private IDevice Device;
 
         #endregion
 
@@ -56,10 +60,11 @@
         public override Boolean FinishedLaunching(UIApplication app,
                                                   NSDictionary options)
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
 
             this.Device = new iOSDevice();
+            this.AnalysisLogger = new AppCenterAnalysisLogger();
 
             Forms.Init();
 
@@ -68,36 +73,16 @@
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
-            
-            this.LoadApplication(new App(this.Device));
+
+            this.LoadApplication(new App(this.Device, this.AnalysisLogger));
 
             return base.FinishedLaunching(app, options);
         }
 
-        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
-        {
-            var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
-            LogUnhandledException(newExc);
-        }
-
-        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
-        {
-            var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
-            LogUnhandledException(newExc);
-        }
-
-        internal static void LogUnhandledException(Exception exception)
-        {
-            try
-            {
-                Crashes.TrackError(exception);
-            }
-            catch
-            {
-                // just suppress any error logging exceptions
-            }
-        }
-
+        /// <summary>
+        /// Sets the configuration.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         [Export("SetConfiguration:")]
         public void SetConfiguration(NSString configuration)
         {
@@ -112,7 +97,31 @@
 
             App.Configuration = configurationObject;
         }
-        
+
+        /// <summary>
+        /// Currents the domain on unhandled exception.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="unhandledExceptionEventArgs">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
+        private void CurrentDomainOnUnhandledException(Object sender,
+                                                       UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
+            this.AnalysisLogger.TrackCrash(newExc);
+        }
+
+        /// <summary>
+        /// Tasks the scheduler on unobserved task exception.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="unobservedTaskExceptionEventArgs">The <see cref="UnobservedTaskExceptionEventArgs"/> instance containing the event data.</param>
+        private void TaskSchedulerOnUnobservedTaskException(Object sender,
+                                                            UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+        {
+            var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
+            this.AnalysisLogger.TrackCrash(newExc);
+        }
+
         #endregion
     }
 }

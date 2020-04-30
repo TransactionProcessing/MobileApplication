@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Events;
     using Pages;
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
@@ -16,13 +17,25 @@
     [ExcludeFromCodeCoverage]
     public partial class MainPage : ContentPage, IMainPage, IPage
     {
+        #region Fields
+
+        /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainPage"/> class.
+        /// Initializes a new instance of the <see cref="MainPage" /> class.
         /// </summary>
-        public MainPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public MainPage(IAnalysisLogger analysisLogger)
         {
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
         }
 
@@ -59,6 +72,7 @@
         /// </summary>
         public void Init()
         {
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
             this.TransactionsButton.Clicked += this.TransactionsButton_Clicked;
             this.ReportsButton.Clicked += this.ReportsButton_Clicked;
             this.ProfileButton.Clicked += this.ProfileButton_Clicked;
@@ -69,7 +83,7 @@
         /// Handles the Clicked event of the ProfileButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void ProfileButton_Clicked(Object sender,
                                            EventArgs e)
         {
@@ -80,7 +94,7 @@
         /// Handles the Clicked event of the ReportsButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void ReportsButton_Clicked(Object sender,
                                            EventArgs e)
         {
@@ -91,7 +105,7 @@
         /// Handles the Clicked event of the SupportButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void SupportButton_Clicked(Object sender,
                                            EventArgs e)
         {
@@ -102,7 +116,7 @@
         /// Handles the Clicked event of the TransactionsButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void TransactionsButton_Clicked(Object sender,
                                                 EventArgs e)
         {

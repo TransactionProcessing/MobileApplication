@@ -1,19 +1,14 @@
-﻿using Xamarin.Forms;
-
-namespace TransactionMobile
+﻿namespace TransactionMobile
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
     using Common;
-    using Microsoft.AppCenter;
-    using Microsoft.AppCenter.Analytics;
-    using Microsoft.AppCenter.Crashes;
-    using Pages;
-    using Plugin.Toast;
+    using Events;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
+    using Syncfusion.Licensing;
     using Unity;
     using Unity.Lifetime;
+    using Xamarin.Forms;
 
     /// <summary>
     /// 
@@ -22,6 +17,13 @@ namespace TransactionMobile
     [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
+        #region Fields
+
+        /// <summary>
+        /// The configuration
+        /// </summary>
+        public static IConfiguration Configuration;
+
         /// <summary>
         /// Unity container
         /// </summary>
@@ -33,65 +35,53 @@ namespace TransactionMobile
         public static TokenResponse TokenResponse;
 
         /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        /// <summary>
         /// The device
         /// </summary>
         private readonly IDevice Device;
 
-        /// <summary>
-        /// The configuration
-        /// </summary>
-        public static IConfiguration Configuration;
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="App" /> class.
         /// </summary>
         /// <param name="device">The device.</param>
-        /// <param name="configuration">The configuration.</param>
-        public App(IDevice device)
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public App(IDevice device,
+                   IAnalysisLogger analysisLogger)
         {
             this.Device = device;
+            this.AnalysisLogger = analysisLogger;
 
-            InitializeComponent();
+            this.InitializeComponent();
 
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTkwMDU4QDMxMzcyZTM0MmUzMENHeFNiTzVPdWtQdk5td09TY0RjRVhUQ1hORFF5cFFKMW5QdnN0RDRLMGc9");
+            SyncfusionLicenseProvider.RegisterLicense("MTkwMDU4QDMxMzcyZTM0MmUzMENHeFNiTzVPdWtQdk5td09TY0RjRVhUQ1hORFF5cFFKMW5QdnN0RDRLMGc9");
 
             App.Container = Bootstrapper.Run();
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-
-            //if (this.Configuration.ClientId == null && this.Configuration.ClientSecret == null && this.Configuration.SecurityService == null &&
-            //    this.Configuration.TransactionProcessorACL == null)
-            //{
-            //    this.Configuration = new DevelopmentConfiguration();
-            //    App.Container.RegisterInstance(this.Configuration, new ContainerControlledLifetimeManager());
-            //}
-            //else
-            //{
-            //    App.Container.RegisterInstance(this.Configuration, new ContainerControlledLifetimeManager());
-            //}
+            App.Container.RegisterInstance(this.AnalysisLogger, new ContainerControlledLifetimeManager());
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Application developers override this method to perform actions when the application starts.
+        /// Application developers override this method to perform actions when the application resumes from a sleeping state.
         /// </summary>
         /// <remarks>
         /// To be added.
         /// </remarks>
-        protected override async void OnStart()
+        protected override void OnResume()
         {
-            //AppCenter.Start("android=9a0cb953-7e00-4918-b2e1-a58326ace637;" +
-            //                "uwp={Your UWP App secret here};" +
-            //                "ios={Your iOS App secret here}",
-            //                typeof(Analytics), typeof(Crashes));
-
-            AppCenter.Start("android=9a0cb953-7e00-4918-b2e1-a58326ace637;",
-                            typeof(Analytics), typeof(Crashes));
-
-            // Handle when your app starts
-            ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
-
-            // show the login page
-            await loginPresenter.Start();
+            // Handle when your app resumes
         }
 
         /// <summary>
@@ -106,14 +96,22 @@ namespace TransactionMobile
         }
 
         /// <summary>
-        /// Application developers override this method to perform actions when the application resumes from a sleeping state.
+        /// Application developers override this method to perform actions when the application starts.
         /// </summary>
         /// <remarks>
         /// To be added.
         /// </remarks>
-        protected override void OnResume()
+        protected override async void OnStart()
         {
-            // Handle when your app resumes
+            this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
+
+            // Handle when your app starts
+            ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
+
+            // show the login page
+            await loginPresenter.Start();
         }
+
+        #endregion
     }
 }

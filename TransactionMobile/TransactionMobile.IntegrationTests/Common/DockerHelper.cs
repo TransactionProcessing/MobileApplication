@@ -437,9 +437,6 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public async Task StopContainersForScenarioRun()
         {
-            String debug = AppManager.GetDebug();
-            this.TestingContext.DockerHelper.Logger.LogInformation(debug);
-
             await CleanUpSubscriptionServiceConfiguration().ConfigureAwait(false);
 
             //await RemoveEstateReadModel().ConfigureAwait(false);
@@ -939,7 +936,6 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             String server = localhostaddress;
-            //String database = "SubscriptionServiceConfiguration";
             String database = "master";
             String user = sqlUserName;
             String password = sqlPassword;
@@ -948,7 +944,7 @@ namespace TransactionMobile.IntegrationTests.Common
             String connectionString = $"server={server},{port};user id={user}; password={password}; database={database};";
             logger.LogInformation($"Connection String {connectionString}");
             SqlConnection connection = new SqlConnection(connectionString);
-
+            Boolean databaseFound = false;
             while (counter <= maxRetries)
             {
                 try
@@ -960,13 +956,23 @@ namespace TransactionMobile.IntegrationTests.Common
                     SqlCommand command = connection.CreateCommand();
                     command.CommandText = "select * from sys.databases";
                     SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.Default);
-                    while (dataReader.Read())
-                    {
-                        Console.WriteLine(dataReader.GetValue(0));
-                    }
-
+                    
                     logger.LogInformation("Connection Opened");
 
+                    // Check if we need to create the SS database
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            if (dataReader.GetFieldValue<String>(0) == "SubscriptionServiceConfiguration")
+                            {
+                                databaseFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    dataReader.Close();
                     connection.Close();
                     logger.LogInformation("SQL Server Container Running");
                     break;
@@ -987,48 +993,53 @@ namespace TransactionMobile.IntegrationTests.Common
                 }
             }
 
-            // Create the SS database here
-            // Read the SQL File
-            String sqlToExecute = null;
-            String executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String sqlFileLocation = Path.Combine(executableLocation, "DbScripts");
-            IOrderedEnumerable<String> files = Directory.GetFiles(sqlFileLocation).OrderBy(x => x);
+            
 
-            try
+            if (databaseFound == false)
             {
-                SqlConnection ssconnection = new SqlConnection(connectionString);
-                ssconnection.Open();
-                SqlCommand sscommand = ssconnection.CreateCommand();
-                sscommand.CommandText = "CREATE DATABASE SubscriptionServiceConfiguration";
-                sscommand.ExecuteNonQuery();
+                // Create the SS database here
+                // Read the SQL File
+                String sqlToExecute = null;
+                String executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                String sqlFileLocation = Path.Combine(executableLocation, "DbScripts");
+                IOrderedEnumerable<String> files = Directory.GetFiles(sqlFileLocation).OrderBy(x => x);
 
-                sscommand.CommandText = "USE SubscriptionServiceConfiguration";
-                sscommand.ExecuteNonQuery();
-
-                foreach (String file in files)
+                try
                 {
-                    using (StreamReader sr = new StreamReader(file))
+                    SqlConnection ssconnection = new SqlConnection(connectionString);
+                    ssconnection.Open();
+                    SqlCommand sscommand = ssconnection.CreateCommand();
+                    sscommand.CommandText = "CREATE DATABASE SubscriptionServiceConfiguration";
+                    sscommand.ExecuteNonQuery();
+
+                    sscommand.CommandText = "USE SubscriptionServiceConfiguration";
+                    sscommand.ExecuteNonQuery();
+
+                    foreach (String file in files)
                     {
-                        sqlToExecute = sr.ReadToEnd();
+                        using(StreamReader sr = new StreamReader(file))
+                        {
+                            sqlToExecute = sr.ReadToEnd();
+                        }
+
+                        sscommand.CommandText = sqlToExecute;
+                        sscommand.ExecuteNonQuery();
                     }
 
-                    sscommand.CommandText = sqlToExecute;
-                    sscommand.ExecuteNonQuery();
-                }
-
-                connection.Close();
-
-                Console.WriteLine("SS Database Created");
-            }
-            catch (Exception e)
-            {
-                if (connection.State == ConnectionState.Open)
-                {
                     connection.Close();
-                }
 
-                Console.WriteLine(e);
-                throw;
+                    Console.WriteLine("SS Database Created");
+                }
+                catch(Exception e)
+                {
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
 
             return databaseServerContainer;

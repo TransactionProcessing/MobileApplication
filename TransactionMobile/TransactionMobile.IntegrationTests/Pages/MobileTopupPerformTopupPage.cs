@@ -59,7 +59,6 @@
 
         public void ClickPerformTopupButton()
         {
-            var debug = AppManager.GetDebug();
             app.WaitForElement(this.PerformTopupButton);
             app.Tap(this.PerformTopupButton);
         }

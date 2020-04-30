@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Events;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -20,6 +21,11 @@
         #region Fields
 
         /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        /// <summary>
         /// The view model
         /// </summary>
         private LoginViewModel ViewModel;
@@ -31,8 +37,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginPage" /> class.
         /// </summary>
-        public LoginPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public LoginPage(IAnalysisLogger analysisLogger)
         {
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
         }
 
@@ -55,6 +64,8 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(LoginViewModel viewModel)
         {
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+
             this.ViewModel = viewModel;
 
             this.EmailEntry.TextChanged += this.Email_TextChanged;
