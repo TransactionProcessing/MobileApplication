@@ -12,9 +12,6 @@
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
     using Platform = Xamarin.Essentials.Platform;
-    //using Com.Instabug.Library;
-    //using Com.Instabug.Library.Invocation;
-    //using Com.Instabug.Library.UI.Onboarding;
 
     /// <summary>
     /// 

@@ -18,11 +18,6 @@
         /// <returns></returns>
         String GetDeviceIdentifier();
 
-        /// <summary>
-        /// Adds the debug information.
-        /// </summary>
-        //void AddDebugInformation(String debug);
-
         #endregion
     }
 }

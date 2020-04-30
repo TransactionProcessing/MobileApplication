@@ -11,7 +11,7 @@
     using UIKit;
     using Xamarin;
     using Xamarin.Forms;
-    using Xamarin.Forms.Platform.iOS; //using InstabugLib;
+    using Xamarin.Forms.Platform.iOS;
 
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
