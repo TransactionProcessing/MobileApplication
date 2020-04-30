@@ -79,7 +79,7 @@ namespace TransactionMobile.IntegrationTests.Common
                       .iOS
                       // Used to run a .app file on an ios simulator:
                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app"))
-                      .DeviceIdentifier("321CFE02-DB77-4234-B7E6-A10BADE7FD1B") // iPhone 11
+                      .DeviceIdentifier("E01E8404-86E0-4E70-A910-99F936E44EE3") // iPhone 11
                       .StartApp();
             }
         }
