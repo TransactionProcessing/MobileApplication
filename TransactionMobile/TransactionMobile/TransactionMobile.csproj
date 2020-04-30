@@ -32,6 +32,7 @@
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.55" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.55" />
     <PackageReference Include="Plugin.Toast" Version="2.1.2" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

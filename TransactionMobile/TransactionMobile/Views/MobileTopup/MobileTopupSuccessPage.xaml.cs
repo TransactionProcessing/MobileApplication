@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Events;
     using Pages;
     using Xamarin.Forms;
     using Xamarin.Forms.Internals;
@@ -18,13 +19,25 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPaymentSuccessPage : ContentPage, IMobileTopupPaymentSuccessPage, IPage
     {
+        #region Fields
+
+        /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MobileTopupPaymentSuccessPage" /> class.
         /// </summary>
-        public MobileTopupPaymentSuccessPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public MobileTopupPaymentSuccessPage(IAnalysisLogger analysisLogger)
         {
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
         }
 
@@ -46,6 +59,7 @@
         /// </summary>
         public void Init()
         {
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
             this.CompleteButton.Clicked += this.CompleteButton_Clicked;
         }
 
@@ -53,7 +67,7 @@
         /// Handles the Clicked event of the CompleteButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void CompleteButton_Clicked(Object sender,
                                             EventArgs e)
         {

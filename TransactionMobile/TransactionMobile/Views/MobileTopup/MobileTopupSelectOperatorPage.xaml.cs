@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Events;
     using Pages;
     using Syncfusion.XForms.Buttons;
     using ViewModels;
@@ -18,13 +19,25 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupSelectOperatorPage : ContentPage, IMobileTopupSelectOperatorPage, IPage
     {
+        #region Fields
+
+        /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MobileTopupSelectOperatorPage"/> class.
+        /// Initializes a new instance of the <see cref="MobileTopupSelectOperatorPage" /> class.
         /// </summary>
-        public MobileTopupSelectOperatorPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public MobileTopupSelectOperatorPage(IAnalysisLogger analysisLogger)
         {
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
         }
 
@@ -44,16 +57,17 @@
         /// <summary>
         /// Initializes the specified view model.
         /// </summary>
-        /// <param name="viewModel"></param>
+        /// <param name="viewModel">The view model.</param>
         public void Init(MobileTopupSelectOperatorViewModel viewModel)
         {
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
             this.LoadOperators(viewModel);
         }
 
         /// <summary>
         /// Executes the specified e.
         /// </summary>
-        /// <param name="e">The <see cref="SelectedItemChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SelectedItemChangedEventArgs" /> instance containing the event data.</param>
         private void Execute(SelectedItemChangedEventArgs e)
         {
             this.OperatorSelected(this, e);

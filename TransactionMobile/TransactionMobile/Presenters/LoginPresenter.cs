@@ -5,6 +5,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
+    using Events;
+    using Microsoft.AppCenter.Crashes;
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
@@ -25,6 +27,11 @@
     public class LoginPresenter : ILoginPresenter
     {
         #region Fields
+
+        /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The device
@@ -69,12 +76,14 @@
         /// <param name="device">The device.</param>
         /// <param name="securityServiceClient">The security service client.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
+        /// <param name="analysisLogger">The analysis logger.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
                               LoginViewModel loginViewModel,
                               IDevice device,
                               ISecurityServiceClient securityServiceClient,
-                              ITransactionProcessorACLClient transactionProcessorAclClient)
+                              ITransactionProcessorACLClient transactionProcessorAclClient,
+                              IAnalysisLogger analysisLogger)
         {
             this.MainPage = mainPage;
             this.LoginPage = loginPage;
@@ -82,6 +91,7 @@
             this.Device = device;
             this.SecurityServiceClient = securityServiceClient;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
+            this.AnalysisLogger = analysisLogger;
         }
 
         #endregion
@@ -93,7 +103,7 @@
         /// </summary>
         public async Task Start()
         {
-            this.Device.AddDebugInformation("In Start");
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("In Start"));
 
             this.LoginPage.LoginButtonClick += this.LoginPage_LoginButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
@@ -113,10 +123,10 @@
                 App.Configuration = new DevelopmentConfiguration();
             }
 
-            this.Device.AddDebugInformation($"Client Id is {App.Configuration.ClientId}");
-            this.Device.AddDebugInformation($"Client Secret is {App.Configuration.ClientSecret}");
-            this.Device.AddDebugInformation($"SecurityService Url is {App.Configuration.SecurityService}");
-            this.Device.AddDebugInformation($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}");
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Id is {App.Configuration.ClientId}"));
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Secret is {App.Configuration.ClientSecret}"));
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"SecurityService Url is {App.Configuration.SecurityService}"));
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
         }
 
         /// <summary>
@@ -132,10 +142,10 @@
                 //this.LoginViewModel.EmailAddress = "merchantuser@testmerchant3.co.uk";
                 //this.LoginViewModel.Password = "123456";
 
-                this.Device.AddDebugInformation("About to Get Configuration");
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Get Configuration"));
                 await this.GetConfiguration();
 
-                this.Device.AddDebugInformation("About to Get Token");
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Get Token"));
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                         this.LoginViewModel.Password,
@@ -143,19 +153,16 @@
                                                                                         App.Configuration.ClientSecret,
                                                                                         CancellationToken.None);
 
-                this.Device.AddDebugInformation($"About to Cache Token {tokenResponse.AccessToken}");
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"About to Cache Token {tokenResponse.AccessToken}"));
+                this.AnalysisLogger.SetUserName(this.LoginViewModel.EmailAddress);
 
                 // Cache the user token
                 App.TokenResponse = tokenResponse;
 
-                //this.Device.AddDebugInformation("About to Set Instabug Details");
-                // Set the details for Instabug
-                //this.Device.SetInstabugUserDetails(this.LoginViewModel.EmailAddress, this.LoginViewModel.EmailAddress);
-
-                // Do the intial logon transaction
+                // Do the initial logon transaction
                 await this.PerformLogonTransaction();
 
-                this.Device.AddDebugInformation("Logon Completed");
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("Logon Completed"));
 
                 // Go to signed in page
                 this.MainPage.Init();
@@ -168,11 +175,12 @@
             }
             catch(Exception ex)
             {
-                this.Device.AddDebugInformation(ex.Message);
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create(ex.Message));
                 if (ex.InnerException != null)
                 {
-                    this.Device.AddDebugInformation(ex.InnerException.Message);
+                    this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create(ex.InnerException.Message));
                 }
+
                 CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
             }
         }
@@ -181,7 +189,7 @@
         /// Handles the ProfileButtonClicked event of the MainPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MainPage_ProfileButtonClicked(Object sender,
                                                    EventArgs e)
         {
@@ -192,7 +200,7 @@
         /// Handles the ReportsButtonClicked event of the MainPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MainPage_ReportsButtonClicked(Object sender,
                                                    EventArgs e)
         {
@@ -203,7 +211,7 @@
         /// Handles the SupportButtonClicked event of the MainPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MainPage_SupportButtonClicked(Object sender,
                                                    EventArgs e)
         {
@@ -214,7 +222,7 @@
         /// Handles the TransactionsButtonClicked event of the MainPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void MainPage_TransactionsButtonClicked(Object sender,
                                                         EventArgs e)
         {
@@ -225,10 +233,11 @@
         /// <summary>
         /// Performs the logon transaction.
         /// </summary>
+        /// <exception cref="System.Exception">Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]</exception>
         /// <exception cref="Exception">Error during logon transaction</exception>
         private async Task PerformLogonTransaction()
         {
-            this.Device.AddDebugInformation("About to Do Logon Transaction");
+            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Do Logon Transaction"));
 
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
@@ -239,17 +248,17 @@
                                                                             };
 
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
-            this.Device.AddDebugInformation($"Logon Request is {requestJson}");
+            this.AnalysisLogger.TrackEvent(MessageSentToHostEvent.Create(App.Configuration.TransactionProcessorACL, requestJson, DateTime.Now));
 
             LogonTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformLogonTransaction(App.TokenResponse.AccessToken, logonTransactionRequestMessage, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            this.Device.AddDebugInformation($"Logon Response is {responseJson}");
+            this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
 
             if (response.ResponseCode != "0000")
             {
-                throw new Exception("Error during logon transaction");
+                throw new Exception($"Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]");
             }
         }
 

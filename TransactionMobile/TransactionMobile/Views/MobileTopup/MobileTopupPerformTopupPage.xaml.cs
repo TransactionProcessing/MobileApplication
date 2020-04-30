@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using Common;
+    using Events;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -21,6 +21,11 @@
         #region Fields
 
         /// <summary>
+        /// The analysis logger
+        /// </summary>
+        private readonly IAnalysisLogger AnalysisLogger;
+
+        /// <summary>
         /// The view model
         /// </summary>
         private MobileTopupPerformTopupViewModel ViewModel;
@@ -30,10 +35,13 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MobileTopupPerformTopupPage"/> class.
+        /// Initializes a new instance of the <see cref="MobileTopupPerformTopupPage" /> class.
         /// </summary>
-        public MobileTopupPerformTopupPage()
+        /// <param name="analysisLogger">The analysis logger.</param>
+        public MobileTopupPerformTopupPage(IAnalysisLogger analysisLogger)
         {
+            this.AnalysisLogger = analysisLogger;
+            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
             this.InitializeComponent();
         }
 
@@ -50,14 +58,14 @@
 
         #region Methods
 
-        private IDevice Device;
         /// <summary>
         /// Initializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public void Init(MobileTopupPerformTopupViewModel viewModel, IDevice device)
+        public void Init(MobileTopupPerformTopupViewModel viewModel)
         {
-            this.Device = device;
+            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+
             this.ViewModel = viewModel;
             this.PerformTopupButton.Clicked += this.PerformTopupButton_Clicked;
 
@@ -65,15 +73,13 @@
             this.CustomerMobileNumberEntry.Completed += this.CustomerMobileNumberEntry_Completed;
             this.TopupAmountEntry.TextChanged += this.TopupAmountEntry_TextChanged;
             this.TopupAmountEntry.Completed += this.TopupAmountEntry_Completed;
-
-            this.Device.AddDebugInformation("MobileTopupPerformTopupPage Init completed");
         }
 
         /// <summary>
         /// Handles the Completed event of the CustomerMobileNumberEntry control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void CustomerMobileNumberEntry_Completed(Object sender,
                                                          EventArgs e)
         {
@@ -84,7 +90,7 @@
         /// Handles the TextChanged event of the CustomerMobileNumberEntry control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs" /> instance containing the event data.</param>
         private void CustomerMobileNumberEntry_TextChanged(Object sender,
                                                            TextChangedEventArgs e)
         {
@@ -95,22 +101,18 @@
         /// Handles the Clicked event of the PerformTopupButton control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void PerformTopupButton_Clicked(Object sender,
                                                 EventArgs e)
         {
-            this.Device.AddDebugInformation("MobileTopupPerformTopupPage PerformTopupButton_Clicked");
-            this.Device.AddDebugInformation($"Customer Mobile Number is {this.ViewModel.CustomerMobileNumber}");
-            this.Device.AddDebugInformation($"Topup Amount is {this.ViewModel.TopupAmount}");
             this.PerformTopupButtonClicked(sender, e);
-
         }
 
         /// <summary>
         /// Handles the Completed event of the TopupAmountEntry control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void TopupAmountEntry_Completed(Object sender,
                                                 EventArgs e)
         {
@@ -121,7 +123,7 @@
         /// Handles the TextChanged event of the TopupAmountEntry control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TextChangedEventArgs" /> instance containing the event data.</param>
         private void TopupAmountEntry_TextChanged(Object sender,
                                                   TextChangedEventArgs e)
         {

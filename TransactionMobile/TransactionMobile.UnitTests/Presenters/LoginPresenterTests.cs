@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.UnitTests.Presenters
 {
     using Common;
+    using Events;
     using Moq;
     using NUnit.Framework;
     using Pages;
@@ -30,8 +31,10 @@ namespace TransactionMobile.UnitTests.Presenters
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
+            Mock<IAnalysisLogger> analysisLogger = new Mock<IAnalysisLogger>();
             LoginPresenter loginPresenter =
-                new LoginPresenter(loginPage.Object, mainPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object);
+                new LoginPresenter(loginPage.Object, mainPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object,
+                                   analysisLogger.Object);
 
             loginPresenter.ShouldNotBeNull();
         }

@@ -24,7 +24,7 @@
         /// Initializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        void Init(MobileTopupPerformTopupViewModel viewModel, IDevice device);
+        void Init(MobileTopupPerformTopupViewModel viewModel);
 
         #endregion
     }
