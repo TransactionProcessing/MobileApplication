@@ -97,8 +97,9 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <exception cref="Exception">No device found with name {deviceToFind}</exception>
         private static String GetDeviceIdentifier(String deviceToFind)
         {
-            var simulatorListEnvVar = "{\"name\":\"iPhone 8\",\"udid\":\"6219E3F3-A934-4CA3-B957-98DDE01C02A2\"}{\"name\":\"iPhone 8 Plus\",\"udid\":\"0137F458-43D0-48F7-9D35-03BC9A37F94B\"}";
-            simulatorListEnvVar=simulatorListEnvVar.Replace("}{", "},{");
+            //var simulatorListEnvVar = "{\"name\":\"iPhone 8\",\"udid\":\"6219E3F3-A934-4CA3-B957-98DDE01C02A2\"}{\"name\":\"iPhone 8 Plus\",\"udid\":\"0137F458-43D0-48F7-9D35-03BC9A37F94B\"}";
+            String simulatorListEnvVar = Environment.GetEnvironmentVariable("IOSSIMULATORS");
+            simulatorListEnvVar =simulatorListEnvVar.Replace("}{", "},{");
 
             // Format as json
             String json = "{\"devices\": [" + simulatorListEnvVar + "]}";
