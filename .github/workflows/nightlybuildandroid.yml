@@ -2,7 +2,9 @@ name: Nightly Build - Android
 
 on:
   schedule:
-  - cron: "45 23 * * *"
+  - cron: "45 23 * * *"    
+  repository_dispatch:
+   types: androidnightly
   
 jobs:  
   build:

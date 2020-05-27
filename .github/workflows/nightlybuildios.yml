@@ -3,7 +3,8 @@ name: Nightly Build - iOS
 on:
   schedule:
   - cron: "45 23 * * *"
-  
+  repository_dispatch:
+   types: iosnightly  
 jobs:  
   buildios:
     name: "Nightly Build - iOS"
