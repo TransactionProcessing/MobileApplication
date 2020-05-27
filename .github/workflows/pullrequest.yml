@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: testing
-      run: echo ::set-env name=TESTING::"$(xcrun instruments -s devices)"
+      run: echo ::set-env name=TESTING::"$(xcrun simctl list devices --json)"
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
