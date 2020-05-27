@@ -59,9 +59,7 @@ namespace TransactionMobile.IntegrationTests.Common
         
         public static void StartApp()
         {
-            String ddeviceIdentifier = AppManager.GetDeviceIdentifier("iPhone 11");
-
-            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             //string binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "Binaries");
 
             if (Platform == Platform.Android)
