@@ -19,7 +19,7 @@ jobs:
       run: xcrun instruments -s devices
 
     - name: testing2
-      run: export SIMULATORS='xcrun instruments -s devices'
+      run: export SIMULATORS=$(xcrun instruments -s devices)
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
