@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: testing
-      run: TESTING="$(xcrun instruments -s devices)"
+      run: echo ::set-env name=DOCKER_TLS_VERIFY::"$(xcrun instruments -s devices)"
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
