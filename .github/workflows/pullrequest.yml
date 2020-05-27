@@ -15,6 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: testing
+      run: xcrun instruments -s devices
+
+    - name: testing2
+      run: export SIMULATORS=`xcrun instruments -s devices`
+
     - name: Install VirtualBox
       run: brew cask install virtualbox      
           
