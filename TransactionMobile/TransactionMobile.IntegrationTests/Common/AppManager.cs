@@ -11,6 +11,7 @@ using Xamarin.UITest.Queries;
 namespace TransactionMobile.IntegrationTests.Common
 {
     using System.Threading;
+    using Newtonsoft.Json;
     using NUnit.Framework;
 
     static class AppManager
@@ -58,7 +59,7 @@ namespace TransactionMobile.IntegrationTests.Common
         
         public static void StartApp()
         {
-            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             //string binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "Binaries");
 
             if (Platform == Platform.Android)
@@ -74,15 +75,57 @@ namespace TransactionMobile.IntegrationTests.Common
 
             if (Platform == Platform.iOS)
             {
+                String deviceIdentifier = AppManager.GetDeviceIdentifier("iPhone 11 (13.4)");
+
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 app = ConfigureApp
                       .iOS
                       // Used to run a .app file on an ios simulator:
                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app"))
-                      .DeviceIdentifier("E01E8404-86E0-4E70-A910-99F936E44EE3") // iPhone 11
+                      .DeviceIdentifier(deviceIdentifier) // iPhone 11
                       .StartApp();
             }
         }
+
+        /// <summary>
+        /// Gets the device identifier.
+        /// </summary>
+        /// <param name="deviceToFind">The device to find.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">No device found with name {deviceToFind}</exception>
+        private static String GetDeviceIdentifier(String deviceToFind)
+        {
+            //var simulatorListEnvVar = "{\"name\":\"iPhone 8\",\"udid\":\"6219E3F3-A934-4CA3-B957-98DDE01C02A2\"}{\"name\":\"iPhone 8 Plus\",\"udid\":\"0137F458-43D0-48F7-9D35-03BC9A37F94B\"}";
+            String simulatorListEnvVar = Environment.GetEnvironmentVariable("IOSSIMULATORS");
+            simulatorListEnvVar =simulatorListEnvVar.Replace("}{", "},{");
+
+            // Format as json
+            String json = "{\"devices\": [" + simulatorListEnvVar + "]}";
+
+            DeviceList simulatorDeviceList = JsonConvert.DeserializeObject<DeviceList>(json);
+
+            SimulatorDevice device = simulatorDeviceList.SimulatorDevices.SingleOrDefault(s => s.Name == deviceToFind);
+
+            if (device == null)
+            {
+                throw new Exception($"No device found with name {deviceToFind}");
+            }
+
+            return device.Idenfifier;
+        }
+    }
+
+    public partial class DeviceList
+    {
+        [JsonProperty("devices")]
+        public SimulatorDevice[] SimulatorDevices { get; set; }
+    }
+
+    public class SimulatorDevice
+    {
+        public String Name { get; set; }
+        [JsonProperty("udid")]
+        public String Idenfifier { get; set; }
     }
 
     public class PlatformQuery
