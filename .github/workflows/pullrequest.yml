@@ -15,12 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    #- name: Setup tmate session
-    #  uses: mxschmitt/action-tmate@v1
-
-    - name: testing
-      run: echo ::set-env name=TESTING::"$(xcrun simctl list devices --json | jq -R -s)"
-
     - name: Install VirtualBox
       run: brew cask install virtualbox      
           
@@ -100,6 +94,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Cache Simulator Data
+      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --json | jq -R -s)"
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
