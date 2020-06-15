@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
+    using EstateManagement.Client;
     using Pages;
     using Plugin.Toast;
     using Presenters;
@@ -31,6 +32,7 @@
             // Common Registrations
             unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new SingletonLifetimeManager());
             unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new SingletonLifetimeManager());
+            unityContainer.RegisterType<IEstateClient, EstateClient>(new SingletonLifetimeManager());
             HttpClient httpClient = new HttpClient();
             unityContainer.RegisterInstance(httpClient, new SingletonLifetimeManager());
             unityContainer.RegisterType<Func<String, String>>(new InjectionFactory(c => new Func<String, String>(configSetting =>
@@ -43,6 +45,11 @@
                                                                                                                          if (configSetting == "TransactionProcessorACL")
                                                                                                                          {
                                                                                                                              return config.TransactionProcessorACL;
+                                                                                                                         }
+
+                                                                                                                         if (configSetting == "EstateManagementApi")
+                                                                                                                         {
+                                                                                                                             return config.EstateManagement;
                                                                                                                          }
 
                                                                                                                          if (configSetting == "SecurityService")
@@ -71,6 +78,7 @@
 
             // View model registrations
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<MainPageViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupPerformTopupViewModel>(new TransientLifetimeManager());
 

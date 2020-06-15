@@ -43,16 +43,16 @@ namespace TransactionMobile.IntegrationTests.Common
             }
         }
 
-        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl)
+        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl, String estateManagementUrl)
         {
             if (AppManager.platform == Platform.Android)
             {
-                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl},{estateManagementUrl}";
                 AppManager.app.Invoke("SetConfiguration", configuration);
             }
             else if(AppManager.platform == Platform.iOS)
             {
-                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl},{estateManagementUrl}";
                 AppManager.app.Invoke("SetConfiguration:", configuration);
             }
         }

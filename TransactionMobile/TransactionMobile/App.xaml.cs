@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using Common;
     using Events;
@@ -35,6 +36,16 @@
         public static TokenResponse TokenResponse;
 
         /// <summary>
+        /// The estate identifier
+        /// </summary>
+        public static Guid EstateId;
+
+        /// <summary>
+        /// The merchant identifier
+        /// </summary>
+        public static Guid MerchantId;
+
+        /// <summary>
         /// The analysis logger
         /// </summary>
         private readonly IAnalysisLogger AnalysisLogger;
@@ -61,7 +72,7 @@
 
             this.InitializeComponent();
 
-            SyncfusionLicenseProvider.RegisterLicense("MTkwMDU4QDMxMzcyZTM0MmUzMENHeFNiTzVPdWtQdk5td09TY0RjRVhUQ1hORFF5cFFKMW5QdnN0RDRLMGc9");
+            SyncfusionLicenseProvider.RegisterLicense("MjcxMTQzQDMxMzgyZTMxMmUzMFJmTmpPay9hVk9xRlRoRDA4YjhhTmxzTldnOUc2UURBOGQ0S3NpR3BENEk9");
 
             App.Container = Bootstrapper.Run();
 

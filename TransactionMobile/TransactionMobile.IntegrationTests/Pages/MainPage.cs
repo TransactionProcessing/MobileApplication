@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.IntegrationTests.Pages
 {
     using System;
+    using System.Linq;
     using Common;
     using Xamarin.UITest.Queries;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
@@ -17,6 +18,7 @@
         private readonly Query ReportsButton;
         private readonly Query ProfileButton;
         private readonly Query SupportButton;
+        private readonly Query AvailableBalanceLabel;
 
         #endregion
 
@@ -31,6 +33,7 @@
             this.ReportsButton = x => x.Marked("ReportsButton");
             this.ProfileButton = x => x.Marked("ProfileButton");
             this.SupportButton = x => x.Marked("SupportButton");
+            this.AvailableBalanceLabel = x => x.Marked("AvailableBalanceLabel");
         }
 
         #endregion
@@ -74,6 +77,26 @@
         {
             app.WaitForElement(this.SupportButton);
             app.Tap(this.SupportButton);
+        }
+
+        public Decimal GetAvailableBalanceValue()
+        {
+            app.WaitForElement(this.AvailableBalanceLabel);
+            var queryResults = app.Query(this.AvailableBalanceLabel);
+            var label = queryResults.SingleOrDefault();
+            if (label == null)
+            {
+                // TODO: Throw some error
+            }
+
+            String availableBalanceText = label.Text.Replace(" KES", String.Empty);
+
+            if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
+            {
+                // TODO: Throw some error
+            }
+
+            return balanceValue;
         }
     }
 }

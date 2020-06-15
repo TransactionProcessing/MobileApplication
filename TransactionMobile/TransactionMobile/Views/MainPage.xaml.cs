@@ -4,6 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
     using Events;
     using Pages;
+    using ViewModels;
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
 
@@ -70,14 +71,21 @@
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        public void Init()
+        /// <param name="viewModel"></param>
+        public void Init(MainPageViewModel viewModel)
         {
             this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
             this.TransactionsButton.Clicked += this.TransactionsButton_Clicked;
             this.ReportsButton.Clicked += this.ReportsButton_Clicked;
             this.ProfileButton.Clicked += this.ProfileButton_Clicked;
             this.SupportButton.Clicked += this.SupportButton_Clicked;
+            this.ViewModel = viewModel;
+            this.BindingContext = this.ViewModel;
         }
+
+        public MainPageViewModel ViewModel { get; set; }
+        
+        
 
         /// <summary>
         /// Handles the Clicked event of the ProfileButton control.

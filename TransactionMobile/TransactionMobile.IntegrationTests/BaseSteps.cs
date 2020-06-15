@@ -198,12 +198,15 @@ namespace TransactionMobile.IntegrationTests
             // TODO: Handle local test running
             String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
             String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
+            String estateManagementUrl = this.TestingContext.DockerHelper.EstateManagementBaseAddress;
 
             Console.WriteLine($"securityService [{securityService}]");
             Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
+            Console.WriteLine($"estateManagementUrl [{estateManagementUrl}]");
 
             AppManager.SetConfiguration(merchantClient.ClientId, merchantClient.ClientSecret,
-                                        securityService, transactionProcessorAcl);
+                                        securityService, transactionProcessorAcl,
+                                        estateManagementUrl);
         }
 
         [Given(@"I have a token to access the estate management and transaction processor acl resources")]
@@ -503,6 +506,68 @@ namespace TransactionMobile.IntegrationTests
                 assignOperatorResponse.OperatorId.ShouldBe(operatorId);
 
                 //this.TestingContext.Logger.LogInformation($"Operator {operatorName} assigned to Estate {estateDetails.EstateName}");
+            }
+        }
+
+        [Given(@"I make the following manual merchant deposits")]
+        public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                EstateDetails estateDetails = this.TestingContext.GetEstateDetails(tableRow);
+
+                String token = this.TestingContext.AccessToken;
+                if (String.IsNullOrEmpty(estateDetails.AccessToken) == false)
+                {
+                    token = estateDetails.AccessToken;
+                }
+
+                // Lookup the merchant id
+                String merchantName = SpecflowTableHelper.GetStringRowValue(tableRow, "MerchantName");
+                Guid merchantId = estateDetails.GetMerchantId(merchantName);
+
+                MakeMerchantDepositRequest makeMerchantDepositRequest = new MakeMerchantDepositRequest
+                                                                        {
+                                                                            DepositDateTime = SpecflowTableHelper.GetDateForDateString(SpecflowTableHelper.GetStringRowValue(tableRow, "DateTime"), DateTime.Now),
+                                                                            Source = MerchantDepositSource.Manual,
+                                                                            Reference = SpecflowTableHelper.GetStringRowValue(tableRow, "Reference"),
+                                                                            Amount = SpecflowTableHelper.GetDecimalValue(tableRow, "Amount")
+                                                                        };
+
+                MakeMerchantDepositResponse makeMerchantDepositResponse = await this.TestingContext.DockerHelper.EstateClient.MakeMerchantDeposit(token, estateDetails.EstateId, merchantId, makeMerchantDepositRequest, CancellationToken.None).ConfigureAwait(false);
+
+                makeMerchantDepositResponse.EstateId.ShouldBe(estateDetails.EstateId);
+                makeMerchantDepositResponse.MerchantId.ShouldBe(merchantId);
+                makeMerchantDepositResponse.DepositId.ShouldNotBe(Guid.Empty);
+            }
+        }
+
+        [Then(@"the merchant balances are as follows")]
+        public async Task ThenTheMerchantBalancesAreAsFollows(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                EstateDetails estateDetails = this.TestingContext.GetEstateDetails(tableRow);
+
+                String token = this.TestingContext.AccessToken;
+                if (String.IsNullOrEmpty(estateDetails.AccessToken) == false)
+                {
+                    token = estateDetails.AccessToken;
+                }
+
+                // Lookup the merchant id
+                String merchantName = SpecflowTableHelper.GetStringRowValue(tableRow, "MerchantName");
+                Guid merchantId = estateDetails.GetMerchantId(merchantName);
+
+                Decimal availableBalance = SpecflowTableHelper.GetDecimalValue(tableRow, "AvailableBalance");
+                Decimal balance = SpecflowTableHelper.GetDecimalValue(tableRow, "Balance");
+
+                MerchantBalanceResponse merchantBalanceResponse = await this.TestingContext.DockerHelper.EstateClient.GetMerchantBalance(token, estateDetails.EstateId, merchantId, CancellationToken.None).ConfigureAwait(false);
+
+                merchantBalanceResponse.EstateId.ShouldBe(estateDetails.EstateId);
+                merchantBalanceResponse.MerchantId.ShouldBe(merchantId);
+                merchantBalanceResponse.AvailableBalance.ShouldBe(availableBalance);
+                merchantBalanceResponse.Balance.ShouldBe(balance);
             }
         }
     }

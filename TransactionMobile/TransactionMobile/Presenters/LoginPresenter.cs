@@ -1,10 +1,19 @@
 ﻿namespace TransactionMobile.Presenters
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Timers;
+    using ClientProxyBase;
     using Common;
+    using EstateManagement.Client;
+    using EstateManagement.DataTransferObjects.Requests;
+    using EstateManagement.DataTransferObjects.Responses;
     using Events;
     using Microsoft.AppCenter.Crashes;
     using Newtonsoft.Json;
@@ -18,6 +27,7 @@
     using Unity;
     using ViewModels;
     using Xamarin.Forms;
+    using Timer = System.Timers.Timer;
 
     /// <summary>
     /// 
@@ -54,6 +64,11 @@
         private readonly IMainPage MainPage;
 
         /// <summary>
+        /// The main page view model
+        /// </summary>
+        private readonly MainPageViewModel MainPageViewModel;
+
+        /// <summary>
         /// The security service client
         /// </summary>
         private readonly ISecurityServiceClient SecurityServiceClient;
@@ -62,6 +77,8 @@
         /// The transaction processor acl client
         /// </summary>
         private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
+
+        private readonly IEstateClient EstateClient;
 
         #endregion
 
@@ -73,24 +90,30 @@
         /// <param name="loginPage">The login page.</param>
         /// <param name="mainPage">The main page.</param>
         /// <param name="loginViewModel">The login view model.</param>
+        /// <param name="mainPageViewModel">The main page view model.</param>
         /// <param name="device">The device.</param>
         /// <param name="securityServiceClient">The security service client.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
+        /// <param name="estateClient">The estate client.</param>
         /// <param name="analysisLogger">The analysis logger.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
                               LoginViewModel loginViewModel,
+                              MainPageViewModel mainPageViewModel,
                               IDevice device,
                               ISecurityServiceClient securityServiceClient,
                               ITransactionProcessorACLClient transactionProcessorAclClient,
+                              IEstateClient estateClient, 
                               IAnalysisLogger analysisLogger)
         {
             this.MainPage = mainPage;
             this.LoginPage = loginPage;
             this.LoginViewModel = loginViewModel;
+            this.MainPageViewModel = mainPageViewModel;
             this.Device = device;
             this.SecurityServiceClient = securityServiceClient;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
+            this.EstateClient = estateClient;
             this.AnalysisLogger = analysisLogger;
         }
 
@@ -139,7 +162,7 @@
         {
             try
             {
-                //this.LoginViewModel.EmailAddress = "merchantuser@testmerchant3.co.uk";
+                //this.LoginViewModel.EmailAddress = "merchantuser@testmerchant1.co.uk";
                 //this.LoginViewModel.Password = "123456";
 
                 this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Get Configuration"));
@@ -162,10 +185,13 @@
                 // Do the initial logon transaction
                 await this.PerformLogonTransaction();
 
+                // Get the merchants current balance
+                await this.GetMerchantBalance();
+
                 this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("Logon Completed"));
 
                 // Go to signed in page
-                this.MainPage.Init();
+                this.MainPage.Init(this.MainPageViewModel);
                 this.MainPage.TransactionsButtonClicked += this.MainPage_TransactionsButtonClicked;
                 this.MainPage.ReportsButtonClicked += this.MainPage_ReportsButtonClicked;
                 this.MainPage.SupportButtonClicked += this.MainPage_SupportButtonClicked;
@@ -183,6 +209,30 @@
 
                 CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
             }
+        }
+
+        /// <summary>
+        /// Gets the merchant balance.
+        /// </summary>
+        private async Task GetMerchantBalance()
+        {
+            this.BalanceTimer_Elapsed(null, null);
+
+            Timer balanceTimer = new System.Timers.Timer(10000);
+
+            balanceTimer.Elapsed += BalanceTimer_Elapsed;
+            balanceTimer.AutoReset = true;
+            balanceTimer.Enabled = true;
+        }
+
+        private async void BalanceTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            // Go to the API and get the merchant's balance
+            MerchantBalanceResponse balanceResponse =
+                    await this.EstateClient.GetMerchantBalance(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
+
+            // get the merchant balance
+            this.MainPageViewModel.AvailableBalance = $"{balanceResponse.AvailableBalance:N2} KES";
         }
 
         /// <summary>
@@ -252,7 +302,7 @@
 
             LogonTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformLogonTransaction(App.TokenResponse.AccessToken, logonTransactionRequestMessage, CancellationToken.None);
-
+            
             String responseJson = JsonConvert.SerializeObject(response);
             this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
 
@@ -260,6 +310,10 @@
             {
                 throw new Exception($"Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]");
             }
+
+            // Set the application values
+            App.EstateId = response.EstateId;
+            App.MerchantId = response.MerchantId;
         }
 
         #endregion

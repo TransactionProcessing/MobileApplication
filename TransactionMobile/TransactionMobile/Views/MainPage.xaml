@@ -44,6 +44,37 @@
                 <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleSupport}"/>
 
             </Grid>
+            <StackLayout Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
+                                                             PhoneLandscape='150,32',
+                                                             TabletPortrait='200,50',
+                                                             TabletLandscape='300,50',
+                                                             Desktop='30'}"
+                         Spacing="0"
+                         VerticalOptions="FillAndExpand"
+                         HorizontalOptions="CenterAndExpand"
+                         WidthRequest="{OnPlatform Default='-1',
+                                          UWP='350'}"
+                         Orientation="Horizontal">
+                <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalance"
+                    Text="Available Balance:"
+                    TextColor="{DynamicResource Gray-900}"
+                    WidthRequest="250"/>
+
+                <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalanceLabel"
+                    x:Name="AvailableBalanceLabel"
+                    Text="{Binding AvailableBalance}"
+                    TextColor="{DynamicResource Gray-900}" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

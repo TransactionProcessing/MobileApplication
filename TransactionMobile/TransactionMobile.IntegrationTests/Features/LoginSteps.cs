@@ -7,6 +7,7 @@ namespace TransactionMobile.IntegrationTests
     using Features;
     using NUnit.Framework;
     using Pages;
+    using Shouldly;
     using Xamarin.UITest;
 
     [Binding]
@@ -14,7 +15,7 @@ namespace TransactionMobile.IntegrationTests
     public class LoginSteps
     {
         LoginPage loginPage = new LoginPage();
-        MainPage homePage = new MainPage();
+        MainPage mainPage = new MainPage();
 
         [Given(@"I am on the Login Screen")]
         public async Task GivenIAmOnTheLoginScreen()
@@ -43,7 +44,16 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public async Task ThenTheMerchantHomePageIsDisplayed()
         {
-            await this.homePage.AssertOnPage(TimeSpan.FromSeconds(60));
+            await this.mainPage.AssertOnPage(TimeSpan.FromSeconds(60));
         }
+
+        [Then(@"the available balance is shown as (.*)")]
+        public void ThenTheAvailableBalanceIsShownAs(Decimal expectedAvailableBalance)
+        {
+            Decimal availableBalance = this.mainPage.GetAvailableBalanceValue();
+
+            availableBalance.ShouldBe(expectedAvailableBalance);
+        }
+
     }
 }

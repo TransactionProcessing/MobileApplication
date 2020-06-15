@@ -21,6 +21,9 @@ namespace TransactionMobile.IntegrationTests.Common
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.Client;
+    using EventStore.ClientAPI.Common.Log;
+    using EventStore.ClientAPI.Projections;
+    using EventStore.ClientAPI.SystemData;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
     using Shouldly;
@@ -302,14 +305,16 @@ namespace TransactionMobile.IntegrationTests.Common
 
             this.SecurityServiceBaseAddress = SecurityServiceBaseAddressResolver(String.Empty);
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
+            this.EstateManagementBaseAddress= EstateManagementBaseAddressResolver(String.Empty);
 
             HttpClient httpClient = new HttpClient();
             this.EstateClient = new EstateClient(EstateManagementBaseAddressResolver, httpClient);
             this.SecurityServiceClient = new SecurityServiceClient(SecurityServiceBaseAddressResolver, httpClient);
-            //this.ITransactionProcessorACLClient = new TransactionProcessorACLClient(TransactionProcessorAclBaseAddressResolver, httpClient);
-
+            
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
+
+            await this.LoadEventStoreProjections().ConfigureAwait(false);
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
 
@@ -337,6 +342,52 @@ namespace TransactionMobile.IntegrationTests.Common
         public String SecurityServiceBaseAddress;
 
         public String TransactionProcessorACLBaseAddress;
+
+        public String EstateManagementBaseAddress;
+
+        private async Task LoadEventStoreProjections()
+        {
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+
+            //Start our Continous Projections - we might decide to do this at a different stage, but now lets try here
+            String projectionsFolder = "projections/continuous";
+            IPAddress[] ipAddresses = Dns.GetHostAddresses("127.0.0.1");
+            IPEndPoint endpoint = new IPEndPoint(ipAddresses.First(), this.EventStoreHttpPort);
+
+            if (!String.IsNullOrWhiteSpace(projectionsFolder))
+            {
+                DirectoryInfo di = new DirectoryInfo(dir);
+                di = di.Parent.Parent;
+
+                DirectoryInfo projectionFolder = new DirectoryInfo($"{di.FullName}/{projectionsFolder}");
+
+                if (projectionFolder.Exists)
+                {
+                    FileInfo[] files = projectionFolder.GetFiles();
+
+                    // TODO: possibly need to change timeout and logger here
+                    ProjectionsManager projectionManager = new ProjectionsManager(new ConsoleLogger(), endpoint, TimeSpan.FromSeconds(30));
+
+                    foreach (FileInfo file in files)
+                    {
+                        String projection = File.ReadAllText(file.FullName);
+                        String projectionName = file.Name.Replace(".js", String.Empty);
+
+                        try
+                        {
+                            Logger.LogInformation($"Creating projection [{projectionName}]");
+                            await projectionManager.CreateContinuousAsync(projectionName, projection, new UserCredentials("admin", "changeit")).ConfigureAwait(false);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(new Exception($"Projection [{projectionName}] error", e));
+                        }
+                    }
+                }
+            }
+
+            Logger.LogInformation("Loaded projections");
+        }
 
         protected async Task PopulateSubscriptionServiceConfiguration()
         {
