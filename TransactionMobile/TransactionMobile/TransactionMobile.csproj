@@ -26,7 +26,7 @@
     <PackageReference Include="SecurityService.Client" Version="1.0.0" />
     <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.57" />
     <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.0.1-build3" />
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
+    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991864" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Unity" Version="5.11.7" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.57" />
