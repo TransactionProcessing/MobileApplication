@@ -51,7 +51,7 @@ jobs:
         echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
         echo ::set-env name=localhostaddress::${DOCKER_IP}        
    
-    - uses: malinskiy/action-android/install-sdk@release/0.0.7
+    - uses: malinskiy/action-android/install-sdk@release/0.0.6
     - run: adb devices
     - run: echo $ANDROID_HOME
     - run: |
