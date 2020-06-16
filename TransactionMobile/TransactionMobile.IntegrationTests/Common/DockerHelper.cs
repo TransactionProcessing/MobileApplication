@@ -351,7 +351,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             //Start our Continous Projections - we might decide to do this at a different stage, but now lets try here
             String projectionsFolder = "projections/continuous";
-            IPAddress[] ipAddresses = Dns.GetHostAddresses("127.0.0.1");
+            IPAddress[] ipAddresses = Dns.GetHostAddresses(TransactionMobileDockerHelper.LocalHostAddress);
             IPEndPoint endpoint = new IPEndPoint(ipAddresses.First(), this.EventStoreHttpPort);
 
             if (!String.IsNullOrWhiteSpace(projectionsFolder))
