@@ -2,7 +2,9 @@
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using Common;
+    using Shouldly;
     using Xamarin.UITest.Queries;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -79,15 +81,20 @@
             app.Tap(this.SupportButton);
         }
 
-        public Decimal GetAvailableBalanceValue()
+        public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
-            app.WaitForElement(this.AvailableBalanceLabel);
-            var queryResults = app.Query(this.AvailableBalanceLabel);
-            var label = queryResults.SingleOrDefault();
-            if (label == null)
-            {
-                // TODO: Throw some error
-            }
+            AppResult label = null;
+            
+            await Retry.For(async () =>
+                                                    {
+                                                        app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
+                                                        AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+                                                        label = queryResults.SingleOrDefault();
+                                    
+                                                        label.ShouldNotBeNull();
+                                                    },
+                                                    TimeSpan.FromMinutes(1),
+                                                    timeout).ConfigureAwait(false);
 
             String availableBalanceText = label.Text.Replace(" KES", String.Empty);
 

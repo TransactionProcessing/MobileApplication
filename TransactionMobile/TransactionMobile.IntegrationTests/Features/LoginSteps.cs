@@ -48,9 +48,9 @@ namespace TransactionMobile.IntegrationTests
         }
 
         [Then(@"the available balance is shown as (.*)")]
-        public void ThenTheAvailableBalanceIsShownAs(Decimal expectedAvailableBalance)
+        public async Task ThenTheAvailableBalanceIsShownAs(Decimal expectedAvailableBalance)
         {
-            Decimal availableBalance = this.mainPage.GetAvailableBalanceValue();
+            Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(60));
 
             availableBalance.ShouldBe(expectedAvailableBalance);
         }
