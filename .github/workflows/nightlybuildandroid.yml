@@ -52,7 +52,7 @@ jobs:
         echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
         echo ::set-env name=localhostaddress::${DOCKER_IP}        
    
-    - uses: malinskiy/action-android/install-sdk@release/0.0.5
+    - uses: malinskiy/action-android/install-sdk@release/0.0.6
     - run: adb devices
     - run: echo $ANDROID_HOME
     - run: |
@@ -72,7 +72,7 @@ jobs:
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
    
     - name: Run Integration Tests - Android
-      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
+      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
       with:
           cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
           api: 24
