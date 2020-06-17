@@ -61,6 +61,8 @@ Scenario: Successful Safaricom Topup
 	
 	Then the Merchant Home Page is displayed
 
+	And the available balance is shown as 2000.00
+
 	Given I tap on the Transactions button
 	Then the Transactions Page is displayed
 	
@@ -85,6 +87,8 @@ Scenario: Failed Safaricom Topup
 	And I tap on Login
 	
 	Then the Merchant Home Page is displayed
+
+	And the available balance is shown as 2000.00
 
 	Given I tap on the Transactions button
 	Then the Transactions Page is displayed
