@@ -3,7 +3,10 @@ using TechTalk.SpecFlow;
 
 namespace TransactionMobile.IntegrationTests
 {
+    using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
+    using Common;
     using Features;
     using NUnit.Framework;
     using Pages;
@@ -50,9 +53,33 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the available balance is shown as (.*)")]
         public async Task ThenTheAvailableBalanceIsShownAs(Decimal expectedAvailableBalance)
         {
-            Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(60));
+            try
+            {
+                Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(60));
 
-            availableBalance.ShouldBe(expectedAvailableBalance);
+                availableBalance.ShouldBe(expectedAvailableBalance);
+            }
+            catch(Exception e)
+            {
+                //AppManager.App.Screenshot($"BalanceError{DateTime.Now:yyyyMMddhhmmssfff}");
+                // Capture screen shot on exception
+                String name = $"BalanceError{DateTime.Now:yyyyMMddhhmmssfff}";
+                FileInfo screenshot = AppManager.App.Screenshot(name);
+
+                // Get the executing directory
+                String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+
+                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
+
+                if (!Directory.Exists(screenshotDirectory))
+                {
+                    Directory.CreateDirectory(screenshotDirectory);
+                }
+
+                // Now copy the screenshot
+                screenshot.CopyTo($"{screenshotDirectory}\\{name}.jpg", true);
+            }
+            
         }
 
     }
