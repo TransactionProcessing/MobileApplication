@@ -154,6 +154,11 @@
     <PackageReference Include="Xamarin.TestCloud.Agent">
       <Version>0.21.9</Version>
     </PackageReference>
+    <PackageReference Include="System.Reflection.Emit">
+          <Version>4.3.0</Version>
+          <ExcludeAssets>All</ExcludeAssets>
+          <IncludeAssets>none</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
