@@ -85,16 +85,11 @@
         {
             AppResult label = null;
             
-            await Retry.For(async () =>
-                                                    {
-                                                        app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
-                                                        AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
-                                                        label = queryResults.SingleOrDefault();
-                                    
-                                                        label.ShouldNotBeNull();
-                                                    },
-                                                    TimeSpan.FromMinutes(timeout.Value.Minutes * 2),
-                                                    timeout).ConfigureAwait(false);
+            app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
+            AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+            label = queryResults.SingleOrDefault();
+
+            label.ShouldNotBeNull();
 
             String availableBalanceText = label.Text.Replace(" KES", String.Empty);
 
