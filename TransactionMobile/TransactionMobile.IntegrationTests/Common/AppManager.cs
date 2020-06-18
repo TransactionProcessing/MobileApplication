@@ -70,6 +70,7 @@ namespace TransactionMobile.IntegrationTests.Common
                       // Used to run a .apk file:
                       .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk"))
                       //.Debug()
+                      .EnableLocalScreenshots()
                       .StartApp();
             }
 
