@@ -8,6 +8,11 @@ namespace TransactionMobile.ViewModels
 
     public class MainPageViewModel : BindableObject
     {
+        public MainPageViewModel()
+        {
+            this.availableBalance = "0 KES";
+        }
+
         private String availableBalance;
         public String AvailableBalance
         {
