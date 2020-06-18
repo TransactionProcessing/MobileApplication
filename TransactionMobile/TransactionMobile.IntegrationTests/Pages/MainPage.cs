@@ -93,7 +93,7 @@
                                     
                                                         label.ShouldNotBeNull();
                                                     },
-                                                    TimeSpan.FromMinutes(1),
+                                                    TimeSpan.FromMinutes(timeout.Value.Minutes * 2),
                                                     timeout).ConfigureAwait(false);
 
             String availableBalanceText = label.Text.Replace(" KES", String.Empty);
