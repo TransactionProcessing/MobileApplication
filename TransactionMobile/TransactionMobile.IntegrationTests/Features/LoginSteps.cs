@@ -66,17 +66,22 @@ namespace TransactionMobile.IntegrationTests
 
                 // Get the executing directory
                 String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
-
+                Console.WriteLine($"Current Directory is [{currentDirectory}]");
                 String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
-
+                Console.WriteLine($"Screenshots Directory is [{screenshotDirectory}]");
                 if (!Directory.Exists(screenshotDirectory))
                 {
+                    Console.WriteLine($"Creating Screenshots Directory is [{screenshotDirectory}]");
                     Directory.CreateDirectory(screenshotDirectory);
+                    Console.WriteLine($"Created Screenshots Directory is [{screenshotDirectory}]");
                 }
 
+                String screenshotName = $"{name}.jpg";
+                Console.WriteLine($"About to copy Screenshot Directory is [{screenshotDirectory}\\{screenshotName}]");
                 // Now copy the screenshot
-                screenshot.CopyTo($"{screenshotDirectory}\\{name}.jpg", true);
-                
+                screenshot.CopyTo($"{screenshotDirectory}\\{screenshotName}", true);
+                Console.WriteLine($"Copied Screenshot Directory is [{screenshotDirectory}\\{screenshotName}]");
+
                 throw;
             }
             
