@@ -53,33 +53,9 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the available balance is shown as (.*)")]
         public async Task ThenTheAvailableBalanceIsShownAs(Decimal expectedAvailableBalance)
         {
-            try
-            {
-                Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(60));
+            Decimal availableBalance = await this.mainPage.GetAvailableBalanceValue(TimeSpan.FromSeconds(120));
 
-                availableBalance.ShouldBe(expectedAvailableBalance);
-            }
-            catch(Exception e)
-            {
-                //AppManager.App.Screenshot($"BalanceError{DateTime.Now:yyyyMMddhhmmssfff}");
-                // Capture screen shot on exception
-                String name = $"BalanceError{DateTime.Now:yyyyMMddhhmmssfff}";
-                FileInfo screenshot = AppManager.App.Screenshot(name);
-
-                // Get the executing directory
-                String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
-
-                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
-
-                if (!Directory.Exists(screenshotDirectory))
-                {
-                    Directory.CreateDirectory(screenshotDirectory);
-                }
-
-                // Now copy the screenshot
-                screenshot.CopyTo($"{screenshotDirectory}\\{name}.jpg", true);
-            }
-            
+            availableBalance.ShouldBe(expectedAvailableBalance);
         }
 
     }
