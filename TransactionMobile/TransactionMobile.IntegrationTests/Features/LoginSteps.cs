@@ -62,27 +62,9 @@ namespace TransactionMobile.IntegrationTests
             catch(TimeoutException e)
             {
                 String name = $"BalanceError{DateTime.UtcNow:yyyyMMddhhmmssfff}";
-                FileInfo screenshot = AppManager.App.Screenshot(name);
-
-                // Get the executing directory
-                String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
-                Console.WriteLine($"Current Directory is [{currentDirectory}]");
-                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
-                Console.WriteLine($"Screenshots Directory is [{screenshotDirectory}]");
-                if (!Directory.Exists(screenshotDirectory))
-                {
-                    Console.WriteLine($"Creating Screenshots Directory is [{screenshotDirectory}]");
-                    Directory.CreateDirectory(screenshotDirectory);
-                    Console.WriteLine($"Created Screenshots Directory is [{screenshotDirectory}]");
-                }
-
-                String screenshotName = $"{name}.jpg";
-                Console.WriteLine($"About to copy Screenshot Directory is [{screenshotDirectory}\\{screenshotName}]");
-                // Now copy the screenshot
-                screenshot.CopyTo($"{screenshotDirectory}\\{screenshotName}", true);
-                Console.WriteLine($"Copied Screenshot Directory is [{screenshotDirectory}\\{screenshotName}]");
-
-                throw;
+                FileInfo fi = AppManager.App.Screenshot(name);
+                
+                throw new Exception(fi.FullName, e);
             }
             
         }
