@@ -71,7 +71,6 @@
                     HorizontalTextAlignment="Center"
                     Style="{StaticResource LabelStyle}"
                     AutomationId="AvailableBalanceLabel"
-                    x:Name="AvailableBalanceLabel"
                     Text="{Binding AvailableBalance}"
                     TextColor="{DynamicResource Gray-900}" />
             </StackLayout>
