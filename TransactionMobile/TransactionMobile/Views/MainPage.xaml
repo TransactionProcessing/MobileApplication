@@ -65,13 +65,21 @@
                     TextColor="{DynamicResource Gray-900}"
                     WidthRequest="250"/>
 
-                <Label
+                <!--<Label
                     FontFamily="{StaticResource Montserrat-SemiBold}"
                     FontSize="20"
                     HorizontalTextAlignment="Center"
                     Style="{StaticResource LabelStyle}"
                     AutomationId="AvailableBalanceLabel"
                     Text="{Binding AvailableBalance}"
+                    TextColor="{DynamicResource Gray-900}" />-->
+                <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalanceLabel"
+                    Text="2000.00 KES"
                     TextColor="{DynamicResource Gray-900}" />
             </StackLayout>
         </StackLayout>
