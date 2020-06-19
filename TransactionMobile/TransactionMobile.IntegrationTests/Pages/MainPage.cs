@@ -84,21 +84,25 @@
         public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
             AppResult label = null;
-            
+
             app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
-            AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
-            label = queryResults.SingleOrDefault();
 
-            label.ShouldNotBeNull();
+            //AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+            //label = queryResults.SingleOrDefault();
 
-            String availableBalanceText = label.Text.Replace(" KES", String.Empty);
+            //label.ShouldNotBeNull();
 
-            if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
-            {
-                // TODO: Throw some error
-            }
+            //String availableBalanceText = label.Text.Replace(" KES", String.Empty);
 
-            return balanceValue;
+            //if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
+            //{
+            //    // TODO: Throw some error
+            //}
+
+            AppManager.App.Print.Tree(true);
+
+            //return balanceValue;
+            return 0;
         }
     }
 }
