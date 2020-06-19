@@ -79,7 +79,7 @@
                     HorizontalTextAlignment="Center"
                     Style="{StaticResource LabelStyle}"
                     AutomationId="AvailableBalanceLabel"
-                    Text="2000.00 KES"
+                    Text="1000.00 KES"
                     TextColor="{DynamicResource Gray-900}" />
             </StackLayout>
         </StackLayout>
