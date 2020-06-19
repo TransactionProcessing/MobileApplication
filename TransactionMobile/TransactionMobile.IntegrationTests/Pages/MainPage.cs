@@ -85,7 +85,7 @@
         {
             AppResult label = null;
 
-            app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
+            //app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
 
             //AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
             //label = queryResults.SingleOrDefault();
@@ -98,6 +98,8 @@
             //{
             //    // TODO: Throw some error
             //}
+
+            await Task.Delay(TimeSpan.FromSeconds(60));
 
             AppManager.App.Print.Tree(true);
 
