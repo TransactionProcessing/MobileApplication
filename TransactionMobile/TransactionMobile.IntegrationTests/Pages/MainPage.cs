@@ -101,7 +101,7 @@
 
             await Task.Delay(TimeSpan.FromSeconds(60));
 
-            AppManager.App.Print.Tree(true);
+            AppManager.App.Print.Tree();
 
             //return balanceValue;
             return 0;
