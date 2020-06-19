@@ -35,6 +35,8 @@
                     <RowDefinition Height="80"></RowDefinition>
                     <RowDefinition Height="80"></RowDefinition>
                     <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <buttons:SfButton AutomationId="TransactionsButton" x:Name="TransactionsButton" Text="Transactions" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleTransactions}"/>
@@ -42,9 +44,26 @@
 
                 <buttons:SfButton AutomationId="ProfileButton" x:Name="ProfileButton" Text="Profile" Grid.Row="2" Grid.Column="0" Style="{StaticResource SfButtonStyleProfile}"/>
                 <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleSupport}"/>
-
+                <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalanceLabel"
+                    Text="Available Balance:"
+                    TextColor="{DynamicResource Gray-900}"
+                    WidthRequest="250"
+                    Grid.Row="5" Grid.Column="0"/>
+                <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalanceValueLabel"
+                    Text="1000.00 KES"
+                    TextColor="{DynamicResource Gray-900}" Grid.Row="5" Grid.Column="0"/>
             </Grid>
-            <StackLayout Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
+            <!--<StackLayout Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
                                                              PhoneLandscape='150,32',
                                                              TabletPortrait='200,50',
                                                              TabletLandscape='300,50',
@@ -54,16 +73,16 @@
                          HorizontalOptions="CenterAndExpand"
                          WidthRequest="{OnPlatform Default='-1',
                                           UWP='350'}"
-                         Orientation="Horizontal">
-                <Label
+                         Orientation="Horizontal">-->
+                <!--<Label
                     FontFamily="{StaticResource Montserrat-SemiBold}"
                     FontSize="20"
                     HorizontalTextAlignment="Center"
                     Style="{StaticResource LabelStyle}"
-                    AutomationId="AvailableBalance"
+                    AutomationId="AvailableBalanceLabel"
                     Text="Available Balance:"
                     TextColor="{DynamicResource Gray-900}"
-                    WidthRequest="250"/>
+                    WidthRequest="250"/>-->
 
                 <!--<Label
                     FontFamily="{StaticResource Montserrat-SemiBold}"
@@ -73,15 +92,15 @@
                     AutomationId="AvailableBalanceLabel"
                     Text="{Binding AvailableBalance}"
                     TextColor="{DynamicResource Gray-900}" />-->
-                <Label
+                <!--<Label
                     FontFamily="{StaticResource Montserrat-SemiBold}"
                     FontSize="20"
                     HorizontalTextAlignment="Center"
                     Style="{StaticResource LabelStyle}"
-                    AutomationId="AvailableBalanceLabel"
+                    AutomationId="AvailableBalanceValueLabel"
                     Text="1000.00 KES"
-                    TextColor="{DynamicResource Gray-900}" />
-            </StackLayout>
+                    TextColor="{DynamicResource Gray-900}" />-->
+            <!--</StackLayout>-->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
