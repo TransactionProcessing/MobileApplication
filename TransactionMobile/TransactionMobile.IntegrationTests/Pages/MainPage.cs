@@ -85,26 +85,25 @@
         {
             AppResult label = null;
 
-            //app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
+            app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
 
-            //AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
-            //label = queryResults.SingleOrDefault();
+            AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+            label = queryResults.SingleOrDefault();
 
-            //label.ShouldNotBeNull();
+            label.ShouldNotBeNull();
 
-            //String availableBalanceText = label.Text.Replace(" KES", String.Empty);
+            String availableBalanceText = label.Text.Replace(" KES", String.Empty);
 
-            //if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
-            //{
-            //    // TODO: Throw some error
-            //}
+            if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
+            {
+                // TODO: Throw some error
+            }
 
-            await Task.Delay(TimeSpan.FromSeconds(60));
+            //await Task.Delay(TimeSpan.FromSeconds(60));
 
-            AppManager.App.Print.Tree();
+            //AppManager.App.Print.Tree();
 
-            //return balanceValue;
-            return 0;
+            return balanceValue;
         }
     }
 }

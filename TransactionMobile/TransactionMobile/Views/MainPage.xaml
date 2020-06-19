@@ -37,6 +37,14 @@
                 AutomationId="AvailableBalanceLabel"
                 Text="Available Balance:"
                 TextColor="{DynamicResource Gray-900}"/>
+            <Label
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Style="{StaticResource LabelStyle}"
+                    AutomationId="AvailableBalanceValueLabel"
+                    Text="1000.00 KES"
+                    TextColor="{DynamicResource Gray-900}" />
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80"></RowDefinition>
