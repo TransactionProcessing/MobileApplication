@@ -59,7 +59,7 @@ namespace TransactionMobile.IntegrationTests
 
                 availableBalance.ShouldBe(expectedAvailableBalance);
             }
-            catch(Exception e)
+            catch(TimeoutException e)
             {
                 String name = $"BalanceError{DateTime.UtcNow:yyyyMMddhhmmssfff}";
                 FileInfo fi = AppManager.App.Screenshot(name);
