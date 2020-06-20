@@ -35,7 +35,7 @@
             this.ReportsButton = x => x.Marked("ReportsButton");
             this.ProfileButton = x => x.Marked("ProfileButton");
             this.SupportButton = x => x.Marked("SupportButton");
-            this.AvailableBalanceLabel = x => x.Marked("AvailableBalanceLabel");
+            this.AvailableBalanceLabel = x => x.Marked("AvailableBalanceValueLabel");
         }
 
         #endregion
