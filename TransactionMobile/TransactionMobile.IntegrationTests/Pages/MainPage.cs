@@ -97,7 +97,7 @@
                 catch(TimeoutException e)
                 {
                     // try scrolling
-                    app.ScrollDown();
+                    app.ScrollDownTo(this.AvailableBalanceLabel);
                     retryCount++;
                 }
             }
