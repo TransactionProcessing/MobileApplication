@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Common;
     using Shouldly;
+    using Utf8Json.Formatters;
     using Xamarin.UITest.Queries;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -84,10 +85,27 @@
         public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
             AppResult label = null;
+            Boolean found = false;
+            Int32 retryCount = 0;
+            while (found == false && retryCount <= 2)
+            {
+                try
+                {
+                    app.WaitForElement(this.AvailableBalanceLabel, timeout:TimeSpan.FromSeconds(30));
+                    found = true;
+                }
+                catch(TimeoutException e)
+                {
+                    // try scrolling
+                    app.ScrollDown();
+                    retryCount++;
+                }
+            }
 
-            app.WaitForElement(this.AvailableBalanceLabel, timeout: timeout);
+            found.ShouldBeTrue();
 
             AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+            
             label = queryResults.SingleOrDefault();
 
             label.ShouldNotBeNull();
@@ -99,10 +117,6 @@
                 throw new Exception($"Failed to parse [{availableBalanceText}] as a Decimal");
             }
             
-            //await Task.Delay(TimeSpan.FromSeconds(60));
-
-            AppManager.App.Print.Tree();
-
             return balanceValue;
         }
     }
