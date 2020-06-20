@@ -85,25 +85,26 @@
         public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
             AppResult label = null;
-            Boolean found = false;
-            Int32 retryCount = 0;
-            while (found == false && retryCount <= 2)
-            {
-                try
-                {
-                    app.WaitForElement(this.AvailableBalanceLabel, timeout:TimeSpan.FromSeconds(30));
-                    found = true;
-                }
-                catch(TimeoutException e)
-                {
-                    // try scrolling
-                    app.ScrollDownTo(this.AvailableBalanceLabel);
-                    retryCount++;
-                }
-            }
+            //Boolean found = false;
+            //Int32 retryCount = 0;
+            //while (found == false && retryCount <= 2)
+            //{
+            //    try
+            //    {
+            //        app.WaitForElement(this.AvailableBalanceLabel, timeout:TimeSpan.FromSeconds(30));
+            //        found = true;
+            //    }
+            //    catch(TimeoutException e)
+            //    {
+            //        // try scrolling
+            //        app.ScrollDownTo(this.AvailableBalanceLabel);
+            //        retryCount++;
+            //    }
+            //}
 
-            found.ShouldBeTrue();
-
+            //found.ShouldBeTrue();
+            app.ScrollDownTo(this.AvailableBalanceLabel);
+            app.WaitForElement(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
             AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
             
             label = queryResults.SingleOrDefault();
