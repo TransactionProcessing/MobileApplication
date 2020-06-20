@@ -96,9 +96,9 @@
 
             if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
             {
-                // TODO: Throw some error
+                throw new Exception($"Failed to parse [{availableBalanceText}] as a Decimal");
             }
-
+            
             //await Task.Delay(TimeSpan.FromSeconds(60));
 
             AppManager.App.Print.Tree();
