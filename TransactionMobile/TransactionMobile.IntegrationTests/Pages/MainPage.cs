@@ -6,6 +6,7 @@
     using Common;
     using Shouldly;
     using Utf8Json.Formatters;
+    using Xamarin.UITest;
     using Xamarin.UITest.Queries;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -103,7 +104,7 @@
             //}
 
             //found.ShouldBeTrue();
-            app.ScrollDownTo(this.AvailableBalanceLabel);
+            app.ScrollDown();
             app.WaitForElement(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
             AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
             
