@@ -61,6 +61,7 @@
 
         public void ClickTransactionsButton()
         {
+            AppManager.App.ScrollUpTo(this.TransactionsButton);
             app.WaitForElement(this.TransactionsButton);
             app.Tap(this.TransactionsButton);
         }
@@ -86,25 +87,7 @@
         public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
             AppResult label = null;
-            //Boolean found = false;
-            //Int32 retryCount = 0;
-            //while (found == false && retryCount <= 2)
-            //{
-            //    try
-            //    {
-            //        app.WaitForElement(this.AvailableBalanceLabel, timeout:TimeSpan.FromSeconds(30));
-            //        found = true;
-            //    }
-            //    catch(TimeoutException e)
-            //    {
-            //        // try scrolling
-            //        app.ScrollDownTo(this.AvailableBalanceLabel);
-            //        retryCount++;
-            //    }
-            //}
-
-            //found.ShouldBeTrue();
-            app.ScrollDown();
+            app.ScrollDownTo(this.AvailableBalanceLabel);
             app.WaitForElement(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
             AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
             
