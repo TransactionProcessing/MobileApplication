@@ -96,7 +96,7 @@
         private void TrackEvent(PageRequestedEvent pageRequestedEvent)
         {
             String eventName = pageRequestedEvent.GetType().Name;
-
+            
             Analytics.TrackEvent(eventName, pageRequestedEvent.GetEventData());
         }
 

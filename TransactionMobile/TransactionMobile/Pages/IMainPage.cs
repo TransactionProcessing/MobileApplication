@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Pages
 {
     using System;
+    using ViewModels;
 
     /// <summary>
     /// 
@@ -36,7 +37,7 @@
         /// <summary>
         /// Initializes this instance.
         /// </summary>
-        void Init();
+        void Init(MainPageViewModel viewModel);
 
         #endregion
     }

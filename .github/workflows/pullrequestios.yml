@@ -1,20 +1,23 @@
-name: Nightly Build - Android
+name: Build and Test Pull Requests
 
 on:
-  schedule:
-  - cron: "45 23 * * *"    
-  repository_dispatch:
-   types: androidnightly
-  
+  pull_request:
+    branches:
+    - master
+
 jobs:  
-  build:
-    name: "Nightly Build - Android"
+  
+  buildios:
+    name: "Build and Test Pull Requests - iOS"
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
     runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Cache Simulator Data
+      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
@@ -50,15 +53,10 @@ jobs:
         echo ::set-env name=DOCKER_HOST::${DOCKER_HOST}
         echo ::set-env name=DOCKER_CERT_PATH::${DOCKER_CERT_PATH}
         echo ::set-env name=DOCKER_MACHINE_NAME::${DOCKER_MACHINE_NAME}
-        echo ::set-env name=localhostaddress::${DOCKER_IP}        
-   
-    - uses: malinskiy/action-android/install-sdk@release/0.0.6
-    - run: adb devices
-    - run: echo $ANDROID_HOME
-    - run: |
-          cd $ANDROID_HOME/tools/bin
-          ./sdkmanager "build-tools;29.0.2"
-    
+        echo ::set-env name=localhostaddress::${DOCKER_IP}
+    - name: testing
+      run: xcrun instruments -s devices
+      
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
           
@@ -68,14 +66,13 @@ jobs:
     - name: Build Code
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
-    - name: Build APK
-      run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
+    - name: Run Unit Tests
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
-    - name: Run Integration Tests - Android
-      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
-      with:
-          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
-          api: 24
-          tag: default
-          abi: x86   
-          verbose: false
+    - name: Run Integration Tests - iOS
+      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+   
+    - name: Setup tmate session
+      if: failure()
+      uses: mxschmitt/action-tmate@v2
+

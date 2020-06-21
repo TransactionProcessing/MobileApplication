@@ -43,16 +43,16 @@ namespace TransactionMobile.IntegrationTests.Common
             }
         }
 
-        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl)
+        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl, String estateManagementUrl)
         {
             if (AppManager.platform == Platform.Android)
             {
-                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl},{estateManagementUrl}";
                 AppManager.app.Invoke("SetConfiguration", configuration);
             }
             else if(AppManager.platform == Platform.iOS)
             {
-                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl}";
+                String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl},{estateManagementUrl}";
                 AppManager.app.Invoke("SetConfiguration:", configuration);
             }
         }
@@ -70,12 +70,13 @@ namespace TransactionMobile.IntegrationTests.Common
                       // Used to run a .apk file:
                       .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk"))
                       //.Debug()
+                      .EnableLocalScreenshots()
                       .StartApp();
             }
 
             if (Platform == Platform.iOS)
             {
-                String deviceIdentifier = AppManager.GetDeviceIdentifier("iPhone 11 (13.4)");
+                String deviceIdentifier = AppManager.GetDeviceIdentifier("iPhone 11 (13.5)");
 
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 app = ConfigureApp

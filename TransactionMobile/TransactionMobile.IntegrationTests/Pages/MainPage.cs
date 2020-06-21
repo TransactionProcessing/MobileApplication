@@ -1,7 +1,12 @@
 ﻿namespace TransactionMobile.IntegrationTests.Pages
 {
     using System;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Common;
+    using Shouldly;
+    using Utf8Json.Formatters;
+    using Xamarin.UITest;
     using Xamarin.UITest.Queries;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -17,6 +22,7 @@
         private readonly Query ReportsButton;
         private readonly Query ProfileButton;
         private readonly Query SupportButton;
+        private readonly Query AvailableBalanceLabel;
 
         #endregion
 
@@ -31,6 +37,7 @@
             this.ReportsButton = x => x.Marked("ReportsButton");
             this.ProfileButton = x => x.Marked("ProfileButton");
             this.SupportButton = x => x.Marked("SupportButton");
+            this.AvailableBalanceLabel = x => x.Marked("AvailableBalanceValueLabel");
         }
 
         #endregion
@@ -54,6 +61,7 @@
 
         public void ClickTransactionsButton()
         {
+            AppManager.App.ScrollUpTo(this.TransactionsButton);
             app.WaitForElement(this.TransactionsButton);
             app.Tap(this.TransactionsButton);
         }
@@ -74,6 +82,27 @@
         {
             app.WaitForElement(this.SupportButton);
             app.Tap(this.SupportButton);
+        }
+
+        public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
+        {
+            AppResult label = null;
+            app.ScrollDownTo(this.AvailableBalanceLabel);
+            app.WaitForElement(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
+            AppResult[] queryResults = app.Query(this.AvailableBalanceLabel);
+            
+            label = queryResults.SingleOrDefault();
+
+            label.ShouldNotBeNull();
+
+            String availableBalanceText = label.Text.Replace(" KES", String.Empty);
+
+            if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
+            {
+                throw new Exception($"Failed to parse [{availableBalanceText}] as a Decimal");
+            }
+            
+            return balanceValue;
         }
     }
 }

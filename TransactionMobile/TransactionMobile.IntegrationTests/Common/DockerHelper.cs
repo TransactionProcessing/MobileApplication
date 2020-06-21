@@ -302,14 +302,16 @@ namespace TransactionMobile.IntegrationTests.Common
 
             this.SecurityServiceBaseAddress = SecurityServiceBaseAddressResolver(String.Empty);
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
+            this.EstateManagementBaseAddress= EstateManagementBaseAddressResolver(String.Empty);
 
             HttpClient httpClient = new HttpClient();
             this.EstateClient = new EstateClient(EstateManagementBaseAddressResolver, httpClient);
             this.SecurityServiceClient = new SecurityServiceClient(SecurityServiceBaseAddressResolver, httpClient);
-            //this.ITransactionProcessorACLClient = new TransactionProcessorACLClient(TransactionProcessorAclBaseAddressResolver, httpClient);
-
+            
             this.HttpClient = new HttpClient();
             this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
+
+            await this.LoadEventStoreProjections().ConfigureAwait(false);
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
 
@@ -337,6 +339,51 @@ namespace TransactionMobile.IntegrationTests.Common
         public String SecurityServiceBaseAddress;
 
         public String TransactionProcessorACLBaseAddress;
+
+        public String EstateManagementBaseAddress;
+
+        private async Task LoadEventStoreProjections()
+        {
+            var dir = AppDomain.CurrentDomain.BaseDirectory;
+
+            //Start our Continous Projections - we might decide to do this at a different stage, but now lets try here
+            String projectionsFolder = "projections/continuous";
+            IPAddress[] ipAddresses = Dns.GetHostAddresses(TransactionMobileDockerHelper.LocalHostAddress);
+            IPEndPoint endpoint = new IPEndPoint(ipAddresses.First(), this.EventStoreHttpPort);
+
+            if (!String.IsNullOrWhiteSpace(projectionsFolder))
+            {
+                DirectoryInfo di = new DirectoryInfo(dir);
+                di = di.Parent.Parent;
+
+                DirectoryInfo projectionFolder = new DirectoryInfo($"{di.FullName}/{projectionsFolder}");
+
+                if (projectionFolder.Exists)
+                {
+                    FileInfo[] files = projectionFolder.GetFiles();
+
+                    EventStoreHttp projectionManager = new EventStoreHttp(endpoint);
+
+                    foreach (FileInfo file in files)
+                    {
+                        String projection = File.ReadAllText(file.FullName);
+                        String projectionName = file.Name.Replace(".js", String.Empty);
+
+                        try
+                        {
+                            Logger.LogInformation($"Creating projection [{projectionName}]");
+                            await projectionManager.CreateContinuousProjection(projectionName, projection, false, "admin", "changeit", CancellationToken.None);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(new Exception($"Projection [{projectionName}] error", e));
+                        }
+                    }
+                }
+            }
+
+            Logger.LogInformation("Loaded projections");
+        }
 
         protected async Task PopulateSubscriptionServiceConfiguration()
         {

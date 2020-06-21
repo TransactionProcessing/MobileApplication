@@ -71,7 +71,8 @@
                                           ClientId = configItems[0],
                                           ClientSecret = configItems[1],
                                           SecurityService = configItems[2],
-                                          TransactionProcessorACL = configItems[3]
+                                          TransactionProcessorACL = configItems[3],
+                                          EstateManagement = configItems[4]
                                       };
 
             App.Configuration = configurationObject;

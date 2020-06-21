@@ -18,6 +18,7 @@
         public DevelopmentConfiguration()
         {
             this.TransactionProcessorACL = "http://192.168.1.133:5003";
+            this.EstateManagement = "http://192.168.1.133:5000";
             this.SecurityService = "http://192.168.1.133:5001";
             this.ClientId = "mobileAppClient";
             this.ClientSecret = "d192cbc46d834d0da90e8a9d50ded543";
@@ -58,6 +59,8 @@
         /// The transaction processor acl.
         /// </value>
         public String TransactionProcessorACL { get; set; }
+
+        public String EstateManagement { get; set; }
 
         #endregion
     }

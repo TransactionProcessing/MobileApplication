@@ -44,6 +44,14 @@
         /// </value>
         public String TransactionProcessorACL { get; set; }
 
+        /// <summary>
+        /// Gets or sets the estate management.
+        /// </summary>
+        /// <value>
+        /// The estate management.
+        /// </value>
+        public String EstateManagement { get; set; }
+
         #endregion
     }
 }

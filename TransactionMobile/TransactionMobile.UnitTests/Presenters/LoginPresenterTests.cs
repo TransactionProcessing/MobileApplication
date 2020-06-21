@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TransactionMobile.UnitTests.Presenters
 {
     using Common;
+    using EstateManagement.Client;
     using Events;
     using Moq;
     using NUnit.Framework;
@@ -28,12 +29,18 @@ namespace TransactionMobile.UnitTests.Presenters
             Mock<ILoginPage> loginPage = new Mock<ILoginPage>();
             Mock<IMainPage> mainPage = new Mock<IMainPage>();
             LoginViewModel loginViewModel = new LoginViewModel();
+            MainPageViewModel mainPageViewModel = new MainPageViewModel();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
+            Mock<IEstateClient> estateClient = new Mock<IEstateClient>();
             Mock<IAnalysisLogger> analysisLogger = new Mock<IAnalysisLogger>();
             LoginPresenter loginPresenter =
-                new LoginPresenter(loginPage.Object, mainPage.Object, loginViewModel, device.Object, securityServiceClient.Object, transactionProcessorACLClient.Object,
+                new LoginPresenter(loginPage.Object, mainPage.Object, 
+                                   loginViewModel, mainPageViewModel,
+                                   device.Object, securityServiceClient.Object, 
+                                   transactionProcessorACLClient.Object,
+                                   estateClient.Object,
                                    analysisLogger.Object);
 
             loginPresenter.ShouldNotBeNull();
