@@ -548,7 +548,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             List<String> environmentVariables = new List<String>();
             environmentVariables
-                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
+                .Add($"EventStoreSettings:ConnectionString=https://{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreHttpDockerPort}");
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.EstateManagementDockerPort}");
@@ -929,7 +929,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             List<String> environmentVariables = new List<String>();
             environmentVariables
-                .Add($"EventStoreSettings:ConnectionString=ConnectTo=tcp://admin:changeit@{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreTcpDockerPort};VerboseLogging=true;");
+                .Add($"EventStoreSettings:ConnectionString=https://{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreHttpDockerPort}");
             environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
             environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{TransactionMobileDockerHelper.EstateManagementDockerPort}");
             environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
