@@ -198,6 +198,9 @@ namespace TransactionMobile.IntegrationTests.Common
 
             INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
+
+            ServicePointManager.ServerCertificateValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+
             IContainerService eventStoreContainer = await TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:20.6.0-buster-slim", testNetwork, traceFolder, usesEventStore2006OrLater: true);
 
             IContainerService estateManagementContainer = TransactionMobileDockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
@@ -672,12 +675,7 @@ namespace TransactionMobile.IntegrationTests.Common
                             {
                                 String url = $"https://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/ping";
 
-                                var handler = new HttpClientHandler()
-                                              {
-                                                  ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                                              };
-
-                                HttpClient client = new HttpClient(handler);
+                                HttpClient client = new HttpClient();
 
                                 HttpResponseMessage pingResponse = await client.GetAsync(url).ConfigureAwait(false);
                                 pingResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -686,12 +684,8 @@ namespace TransactionMobile.IntegrationTests.Common
             await Retry.For(async () =>
                             {
                                 String url = $"https://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/info";
-                                var handler = new HttpClientHandler()
-                                              {
-                                                  ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                                              };
 
-                                HttpClient client = new HttpClient(handler);
+                                HttpClient client = new HttpClient();
 
                                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Authorization", "Basic YWRtaW46Y2hhbmdlaXQ=");
