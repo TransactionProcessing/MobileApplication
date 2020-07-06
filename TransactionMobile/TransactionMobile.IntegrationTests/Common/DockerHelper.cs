@@ -198,8 +198,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
-            IContainerService eventStoreContainer =
-                await TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:release-5.0.2", testNetwork, traceFolder);
+            IContainerService eventStoreContainer = await TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:20.6.0-buster-slim", testNetwork, traceFolder, usesEventStore2006OrLater: true);
 
             IContainerService estateManagementContainer = TransactionMobileDockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
                                                                                                                        "stuartferguson/estatemanagement", new List<INetworkService>
@@ -642,25 +641,43 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                  String imageName,
                                                                  INetworkService networkService,
                                                                  String hostFolder,
-                                                                 Boolean forceLatestImage = false)
+                                                                 Boolean forceLatestImage = false,
+                                                                 Boolean usesEventStore2006OrLater = false)
         {
             logger.LogInformation("About to Start Event Store Container");
 
+            List<String> enviromentVariables = new List<String>();
+            enviromentVariables.Add("EVENTSTORE_RUN_PROJECTIONS=all");
+            enviromentVariables.Add("EVENTSTORE_START_STANDARD_PROJECTIONS=true");
+
+            if(usesEventStore2006OrLater)
+            {
+                enviromentVariables.Add("EVENTSTORE_DEV=true");
+                enviromentVariables.Add("EVENTSTORE_ENABLE_EXTERNAL_TCP=true");
+                enviromentVariables.Add("EVENTSTORE_DISABLE_EXTERNAL_TCP_TLS=true");
+                enviromentVariables.Add("EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true");
+            }
+
             IContainerService eventStoreContainer = new Builder().UseContainer().UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.EventStoreHttpDockerPort)
+                                                                 .WithEnvironment(enviromentVariables.ToArray())
                                                                  .ExposePort(TransactionMobileDockerHelper.EventStoreTcpDockerPort).WithName(containerName)
-                                                                 .WithEnvironment("EVENTSTORE_RUN_PROJECTIONS=all", "EVENTSTORE_START_STANDARD_PROJECTIONS=true")
                                                                  .UseNetwork(networkService).Mount(hostFolder, "/var/log/eventstore", MountType.ReadWrite).Build().Start();
 
             await Task.Delay(20000);
 
-            var eventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
+            Int32 eventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
 
             // Verify the Event Store is running
             await Retry.For(async () =>
                             {
-                                String url = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/ping";
+                                String url = $"https://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/ping";
 
-                                HttpClient client = new HttpClient();
+                                var handler = new HttpClientHandler()
+                                              {
+                                                  ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                                              };
+
+                                HttpClient client = new HttpClient(handler);
 
                                 HttpResponseMessage pingResponse = await client.GetAsync(url).ConfigureAwait(false);
                                 pingResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -668,8 +685,13 @@ namespace TransactionMobile.IntegrationTests.Common
 
             await Retry.For(async () =>
                             {
-                                String url = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/info";
-                                HttpClient client = new HttpClient();
+                                String url = $"https://{TransactionMobileDockerHelper.LocalHostAddress}:{eventStoreHttpPort}/info";
+                                var handler = new HttpClientHandler()
+                                              {
+                                                  ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                                              };
+
+                                HttpClient client = new HttpClient(handler);
 
                                 HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
                                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Authorization", "Basic YWRtaW46Y2hhbmdlaXQ=");
