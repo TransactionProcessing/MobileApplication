@@ -68,7 +68,10 @@ namespace TransactionMobile.IntegrationTests.Common
 
         private async Task<HttpResponseMessage> PostProjection(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
         {
-            using (HttpClient client = new HttpClient())
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            using (HttpClient client = new HttpClient(clientHandler))
             {
                 return await client.SendAsync(requestMessage, cancellationToken);
             }
