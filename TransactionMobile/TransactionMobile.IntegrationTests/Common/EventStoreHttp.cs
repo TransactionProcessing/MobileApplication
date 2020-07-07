@@ -29,7 +29,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                CancellationToken cancellationToken)
         {
             // Build up the stream name
-            String url = this.EventStoreHttpEndpoint.ToHttpUrl("http", "/projections/continuous?name={0}&type=JS&emit=1&trackemittedstreams={1}", name, trackEmittedStreams);
+            String url = this.EventStoreHttpEndpoint.ToHttpUrl("https", "/projections/continuous?name={0}&type=JS&emit=1&trackemittedstreams={1}", name, trackEmittedStreams);
 
             // Post the projection
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post,url);
@@ -68,7 +68,10 @@ namespace TransactionMobile.IntegrationTests.Common
 
         private async Task<HttpResponseMessage> PostProjection(HttpRequestMessage requestMessage, CancellationToken cancellationToken)
         {
-            using(HttpClient client = new HttpClient())
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            using (HttpClient client = new HttpClient(clientHandler))
             {
                 return await client.SendAsync(requestMessage, cancellationToken);
             }
