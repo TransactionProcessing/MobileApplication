@@ -21,6 +21,8 @@
             Mock<ITransactionsPage> transactionsPage = new Mock<ITransactionsPage>();
             Mock<IMobileTopupSelectOperatorPage> mobileTopupSelectOperatorPage = new Mock<IMobileTopupSelectOperatorPage>();
             MobileTopupSelectOperatorViewModel mobileTopupSelectOperatorViewModel = new MobileTopupSelectOperatorViewModel();
+            Mock<IMobileTopupSelectProductPage> mobileTopupSelectProductPage = new Mock<IMobileTopupSelectProductPage>();
+            MobileTopupSelectProductViewModel mobileTopupSelectProductViewModel = new MobileTopupSelectProductViewModel();
             Mock<IMobileTopupPerformTopupPage> mobileTopupPerformTopupPage = new Mock<IMobileTopupPerformTopupPage>();
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();
             Mock<IMobileTopupPaymentSuccessPage> mobileTopupPaymentSuccessPage = new Mock<IMobileTopupPaymentSuccessPage>();
@@ -34,6 +36,8 @@
                                                                                     mobileTopupSelectOperatorViewModel,
                                                                                     mobileTopupPerformTopupPage.Object,
                                                                                     mobileTopupPerformTopupViewModel,
+                                                                                    mobileTopupSelectProductPage.Object,
+                                                                                    mobileTopupSelectProductViewModel,
                                                                                     mobileTopupPaymentSuccessPage.Object,
                                                                                     mobileTopupPaymentFailedPage.Object,
                                                                                     device.Object,

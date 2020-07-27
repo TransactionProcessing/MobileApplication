@@ -1,9 +1,11 @@
 ﻿namespace TransactionMobile
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using Common;
     using Events;
+    using Models;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
     using Syncfusion.Licensing;
@@ -44,6 +46,11 @@
         /// The merchant identifier
         /// </summary>
         public static Guid MerchantId;
+
+        /// <summary>
+        /// The contract products
+        /// </summary>
+        public static List<ContractProductModel> ContractProducts;
 
         /// <summary>
         /// The analysis logger

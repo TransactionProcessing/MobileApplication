@@ -15,6 +15,7 @@
         MainPage MainPage = new MainPage();
         TransactionsPage TransactionsPage = new TransactionsPage();
         MobileTopupSelectOperatorPage SelectOperatorPage = new MobileTopupSelectOperatorPage();
+        MobileTopupSelectProductPage SelectProductPage = new MobileTopupSelectProductPage();
         MobileTopupPerformTopupPage MobileTopupPerformTopupPage = new MobileTopupPerformTopupPage();
         MobileTopupSuccessPage MobileTopupSuccessPage = new MobileTopupSuccessPage();
         MobileTopupFailedPage MobileTopupFailedPage = new MobileTopupFailedPage();
@@ -43,10 +44,22 @@
             await this.SelectOperatorPage.AssertOnPage();
         }
 
+        [Then(@"the Mobile Topup Select Product Page is displayed")]
+        public async Task ThenTheMobileTopupSelectProductPageIsDisplayed()
+        {
+            await this.SelectProductPage.AssertOnPage();
+        }
+        
         [Given(@"I tap on the Safaricom button")]
         public void GivenITapOnTheSafaricomButton()
         {
             this.SelectOperatorPage.ClickSafaricomOperatorButton();
+        }
+
+        [Given(@"I tap on the Custom button")]
+        public void GivenITapOnTheCustomButton()
+        {
+            this.SelectProductPage.ClickCustomProductButton();
         }
 
         [Then(@"the Mobile Topup Topup Details Page is displayed")]

@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
     using Events;
+    using Models;
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
@@ -55,6 +57,10 @@
         /// </summary>
         private readonly MobileTopupPerformTopupViewModel MobileTopupPerformTopupViewModel;
 
+        private readonly IMobileTopupSelectProductPage MobileTopupSelectProductPage;
+
+        private readonly MobileTopupSelectProductViewModel MobileTopupSelectProductViewModel;
+
         /// <summary>
         /// The mobile topup select operator page
         /// </summary>
@@ -87,6 +93,8 @@
         /// <param name="mobileTopupSelectOperatorViewModel">The mobile topup select operator view model.</param>
         /// <param name="mobileTopupPerformTopupPage">The mobile topup perform topup page.</param>
         /// <param name="mobileTopupPerformTopupViewModel">The mobile topup perform topup view model.</param>
+        /// <param name="mobileTopupSelectProductPage">The mobile topup select product page.</param>
+        /// <param name="mobileTopupSelectProductViewModel">The mobile topup select product view model.</param>
         /// <param name="mobileTopupPaymentSuccessPage">The mobile topup payment success page.</param>
         /// <param name="mobileTopupPaymentFailedPage">The mobile topup payment failed page.</param>
         /// <param name="device">The device.</param>
@@ -97,6 +105,8 @@
                                      MobileTopupSelectOperatorViewModel mobileTopupSelectOperatorViewModel,
                                      IMobileTopupPerformTopupPage mobileTopupPerformTopupPage,
                                      MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel,
+                                     IMobileTopupSelectProductPage mobileTopupSelectProductPage,
+                                     MobileTopupSelectProductViewModel mobileTopupSelectProductViewModel,
                                      IMobileTopupPaymentSuccessPage mobileTopupPaymentSuccessPage,
                                      IMobileTopupPaymentFailedPage mobileTopupPaymentFailedPage,
                                      IDevice device,
@@ -108,6 +118,8 @@
             this.MobileTopupSelectOperatorViewModel = mobileTopupSelectOperatorViewModel;
             this.MobileTopupPerformTopupPage = mobileTopupPerformTopupPage;
             this.MobileTopupPerformTopupViewModel = mobileTopupPerformTopupViewModel;
+            this.MobileTopupSelectProductPage = mobileTopupSelectProductPage;
+            this.MobileTopupSelectProductViewModel = mobileTopupSelectProductViewModel;
             this.MobileTopupPaymentSuccessPage = mobileTopupPaymentSuccessPage;
             this.MobileTopupPaymentFailedPage = mobileTopupPaymentFailedPage;
             this.Device = device;
@@ -163,7 +175,7 @@
         private async void MobileTopupPerformTopupPage_PerformTopupButtonClicked(Object sender,
                                                                                  EventArgs e)
         {
-            Boolean mobileTopupResult = await this.PerformMobileTopup();
+            Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
 
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
 
@@ -189,25 +201,58 @@
         private async void MobileTopupSelectOperatorPage_OperatorSelected(Object sender,
                                                                           SelectedItemChangedEventArgs e)
         {
-            this.MobileTopupPerformTopupViewModel.OperatorName = e.SelectedItem as String;
+            // Get the selected item
+            ContractProductModel selectedOperator = (ContractProductModel)e.SelectedItem;
+
+            // Get the products for this operator contract
+            List<ContractProductModel> products = App.ContractProducts.Where(c => c.ContractId == selectedOperator.ContractId).ToList();
+
+            // Go to the product selection screen
+            this.MobileTopupSelectProductViewModel.Products = products;
+            this.MobileTopupSelectProductPage.Init(this.MobileTopupSelectProductViewModel);
+            this.MobileTopupSelectProductPage.ProductSelected += this.MobileTopupSelectProductPage_ProductSelected;
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupSelectProductPage);
+            
+        }
+
+        /// <summary>
+        /// Handles the ProductSelected event of the MobileTopupSelectProductPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SelectedItemChangedEventArgs"/> instance containing the event data.</param>
+        private async void MobileTopupSelectProductPage_ProductSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            // Get the selected item
+            ContractProductModel selectedProduct = (ContractProductModel)e.SelectedItem;
+
+            // Go to the product selection screen
+            this.MobileTopupPerformTopupViewModel.ContractProductModel = selectedProduct;
+
+            if (selectedProduct.IsFixedValue)
+            {
+                this.MobileTopupPerformTopupViewModel.TopupAmount = selectedProduct.Value;
+            }
+
             this.MobileTopupPerformTopupPage.Init(this.MobileTopupPerformTopupViewModel);
             this.MobileTopupPerformTopupPage.PerformTopupButtonClicked += this.MobileTopupPerformTopupPage_PerformTopupButtonClicked;
-
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPerformTopupPage);
         }
 
         /// <summary>
         /// Performs the mobile topup.
         /// </summary>
+        /// <param name="contractProduct">The contract product.</param>
         /// <returns></returns>
-        private async Task<Boolean> PerformMobileTopup()
+        private async Task<Boolean> PerformMobileTopup(ContractProductModel contractProduct)
         {
             SaleTransactionRequestMessage saleTransactionRequestMessage = new SaleTransactionRequestMessage
                                                                           {
+                                                                              ContractId = contractProduct.ContractId,
+                                                                              ProductId = contractProduct.ProductId,
                                                                               Amount = this.MobileTopupPerformTopupViewModel.TopupAmount,
                                                                               CustomerAccountNumber = this.MobileTopupPerformTopupViewModel.CustomerMobileNumber,
                                                                               DeviceIdentifier = this.Device.GetDeviceIdentifier(),
-                                                                              OperatorIdentifier = this.MobileTopupPerformTopupViewModel.OperatorName,
+                                                                              OperatorIdentifier = contractProduct.OperatorName,
                                                                               TransactionDateTime = DateTime.Now,
                                                                               TransactionNumber = "1" // TODO: Need to hold txn number somewhere
                                                                           };
@@ -259,10 +304,11 @@
         private async void TransactionsPage_MobileTopupButtonClick(Object sender,
                                                                    EventArgs e)
         {
-            // TODO: Get the merchants supported operators
-            this.MobileTopupSelectOperatorViewModel.Operators = new List<String>();
-            this.MobileTopupSelectOperatorViewModel.Operators.Add("Safaricom");
+            this.MobileTopupSelectOperatorViewModel.Operators = new List<ContractProductModel>();
 
+            // Get distinct operator names for Mobile Topup
+            this.MobileTopupSelectOperatorViewModel.Operators = App.ContractProducts.Where(c => c.ProductType == 0).GroupBy(c => c.OperatorName).Select(g => g.First()) .ToList();
+            
             this.MobileTopupSelectOperatorPage.Init(this.MobileTopupSelectOperatorViewModel);
             this.MobileTopupSelectOperatorPage.OperatorSelected += this.MobileTopupSelectOperatorPage_OperatorSelected;
 

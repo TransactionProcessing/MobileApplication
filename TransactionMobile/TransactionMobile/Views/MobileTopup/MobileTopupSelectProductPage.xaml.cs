@@ -14,11 +14,11 @@
     /// 
     /// </summary>
     /// <seealso cref="Xamarin.Forms.ContentPage" />
-    /// <seealso cref="TransactionMobile.Pages.IMobileTopupSelectOperatorPage" />
+    /// <seealso cref="TransactionMobile.Pages.IMobileTopupSelectProductPage" />
     /// <seealso cref="TransactionMobile.Pages.IPage" />
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ExcludeFromCodeCoverage]
-    public partial class MobileTopupSelectOperatorPage : ContentPage, IMobileTopupSelectOperatorPage, IPage
+    public partial class MobileTopupSelectProductPage : ContentPage, IMobileTopupSelectProductPage, IPage
     {
         #region Fields
 
@@ -32,10 +32,10 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MobileTopupSelectOperatorPage" /> class.
+        /// Initializes a new instance of the <see cref="MobileTopupSelectProductPage" /> class.
         /// </summary>
         /// <param name="analysisLogger">The analysis logger.</param>
-        public MobileTopupSelectOperatorPage(IAnalysisLogger analysisLogger)
+        public MobileTopupSelectProductPage(IAnalysisLogger analysisLogger)
         {
             this.AnalysisLogger = analysisLogger;
             this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
@@ -47,9 +47,9 @@
         #region Events
 
         /// <summary>
-        /// Occurs when [operator selected].
+        /// Occurs when [product selected].
         /// </summary>
-        public event EventHandler<SelectedItemChangedEventArgs> OperatorSelected;
+        public event EventHandler<SelectedItemChangedEventArgs> ProductSelected;
 
         #endregion
 
@@ -59,7 +59,7 @@
         /// Initializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public void Init(MobileTopupSelectOperatorViewModel viewModel)
+        public void Init(MobileTopupSelectProductViewModel viewModel)
         {
             this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
             this.LoadOperators(viewModel);
@@ -71,17 +71,17 @@
         /// <param name="e">The <see cref="SelectedItemChangedEventArgs" /> instance containing the event data.</param>
         private void Execute(SelectedItemChangedEventArgs e)
         {
-            this.OperatorSelected(this, e);
+            this.ProductSelected(this, e);
         }
 
         /// <summary>
         /// Loads the operators.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        private void LoadOperators(MobileTopupSelectOperatorViewModel viewModel)
+        private void LoadOperators(MobileTopupSelectProductViewModel viewModel)
         {
             RowDefinitionCollection rowDefinitionCollection = new RowDefinitionCollection();
-            for (Int32 i = 0; i < viewModel.Operators.Count; i++)
+            for (Int32 i = 0; i < viewModel.Products.Count; i++)
             {
                 rowDefinitionCollection.Add(new RowDefinition
                                             {
@@ -89,24 +89,24 @@
                                             });
             }
 
-            this.OperatorsGrid.RowDefinitions = rowDefinitionCollection;
+            this.ProductsGrid.RowDefinitions = rowDefinitionCollection;
 
             Int32 rowCount = 0;
-            foreach (ContractProductModel modelOperator in viewModel.Operators)
+            foreach (ContractProductModel modelProduct in viewModel.Products)
             {
                 SfButton button = new SfButton
                                   {
-                                      Text = modelOperator.OperatorName,
+                                      Text = modelProduct.ProductDisplayText,
                                       HorizontalOptions = LayoutOptions.FillAndExpand,
                                       //HeightRequest = 100,
                                       //WidthRequest = 400,
-                                      AutomationId = modelOperator.OperatorName,
+                                      AutomationId = modelProduct.ProductDisplayText,
                                       Command = new Command<SelectedItemChangedEventArgs>(this.Execute),
-                                      CommandParameter = new SelectedItemChangedEventArgs(modelOperator, rowCount)
+                                      CommandParameter = new SelectedItemChangedEventArgs(modelProduct, rowCount)
                                   };
                 button.SetDynamicResource(VisualElement.StyleProperty, "SfButtonStyleMobileTopup");
 
-                this.OperatorsGrid.Children.Add(button, 0, rowCount);
+                this.ProductsGrid.Children.Add(button, 0, rowCount);
                 rowCount++;
             }
         }

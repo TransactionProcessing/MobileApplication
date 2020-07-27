@@ -12,6 +12,11 @@
         #region Fields
 
         /// <summary>
+        /// The contracts
+        /// </summary>
+        private readonly List<Contract> Contracts;
+
+        /// <summary>
         /// The merchants
         /// </summary>
         private readonly Dictionary<String, Guid> Merchants;
@@ -36,7 +41,7 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EstateDetails"/> class.
+        /// Initializes a new instance of the <see cref="EstateDetails" /> class.
         /// </summary>
         /// <param name="estateId">The estate identifier.</param>
         /// <param name="estateName">Name of the estate.</param>
@@ -48,6 +53,7 @@
             this.Merchants = new Dictionary<String, Guid>();
             this.Operators = new Dictionary<String, Guid>();
             this.MerchantUsers = new Dictionary<String, Dictionary<String, String>>();
+            this.Contracts = new List<Contract>();
         }
 
         #endregion
@@ -97,6 +103,24 @@
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Adds the contract.
+        /// </summary>
+        /// <param name="contractId">The contract identifier.</param>
+        /// <param name="contractName">Name of the contract.</param>
+        /// <param name="operatorId">The operator identifier.</param>
+        public void AddContract(Guid contractId,
+                                String contractName,
+                                Guid operatorId)
+        {
+            this.Contracts.Add(new Contract
+                               {
+                                   ContractId = contractId,
+                                   Description = contractName,
+                                   OperatorId = operatorId,
+                               });
+        }
 
         /// <summary>
         /// Adds the merchant.
@@ -182,6 +206,26 @@
                                            String estateName)
         {
             return new EstateDetails(estateId, estateName);
+        }
+
+        /// <summary>
+        /// Gets the contract.
+        /// </summary>
+        /// <param name="contractName">Name of the contract.</param>
+        /// <returns></returns>
+        public Contract GetContract(String contractName)
+        {
+            return this.Contracts.Single(c => c.Description == contractName);
+        }
+
+        /// <summary>
+        /// Gets the contract.
+        /// </summary>
+        /// <param name="contractId">The contract identifier.</param>
+        /// <returns></returns>
+        public Contract GetContract(Guid contractId)
+        {
+            return this.Contracts.Single(c => c.ContractId == contractId);
         }
 
         /// <summary>
