@@ -116,9 +116,12 @@ Scenario: Failed Safaricom Topup
 	Given I tap on the Safaricom button
 	Then the Mobile Topup Topup Details Page is displayed
 	
+	Given I tap on the Custom button
+	Then the Mobile Topup Topup Details Page is displayed
+
 	When I enter the following topup details
 	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 100000.00     |
+	| 123456789            | 100000      |
 	And I tap on Perform Topup
 	
 	Then The Topup Failed Screen will be displayed
