@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.ViewModels
 {
     using System;
+    using Models;
     using Xamarin.Forms;
 
     /// <summary>
@@ -10,6 +11,14 @@
     public class MobileTopupPerformTopupViewModel : BindableObject
     {
         #region Fields
+
+        /// <summary>
+        /// Gets or sets the contract product model.
+        /// </summary>
+        /// <value>
+        /// The contract product model.
+        /// </value>
+        public ContractProductModel ContractProductModel { get; set; }
 
         /// <summary>
         /// The customer mobile number

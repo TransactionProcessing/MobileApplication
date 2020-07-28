@@ -11,6 +11,23 @@
         #region Methods
 
         /// <summary>
+        /// Gets the enum value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="row">The row.</param>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        public static T GetEnumValue<T>(TableRow row,
+                                        String key) where T : struct
+        {
+            String field = SpecflowTableHelper.GetStringRowValue(row, key);
+
+            Enum.TryParse(field, out T myEnum);
+
+            return myEnum;
+        }
+
+        /// <summary>
         /// Gets the boolean value.
         /// </summary>
         /// <param name="row">The row.</param>

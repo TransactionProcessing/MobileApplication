@@ -30,6 +30,21 @@ Background:
 	| EstateName    | OperatorName | RequireCustomMerchantNumber | RequireCustomTerminalNumber |
 	| Test Estate 1 | Safaricom    | True                        | True                        |
 
+	Given I create a contract with the following values
+	| EstateName    | OperatorName | ContractDescription |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  |
+
+	When I create the following Products
+	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value  |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  | 100 KES Topup  | 100 KES     | 100.00 |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |        |
+
+	When I add the following Transaction Fees
+	| EstateName    | OperatorName    | ContractDescription | ProductName    | CalculationType | FeeDescription      | Value |
+	| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Fixed           | Merchant Commission | 2.00  |
+	| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Percentage      | Merchant Commission | 0.025 |
+	| Test Estate 1 | Safaricom | Safaricom Contract | Variable Topup | Fixed           | Merchant Commission | 2.50  |
+
 	Given I create the following merchants
 	| MerchantName    | AddressLine1   | Town     | Region      | Country        | ContactName    | EmailAddress                 | EstateName    |
 	| Test Merchant 1 | Address Line 1 | TestTown | Test Region | United Kingdom | Test Contact 1 | testcontact1@merchant1.co.uk | Test Estate 1 |
@@ -69,11 +84,14 @@ Scenario: Successful Safaricom Topup
 	Then the Mobile Topup Select Operator Page is displayed
 	
 	Given I tap on the Safaricom button
+	Then the Mobile Topup Select Product Page is displayed
+
+	Given I tap on the Custom button
 	Then the Mobile Topup Topup Details Page is displayed
 	
 	When I enter the following topup details
 	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 1000.00     |
+	| 123456789            | 1000     |
 	And I tap on Perform Topup
 	
 	Then The Topup Successful Screen will be displayed
@@ -96,11 +114,14 @@ Scenario: Failed Safaricom Topup
 	Then the Mobile Topup Select Operator Page is displayed
 	
 	Given I tap on the Safaricom button
-	Then the Mobile Topup Topup Details Page is displayed
+	Then the Mobile Topup Select Product Page is displayed
 	
+	Given I tap on the Custom button
+	Then the Mobile Topup Topup Details Page is displayed
+
 	When I enter the following topup details
 	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 100000.00     |
+	| 123456789            | 100000      |
 	And I tap on Perform Topup
 	
 	Then The Topup Failed Screen will be displayed

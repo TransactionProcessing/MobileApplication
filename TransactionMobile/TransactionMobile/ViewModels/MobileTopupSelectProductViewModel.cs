@@ -9,17 +9,17 @@
     /// 
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class MobileTopupSelectOperatorViewModel
+    public class MobileTopupSelectProductViewModel
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets the operators.
+        /// Gets or sets the products.
         /// </summary>
         /// <value>
         /// The operators.
         /// </value>
-        public List<ContractProductModel> Operators { get; set; }
+        public List<ContractProductModel> Products { get; set; }
 
         #endregion
     }

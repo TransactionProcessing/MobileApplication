@@ -67,12 +67,22 @@
             this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
 
             this.ViewModel = viewModel;
+            this.BindingContext = this.ViewModel;
             this.PerformTopupButton.Clicked += this.PerformTopupButton_Clicked;
 
             this.CustomerMobileNumberEntry.TextChanged += this.CustomerMobileNumberEntry_TextChanged;
             this.CustomerMobileNumberEntry.Completed += this.CustomerMobileNumberEntry_Completed;
-            this.TopupAmountEntry.TextChanged += this.TopupAmountEntry_TextChanged;
-            this.TopupAmountEntry.Completed += this.TopupAmountEntry_Completed;
+            if (viewModel.ContractProductModel.IsFixedValue)
+            {
+                this.TopupAmountEntry.IsEnabled = false;
+                this.CustomerMobileNumberEntry.Focus();
+            }
+            else
+            {
+                this.TopupAmountEntry.TextChanged += this.TopupAmountEntry_TextChanged;
+                this.TopupAmountEntry.Completed += this.TopupAmountEntry_Completed;
+                this.TopupAmountEntry.IsEnabled = true;
+            }
         }
 
         /// <summary>
@@ -127,7 +137,14 @@
         private void TopupAmountEntry_TextChanged(Object sender,
                                                   TextChangedEventArgs e)
         {
-            this.ViewModel.TopupAmount = decimal.Parse(e.NewTextValue);
+            if (e.NewTextValue != String.Empty)
+            {
+                this.ViewModel.TopupAmount = decimal.Parse(e.NewTextValue);
+            }
+            else
+            {
+                this.ViewModel.TopupAmount = 0;
+            }
         }
 
         #endregion

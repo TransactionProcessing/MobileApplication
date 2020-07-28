@@ -399,11 +399,15 @@ namespace TransactionMobile.IntegrationTests.Common
                     await this.InsertEventStoreServer(connection, this.EventStoreContainerName).ConfigureAwait(false);
 
                     String endPointUri = $"http://{this.EstateReportingContainerName}:5005/api/domainevents";
+
                     // Add Route for Estate Aggregate Events
                     await this.InsertSubscription(connection, "$ce-EstateAggregate", "Reporting", endPointUri).ConfigureAwait(false);
 
                     // Add Route for Merchant Aggregate Events
                     await this.InsertSubscription(connection, "$ce-MerchantAggregate", "Reporting", endPointUri).ConfigureAwait(false);
+
+                    // Add Route for Contract Aggregate Events
+                    await this.InsertSubscription(connection, "$ce-ContractAggregate", "Reporting", endPointUri).ConfigureAwait(false);
 
                     connection.Close();
                 }

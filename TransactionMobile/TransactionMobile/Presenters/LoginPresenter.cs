@@ -3,19 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
-    using ClientProxyBase;
     using Common;
     using EstateManagement.Client;
-    using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
     using Events;
-    using Microsoft.AppCenter.Crashes;
+    using Models;
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
@@ -49,6 +44,11 @@
         private readonly IDevice Device;
 
         /// <summary>
+        /// The estate client
+        /// </summary>
+        private readonly IEstateClient EstateClient;
+
+        /// <summary>
         /// The login page
         /// </summary>
         private readonly ILoginPage LoginPage;
@@ -78,8 +78,6 @@
         /// </summary>
         private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
 
-        private readonly IEstateClient EstateClient;
-
         #endregion
 
         #region Constructors
@@ -103,7 +101,7 @@
                               IDevice device,
                               ISecurityServiceClient securityServiceClient,
                               ITransactionProcessorACLClient transactionProcessorAclClient,
-                              IEstateClient estateClient, 
+                              IEstateClient estateClient,
                               IAnalysisLogger analysisLogger)
         {
             this.MainPage = mainPage;
@@ -135,6 +133,22 @@
         }
 
         /// <summary>
+        /// Handles the Elapsed event of the BalanceTimer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs" /> instance containing the event data.</param>
+        private async void BalanceTimer_Elapsed(Object sender,
+                                                ElapsedEventArgs e)
+        {
+            // Go to the API and get the merchant's balance
+            MerchantBalanceResponse balanceResponse =
+                await this.EstateClient.GetMerchantBalance(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
+
+            // get the merchant balance
+            this.MainPageViewModel.AvailableBalance = $"{balanceResponse.AvailableBalance:N2} KES";
+        }
+
+        /// <summary>
         /// Gets the configuration.
         /// </summary>
         private async Task GetConfiguration()
@@ -150,6 +164,34 @@
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Secret is {App.Configuration.ClientSecret}"));
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"SecurityService Url is {App.Configuration.SecurityService}"));
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
+        }
+
+        /// <summary>
+        /// Gets the merchant balance.
+        /// </summary>
+        private async Task GetMerchantBalance()
+        {
+            this.BalanceTimer_Elapsed(null, null);
+
+            Timer balanceTimer = new Timer(10000);
+
+            balanceTimer.Elapsed += this.BalanceTimer_Elapsed;
+            balanceTimer.AutoReset = true;
+            balanceTimer.Enabled = true;
+        }
+
+        /// <summary>
+        /// Gets the merchant contract.
+        /// </summary>
+        private async Task GetMerchantContract()
+        {
+            this.MerchantContractTimer_Elapsed(null, null);
+
+            Timer merchantContractTimer = new Timer(60000);
+
+            merchantContractTimer.Elapsed += this.MerchantContractTimer_Elapsed;
+            merchantContractTimer.AutoReset = true;
+            merchantContractTimer.Enabled = true;
         }
 
         /// <summary>
@@ -188,6 +230,9 @@
                 // Get the merchants current balance
                 await this.GetMerchantBalance();
 
+                // Get the merchants contract details
+                await this.GetMerchantContract();
+
                 this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("Logon Completed"));
 
                 // Go to signed in page
@@ -209,30 +254,6 @@
 
                 CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
             }
-        }
-
-        /// <summary>
-        /// Gets the merchant balance.
-        /// </summary>
-        private async Task GetMerchantBalance()
-        {
-            this.BalanceTimer_Elapsed(null, null);
-
-            Timer balanceTimer = new System.Timers.Timer(10000);
-
-            balanceTimer.Elapsed += BalanceTimer_Elapsed;
-            balanceTimer.AutoReset = true;
-            balanceTimer.Enabled = true;
-        }
-
-        private async void BalanceTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            // Go to the API and get the merchant's balance
-            MerchantBalanceResponse balanceResponse =
-                    await this.EstateClient.GetMerchantBalance(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
-
-            // get the merchant balance
-            this.MainPageViewModel.AvailableBalance = $"{balanceResponse.AvailableBalance:N2} KES";
         }
 
         /// <summary>
@@ -281,10 +302,43 @@
         }
 
         /// <summary>
+        /// Handles the Elapsed event of the MerchantContractTimer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        private async void MerchantContractTimer_Elapsed(Object sender,
+                                                         ElapsedEventArgs e)
+        {
+            // Go to the API and get the merchant's contract details
+            List<ContractResponse> contractResponses =
+                await this.EstateClient.GetMerchantContracts(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
+
+            foreach (ContractResponse contractResponse in contractResponses)
+            {
+                App.ContractProducts = new List<ContractProductModel>();
+
+                foreach (ContractProduct contractResponseProduct in contractResponse.Products)
+                {
+                    App.ContractProducts.Add(new ContractProductModel
+                                             {
+                                                 OperatorId = contractResponse.OperatorId,
+                                                 ContractId = contractResponse.ContractId,
+                                                 ProductId = contractResponseProduct.ProductId,
+                                                 OperatorName = contractResponse.OperatorName,
+                                                 Value = contractResponseProduct.Value ?? 0,
+                                                 IsFixedValue = contractResponseProduct.Value.HasValue,
+                                                 ProductDisplayText = contractResponseProduct.DisplayText,
+                                                 ProductType = 0 // TODO: once we have product type in the contract product
+                                             });
+                }
+            }
+        }
+
+        /// <summary>
         /// Performs the logon transaction.
         /// </summary>
-        /// <exception cref="System.Exception">Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]</exception>
         /// <exception cref="Exception">Error during logon transaction</exception>
+        /// <exception cref="System.Exception">Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]</exception>
         private async Task PerformLogonTransaction()
         {
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Do Logon Transaction"));
@@ -302,7 +356,7 @@
 
             LogonTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformLogonTransaction(App.TokenResponse.AccessToken, logonTransactionRequestMessage, CancellationToken.None);
-            
+
             String responseJson = JsonConvert.SerializeObject(response);
             this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
 

@@ -72,6 +72,7 @@
             unityContainer.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupSelectOperatorPage, MobileTopupSelectOperatorPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IMobileTopupSelectProductPage, MobileTopupSelectProductPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPerformTopupPage, MobileTopupPerformTopupPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
@@ -80,6 +81,7 @@
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MainPageViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<MobileTopupSelectProductViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupPerformTopupViewModel>(new TransientLifetimeManager());
 
             return unityContainer;
