@@ -114,7 +114,7 @@ Scenario: Failed Safaricom Topup
 	Then the Mobile Topup Select Operator Page is displayed
 	
 	Given I tap on the Safaricom button
-	Then the Mobile Topup Topup Details Page is displayed
+	Then the Mobile Topup Select Product Page is displayed
 	
 	Given I tap on the Custom button
 	Then the Mobile Topup Topup Details Page is displayed
