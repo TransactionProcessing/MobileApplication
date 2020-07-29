@@ -62,5 +62,14 @@
             app.WaitForElement(this.PerformTopupButton);
             app.Tap(this.PerformTopupButton);
         }
+
+        public void AssertTopupValidationErrorDisplayed()
+        {
+            String errorMessage = "Please enter a mobile number and Topup Amount to continue";
+            app.WaitForElement(errorMessage, timeout:TimeSpan.FromSeconds(15));
+            
+            // Dismiss the error
+            app.Tap("OK");
+        }
     }
 }

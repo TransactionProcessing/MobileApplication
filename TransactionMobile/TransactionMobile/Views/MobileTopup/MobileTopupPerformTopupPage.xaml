@@ -50,7 +50,8 @@
                     Style="{StaticResource EntryStyle}"
                     Text="{Binding CustomerMobileNumber}"
                     TextColor="{DynamicResource Gray-900}"
-                    AutomationId="CustomerMobileNumberEntry"/>
+                    AutomationId="CustomerMobileNumberEntry"
+                    Keyboard="Numeric"/>
             </border:SfBorder>
 
             <border:SfBorder
@@ -65,7 +66,8 @@
                     Style="{StaticResource EntryStyle}"
                     Text="{Binding TopupAmount}"
                     TextColor="{DynamicResource Gray-900}"
-                    AutomationId="TopupAmountEntry"/>
+                    AutomationId="TopupAmountEntry"
+                    Keyboard="Numeric"/>
             </border:SfBorder>
 
             <buttons:SfButton

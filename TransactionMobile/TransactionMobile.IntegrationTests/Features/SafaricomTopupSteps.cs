@@ -80,10 +80,22 @@
             this.MobileTopupPerformTopupPage.EnterTopupAmount(topupAmount);
         }
 
+        [When(@"I click the back button")]
+        public void WhenIClickTheBackButton()
+        {
+            AppManager.App.Back();
+        }
+
         [When(@"I tap on Perform Topup")]
         public void WhenITapOnPerformTopup()
         {
             this.MobileTopupPerformTopupPage.ClickPerformTopupButton();
+        }
+
+        [Then(@"The Topup Validation Error will be displayed")]
+        public void ThenTheTopupValidationErrorWillBeDisplayed()
+        {
+            this.MobileTopupPerformTopupPage.AssertTopupValidationErrorDisplayed();
         }
 
         [Then(@"The Topup Successful Screen will be displayed")]
