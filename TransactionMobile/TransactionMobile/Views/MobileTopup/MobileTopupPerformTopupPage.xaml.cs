@@ -2,11 +2,14 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using Controls;
     using Events;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
+    using static System.Char;
 
     /// <summary>
     /// 
@@ -104,7 +107,18 @@
         private void CustomerMobileNumberEntry_TextChanged(Object sender,
                                                            TextChangedEventArgs e)
         {
-            this.ViewModel.CustomerMobileNumber = e.NewTextValue;
+            //Make sure all characters are numbers
+            Boolean isValid = e.NewTextValue.ToCharArray().All(Char.IsDigit);
+            if (isValid && String.IsNullOrEmpty(e.NewTextValue) == false)
+            {
+                this.ViewModel.CustomerMobileNumber = e.NewTextValue;
+            }
+            else
+            {
+                ((BorderlessEntry)sender).Text = e.OldTextValue ?? String.Empty;
+            }
+
+            
         }
 
         /// <summary>
@@ -137,13 +151,15 @@
         private void TopupAmountEntry_TextChanged(Object sender,
                                                   TextChangedEventArgs e)
         {
-            if (e.NewTextValue != String.Empty)
+            //Make sure all characters are numbers
+            Boolean isValid = e.NewTextValue.ToCharArray().All(Char.IsDigit);
+            if (isValid && String.IsNullOrEmpty(e.NewTextValue) == false)
             {
-                this.ViewModel.TopupAmount = decimal.Parse(e.NewTextValue);
+                this.ViewModel.TopupAmount = Decimal.Parse(e.NewTextValue);
             }
             else
             {
-                this.ViewModel.TopupAmount = 0;
+                ((BorderlessEntry)sender).Text = e.OldTextValue ?? String.Empty;
             }
         }
 

@@ -80,7 +80,7 @@
         {
             String field = SpecflowTableHelper.GetStringRowValue(row, key);
 
-            return decimal.TryParse(field, out Decimal value) ? value : -1;
+            return decimal.TryParse(field, out Decimal value) ? value : 0;
         }
 
         /// <summary>

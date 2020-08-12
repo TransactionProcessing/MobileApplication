@@ -175,21 +175,31 @@
         private async void MobileTopupPerformTopupPage_PerformTopupButtonClicked(Object sender,
                                                                                  EventArgs e)
         {
-            Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
-
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
-
-            if (mobileTopupResult)
+            // Check the user has entered a value for the mobile number and amount
+            if (String.IsNullOrEmpty(this.MobileTopupPerformTopupViewModel.CustomerMobileNumber) || this.MobileTopupPerformTopupViewModel.TopupAmount == 0)
             {
-                this.MobileTopupPaymentSuccessPage.Init();
-                this.MobileTopupPaymentSuccessPage.CompleteButtonClicked += this.MobileTopupPaymentSuccessPage_CompleteButtonClicked;
-                await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPaymentSuccessPage);
+                this.MobileTopupPerformTopupViewModel.CustomerMobileNumber = String.Empty;
+                this.MobileTopupPerformTopupViewModel.TopupAmount = 0;
+                await App.Current.MainPage.DisplayAlert("Invalid Topup Details", "Please enter a mobile number and Topup Amount to continue", "OK");
             }
             else
             {
-                this.MobileTopupPaymentFailedPage.Init();
-                this.MobileTopupPaymentFailedPage.CancelButtonClicked += this.MobileTopupPaymentFailedPage_CancelButtonClicked;
-                await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPaymentFailedPage);
+                Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
+
+                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
+
+                if (mobileTopupResult)
+                {
+                    this.MobileTopupPaymentSuccessPage.Init();
+                    this.MobileTopupPaymentSuccessPage.CompleteButtonClicked += this.MobileTopupPaymentSuccessPage_CompleteButtonClicked;
+                    await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPaymentSuccessPage);
+                }
+                else
+                {
+                    this.MobileTopupPaymentFailedPage.Init();
+                    this.MobileTopupPaymentFailedPage.CancelButtonClicked += this.MobileTopupPaymentFailedPage_CancelButtonClicked;
+                    await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupPaymentFailedPage);
+                }
             }
         }
 
