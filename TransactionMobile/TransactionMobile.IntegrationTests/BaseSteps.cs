@@ -281,7 +281,7 @@ namespace TransactionMobile.IntegrationTests
                                 {
                                     estate = await this.TestingContext.DockerHelper.EstateClient
                                                                       .GetEstate(this.TestingContext.AccessToken, estateDetails.EstateId, CancellationToken.None).ConfigureAwait(false);
-                                });
+                                }, TimeSpan.FromMinutes(2));
                 
                 estate.ShouldNotBeNull();
                 estate.EstateName.ShouldBe(estateDetails.EstateName);
