@@ -973,7 +973,7 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <param name="sqlUserName">Name of the SQL user.</param>
         /// <param name="sqlPassword">The SQL password.</param>
         /// <returns></returns>
-        public static IContainerService StartSqlContainerWithOpenConnection(String containerName,
+        public static async Task<IContainerService> StartSqlContainerWithOpenConnection(String containerName,
                                                                             ILogger logger,
                                                                             String imageName,
                                                                             INetworkService networkService,
@@ -991,7 +991,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
             logger.LogInformation("About to SQL Server Container is running");
             IPEndPoint sqlServerEndpoint = null;
-            Retry.For(async () => { sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp"); }).Wait();
+            await Retry.For(async () => { sqlServerEndpoint = databaseServerContainer.ToHostExposedEndpoint("1433/tcp"); }).ConfigureAwait(false);
 
             // Try opening a connection
             Int32 maxRetries = 10;
@@ -1019,20 +1019,20 @@ namespace TransactionMobile.IntegrationTests.Common
                 {
                     logger.LogInformation($"Database Connection Attempt {counter}");
 
-                    connection.Open();
+                    await connection.OpenAsync();
 
                     SqlCommand command = connection.CreateCommand();
                     command.CommandText = "select * from sys.databases";
-                    SqlDataReader dataReader = command.ExecuteReader(CommandBehavior.Default);
+                    SqlDataReader dataReader = await command.ExecuteReaderAsync(CommandBehavior.Default, CancellationToken.None).ConfigureAwait(false);
                     
                     logger.LogInformation("Connection Opened");
 
                     // Check if we need to create the SS database
                     if (dataReader.HasRows)
                     {
-                        while (dataReader.Read())
+                        while (await dataReader.ReadAsync(CancellationToken.None).ConfigureAwait(false))
                         {
-                            if (dataReader.GetFieldValue<String>(0) == "SubscriptionServiceConfiguration")
+                            if (await dataReader.GetFieldValueAsync<String>(0, CancellationToken.None).ConfigureAwait(false) == "SubscriptionServiceConfiguration")
                             {
                                 databaseFound = true;
                                 break;
@@ -1043,6 +1043,7 @@ namespace TransactionMobile.IntegrationTests.Common
                     dataReader.Close();
                     connection.Close();
                     logger.LogInformation("SQL Server Container Running");
+                    Console.WriteLine("SQL Server Container Running");
                     break;
                 }
                 catch (SqlException ex)
@@ -1075,13 +1076,13 @@ namespace TransactionMobile.IntegrationTests.Common
                 try
                 {
                     SqlConnection ssconnection = new SqlConnection(connectionString);
-                    ssconnection.Open();
+                    await ssconnection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
                     SqlCommand sscommand = ssconnection.CreateCommand();
                     sscommand.CommandText = "CREATE DATABASE SubscriptionServiceConfiguration";
-                    sscommand.ExecuteNonQuery();
+                    await sscommand.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
 
                     sscommand.CommandText = "USE SubscriptionServiceConfiguration";
-                    sscommand.ExecuteNonQuery();
+                    await sscommand.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
 
                     foreach (String file in files)
                     {
@@ -1091,7 +1092,7 @@ namespace TransactionMobile.IntegrationTests.Common
                         }
 
                         sscommand.CommandText = sqlToExecute;
-                        sscommand.ExecuteNonQuery();
+                        await sscommand.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
                     }
 
                     connection.Close();

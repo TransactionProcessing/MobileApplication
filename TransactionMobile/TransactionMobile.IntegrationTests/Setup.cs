@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.IntegrationTests
 {
     using System;
+    using System.Threading.Tasks;
     using Common;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
@@ -19,7 +20,7 @@
         public const String SqlPassword = "thisisalongpassword123!";
 
         [BeforeTestRun]
-        protected static void GlobalSetup()
+        protected static async Task GlobalSetup()
         {
             ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
@@ -31,14 +32,14 @@
             TestingLogger logger = new TestingLogger();
 
             // Start the Database Server here
-            DatabaseServerContainer = TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+            DatabaseServerContainer = await TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
                                                                                                         logger,
                                                                                                         "justin2004/mssql_server_tiny",
                                                                                                         Setup.DatabaseServerNetwork,
                                                                                                         "",
                                                                                                         dockerCredentials,
                                                                                                         Setup.SqlUserName,
-                                                                                                        Setup.SqlPassword);
+                                                                                                        Setup.SqlPassword).ConfigureAwait(false);
         }
 
         public static String GetConnectionString(String databaseName)
