@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.IntegrationTests.Common
 {
+    using System.ComponentModel;
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics;
@@ -158,6 +159,8 @@ namespace TransactionMobile.IntegrationTests.Common
 
         #endregion
 
+        private IContainerService DatabaseServerContainer;
+
         private static String LocalHostAddress;
         #region Methods
 
@@ -199,13 +202,22 @@ namespace TransactionMobile.IntegrationTests.Common
             INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
 
+            // Start the Database Server here
+            IContainerService databaseServerContainer = await TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+                                                                                                        this.Logger,
+                                                                                                        "justin2004/mssql_server_tiny",
+                                                                                                        testNetwork,
+                                                                                                        "",
+                                                                                                        dockerCredentials,
+                                                                                                        Setup.SqlUserName,
+                                                                                                        Setup.SqlPassword).ConfigureAwait(false);
+
             IContainerService eventStoreContainer = await TransactionMobileDockerHelper.SetupEventStoreContainer(this.EventStoreContainerName, this.Logger, "eventstore/eventstore:20.6.0-buster-slim", testNetwork, traceFolder, usesEventStore2006OrLater: true);
 
             IContainerService estateManagementContainer = TransactionMobileDockerHelper.SetupEstateManagementContainer(this.EstateManagementContainerName, this.Logger,
                                                                                                                        "stuartferguson/estatemanagement", new List<INetworkService>
                                                                                                                                                           {
-                                                                                                                                                              testNetwork,
-                                                                                                                                                              Setup.DatabaseServerNetwork
+                                                                                                                                                              testNetwork
                                                                                                                                                           }, traceFolder, null,
                                                                                                                        this.SecurityServiceContainerName,
                                                                                                                        this.EventStoreContainerName,
@@ -244,8 +256,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                      "stuartferguson/estatereporting",
                                                                                                                      new List<INetworkService>
                                                                                                                      {
-                                                                                                                         testNetwork,
-                                                                                                                         Setup.DatabaseServerNetwork
+                                                                                                                         testNetwork
                                                                                                                      },
                                                                                                                      traceFolder,
                                                                                                                      dockerCredentials,
@@ -286,10 +297,12 @@ namespace TransactionMobile.IntegrationTests.Common
                                          transactionProcessorContainer,
                                          transactionProcessorACLContainer,
                                          estateReportingContainer,
-                                         testhostContainer
+                                         testhostContainer,
+                                         databaseServerContainer
                                      });
 
             // Cache the ports
+            this.DatabaseServerContainer = databaseServerContainer;
             this.EstateManagementApiPort = estateManagementContainer.ToHostExposedEndpoint("5000/tcp").Port;
             this.SecurityServicePort = securityServiceContainer.ToHostExposedEndpoint("5001/tcp").Port;
             this.EventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
@@ -320,8 +333,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                              "stuartferguson/subscriptionservicehost",
                                                                                                                              new List<INetworkService>
                                                                                                                              {
-                                                                                                                                 testNetwork,
-                                                                                                                                 Setup.DatabaseServerNetwork
+                                                                                                                                 testNetwork
                                                                                                                              },
                                                                                                                              traceFolder,
                                                                                                                              dockerCredentials,
@@ -334,6 +346,19 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                              true);
 
             this.Containers.Add(subscriptionServiceContainer);
+        }
+
+        public String GetLocalConnectionString(String databaseName)
+        {
+        Int32 databaseHostPort = this.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
+
+        String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+        if (String.IsNullOrEmpty(localhostaddress))
+        {
+            localhostaddress = "192.168.1.67";
+        }
+
+        return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
         }
 
         public String SecurityServiceBaseAddress;
@@ -387,7 +412,7 @@ namespace TransactionMobile.IntegrationTests.Common
 
         protected async Task PopulateSubscriptionServiceConfiguration()
         {
-            String connectionString = Setup.GetLocalConnectionString("SubscriptionServiceConfiguration");
+            String connectionString = this.GetLocalConnectionString("SubscriptionServiceConfiguration");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -419,7 +444,8 @@ namespace TransactionMobile.IntegrationTests.Common
         }
         protected async Task CleanUpSubscriptionServiceConfiguration()
         {
-            String connectionString = Setup.GetLocalConnectionString("SubscriptionServiceConfiguration");
+            //String connectionString = Setup.GetLocalConnectionString("SubscriptionServiceConfiguration");
+            String connectionString = this.GetLocalConnectionString("SubscriptionServiceConfiguration");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -467,30 +493,13 @@ namespace TransactionMobile.IntegrationTests.Common
             command.CommandType = CommandType.Text;
             await command.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
         }
-
-        //private async Task RemoveEstateReadModel()
-        //{
-        //    List<Guid> estateIdList = this.TestingContext.GetAllEstateIds();
-
-        //    foreach (Guid estateId in estateIdList)
-        //    {
-        //        String databaseName = $"EstateReportingReadModel{estateId}";
-
-        //        // Build the connection string (to master)
-        //        String connectionString = Setup.GetLocalConnectionString(databaseName);
-        //        EstateReportingContext context = new EstateReportingContext(connectionString);
-        //        await context.Database.EnsureDeletedAsync(CancellationToken.None);
-        //    }
-        //}
-
+        
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>
         public async Task StopContainersForScenarioRun()
         {
             await CleanUpSubscriptionServiceConfiguration().ConfigureAwait(false);
-
-            //await RemoveEstateReadModel().ConfigureAwait(false);
 
             if (this.Containers.Any())
             {
