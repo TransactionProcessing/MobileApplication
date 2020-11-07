@@ -95,7 +95,7 @@
 
         public void ClickCustomProductButton()
         {
-            app.WaitForElement(this.CustomProductButton, timeout: TimeSpan.FromSeconds(45));
+            app.WaitForElement(this.CustomProductButton, timeout:TimeSpan.FromSeconds(60));
             app.Tap(this.CustomProductButton);
         }
     }
