@@ -65,7 +65,8 @@ Background:
 	Then the merchant balances are as follows
 	| Balance | AvailableBalance | MerchantName    | EstateName    |
 	| 2000.00 | 2000.00          | Test Merchant 1 | Test Estate 1 |
-	   
+
+@ignore	   
 Scenario: Successful Safaricom Topup
 	Given I am on the Login Screen
 	
@@ -96,6 +97,7 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
+@ignore
 Scenario: Failed Safaricom Topup
 	Given I am on the Login Screen
 	
