@@ -66,7 +66,7 @@
         public void AssertTopupValidationErrorDisplayed()
         {
             String errorMessage = "Please enter a mobile number and Topup Amount to continue";
-            app.WaitForElement(errorMessage, timeout:TimeSpan.FromSeconds(15));
+            app.WaitForElement(errorMessage, timeout:TimeSpan.FromSeconds(45));
             
             // Dismiss the error
             app.Tap("OK");
