@@ -109,7 +109,7 @@ namespace TransactionMobile.IntegrationTests
                 // Get the executing directory
                 String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
 
-                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
+                String screenshotDirectory = $"{currentDirectory}\\Screenshots";
 
                 if (!Directory.Exists(screenshotDirectory))
                 {
