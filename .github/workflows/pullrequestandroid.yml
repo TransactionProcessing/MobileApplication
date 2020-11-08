@@ -83,15 +83,16 @@ jobs:
           verbose: false
 
     - uses: actions/upload-artifact@v2
+      if: failure()
       with:
         name: screenshots
         path: /Users/runner/work/MobileApplication/MobileApplication/TransactionMobile/TransactionMobile.IntegrationTests/bin/Release\Screenshots # or path/to/artifact
 
-    - name: debug
-      if: failure()
-      run: vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf("%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576);'
+    #- name: debug
+    #  if: failure()
+    #  run: vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf("%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576);'
    
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v2
+    #- name: Setup tmate session
+    #  if: failure()
+    #  uses: mxschmitt/action-tmate@v2
 
