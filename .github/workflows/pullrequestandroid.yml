@@ -82,6 +82,11 @@ jobs:
           abi: x86   
           verbose: false
 
+    - uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: /Users/runner/work/MobileApplication/MobileApplication/TransactionMobile/TransactionMobile.IntegrationTests/bin/Release\Screenshots # or path/to/artifact
+
     - name: debug
       if: failure()
       run: vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf("%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576);'
