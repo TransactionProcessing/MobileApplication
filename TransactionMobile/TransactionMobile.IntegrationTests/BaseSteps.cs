@@ -109,7 +109,7 @@ namespace TransactionMobile.IntegrationTests
                 // Get the executing directory
                 String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
 
-                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\{featureName}\\";
+                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\";
 
                 if (!Directory.Exists(screenshotDirectory))
                 {
@@ -117,7 +117,7 @@ namespace TransactionMobile.IntegrationTests
                 }
 
                 // Now copy the screenshot
-                screenshot.CopyTo($"{screenshotDirectory}\\{scenarioName}-{stepName}.jpg", true);
+                screenshot.CopyTo($"{screenshotDirectory}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
 
                 Console.WriteLine($"{screenshotDirectory}\\{scenarioName}-{stepName}.jpg");
             }
