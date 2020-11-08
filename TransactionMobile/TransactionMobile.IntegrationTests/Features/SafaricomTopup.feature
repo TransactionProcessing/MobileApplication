@@ -36,13 +36,13 @@ Background:
 
 	When I create the following Products
 	| EstateName    | OperatorName | ContractDescription | ProductName    | DisplayText | Value  |
-	#| Test Estate 1 | Safaricom    | Safaricom Contract  | 100 KES Topup  | 100 KES     | 100.00 |
+	| Test Estate 1 | Safaricom    | Safaricom Contract  | 100 KES Topup  | 100 KES     | 100.00 |
 	| Test Estate 1 | Safaricom    | Safaricom Contract  | Variable Topup | Custom      |        |
 
 	When I add the following Transaction Fees
 	| EstateName    | OperatorName    | ContractDescription | ProductName    | CalculationType | FeeDescription      | Value |
-	#| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Fixed           | Merchant Commission | 2.00  |
-	#| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Percentage      | Merchant Commission | 0.025 |
+	| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Fixed           | Merchant Commission | 2.00  |
+	| Test Estate 1 | Safaricom | Safaricom Contract | 100 KES Topup  | Percentage      | Merchant Commission | 0.025 |
 	| Test Estate 1 | Safaricom | Safaricom Contract | Variable Topup | Fixed           | Merchant Commission | 2.50  |
 
 	Given I create the following merchants
