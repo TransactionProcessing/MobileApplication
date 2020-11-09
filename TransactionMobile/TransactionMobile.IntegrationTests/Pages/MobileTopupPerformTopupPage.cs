@@ -59,6 +59,7 @@
 
         public void ClickPerformTopupButton()
         {
+            app.DismissKeyboard();
             app.WaitForElement(this.PerformTopupButton);
             app.Tap(this.PerformTopupButton);
         }
