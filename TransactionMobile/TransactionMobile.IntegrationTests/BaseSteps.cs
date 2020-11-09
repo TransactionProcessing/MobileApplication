@@ -120,7 +120,7 @@ namespace TransactionMobile.IntegrationTests
                     }
 
                     // Now copy the screenshot
-                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
+                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg", true);
 
                     Console.WriteLine($"{fi.FullName} exists");
                 }
@@ -132,7 +132,7 @@ namespace TransactionMobile.IntegrationTests
                         Directory.CreateDirectory(screenshotPath);
                     }
 
-                    String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg";
+                    String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg";
                     Console.WriteLine($"About to copy to {fileName}");
                     FileInfo fi = screenshot.CopyTo(fileName, true);
                     Console.WriteLine($"{fi.FullName} exists");
