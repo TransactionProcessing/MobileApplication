@@ -106,20 +106,29 @@ namespace TransactionMobile.IntegrationTests
                 // Capture screen shot on exception
                 FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
 
-                // Get the executing directory
-                String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
-
-                String screenshotDirectory = $"{currentDirectory}\\Screenshots";
-
-                if (!Directory.Exists(screenshotDirectory))
+                String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotPath");
+                if (String.IsNullOrEmpty(screenshotPath))
                 {
-                    Directory.CreateDirectory(screenshotDirectory);
+                    // Get the executing directory
+                    String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+
+                    String screenshotDirectory = $"{currentDirectory}\\Screenshots";
+
+                    if (!Directory.Exists(screenshotDirectory))
+                    {
+                        Directory.CreateDirectory(screenshotDirectory);
+                    }
+
+                    // Now copy the screenshot
+                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
+
+                    Console.WriteLine($"{fi.FullName} exists");
                 }
-
-                // Now copy the screenshot
-                FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
-
-                Console.WriteLine($"{fi.FullName} exists");
+                else
+                {
+                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
+                    Console.WriteLine($"{fi.FullName} exists");
+                }
 
             }
         }

@@ -10,6 +10,7 @@ jobs:
     name: "Build and Test Pull Requests - Android"
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+        ScreenshotFolder: "/Users/runner/screenshots"
     runs-on: macos-latest
     
     steps:
@@ -72,6 +73,9 @@ jobs:
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
+
+    - name: Create Screenshot Folder
+      run: mkdir -p /Users/runner/screenshots
    
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
@@ -86,7 +90,7 @@ jobs:
       if: failure()
       with:
         name: screenshots
-        path: /Users/runner/work/MobileApplication/MobileApplication/TransactionMobile/TransactionMobile.IntegrationTests/bin/Release\Screenshots # or path/to/artifact
+        path: /Users/runner/screenshots/*.*
 
     #- name: debug
     #  if: failure()
