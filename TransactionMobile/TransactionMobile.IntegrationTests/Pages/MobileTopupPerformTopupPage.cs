@@ -66,6 +66,7 @@
 
         public void AssertTopupValidationErrorDisplayed()
         {
+            app.DismissKeyboard();
             String errorMessage = "Please enter a mobile number and Topup Amount to continue";
             app.WaitForElement(errorMessage, timeout:TimeSpan.FromMinutes(2));
             
