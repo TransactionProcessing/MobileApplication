@@ -90,7 +90,7 @@ jobs:
       if: failure()
       with:
         name: screenshots
-        path: /Users/runner/screenshots/*.*
+        path: /Users/runner/screenshots/**/*
 
     #- name: debug
     #  if: failure()
