@@ -112,7 +112,7 @@ namespace TransactionMobile.IntegrationTests
                     // Get the executing directory
                     String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
 
-                    String screenshotDirectory = $"{currentDirectory}\\Screenshots";
+                    String screenshotDirectory = $"{currentDirectory}\\Screenshots\\{featureName}";
 
                     if (!Directory.Exists(screenshotDirectory))
                     {
@@ -120,13 +120,21 @@ namespace TransactionMobile.IntegrationTests
                     }
 
                     // Now copy the screenshot
-                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}//{featureName}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
+                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
 
                     Console.WriteLine($"{fi.FullName} exists");
                 }
                 else
                 {
-                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}//{featureName}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
+                    screenshotPath = $"{screenshotPath}//{featureName}";
+                    if (!Directory.Exists(screenshotPath))
+                    {
+                        Directory.CreateDirectory(screenshotPath);
+                    }
+
+                    String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg";
+                    Console.WriteLine($"About to copy to {fileName}");
+                    FileInfo fi = screenshot.CopyTo(fileName, true);
                     Console.WriteLine($"{fi.FullName} exists");
                 }
                 //}
