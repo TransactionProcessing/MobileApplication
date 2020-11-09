@@ -126,7 +126,7 @@ namespace TransactionMobile.IntegrationTests
                 }
                 else
                 {
-                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
+                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}//{featureName}-{scenarioName}-{stepName}.jpg", true);
                     Console.WriteLine($"{fi.FullName} exists");
                 }
 
