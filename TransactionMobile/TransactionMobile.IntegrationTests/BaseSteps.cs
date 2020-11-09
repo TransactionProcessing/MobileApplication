@@ -95,9 +95,9 @@ namespace TransactionMobile.IntegrationTests
         [AfterStep]
         public void CheckStepStatus()
         {
-            Exception exception = ScenarioContext.Current.TestError;
-            if (exception != null)
-            {
+            //Exception exception = ScenarioContext.Current.TestError;
+            //if (exception != null)
+            //{
                 // Build the screenshot name
                 String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
                 String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
@@ -120,17 +120,16 @@ namespace TransactionMobile.IntegrationTests
                     }
 
                     // Now copy the screenshot
-                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{featureName}-{scenarioName}-{stepName}.jpg", true);
+                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}//{featureName}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
 
                     Console.WriteLine($"{fi.FullName} exists");
                 }
                 else
                 {
-                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}//{featureName}-{scenarioName}-{stepName}.jpg", true);
+                    FileInfo fi = screenshot.CopyTo($"{screenshotPath}//{featureName}//{DateTime.Now:yyyMMddHHmmss}-{scenarioName}-{stepName}.jpg", true);
                     Console.WriteLine($"{fi.FullName} exists");
                 }
-
-            }
+                //}
         }
     }
 
