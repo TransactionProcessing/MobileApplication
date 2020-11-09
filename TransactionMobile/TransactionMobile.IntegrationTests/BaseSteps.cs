@@ -106,7 +106,7 @@ namespace TransactionMobile.IntegrationTests
                 // Capture screen shot on exception
                 FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
 
-                String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotPath");
+                String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotFolder");
                 if (String.IsNullOrEmpty(screenshotPath))
                 {
                     // Get the executing directory
