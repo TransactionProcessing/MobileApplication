@@ -77,32 +77,18 @@ jobs:
     - name: Create Screenshot Folder
       run: mkdir -p /Users/runner/screenshots
    
-#    - name: Run Integration Tests - Android
-#      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.7
-#     with:
-#          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
-#          api: 24
-#          tag: default
-#          abi: x86   
-#          verbose: false
-
     - name: Run Integration Tests - Android
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 29
-        script: ./TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/runtests.sh
+      uses: malinskiy/action-android/emulator-run-cmd@release/0.0.7
+     with:
+          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
+          api: 24
+          tag: default
+          abi: x86   
+          verbose: false
 
     - uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: screenshots
         path: /Users/runner/screenshots/**/*
-
-    #- name: debug
-    #  if: failure()
-    #  run: vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf("%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576);'
-   
-    #- name: Setup tmate session
-    #  if: failure()
-    #  uses: mxschmitt/action-tmate@v2
 
