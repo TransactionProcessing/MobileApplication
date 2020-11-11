@@ -50,7 +50,7 @@ Background:
 	Then the merchant balances are as follows
 	| Balance | AvailableBalance | MerchantName    | EstateName    |
 	| 2000.00 | 2000.00          | Test Merchant 1 | Test Estate 1 |
-	   
+
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address

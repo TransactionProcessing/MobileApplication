@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.IntegrationTests
 {
+    using System.IO;
     using System.Net;
     using System.Net.Sockets;
+    using System.Reflection;
     using System.Threading;
     using Common;
     using Ductus.FluentDocker.Executors;
@@ -88,6 +90,125 @@ namespace TransactionMobile.IntegrationTests
             await this.TestingContext.DockerHelper.StopContainersForScenarioRun().ConfigureAwait(false);
             logger.LogInformation($"Containers for Scenario Run Stopped  - {scenarioName}");
 
+        }
+
+        [AfterStep]
+        public void CheckStepStatus()
+        {
+            //Exception exception = ScenarioContext.Current.TestError;
+            //if (exception != null)
+            //{
+                // Build the screenshot name
+                String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
+                String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
+                String stepName = this.ScenarioContext.GetStepNameForScreenshot();
+                
+                // Capture screen shot on exception
+                FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
+
+                String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotFolder");
+                if (String.IsNullOrEmpty(screenshotPath))
+                {
+                    // Get the executing directory
+                    String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
+
+                    String screenshotDirectory = $"{currentDirectory}\\Screenshots\\{featureName}";
+
+                    if (!Directory.Exists(screenshotDirectory))
+                    {
+                        Directory.CreateDirectory(screenshotDirectory);
+                    }
+
+                    // Now copy the screenshot
+                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg", true);
+
+                    Console.WriteLine($"{fi.FullName} exists");
+                }
+                else
+                {
+                    screenshotPath = $"{screenshotPath}//{featureName}";
+                    if (!Directory.Exists(screenshotPath))
+                    {
+                        Directory.CreateDirectory(screenshotPath);
+                    }
+
+                    String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg";
+                    Console.WriteLine($"About to copy to {fileName}");
+                    FileInfo fi = screenshot.CopyTo(fileName, true);
+                    Console.WriteLine($"{fi.FullName} exists");
+                }
+                //}
+        }
+    }
+
+    public static class Extensions
+    {
+        public static String GetFeatureNameForLogging(this FeatureContext featureContext)
+        {
+            return featureContext.FeatureInfo.Title.Replace(" ", "");
+        }
+
+        public static String GetFeatureNameForScreenshot(this FeatureContext featureContext)
+        {
+            String featureName = featureContext.GetFeatureNameForLogging();
+            featureName = String.Join("", featureName.Split(Path.GetInvalidFileNameChars()));
+
+            // Remove other characters that are valid for a path but not a screenshot name (/ and : for example)
+            featureName = featureName.Replace("/", "");
+            featureName = featureName.Replace(":", "");
+
+            return featureName;
+        }
+
+        public static String GetScenarioNameForLogging(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.ScenarioInfo.Title.Replace(" ", "");
+        }
+
+        /// <summary>
+        /// Gets the scenario name for screenshot.
+        /// </summary>
+        /// <param name="scenarioContext">The scenario context.</param>
+        /// <returns></returns>
+        public static String GetScenarioNameForScreenshot(this ScenarioContext scenarioContext)
+        {
+            String scenarioName = scenarioContext.GetScenarioNameForLogging();
+
+            scenarioName = String.Join("", scenarioName.Split(Path.GetInvalidFileNameChars()));
+
+            // Remove other characters that are valid for a path but not a screenshot name (/ and : for example)
+            scenarioName = scenarioName.Replace("/", "");
+            scenarioName = scenarioName.Replace(":", "");
+
+            return scenarioName;
+        }
+
+        /// <summary>
+        /// Gets the step name for logging.
+        /// </summary>
+        /// <param name="scenarioContext">The scenario context.</param>
+        /// <returns></returns>
+        public static String GetStepNameForLogging(this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.StepContext.StepInfo.Text.Replace(" ", "");
+        }
+
+        /// <summary>
+        /// Gets the step name for screenshot.
+        /// </summary>
+        /// <param name="scenarioContext">The scenario context.</param>
+        /// <returns></returns>
+        public static String GetStepNameForScreenshot(this ScenarioContext scenarioContext)
+        {
+            String stepName = scenarioContext.GetStepNameForLogging();
+
+            stepName = String.Join("", stepName.Split(Path.GetInvalidFileNameChars()));
+
+            // Remove other characters that are valid for a path but not a screenshot name (/ and : for example)
+            stepName = stepName.Replace("/", "");
+            stepName = stepName.Replace(":", "");
+
+            return stepName;
         }
     }
 
@@ -281,7 +402,7 @@ namespace TransactionMobile.IntegrationTests
                                 {
                                     estate = await this.TestingContext.DockerHelper.EstateClient
                                                                       .GetEstate(this.TestingContext.AccessToken, estateDetails.EstateId, CancellationToken.None).ConfigureAwait(false);
-                                });
+                                }, TimeSpan.FromMinutes(2));
                 
                 estate.ShouldNotBeNull();
                 estate.EstateName.ShouldBe(estateDetails.EstateName);

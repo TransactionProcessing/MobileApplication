@@ -76,7 +76,8 @@ namespace TransactionMobile.IntegrationTests.Common
 
             if (Platform == Platform.iOS)
             {
-                String deviceIdentifier = AppManager.GetDeviceIdentifier("iPhone 11 (13.6)");
+                String device = Environment.GetEnvironmentVariable("Device");
+                String deviceIdentifier = AppManager.GetDeviceIdentifier(device);
 
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 app = ConfigureApp

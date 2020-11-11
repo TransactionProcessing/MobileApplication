@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.IntegrationTests.Pages
 {
+    using System;
     using Common;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -94,7 +95,7 @@
 
         public void ClickCustomProductButton()
         {
-            app.WaitForElement(this.CustomProductButton);
+            app.WaitForElement(this.CustomProductButton, timeout:TimeSpan.FromSeconds(60));
             app.Tap(this.CustomProductButton);
         }
     }

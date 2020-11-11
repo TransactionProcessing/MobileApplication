@@ -11,6 +11,7 @@ jobs:
     name: "Nightly Build - Android"
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+        ScreenshotFolder: "/Users/runner/screenshots"
     runs-on: macos-latest
 
     steps:
@@ -60,7 +61,7 @@ jobs:
     - run: echo $ANDROID_HOME
     - run: |
           cd $ANDROID_HOME/tools/bin
-          ./sdkmanager "build-tools;29.0.2"
+          ./sdkmanager "build-tools;30.0.2"
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
@@ -73,7 +74,10 @@ jobs:
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
-   
+
+    - name: Create Screenshot Folder
+      run: mkdir -p /Users/runner/screenshots
+      
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
       with:
@@ -82,3 +86,9 @@ jobs:
           tag: default
           abi: x86   
           verbose: false
+
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: screenshots
+        path: /Users/runner/screenshots/**/*

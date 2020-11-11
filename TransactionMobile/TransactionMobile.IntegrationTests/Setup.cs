@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.IntegrationTests
 {
     using System;
+    using System.Threading.Tasks;
     using Common;
     using Ductus.FluentDocker.Services;
     using Ductus.FluentDocker.Services.Extensions;
@@ -19,44 +20,44 @@
         public const String SqlPassword = "thisisalongpassword123!";
 
         [BeforeTestRun]
-        protected static void GlobalSetup()
+        protected static async Task GlobalSetup()
         {
-            ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
+            //ShouldlyConfiguration.DefaultTaskTimeout = TimeSpan.FromMinutes(1);
 
-            (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
+            //(String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
-            // Setup a network for the DB Server
-            Setup.DatabaseServerNetwork = TransactionMobileDockerHelper.SetupTestNetwork("sharednetwork", true);
+            //// Setup a network for the DB Server
+            //Setup.DatabaseServerNetwork = TransactionMobileDockerHelper.SetupTestNetwork("sharednetwork", true);
 
-            TestingLogger logger = new TestingLogger();
+            //TestingLogger logger = new TestingLogger();
 
-            // Start the Database Server here
-            DatabaseServerContainer = TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
-                                                                                                        logger,
-                                                                                                        "justin2004/mssql_server_tiny",
-                                                                                                        Setup.DatabaseServerNetwork,
-                                                                                                        "",
-                                                                                                        dockerCredentials,
-                                                                                                        Setup.SqlUserName,
-                                                                                                        Setup.SqlPassword);
+            //// Start the Database Server here
+            //DatabaseServerContainer = await TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
+            //                                                                                            logger,
+            //                                                                                            "justin2004/mssql_server_tiny",
+            //                                                                                            Setup.DatabaseServerNetwork,
+            //                                                                                            "",
+            //                                                                                            dockerCredentials,
+            //                                                                                            Setup.SqlUserName,
+            //                                                                                            Setup.SqlPassword).ConfigureAwait(false);
         }
 
-        public static String GetConnectionString(String databaseName)
-        {
-            return $"server={Setup.DatabaseServerContainer.Name};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
-        }
+        //public static String GetConnectionString(String databaseName)
+        //{
+        //    //return $"server={Setup.DatabaseServerContainer.Name};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
+        //}
 
-        public static String GetLocalConnectionString(String databaseName)
-        {
-            Int32 databaseHostPort = Setup.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
+        //public static String GetLocalConnectionString(String databaseName)
+        //{
+            //Int32 databaseHostPort = Setup.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
 
-            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
-            if (String.IsNullOrEmpty(localhostaddress))
-            {
-                localhostaddress = "192.168.1.67";
-            }
+            //String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            //if (String.IsNullOrEmpty(localhostaddress))
+            //{
+            //    localhostaddress = "192.168.1.67";
+            //}
 
-            return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
-        }
+            //return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
+        //}
     }
 }
