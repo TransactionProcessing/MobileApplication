@@ -3,11 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Net.Http;
+    using System.Threading;
     using Common;
     using Events;
     using Models;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
+    using Services;
     using Syncfusion.Licensing;
     using Unity;
     using Unity.Lifetime;
@@ -122,12 +125,17 @@
         protected override async void OnStart()
         {
             this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
-
+            
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
-
+            
             // show the login page
             await loginPresenter.Start();
+
+            IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+
+            App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+            
         }
 
         #endregion

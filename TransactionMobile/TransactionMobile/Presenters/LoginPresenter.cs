@@ -153,13 +153,12 @@
         /// </summary>
         private async Task GetConfiguration()
         {
-            // TODO: this may well make a server call of some kind in future....
-
             if (App.Configuration == null)
             {
                 App.Configuration = new DevelopmentConfiguration();
             }
 
+            // TODO: this may well make a server call of some kind in future....
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Id is {App.Configuration.ClientId}"));
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Secret is {App.Configuration.ClientSecret}"));
             this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"SecurityService Url is {App.Configuration.SecurityService}"));
