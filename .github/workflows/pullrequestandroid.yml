@@ -53,10 +53,11 @@ jobs:
     - uses: malinskiy/action-android/install-sdk@release/0.0.7
     - run: echo $ANDROID_HOME
     - run: |
-          cd $ANDROID_HOME/tools/bin
-          ./adb devices
           #./sdkmanager "build-tools;30.0.2"
+          cd $ANDROID_HOME/tools/bin
           ./sdkmanager --update
+          cd $ANDROID_HOME/platform-tools
+          ./adb devices
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
