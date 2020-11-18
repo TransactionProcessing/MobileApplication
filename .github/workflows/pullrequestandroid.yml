@@ -52,12 +52,12 @@ jobs:
    
     - uses: malinskiy/action-android/install-sdk@release/0.0.7
     - run: echo $ANDROID_HOME
-    - run: |
+    #- run: |
           #./sdkmanager "build-tools;30.0.2"
-          cd $ANDROID_HOME/tools/bin
-          ./sdkmanager --update
-          brew cask install android-platform-tools
-          adb devices
+          #cd $ANDROID_HOME/tools/bin
+          #./sdkmanager --update
+          #brew cask install android-platform-tools
+          #adb devices
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
