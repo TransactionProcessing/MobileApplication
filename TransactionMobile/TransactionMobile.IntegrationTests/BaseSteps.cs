@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.IntegrationTests
 {
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
@@ -95,14 +96,13 @@ namespace TransactionMobile.IntegrationTests
         [AfterStep]
         public void CheckStepStatus()
         {
-            //Exception exception = ScenarioContext.Current.TestError;
-            //if (exception != null)
-            //{
+            if (Debugger.IsAttached == false)
+            {
                 // Build the screenshot name
                 String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
                 String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
                 String stepName = this.ScenarioContext.GetStepNameForScreenshot();
-                
+
                 // Capture screen shot on exception
                 FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
 
@@ -137,7 +137,7 @@ namespace TransactionMobile.IntegrationTests
                     FileInfo fi = screenshot.CopyTo(fileName, true);
                     Console.WriteLine($"{fi.FullName} exists");
                 }
-                //}
+            }
         }
     }
 

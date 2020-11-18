@@ -244,6 +244,7 @@
     <Content Include="DBScripts\5 - Indexes.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="projections\continuous\MerchantAggregator.js" />
     <None Include="projections\continuous\MerchantBalanceCalculator.js" />
   </ItemGroup>
   <ItemGroup />

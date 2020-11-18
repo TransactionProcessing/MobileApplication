@@ -10,6 +10,7 @@ using Xamarin.UITest.Queries;
 
 namespace TransactionMobile.IntegrationTests.Common
 {
+    using System.Diagnostics;
     using System.Threading;
     using Newtonsoft.Json;
     using NUnit.Framework;
@@ -60,18 +61,23 @@ namespace TransactionMobile.IntegrationTests.Common
         public static void StartApp()
         {
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //string binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "Binaries");
-
+            
             if (Platform == Platform.Android)
             {
-                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.Android/bin/Release");
-                app = ConfigureApp
-                      .Android
-                      // Used to run a .apk file:
-                      .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk"))
-                      //.Debug()
-                      .EnableLocalScreenshots()
-                      .StartApp();
+                if (Debugger.IsAttached)
+                {
+                    app = ConfigureApp.Android.InstalledApp("com.transactionprocessing.transactionmobile").EnableLocalScreenshots().Debug().StartApp();
+                }
+                else
+                {
+                    String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.Android/bin/Release");
+
+                    app = ConfigureApp.Android
+                                      // Used to run a .apk file:
+                                      .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk")).EnableLocalScreenshots().StartApp();
+                }
+
+                return;
             }
 
             if (Platform == Platform.iOS)
@@ -79,13 +85,20 @@ namespace TransactionMobile.IntegrationTests.Common
                 String device = Environment.GetEnvironmentVariable("Device");
                 String deviceIdentifier = AppManager.GetDeviceIdentifier(device);
 
-                String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
-                app = ConfigureApp
-                      .iOS
-                      // Used to run a .app file on an ios simulator:
-                      .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app"))
-                      .DeviceIdentifier(deviceIdentifier) // iPhone 11
-                      .StartApp();
+                if (Debugger.IsAttached)
+                {
+                    app = ConfigureApp.iOS.EnableLocalScreenshots().Debug().StartApp();
+                }
+                else
+                {
+
+                    String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
+                    app = ConfigureApp.iOS
+                                      // Used to run a .app file on an ios simulator:
+                                      .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app")).DeviceIdentifier(deviceIdentifier)
+                                      .StartApp();
+                }
+                return;
             }
         }
 

@@ -397,7 +397,7 @@ namespace TransactionMobile.IntegrationTests.Common
                         try
                         {
                             Logger.LogInformation($"Creating projection [{projectionName}]");
-                            await projectionManager.CreateContinuousProjection(projectionName, projection, false, "admin", "changeit", CancellationToken.None);
+                            await projectionManager.CreateContinuousProjection(projectionName, projection, true, "admin", "changeit", CancellationToken.None);
                         }
                         catch (Exception e)
                         {
