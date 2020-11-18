@@ -19,10 +19,7 @@ jobs:
     - uses: actions/checkout@v2.3.4
 
     - name: Cache Simulator Data
-      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"
-
-    #- name: Install VirtualBox
-    #  run: brew cask install virtualbox      
+      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"    
           
     #- name: Create Docker VM
     #  shell: bash

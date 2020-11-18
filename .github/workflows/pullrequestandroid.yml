@@ -15,10 +15,7 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v2.3.4
-
-    - name: Install VirtualBox
-      run: brew cask install virtualbox      
+    - uses: actions/checkout@v2.3.4      
           
     - name: Create Docker VM
       shell: bash
@@ -58,7 +55,8 @@ jobs:
     - run: echo $ANDROID_HOME
     - run: |
           cd $ANDROID_HOME/tools/bin
-          ./sdkmanager "build-tools;30.0.2"
+          #./sdkmanager "build-tools;30.0.2"
+          ./sdkmanager --update
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
