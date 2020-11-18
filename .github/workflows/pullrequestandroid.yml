@@ -57,8 +57,7 @@ jobs:
           cd $ANDROID_HOME/tools/bin
           ./sdkmanager --update
           brew cask install android-platform-tools
-          cd $ANDROID_HOME/platform-tools
-          ./adb devices
+          adb devices
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
