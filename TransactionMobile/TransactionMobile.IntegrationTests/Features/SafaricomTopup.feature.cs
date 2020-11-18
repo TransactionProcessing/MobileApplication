@@ -407,7 +407,7 @@ this.FeatureBackground();
                             "TopupAmount"});
                 table26.AddRow(new string[] {
                             "123456789",
-                            "1000"});
+                            "10"});
 #line 92
  testRunner.When("I enter the following topup details", ((string)(null)), table26, "When ");
 #line hidden
@@ -497,7 +497,7 @@ this.FeatureBackground();
                             "TopupAmount"});
                 table27.AddRow(new string[] {
                             "123456789",
-                            "100000"});
+                            "1000"});
 #line 122
  testRunner.When("I enter the following topup details", ((string)(null)), table27, "When ");
 #line hidden
