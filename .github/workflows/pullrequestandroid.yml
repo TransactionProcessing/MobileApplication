@@ -51,10 +51,10 @@ jobs:
         echo ::set-env name=localhostaddress::${DOCKER_IP}        
    
     - uses: malinskiy/action-android/install-sdk@release/0.0.7
-    - run: adb devices
     - run: echo $ANDROID_HOME
     - run: |
           cd $ANDROID_HOME/tools/bin
+          ./adb devices
           #./sdkmanager "build-tools;30.0.2"
           ./sdkmanager --update
     
