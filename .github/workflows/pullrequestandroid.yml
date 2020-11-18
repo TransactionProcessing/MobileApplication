@@ -53,8 +53,8 @@ jobs:
     - uses: malinskiy/action-android/install-sdk@release/0.0.6
     - run: echo $ANDROID_HOME
     - run: |
-          ./sdkmanager "build-tools;30.0.2"
-          #cd $ANDROID_HOME/tools/bin
+          cd $ANDROID_HOME/tools/bin
+          ./sdkmanager "build-tools;30.0.2"          
           #./sdkmanager --update
           #brew cask install android-platform-tools
           #adb devices
