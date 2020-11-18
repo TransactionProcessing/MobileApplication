@@ -38,10 +38,10 @@
             unityContainer.RegisterInstance(httpClient, new SingletonLifetimeManager());
             unityContainer.RegisterType<Func<String, String>>(new InjectionFactory(c => new Func<String, String>(configSetting =>
                                                                                                                  {
-                                                                                                                     if (configSetting == "ConfigServiceUrl")
-                                                                                                                     {
-                                                                                                                         return "https://pxj6yf.deta.dev";
-                                                                                                                     }
+                                                                                                                     //if (configSetting == "ConfigServiceUrl")
+                                                                                                                     //{
+                                                                                                                     //    return "https://pxj6yf.deta.dev";
+                                                                                                                     //}
 
                                                                                                                      if (App.Configuration != null)
                                                                                                                      {
