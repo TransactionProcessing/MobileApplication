@@ -12,11 +12,12 @@ jobs:
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
         ScreenshotFolder: "/Users/runner/screenshots"
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         Device: "iPhone 11 (13.7)"
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2.3.4
 
     - name: Cache Simulator Data
       run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"
@@ -77,7 +78,7 @@ jobs:
     #- name: Run Integration Tests - iOS
     #  run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
    
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2.2.1
       if: failure()
       with:
         name: screenshots

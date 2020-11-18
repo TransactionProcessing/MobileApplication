@@ -11,10 +11,11 @@ jobs:
     env:
         ANDROID_HOME: "/Users/runner/Library/Android/sdk"
         ScreenshotFolder: "/Users/runner/screenshots"
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2.3.4
 
     - name: Install VirtualBox
       run: brew cask install virtualbox      
@@ -86,7 +87,7 @@ jobs:
           abi: x86   
           verbose: false
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2.2.1
       if: failure()
       with:
         name: screenshots
