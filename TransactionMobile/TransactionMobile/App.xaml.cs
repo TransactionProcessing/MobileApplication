@@ -132,7 +132,7 @@
             // show the login page
             await loginPresenter.Start();
 
-            if (App.Configuration != null)
+            if (App.Configuration == null)
             {
                 IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
 
