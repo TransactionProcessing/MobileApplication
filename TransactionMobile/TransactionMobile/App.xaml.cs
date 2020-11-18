@@ -132,9 +132,9 @@
             // show the login page
             await loginPresenter.Start();
 
-            IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+//            IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
 
-            App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+//            App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
             
         }
 
