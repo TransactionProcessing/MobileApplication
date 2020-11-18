@@ -91,7 +91,7 @@ Scenario: Successful Safaricom Topup
 	
 	When I enter the following topup details
 	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 1000     |
+	| 123456789            | 10			 |
 	And I tap on Perform Topup
 	
 	Then The Topup Successful Screen will be displayed
@@ -121,7 +121,7 @@ Scenario: Failed Safaricom Topup
 
 	When I enter the following topup details
 	| CustomerMobileNumber | TopupAmount |
-	| 123456789            | 100000      |
+	| 123456789            | 1000        |
 	And I tap on Perform Topup
 	
 	Then The Topup Failed Screen will be displayed
