@@ -139,12 +139,13 @@
                 IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
 
                 App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-
-                this.AnalysisLogger.TrackEvent($"Got config from REST {JsonConvert.SerializeObject(App.Configuration)}");
+                DebugInformationEvent d = DebugInformationEvent.Create($"Got config from REST {JsonConvert.SerializeObject(App.Configuration)}");
+                this.AnalysisLogger.TrackEvent(d);
             }
             else
             {
-                this.AnalysisLogger.TrackEvent($"Config Already Set {JsonConvert.SerializeObject(App.Configuration)}");
+                DebugInformationEvent d = DebugInformationEvent.Create($"Config Already Set {JsonConvert.SerializeObject(App.Configuration)}");
+                this.AnalysisLogger.TrackEvent(d);
             }
         }
 
