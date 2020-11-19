@@ -8,6 +8,7 @@
     using Common;
     using Events;
     using Models;
+    using Newtonsoft.Json;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
     using Services;
@@ -132,12 +133,19 @@
             // show the login page
             await loginPresenter.Start();
 
-            //if (App.Configuration == null)
-            //{
-            //    IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+            if (App.Configuration == null)
+            {
+                this.AnalysisLogger.TrackEvent("About to get config from REST");
+                IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
 
-            //    App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-            //}
+                App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+
+                this.AnalysisLogger.TrackEvent($"Got config from REST {JsonConvert.SerializeObject(App.Configuration)}");
+            }
+            else
+            {
+                this.AnalysisLogger.TrackEvent($"Config Already Set {JsonConvert.SerializeObject(App.Configuration)}");
+            }
         }
 
         #endregion
