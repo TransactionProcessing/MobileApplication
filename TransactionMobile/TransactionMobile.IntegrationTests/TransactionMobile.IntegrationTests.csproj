@@ -221,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Common\config\db.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\Login.feature" />
     <None Include="Features\SafaricomTopup.feature">
       <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>

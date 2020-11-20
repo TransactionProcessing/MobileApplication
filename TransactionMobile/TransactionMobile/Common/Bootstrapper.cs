@@ -40,7 +40,7 @@
                                                                                                                  {
                                                                                                                      if (configSetting == "ConfigServiceUrl")
                                                                                                                      {
-                                                                                                                         return "https://gimppxj6yf.deta.dev";
+                                                                                                                         return "https://pxj6yf.deta.dev";
                                                                                                                      }
 
                                                                                                                      if (App.Configuration != null)

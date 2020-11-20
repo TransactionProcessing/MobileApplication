@@ -1,6 +1,8 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
     using Android.App;
     using Android.Content.PM;
@@ -9,6 +11,7 @@
     using Common;
     using Events;
     using Java.Interop;
+    using Services;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
     using Platform = Xamarin.Essentials.Platform;
@@ -38,6 +41,11 @@
 
         #endregion
 
+        public MainActivity()
+        {
+            
+        }
+
         #region Methods
 
         /// <summary>
@@ -61,21 +69,34 @@
         /// <summary>
         /// Sets the configuration.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
+        /// <param name="configurationHost">The configuration host.</param>
         [Export("SetConfiguration")]
-        public void SetConfiguration(String configuration)
+        public void SetConfiguration(String configurationHost)
         {
-            var configItems = configuration.Split(',');
-            var configurationObject = new Configuration
-                                      {
-                                          ClientId = configItems[0],
-                                          ClientSecret = configItems[1],
-                                          SecurityService = configItems[2],
-                                          TransactionProcessorACL = configItems[3],
-                                          EstateManagement = configItems[4]
-                                      };
+            Console.WriteLine("In Set Configuration");
 
-            App.Configuration = configurationObject;
+            App.ConfigHostAddress = configurationHost;
+
+            IDevice device = new AndroidDevice();
+
+            String deviceId = device.GetDeviceIdentifier();
+
+            // Now get the configuration
+            Func<String, String> resolver = new Func<String, String>(configSetting => { return configurationHost; });
+
+            ConfigurationServiceClient configClient = new ConfigurationServiceClient(resolver, new HttpClient());
+
+            Task.Run(async () => { App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None); });
+        }
+
+        [Export("GetDeviceIdentifier")]
+        public String GetDeviceIdentifier()
+        {
+            Console.WriteLine("In Get Device Identifier");
+
+            IDevice device = new AndroidDevice();
+
+            return device.GetDeviceIdentifier();
         }
 
         /// <summary>

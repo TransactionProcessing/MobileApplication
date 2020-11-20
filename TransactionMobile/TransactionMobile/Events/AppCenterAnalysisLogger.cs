@@ -97,7 +97,7 @@
         {
             String eventName = pageRequestedEvent.GetType().Name;
             
-            //Analytics.TrackEvent(eventName, pageRequestedEvent.GetEventData());
+            Analytics.TrackEvent(eventName, pageRequestedEvent.GetEventData());
         }
 
         /// <summary>
@@ -108,7 +108,7 @@
         {
             String eventName = pageInitialisedEvent.GetType().Name;
 
-            //Analytics.TrackEvent(eventName, pageInitialisedEvent.GetEventData());
+            Analytics.TrackEvent(eventName, pageInitialisedEvent.GetEventData());
         }
 
         /// <summary>
@@ -130,7 +130,7 @@
         {
             String eventName = messageSentToHostEvent.GetType().Name;
 
-            //Analytics.TrackEvent(eventName, messageSentToHostEvent.GetEventData());
+            Analytics.TrackEvent(eventName, messageSentToHostEvent.GetEventData());
         }
 
         /// <summary>
@@ -141,7 +141,7 @@
         {
             String eventName = messageReceivedFromHostEvent.GetType().Name;
 
-            //Analytics.TrackEvent(eventName, messageReceivedFromHostEvent.GetEventData());
+            Analytics.TrackEvent(eventName, messageReceivedFromHostEvent.GetEventData());
         }
 
         #endregion

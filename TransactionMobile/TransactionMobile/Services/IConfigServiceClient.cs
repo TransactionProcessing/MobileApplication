@@ -4,6 +4,7 @@ using System.Text;
 
 namespace TransactionMobile.Services
 {
+    using System.Net;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -44,16 +45,20 @@ namespace TransactionMobile.Services
         public async Task<Configuration> GetConfiguration(String deviceIdentifier,
                                                           CancellationToken cancellationToken)
         {
+            Console.WriteLine($"Getting config for device [{deviceIdentifier}]");
             Configuration response = null;
             String requestUri = this.BuildRequestUrl($"/configuration/{deviceIdentifier}");
 
+            Console.WriteLine($"requestUri: {requestUri}");
             try
             {
                 // Make the Http Call here
                 HttpResponseMessage httpResponse = await this.HttpClient.GetAsync(requestUri, cancellationToken);
-
+                    
                 // Process the response
                 String content = await this.HandleResponse(httpResponse, cancellationToken);
+
+                Console.WriteLine($"content: {content}");
 
                 // call was successful so now deserialise the body to the response object
                 response = JsonConvert.DeserializeObject<Configuration>(content);
@@ -67,6 +72,20 @@ namespace TransactionMobile.Services
             }
 
             return response;
+        }
+
+        protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
+                                                       CancellationToken cancellationToken)
+        {
+            String content = await responseMessage.Content.ReadAsStringAsync();
+
+            if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                // No error as maybe running under CI (which has no internet)
+                return content;
+            }
+            
+            return await base.HandleResponse(responseMessage, cancellationToken);
         }
     }
 }

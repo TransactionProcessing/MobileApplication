@@ -5,6 +5,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
     using System.Threading;
+    using System.Threading.Tasks;
     using Common;
     using Events;
     using Models;
@@ -30,6 +31,11 @@
         /// The configuration
         /// </summary>
         public static IConfiguration Configuration;
+
+        /// <summary>
+        /// The configuration host address
+        /// </summary>
+        public static String ConfigHostAddress;
 
         /// <summary>
         /// Unity container
@@ -78,6 +84,7 @@
         public App(IDevice device,
                    IAnalysisLogger analysisLogger)
         {
+            Console.WriteLine("In App Ctor");
             this.Device = device;
             this.AnalysisLogger = analysisLogger;
 
@@ -89,6 +96,22 @@
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.AnalysisLogger, new ContainerControlledLifetimeManager());
+            
+            if (App.Configuration == null)
+            {
+                Task.Run(async () =>
+                         {
+
+                             Console.WriteLine("Config is null");
+
+                             Console.WriteLine(App.ConfigHostAddress);
+                             IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+
+                             App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+
+                             Console.WriteLine("Config retrieved");
+                         });
+            }
         }
 
         #endregion
@@ -125,6 +148,7 @@
         /// </remarks>
         protected override async void OnStart()
         {
+            Console.WriteLine("In On Start");
             this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
             
             // Handle when your app starts
@@ -132,21 +156,6 @@
             
             // show the login page
             await loginPresenter.Start();
-
-            if (App.Configuration == null)
-            {
-                this.AnalysisLogger.TrackEvent("About to get config from REST");
-                IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
-
-                App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-                DebugInformationEvent d = DebugInformationEvent.Create($"Got config from REST {JsonConvert.SerializeObject(App.Configuration)}");
-                this.AnalysisLogger.TrackEvent(d);
-            }
-            else
-            {
-                DebugInformationEvent d = DebugInformationEvent.Create($"Config Already Set {JsonConvert.SerializeObject(App.Configuration)}");
-                this.AnalysisLogger.TrackEvent(d);
-            }
         }
 
         #endregion

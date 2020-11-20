@@ -44,26 +44,35 @@ namespace TransactionMobile.IntegrationTests.Common
             }
         }
 
-        public static void SetConfiguration(String clientId, String clientSecret, String securityServiceUri, String transactionProcessorAclUrl, String estateManagementUrl)
+        public static String GetDeviceIdentifier()
         {
-            String configuration = $"{clientId},{clientSecret},{securityServiceUri},{transactionProcessorAclUrl},{estateManagementUrl}";
+            String deviceIdentifier = null;
+
             if (AppManager.platform == Platform.Android)
             {
-                try
-                {
-                    AppManager.app.Invoke("SetConfiguration", configuration);
+                var result = AppManager.app.Invoke("GetDeviceIdentifier");
 
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-                
+                return result.ToString();
+            }
+            else if (AppManager.platform == Platform.iOS)
+            {
+                var result = AppManager.app.Invoke("GetDeviceIdentifier:");
+
+                return result.ToString();
+            }
+
+            return deviceIdentifier;
+        }
+
+        public static void SetConfiguration(String configHostAddress)
+        {
+            if (AppManager.platform == Platform.Android)
+            {
+                AppManager.app.Invoke("SetConfiguration", configHostAddress);
             }
             else if(AppManager.platform == Platform.iOS)
             {
-                AppManager.app.Invoke("SetConfiguration:", configuration);
+                AppManager.app.Invoke("SetConfiguration:", configHostAddress);
             }
         }
         

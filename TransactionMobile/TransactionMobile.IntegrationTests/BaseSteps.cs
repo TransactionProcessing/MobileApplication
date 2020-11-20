@@ -9,6 +9,7 @@ namespace TransactionMobile.IntegrationTests
     using System.Diagnostics;
     using System.IO;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Sockets;
     using System.Reflection;
     using System.Threading;
@@ -20,6 +21,7 @@ namespace TransactionMobile.IntegrationTests
     using EstateManagement.DataTransferObjects;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
+    using Newtonsoft.Json;
     using NUnit.Framework;
     using SecurityService.DataTransferObjects;
     using SecurityService.DataTransferObjects.Requests;
@@ -317,18 +319,33 @@ namespace TransactionMobile.IntegrationTests
 
             var merchantClient = this.TestingContext.GetClientDetails("merchantClient");
 
-            // TODO: Handle local test running
             String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
             String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
             String estateManagementUrl = this.TestingContext.DockerHelper.EstateManagementBaseAddress;
+            String mobileConfigUrl = this.TestingContext.DockerHelper.MobileConfigBaseAddress;
 
             Console.WriteLine($"securityService [{securityService}]");
             Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
             Console.WriteLine($"estateManagementUrl [{estateManagementUrl}]");
+            Console.WriteLine($"mobileConfigUrl [{mobileConfigUrl}]");
 
-            AppManager.SetConfiguration(merchantClient.ClientId, merchantClient.ClientSecret,
-                                        securityService, transactionProcessorAcl,
-                                        estateManagementUrl);
+            // Setup the config host
+            var deviceIdentifier = AppManager.GetDeviceIdentifier();
+            var config = new
+                         {
+                             id = deviceIdentifier,
+                             deviceIdentifier,
+                             clientId = merchantClient.ClientId,
+                             clientSecret = merchantClient.ClientSecret,
+                             securityService = securityService,
+                             estateManagement = estateManagementUrl,
+                             transactionProcessorACL = transactionProcessorAcl
+
+                         };
+            StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
+            var resp = await this.TestingContext.DockerHelper.MobileConfigHttpClient.PostAsync("configuration", content, CancellationToken.None).ConfigureAwait(false);
+
+            AppManager.SetConfiguration(mobileConfigUrl);
         }
 
         [Given(@"I have a token to access the estate management and transaction processor acl resources")]
