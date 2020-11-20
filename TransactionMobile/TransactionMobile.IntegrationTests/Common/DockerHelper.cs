@@ -669,7 +669,7 @@ namespace TransactionMobile.IntegrationTests.Common
             logger.LogInformation("About to Start Mobile Config Container");
 
             String executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String config = $"{executableLocation}\\Common\\config\\db.json";
+            String config = $"{executableLocation}/Common/config/db.json";
 
             IContainerService mobileConfigContainer = new Builder().UseContainer().UseImage(imageName).ExposePort(80).WithName(containerName).UseNetwork(networkService)
                                                                    .CopyOnStart(config, "/data").Build().Start();
