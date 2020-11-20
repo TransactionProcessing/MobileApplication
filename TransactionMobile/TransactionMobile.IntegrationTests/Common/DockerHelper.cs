@@ -22,6 +22,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.Client;
+    using Newtonsoft.Json;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
     using Shouldly;
@@ -675,6 +676,35 @@ namespace TransactionMobile.IntegrationTests.Common
             
             logger.LogInformation("Event Store Container Started");
 
+            // Verify it works
+            var port = mobileConfigContainer.ToHostExposedEndpoint("80/tcp").Port;
+
+            HttpClient client = new HttpClient();
+            String mobileConfigUrl = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{port}";
+            var configObject = new
+                         {
+                             id = 1,
+                             deviceIdentifier = 1,
+                             clientId = "clientId",
+                             clientSecret = "clientSecret",
+                             securityService = "securityService",
+                             estateManagement = "estateManagementUrl",
+                             transactionProcessorACL = "transactionProcessorAcl"
+                         };
+            StringContent content = new StringContent(JsonConvert.SerializeObject(configObject), Encoding.UTF8, "application/json");
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration/");
+            message.Content = content;
+
+            try
+            {
+                var response = await client.SendAsync(message, CancellationToken.None);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
             return mobileConfigContainer;
         }
 
