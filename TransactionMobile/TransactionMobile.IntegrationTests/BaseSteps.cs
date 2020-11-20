@@ -343,6 +343,7 @@ namespace TransactionMobile.IntegrationTests
                          };
 
             Console.WriteLine(JsonConvert.SerializeObject(config));
+            Console.WriteLine(this.TestingContext.DockerHelper.MobileConfigHttpClient.BaseAddress.AbsoluteUri);
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
             var resp = await this.TestingContext.DockerHelper.MobileConfigHttpClient.PostAsync("/configuration", content, CancellationToken.None).ConfigureAwait(false);
