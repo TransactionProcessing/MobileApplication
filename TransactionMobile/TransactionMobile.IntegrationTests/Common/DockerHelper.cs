@@ -341,8 +341,7 @@ namespace TransactionMobile.IntegrationTests.Common
             this.ACLHttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
 
             this.MobileConfigHttpClient = new HttpClient();
-            this.MobileConfigHttpClient.BaseAddress = new Uri(MobileConfigBaseAddressResolver(String.Empty));
-
+            
             await this.LoadEventStoreProjections().ConfigureAwait(false);
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
