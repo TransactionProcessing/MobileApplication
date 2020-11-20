@@ -676,35 +676,6 @@ namespace TransactionMobile.IntegrationTests.Common
             
             Thread.Sleep(1000);
             logger.LogInformation("Mobile Config Container Started");
-
-            //// Verify it works
-            //var port = mobileConfigContainer.ToHostExposedEndpoint("80/tcp").Port;
-
-            //HttpClient client = new HttpClient();
-            //String mobileConfigUrl = $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{port}";
-            //var configObject = new
-            //             {
-            //                 id = 1,
-            //                 deviceIdentifier = 1,
-            //                 clientId = "clientId",
-            //                 clientSecret = "clientSecret",
-            //                 securityService = "securityService",
-            //                 estateManagement = "estateManagementUrl",
-            //                 transactionProcessorACL = "transactionProcessorAcl"
-            //             };
-            //StringContent content = new StringContent(JsonConvert.SerializeObject(configObject), Encoding.UTF8, "application/json");
-            //HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration/");
-            //message.Content = content;
-
-            //try
-            //{
-            //    var response = await client.SendAsync(message, CancellationToken.None);
-            //}
-            //catch(Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    throw;
-            //}
             
             return mobileConfigContainer;
         }

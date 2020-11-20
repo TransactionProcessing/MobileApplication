@@ -346,21 +346,10 @@ namespace TransactionMobile.IntegrationTests
             Console.WriteLine($"Uri [{ mobileConfigUrl}/configuration]");
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
-            //var resp = await this.TestingContext.DockerHelper.MobileConfigHttpClient.PostAsync("/configuration", content, CancellationToken.None).ConfigureAwait(false);
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration");
             message.Content = content;
-            try
-            {
-                await this.TestingContext.DockerHelper.MobileConfigHttpClient.SendAsync(message, CancellationToken.None).ConfigureAwait(false);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.Message);
-                }
-            }
+
+            await this.TestingContext.DockerHelper.MobileConfigHttpClient.SendAsync(message, CancellationToken.None).ConfigureAwait(false);
 
             AppManager.SetConfiguration(mobileConfigUrl);
         }
