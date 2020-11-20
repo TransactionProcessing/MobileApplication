@@ -3,11 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Common;
     using Events;
     using Models;
+    using Newtonsoft.Json;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
+    using Services;
     using Syncfusion.Licensing;
     using Unity;
     using Unity.Lifetime;
@@ -26,6 +31,11 @@
         /// The configuration
         /// </summary>
         public static IConfiguration Configuration;
+
+        /// <summary>
+        /// The configuration host address
+        /// </summary>
+        public static String ConfigHostAddress;
 
         /// <summary>
         /// Unity container
@@ -74,6 +84,7 @@
         public App(IDevice device,
                    IAnalysisLogger analysisLogger)
         {
+            Console.WriteLine("In App Ctor");
             this.Device = device;
             this.AnalysisLogger = analysisLogger;
 
@@ -85,6 +96,22 @@
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.AnalysisLogger, new ContainerControlledLifetimeManager());
+            
+            if (App.Configuration == null)
+            {
+                Task.Run(async () =>
+                         {
+
+                             Console.WriteLine("Config is null");
+
+                             Console.WriteLine(App.ConfigHostAddress);
+                             IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+
+                             App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+
+                             Console.WriteLine("Config retrieved");
+                         });
+            }
         }
 
         #endregion
@@ -121,11 +148,12 @@
         /// </remarks>
         protected override async void OnStart()
         {
+            Console.WriteLine("In On Start");
             this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
-
+            
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
-
+            
             // show the login page
             await loginPresenter.Start();
         }

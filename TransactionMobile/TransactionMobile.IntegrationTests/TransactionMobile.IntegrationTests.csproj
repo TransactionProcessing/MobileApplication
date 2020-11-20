@@ -221,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Common\config\db.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Features\Login.feature" />
     <None Include="Features\SafaricomTopup.feature">
       <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>
@@ -244,6 +247,7 @@
     <Content Include="DBScripts\5 - Indexes.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="projections\continuous\MerchantAggregator.js" />
     <None Include="projections\continuous\MerchantBalanceCalculator.js" />
   </ItemGroup>
   <ItemGroup />

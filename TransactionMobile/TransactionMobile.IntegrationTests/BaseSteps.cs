@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.IntegrationTests
 {
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Sockets;
     using System.Reflection;
     using System.Threading;
@@ -19,6 +21,7 @@ namespace TransactionMobile.IntegrationTests
     using EstateManagement.DataTransferObjects;
     using EstateManagement.DataTransferObjects.Requests;
     using EstateManagement.DataTransferObjects.Responses;
+    using Newtonsoft.Json;
     using NUnit.Framework;
     using SecurityService.DataTransferObjects;
     using SecurityService.DataTransferObjects.Requests;
@@ -95,14 +98,13 @@ namespace TransactionMobile.IntegrationTests
         [AfterStep]
         public void CheckStepStatus()
         {
-            //Exception exception = ScenarioContext.Current.TestError;
-            //if (exception != null)
-            //{
+            if (Debugger.IsAttached == false)
+            {
                 // Build the screenshot name
                 String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
                 String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
                 String stepName = this.ScenarioContext.GetStepNameForScreenshot();
-                
+
                 // Capture screen shot on exception
                 FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
 
@@ -137,7 +139,7 @@ namespace TransactionMobile.IntegrationTests
                     FileInfo fi = screenshot.CopyTo(fileName, true);
                     Console.WriteLine($"{fi.FullName} exists");
                 }
-                //}
+            }
         }
     }
 
@@ -317,18 +319,39 @@ namespace TransactionMobile.IntegrationTests
 
             var merchantClient = this.TestingContext.GetClientDetails("merchantClient");
 
-            // TODO: Handle local test running
             String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
             String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
             String estateManagementUrl = this.TestingContext.DockerHelper.EstateManagementBaseAddress;
+            String mobileConfigUrl = this.TestingContext.DockerHelper.MobileConfigBaseAddress;
 
             Console.WriteLine($"securityService [{securityService}]");
             Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
             Console.WriteLine($"estateManagementUrl [{estateManagementUrl}]");
+            Console.WriteLine($"mobileConfigUrl [{mobileConfigUrl}]");
 
-            AppManager.SetConfiguration(merchantClient.ClientId, merchantClient.ClientSecret,
-                                        securityService, transactionProcessorAcl,
-                                        estateManagementUrl);
+            // Setup the config host
+            var deviceIdentifier = AppManager.GetDeviceIdentifier();
+            var config = new
+                         {
+                             id = deviceIdentifier,
+                             deviceIdentifier,
+                             clientId = merchantClient.ClientId,
+                             clientSecret = merchantClient.ClientSecret,
+                             securityService = securityService,
+                             estateManagement = estateManagementUrl,
+                             transactionProcessorACL = transactionProcessorAcl
+                         };
+
+            Console.WriteLine(JsonConvert.SerializeObject(config));
+            Console.WriteLine($"Uri [{ mobileConfigUrl}/configuration]");
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration");
+            message.Content = content;
+
+            await this.TestingContext.DockerHelper.MobileConfigHttpClient.SendAsync(message, CancellationToken.None).ConfigureAwait(false);
+
+            AppManager.SetConfiguration(mobileConfigUrl);
         }
 
         [Given(@"I have a token to access the estate management and transaction processor acl resources")]

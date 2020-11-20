@@ -33,13 +33,18 @@
             unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new SingletonLifetimeManager());
             unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new SingletonLifetimeManager());
             unityContainer.RegisterType<IEstateClient, EstateClient>(new SingletonLifetimeManager());
+            unityContainer.RegisterType<IConfigurationServiceClient, ConfigurationServiceClient>(new SingletonLifetimeManager());
             HttpClient httpClient = new HttpClient();
             unityContainer.RegisterInstance(httpClient, new SingletonLifetimeManager());
             unityContainer.RegisterType<Func<String, String>>(new InjectionFactory(c => new Func<String, String>(configSetting =>
                                                                                                                  {
+                                                                                                                     if (configSetting == "ConfigServiceUrl")
+                                                                                                                     {
+                                                                                                                         return "https://pxj6yf.deta.dev";
+                                                                                                                     }
+
                                                                                                                      if (App.Configuration != null)
                                                                                                                      {
-
                                                                                                                          IConfiguration config = App.Configuration;
 
                                                                                                                          if (configSetting == "TransactionProcessorACL")

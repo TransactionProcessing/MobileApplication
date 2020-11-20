@@ -22,6 +22,7 @@ namespace TransactionMobile.IntegrationTests.Common
     using Ductus.FluentDocker.Model.Builders;
     using Ductus.FluentDocker.Services.Extensions;
     using EstateManagement.Client;
+    using Newtonsoft.Json;
     using NUnit.Framework.Internal;
     using SecurityService.Client;
     using Shouldly;
@@ -39,7 +40,8 @@ namespace TransactionMobile.IntegrationTests.Common
         /// <summary>
         /// The HTTP client
         /// </summary>
-        public HttpClient HttpClient;
+        public HttpClient ACLHttpClient;
+        public HttpClient MobileConfigHttpClient;
 
         /// <summary>
         /// The security service client
@@ -86,7 +88,11 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         protected Int32 TransactionProcessorACLPort;
 
+        protected Int32 MobileConfigurationContainerPort;
+
         protected String SecurityServiceContainerName;
+
+        protected String MobileConfigurationContainerName;
 
         public String EstateManagementContainerName;
 
@@ -196,11 +202,18 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TransactionProcessorContainerName = $"txnprocessor{testGuid:N}";
             this.TransactionProcessorACLContainerName = $"txnprocessoracl{testGuid:N}";
             this.TestHostContainerName = $"testhosts{testGuid:N}";
+            this.MobileConfigurationContainerName = $"mobileConfig{this.TestId:N}";
 
             (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
             INetworkService testNetwork = TransactionMobileDockerHelper.SetupTestNetwork();
             this.TestNetworks.Add(testNetwork);
+            
+
+            IContainerService mobileConfigurationContainer = await SetupMobileConfigurationContainer(this.MobileConfigurationContainerName, 
+                                                                                                     this.Logger, 
+                                                                                                     "clue/json-server", 
+                                                                                                     testNetwork);
 
             // Start the Database Server here
             IContainerService databaseServerContainer = await TransactionMobileDockerHelper.StartSqlContainerWithOpenConnection(Setup.SqlServerContainerName,
@@ -298,7 +311,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                          transactionProcessorACLContainer,
                                          estateReportingContainer,
                                          testhostContainer,
-                                         databaseServerContainer
+                                         databaseServerContainer,
+                                         mobileConfigurationContainer
                                      });
 
             // Cache the ports
@@ -308,22 +322,27 @@ namespace TransactionMobile.IntegrationTests.Common
             this.EventStoreHttpPort = eventStoreContainer.ToHostExposedEndpoint("2113/tcp").Port;
             this.TransactionProcessorPort = transactionProcessorContainer.ToHostExposedEndpoint("5002/tcp").Port;
             this.TransactionProcessorACLPort = transactionProcessorACLContainer.ToHostExposedEndpoint("5003/tcp").Port;
+            this.MobileConfigurationContainerPort = mobileConfigurationContainer.ToHostExposedEndpoint("80/tcp").Port;
 
             String EstateManagementBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.EstateManagementApiPort}";
             String SecurityServiceBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.SecurityServicePort}";
             String TransactionProcessorAclBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.TransactionProcessorACLPort}";
+            String MobileConfigBaseAddressResolver(String api) => $"http://{TransactionMobileDockerHelper.LocalHostAddress}:{this.MobileConfigurationContainerPort}";
 
             this.SecurityServiceBaseAddress = SecurityServiceBaseAddressResolver(String.Empty);
             this.TransactionProcessorACLBaseAddress = TransactionProcessorAclBaseAddressResolver(String.Empty);
             this.EstateManagementBaseAddress= EstateManagementBaseAddressResolver(String.Empty);
+            this.MobileConfigBaseAddress = MobileConfigBaseAddressResolver(String.Empty);
 
             HttpClient httpClient = new HttpClient();
             this.EstateClient = new EstateClient(EstateManagementBaseAddressResolver, httpClient);
             this.SecurityServiceClient = new SecurityServiceClient(SecurityServiceBaseAddressResolver, httpClient);
             
-            this.HttpClient = new HttpClient();
-            this.HttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
+            this.ACLHttpClient = new HttpClient();
+            this.ACLHttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
 
+            this.MobileConfigHttpClient = new HttpClient();
+            
             await this.LoadEventStoreProjections().ConfigureAwait(false);
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
@@ -350,15 +369,15 @@ namespace TransactionMobile.IntegrationTests.Common
 
         public String GetLocalConnectionString(String databaseName)
         {
-        Int32 databaseHostPort = this.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
+            Int32 databaseHostPort = this.DatabaseServerContainer.ToHostExposedEndpoint("1433/tcp").Port;
 
-        String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
-        if (String.IsNullOrEmpty(localhostaddress))
-        {
-            localhostaddress = "192.168.1.67";
-        }
+            String localhostaddress = Environment.GetEnvironmentVariable("localhostaddress");
+            if (String.IsNullOrEmpty(localhostaddress))
+            {
+                localhostaddress = "192.168.1.67";
+            }
 
-        return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
+            return $"server={localhostaddress},{databaseHostPort};database={databaseName};user id={Setup.SqlUserName};password={Setup.SqlPassword}";
         }
 
         public String SecurityServiceBaseAddress;
@@ -366,6 +385,8 @@ namespace TransactionMobile.IntegrationTests.Common
         public String TransactionProcessorACLBaseAddress;
 
         public String EstateManagementBaseAddress;
+
+        public String MobileConfigBaseAddress;
 
         private async Task LoadEventStoreProjections()
         {
@@ -397,7 +418,7 @@ namespace TransactionMobile.IntegrationTests.Common
                         try
                         {
                             Logger.LogInformation($"Creating projection [{projectionName}]");
-                            await projectionManager.CreateContinuousProjection(projectionName, projection, false, "admin", "changeit", CancellationToken.None);
+                            await projectionManager.CreateContinuousProjection(projectionName, projection, true, "admin", "changeit", CancellationToken.None);
                         }
                         catch (Exception e)
                         {
@@ -638,6 +659,25 @@ namespace TransactionMobile.IntegrationTests.Common
             logger.LogInformation("Estate Reporting Container Started");
 
             return builtContainer;
+        }
+
+        public static async Task<IContainerService> SetupMobileConfigurationContainer(String containerName,
+                                                                                      ILogger logger,
+                                                                                      String imageName,
+                                                                                      INetworkService networkService)
+        {
+            logger.LogInformation("About to Start Mobile Config Container");
+
+            String executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            String config = $"{executableLocation}/Common/config/db.json";
+
+            IContainerService mobileConfigContainer = new Builder().UseContainer().UseImage(imageName).ExposePort(80).WithName(containerName).UseNetwork(networkService)
+                                                                   .CopyOnStart(config, "/data").Build().Start();
+            
+            Thread.Sleep(1000);
+            logger.LogInformation("Mobile Config Container Started");
+            
+            return mobileConfigContainer;
         }
 
         /// <summary>
