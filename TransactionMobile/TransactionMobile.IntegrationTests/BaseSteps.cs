@@ -340,10 +340,12 @@ namespace TransactionMobile.IntegrationTests
                              securityService = securityService,
                              estateManagement = estateManagementUrl,
                              transactionProcessorACL = transactionProcessorAcl
-
                          };
+
+            Console.WriteLine(JsonConvert.SerializeObject(config));
+
             StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
-            var resp = await this.TestingContext.DockerHelper.MobileConfigHttpClient.PostAsync("configuration", content, CancellationToken.None).ConfigureAwait(false);
+            var resp = await this.TestingContext.DockerHelper.MobileConfigHttpClient.PostAsync("/configuration", content, CancellationToken.None).ConfigureAwait(false);
 
             AppManager.SetConfiguration(mobileConfigUrl);
         }
