@@ -264,7 +264,8 @@
                                                                               DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                               OperatorIdentifier = contractProduct.OperatorName,
                                                                               TransactionDateTime = DateTime.Now,
-                                                                              TransactionNumber = "1" // TODO: Need to hold txn number somewhere
+                                                                              TransactionNumber = "1", // TODO: Need to hold txn number somewhere
+                                                                              CustomerEmailAddress = this.MobileTopupPerformTopupViewModel.CustomerEmailAddress
                                                                           };
 
             String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);

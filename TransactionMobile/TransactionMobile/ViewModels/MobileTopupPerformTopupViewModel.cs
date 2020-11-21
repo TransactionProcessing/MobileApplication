@@ -21,6 +21,11 @@
         public ContractProductModel ContractProductModel { get; set; }
 
         /// <summary>
+        /// The customer email address
+        /// </summary>
+        private String customerEmailAddress;
+
+        /// <summary>
         /// The customer mobile number
         /// </summary>
         private String customerMobileNumber;
@@ -55,6 +60,19 @@
             {
                 this.customerMobileNumber = value;
                 this.OnPropertyChanged(nameof(this.CustomerMobileNumber));
+            }
+        }
+
+        public String CustomerEmailAddress
+        {
+            get
+            {
+                return this.customerEmailAddress;
+            }
+            set
+            {
+                this.customerEmailAddress = value;
+                this.OnPropertyChanged(nameof(this.CustomerEmailAddress));
             }
         }
 

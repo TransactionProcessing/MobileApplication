@@ -96,6 +96,37 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
+Scenario: Successful Safaricom Topup with Email Address Captured
+	Given I am on the Login Screen
+	
+	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	And I enter '123456' as the Password
+	And I tap on Login
+	
+	Then the Merchant Home Page is displayed
+
+	And the available balance is shown as 2000.00
+
+	Given I tap on the Transactions button
+	Then the Transactions Page is displayed
+	
+	Given I tap on the Mobile Topup button
+	Then the Mobile Topup Select Operator Page is displayed
+	
+	Given I tap on the Safaricom button
+	Then the Mobile Topup Select Product Page is displayed
+
+	Given I tap on the Custom button
+	Then the Mobile Topup Topup Details Page is displayed
+	
+	When I enter the following topup details
+	| CustomerMobileNumber | TopupAmount | CustomerEmailAddress                |
+	| 123456789            | 10          | testcustomer@customer.co.uk |
+
+	And I tap on Perform Topup
+	
+	Then The Topup Successful Screen will be displayed
+
 Scenario: Failed Safaricom Topup
 	Given I am on the Login Screen
 	
