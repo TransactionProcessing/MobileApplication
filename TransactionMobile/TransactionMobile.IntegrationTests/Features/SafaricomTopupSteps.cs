@@ -75,9 +75,11 @@
             TableRow topupDetails = table.Rows.Single();
             String customerMobileNumber = SpecflowTableHelper.GetStringRowValue(topupDetails, "CustomerMobileNumber");
             Decimal topupAmount = SpecflowTableHelper.GetDecimalValue(topupDetails, "TopupAmount");
-            
+            String customerEmailAddress = SpecflowTableHelper.GetStringRowValue(topupDetails, "CustomerEmailAddress");
+
             this.MobileTopupPerformTopupPage.EnterCustomerMobileNumber(customerMobileNumber);
             this.MobileTopupPerformTopupPage.EnterTopupAmount(topupAmount);
+            this.MobileTopupPerformTopupPage.EnterCustomerEmailAddress(customerEmailAddress);
         }
 
         [When(@"I click the back button")]

@@ -9,6 +9,7 @@
         #region Fields
 
         private readonly Query CustomerMobileNumberEntry;
+        private readonly Query CustomerEmailAddressEntry;
         private readonly Query TopupAmountEntry;
         private readonly Query PerformTopupButton;
 
@@ -22,6 +23,7 @@
         public MobileTopupPerformTopupPage()
         {
             this.CustomerMobileNumberEntry = x => x.Marked("CustomerMobileNumberEntry");
+            this.CustomerEmailAddressEntry= x => x.Marked("CustomerEmailAddressEntry");
             this.TopupAmountEntry = x => x.Marked("TopupAmountEntry");
             this.PerformTopupButton = x => x.Marked("PerformTopupButton");
         }
@@ -49,6 +51,12 @@
         {
             app.WaitForElement(this.CustomerMobileNumberEntry);
             app.EnterText(this.CustomerMobileNumberEntry, customerMobileNumber);
+        }
+
+        public void EnterCustomerEmailAddress(String customerEmailAddress)
+        {
+            app.WaitForElement(this.CustomerMobileNumberEntry);
+            app.EnterText(this.CustomerMobileNumberEntry, customerEmailAddress);
         }
 
         public void EnterTopupAmount(Decimal topupAmount)

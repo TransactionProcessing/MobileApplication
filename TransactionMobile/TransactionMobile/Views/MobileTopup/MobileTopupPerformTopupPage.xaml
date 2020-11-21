@@ -70,6 +70,22 @@
                     Keyboard="Numeric"/>
             </border:SfBorder>
 
+            <border:SfBorder
+                Grid.Row="2"
+                BackgroundColor="{DynamicResource Gray-White}"
+                BorderColor="{Binding Source={x:Reference CustomerEmailAddressEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                Style="{StaticResource SfBorderStyle}">
+                <controls:BorderlessEntry
+                    x:Name="CustomerEmailAddressEntry"
+                    Placeholder="Customer Email Address"
+                    PlaceholderColor="{DynamicResource Gray-700}"
+                    Style="{StaticResource EntryStyle}"
+                    Text="{Binding CustomerEmailAddress}"
+                    TextColor="{DynamicResource Gray-900}"
+                    AutomationId="CustomerEmailAddressEntry"
+                    Keyboard="Email"/>
+            </border:SfBorder>
+
             <buttons:SfButton
                 x:Name="PerformTopupButton"
                 Margin="0,16"
