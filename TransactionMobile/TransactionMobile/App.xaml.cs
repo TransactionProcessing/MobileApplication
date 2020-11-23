@@ -60,7 +60,7 @@
         /// <summary>
         /// The transaction number
         /// </summary>
-        public static Int32 TransactionNumber;
+        private static Int32 TransactionNumber;
 
         /// <summary>
         /// The contract products
