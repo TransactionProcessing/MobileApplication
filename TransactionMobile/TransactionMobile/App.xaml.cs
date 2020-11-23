@@ -58,6 +58,11 @@
         public static Guid MerchantId;
 
         /// <summary>
+        /// The transaction number
+        /// </summary>
+        private static Int32 TransactionNumber;
+
+        /// <summary>
         /// The contract products
         /// </summary>
         public static List<ContractProductModel> ContractProducts;
@@ -149,6 +154,7 @@
         protected override async void OnStart()
         {
             Console.WriteLine("In On Start");
+            App.TransactionNumber = 1;
             this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
             
             // Handle when your app starts
@@ -156,6 +162,16 @@
             
             // show the login page
             await loginPresenter.Start();
+        }
+
+        public static Int32 GetNextTransactionNumber()
+        {
+            return App.TransactionNumber;
+        }
+
+        public static void IncrementTransactionNumber()
+        {
+            Interlocked.Increment(ref App.TransactionNumber);
         }
 
         #endregion

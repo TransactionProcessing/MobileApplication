@@ -347,8 +347,8 @@
                                                                                 DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                                 RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
-                                                                                TransactionNumber = "1" // TODO: Need to hold txn number somewhere
-                                                                            };
+                                                                                TransactionNumber = App.GetNextTransactionNumber().ToString() // TODO: Need to hold txn number somewhere
+            };
 
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
             this.AnalysisLogger.TrackEvent(MessageSentToHostEvent.Create(App.Configuration.TransactionProcessorACL, requestJson, DateTime.Now));
@@ -367,6 +367,7 @@
             // Set the application values
             App.EstateId = response.EstateId;
             App.MerchantId = response.MerchantId;
+            App.IncrementTransactionNumber();
         }
 
         #endregion

@@ -185,7 +185,9 @@
             else
             {
                 Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
-
+                
+                App.IncrementTransactionNumber();
+                
                 this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
 
                 if (mobileTopupResult)
@@ -264,7 +266,7 @@
                                                                               DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                               OperatorIdentifier = contractProduct.OperatorName,
                                                                               TransactionDateTime = DateTime.Now,
-                                                                              TransactionNumber = "1", // TODO: Need to hold txn number somewhere
+                                                                              TransactionNumber = App.GetNextTransactionNumber().ToString(),
                                                                               CustomerEmailAddress = this.MobileTopupPerformTopupViewModel.CustomerEmailAddress
                                                                           };
 
