@@ -209,11 +209,13 @@ namespace TransactionMobile.IntegrationTests.Common
         /// Verifies that the trait is present. Uses the default wait time.
         /// </summary>
         /// <param name="timeout">Time to wait before the assertion fails</param>
-        public async Task AssertOnPage(TimeSpan? timeout = default(TimeSpan?))
+        public async Task AssertOnPage(TimeSpan? timeout = null)
         {
+            timeout = timeout ?? TimeSpan.FromSeconds(60);
+
             await Retry.For(async () =>
                             {
-                                var message = "Unable to verify on page: " + this.GetType().Name;
+                                String message = "Unable to verify on page: " + this.GetType().Name;
 
                                 Assert.DoesNotThrow(() => app.WaitForElement(Trait.Current, timeout:timeout), message);
                             },
@@ -226,7 +228,7 @@ namespace TransactionMobile.IntegrationTests.Common
         /// Verifies that the trait is no longer present. Defaults to a 5 second wait.
         /// </summary>
         /// <param name="timeout">Time to wait before the assertion fails</param>
-        public void WaitForPageToLeave(TimeSpan? timeout = default(TimeSpan?))
+        public void WaitForPageToLeave(TimeSpan? timeout = null)
         {
             timeout = timeout ?? TimeSpan.FromSeconds(5);
             var message = "Unable to verify *not* on page: " + this.GetType().Name;

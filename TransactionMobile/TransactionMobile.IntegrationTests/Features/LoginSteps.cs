@@ -47,7 +47,7 @@ namespace TransactionMobile.IntegrationTests
         [Then(@"the Merchant Home Page is displayed")]
         public async Task ThenTheMerchantHomePageIsDisplayed()
         {
-            await this.mainPage.AssertOnPage(TimeSpan.FromSeconds(60));
+            await this.mainPage.AssertOnPage();
         }
 
         [Then(@"the available balance is shown as (.*)")]
