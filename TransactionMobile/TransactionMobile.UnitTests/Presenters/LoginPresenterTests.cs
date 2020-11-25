@@ -9,7 +9,6 @@ namespace TransactionMobile.UnitTests.Presenters
     using Common;
     using Database;
     using EstateManagement.Client;
-    using Events;
     using Moq;
     using NUnit.Framework;
     using Pages;

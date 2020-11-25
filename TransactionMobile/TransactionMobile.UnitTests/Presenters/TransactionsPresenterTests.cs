@@ -2,7 +2,6 @@
 {
     using Common;
     using Database;
-    using Events;
     using Moq;
     using NUnit.Framework;
     using Pages;

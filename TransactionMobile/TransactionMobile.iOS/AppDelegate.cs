@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using Common;
-    using Events;
     using Foundation;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
