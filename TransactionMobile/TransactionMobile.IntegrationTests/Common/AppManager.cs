@@ -89,7 +89,6 @@ namespace TransactionMobile.IntegrationTests.Common
                 else
                 {
                     String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.Android/bin/Release");
-
                     app = ConfigureApp.Android
                                       // Used to run a .apk file:
                                       .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk")).EnableLocalScreenshots().StartApp();
