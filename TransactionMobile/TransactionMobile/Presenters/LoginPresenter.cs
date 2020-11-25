@@ -200,8 +200,8 @@
         {
             try
             {
-                this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
-                this.LoginViewModel.Password = "123456";
+                //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
+                //this.LoginViewModel.Password = "123456";
 
                 await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
