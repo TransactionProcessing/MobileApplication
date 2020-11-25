@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using Events;
+    using Database;
     using Pages;
     using Xamarin.Forms;
     using Xamarin.Forms.Internals;
@@ -19,12 +19,9 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPaymentFailedPage : ContentPage, IMobileTopupPaymentFailedPage, IPage
     {
-        #region Fields
+        private readonly ILoggingDatabaseContext LoggingDatabase;
 
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
+        #region Fields
 
         #endregion
 
@@ -33,11 +30,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MobileTopupPaymentFailedPage" /> class.
         /// </summary>
-        /// <param name="analysisLogger">The analysis logger.</param>
-        public MobileTopupPaymentFailedPage(IAnalysisLogger analysisLogger)
+        /// <param name="loggingDatabase">The logging database.</param>
+        public MobileTopupPaymentFailedPage(ILoggingDatabaseContext loggingDatabase)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -59,7 +56,7 @@
         /// </summary>
         public void Init()
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.CancelButton.Clicked += this.CancelButton_Clicked;
         }
 

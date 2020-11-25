@@ -7,7 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
-    using Events;
+    using Database;
     using Models;
     using Newtonsoft.Json;
     using Pages;
@@ -26,11 +26,6 @@
     public class TransactionsPresenter : ITransactionsPresenter
     {
         #region Fields
-
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The device
@@ -76,6 +71,8 @@
         /// </summary>
         private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
 
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
         /// <summary>
         /// The transactions page
         /// </summary>
@@ -99,7 +96,7 @@
         /// <param name="mobileTopupPaymentFailedPage">The mobile topup payment failed page.</param>
         /// <param name="device">The device.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
-        /// <param name="analysisLogger">The analysis logger.</param>
+        /// <param name="loggingDatabase">The logging database.</param>
         public TransactionsPresenter(ITransactionsPage transactionsPage,
                                      IMobileTopupSelectOperatorPage mobileTopupSelectOperatorPage,
                                      MobileTopupSelectOperatorViewModel mobileTopupSelectOperatorViewModel,
@@ -111,7 +108,7 @@
                                      IMobileTopupPaymentFailedPage mobileTopupPaymentFailedPage,
                                      IDevice device,
                                      ITransactionProcessorACLClient transactionProcessorAclClient,
-                                     IAnalysisLogger analysisLogger)
+                                     ILoggingDatabaseContext loggingDatabase)
         {
             this.TransactionsPage = transactionsPage;
             this.MobileTopupSelectOperatorPage = mobileTopupSelectOperatorPage;
@@ -124,7 +121,7 @@
             this.MobileTopupPaymentFailedPage = mobileTopupPaymentFailedPage;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
-            this.AnalysisLogger = analysisLogger;
+            this.LoggingDatabase = loggingDatabase;
         }
 
         #endregion
@@ -187,8 +184,8 @@
                 Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
                 
                 App.IncrementTransactionNumber();
-                
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Mobile Topup Result is [{mobileTopupResult}]"));
+
+                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Mobile Topup Result is [{mobileTopupResult}]"));
 
                 if (mobileTopupResult)
                 {
@@ -257,6 +254,8 @@
         /// <returns></returns>
         private async Task<Boolean> PerformMobileTopup(ContractProductModel contractProduct)
         {
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"About to perform Mobile Topup"));
+
             SaleTransactionRequestMessage saleTransactionRequestMessage = new SaleTransactionRequestMessage
                                                                           {
                                                                               ContractId = contractProduct.ContractId,
@@ -271,13 +270,14 @@
                                                                           };
 
             String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);
-            this.AnalysisLogger.TrackEvent(MessageSentToHostEvent.Create(App.Configuration.TransactionProcessorACL, requestJson, DateTime.Now));
+
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
             SaleTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformSaleTransaction(App.TokenResponse.AccessToken, saleTransactionRequestMessage, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
 
             if (response.ResponseCode != "0000")
             {

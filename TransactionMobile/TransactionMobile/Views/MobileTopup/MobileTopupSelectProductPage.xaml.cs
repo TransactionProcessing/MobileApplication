@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using Events;
+    using Database;
     using Models;
     using Pages;
     using Syncfusion.XForms.Buttons;
@@ -20,12 +20,9 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupSelectProductPage : ContentPage, IMobileTopupSelectProductPage, IPage
     {
-        #region Fields
+        private readonly ILoggingDatabaseContext LoggingDatabase;
 
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
+        #region Fields
 
         #endregion
 
@@ -34,11 +31,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MobileTopupSelectProductPage" /> class.
         /// </summary>
-        /// <param name="analysisLogger">The analysis logger.</param>
-        public MobileTopupSelectProductPage(IAnalysisLogger analysisLogger)
+        /// <param name="loggingDatabase">The logging database.</param>
+        public MobileTopupSelectProductPage(ILoggingDatabaseContext loggingDatabase)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -61,7 +58,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(MobileTopupSelectProductViewModel viewModel)
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.LoadOperators(viewModel);
         }
 

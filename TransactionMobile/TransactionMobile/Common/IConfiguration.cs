@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Common
 {
     using System;
+    using Models;
 
     /// <summary>
     /// 
@@ -49,6 +50,13 @@
         /// </value>
         String EstateManagement { get; set; }
 
+        /// <summary>
+        /// Gets or sets the log level.
+        /// </summary>
+        /// <value>
+        /// The log level.
+        /// </value>
+        LogLevel LogLevel { get; set; }
         #endregion
     }
 }

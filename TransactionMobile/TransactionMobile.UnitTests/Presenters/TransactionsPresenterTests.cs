@@ -1,7 +1,7 @@
 ﻿namespace TransactionMobile.UnitTests.Presenters
 {
     using Common;
-    using Events;
+    using Database;
     using Moq;
     using NUnit.Framework;
     using Pages;
@@ -29,7 +29,7 @@
             Mock<IMobileTopupPaymentFailedPage> mobileTopupPaymentFailedPage = new Mock<IMobileTopupPaymentFailedPage>();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
-            Mock<IAnalysisLogger> analysisLogger = new Mock<IAnalysisLogger>();
+            Mock<ILoggingDatabaseContext> loggingDatabase = new Mock<ILoggingDatabaseContext>();
 
             TransactionsPresenter transactionsPresenter = new TransactionsPresenter(transactionsPage.Object,
                                                                                     mobileTopupSelectOperatorPage.Object,
@@ -42,7 +42,7 @@
                                                                                     mobileTopupPaymentFailedPage.Object,
                                                                                     device.Object,
                                                                                     transactionProcessorACLClient.Object,
-                                                                                    analysisLogger.Object);
+                                                                                    loggingDatabase.Object);
 
             transactionsPresenter.ShouldNotBeNull();
         }

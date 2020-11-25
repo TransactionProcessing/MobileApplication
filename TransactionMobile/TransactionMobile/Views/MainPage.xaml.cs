@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using Events;
+    using Database;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -18,12 +18,10 @@
     [ExcludeFromCodeCoverage]
     public partial class MainPage : ContentPage, IMainPage, IPage
     {
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
         #region Fields
 
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
 
         #endregion
 
@@ -32,11 +30,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MainPage" /> class.
         /// </summary>
-        /// <param name="analysisLogger">The analysis logger.</param>
-        public MainPage(IAnalysisLogger analysisLogger)
+        /// <param name="loggingDatabase">The logging database.</param>
+        public MainPage(ILoggingDatabaseContext loggingDatabase)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -74,7 +72,7 @@
         /// <param name="viewModel"></param>
         public void Init(MainPageViewModel viewModel)
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.TransactionsButton.Clicked += this.TransactionsButton_Clicked;
             this.ReportsButton.Clicked += this.ReportsButton_Clicked;
             this.ProfileButton.Clicked += this.ProfileButton_Clicked;

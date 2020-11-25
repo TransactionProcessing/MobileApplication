@@ -4,7 +4,7 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Controls;
-    using Events;
+    using Database;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -21,12 +21,10 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPerformTopupPage : ContentPage, IMobileTopupPerformTopupPage, IPage
     {
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
         #region Fields
 
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The view model
@@ -40,11 +38,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MobileTopupPerformTopupPage" /> class.
         /// </summary>
-        /// <param name="analysisLogger">The analysis logger.</param>
-        public MobileTopupPerformTopupPage(IAnalysisLogger analysisLogger)
+        /// <param name="loggingDatabase">The logging database.</param>
+        public MobileTopupPerformTopupPage(ILoggingDatabaseContext loggingDatabase)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -67,7 +65,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(MobileTopupPerformTopupViewModel viewModel)
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.ViewModel = viewModel;
             this.BindingContext = this.ViewModel;

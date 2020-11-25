@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using Common;
-    using Events;
     using Foundation;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
@@ -24,12 +23,7 @@
     public class AppDelegate : FormsApplicationDelegate
     {
         #region Fields
-
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private AppCenterAnalysisLogger AnalysisLogger;
-
+        
         /// <summary>
         /// The configuration
         /// </summary>
@@ -64,7 +58,7 @@
             TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
 
             this.Device = new iOSDevice();
-            this.AnalysisLogger = new AppCenterAnalysisLogger();
+            //this.AnalysisLogger = new AppCenterAnalysisLogger();
 
             Forms.Init();
 
@@ -74,7 +68,8 @@
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
 
-            this.LoadApplication(new App(this.Device, this.AnalysisLogger));
+            // TODO: fix this
+            //this.LoadApplication(new App(this.Device, this.AnalysisLogger));
 
             return base.FinishedLaunching(app, options);
         }
@@ -108,7 +103,8 @@
                                                        UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
             var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
-            this.AnalysisLogger.TrackCrash(newExc);
+            // TODO: Logging
+            //this.AnalysisLogger.TrackCrash(newExc);
         }
 
         /// <summary>
@@ -120,7 +116,8 @@
                                                             UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
         {
             var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
-            this.AnalysisLogger.TrackCrash(newExc);
+            // TODO: Logging
+            // this.AnalysisLogger.TrackCrash(newExc);
         }
 
         #endregion

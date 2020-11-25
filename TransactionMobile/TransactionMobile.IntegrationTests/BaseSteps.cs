@@ -36,22 +36,22 @@ namespace TransactionMobile.IntegrationTests
     public class BaseSteps
     {
 
-            private readonly FeatureContext FeatureContext;
+        private readonly FeatureContext FeatureContext;
 
-            private readonly ScenarioContext ScenarioContext;
+        private readonly ScenarioContext ScenarioContext;
 
-            private readonly TestingContext TestingContext;
+        private readonly TestingContext TestingContext;
 
-            //    private IApp App;
+        //    private IApp App;
 
-            public BaseSteps(FeatureContext featureContext,
-                             ScenarioContext scenarioContext,
-                             TestingContext testingContext)
-            {
-                this.FeatureContext = featureContext;
-                this.ScenarioContext = scenarioContext;
-                this.TestingContext = testingContext;
-            }
+        public BaseSteps(FeatureContext featureContext,
+                         ScenarioContext scenarioContext,
+                         TestingContext testingContext)
+        {
+            this.FeatureContext = featureContext;
+            this.ScenarioContext = scenarioContext;
+            this.TestingContext = testingContext;
+        }
 
         [BeforeScenario()]
         public async Task StartSystem()
@@ -72,7 +72,8 @@ namespace TransactionMobile.IntegrationTests
             TestingLogger logger = new TestingLogger();
             if (this.ScenarioContext.TestError != null)
             {
-                List<IContainerService> containers = this.TestingContext.DockerHelper.Containers.Where(c => c.Name == this.TestingContext.DockerHelper.EstateManagementContainerName).ToList();
+                List<IContainerService> containers = this.TestingContext.DockerHelper.Containers
+                                                         .Where(c => c.Name == this.TestingContext.DockerHelper.EstateManagementContainerName).ToList();
 
                 // The test has failed, grab the logs from all the containers
                 foreach (IContainerService containerService in containers)
@@ -98,47 +99,44 @@ namespace TransactionMobile.IntegrationTests
         [AfterStep]
         public void CheckStepStatus()
         {
-            if (Debugger.IsAttached == false)
+            // Build the screenshot name
+            String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
+            String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
+            String stepName = this.ScenarioContext.GetStepNameForScreenshot();
+
+            // Capture screen shot on exception
+            FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
+
+            String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotFolder");
+            if (String.IsNullOrEmpty(screenshotPath))
             {
-                // Build the screenshot name
-                String featureName = this.FeatureContext.GetFeatureNameForScreenshot();
-                String scenarioName = this.ScenarioContext.GetScenarioNameForScreenshot();
-                String stepName = this.ScenarioContext.GetStepNameForScreenshot();
+                // Get the executing directory
+                String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
 
-                // Capture screen shot on exception
-                FileInfo screenshot = AppManager.App.Screenshot($"{scenarioName}:{stepName}");
+                String screenshotDirectory = $"{currentDirectory}\\Screenshots\\{featureName}";
 
-                String screenshotPath = Environment.GetEnvironmentVariable("ScreenshotFolder");
-                if (String.IsNullOrEmpty(screenshotPath))
+                if (!Directory.Exists(screenshotDirectory))
                 {
-                    // Get the executing directory
-                    String currentDirectory = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}";
-
-                    String screenshotDirectory = $"{currentDirectory}\\Screenshots\\{featureName}";
-
-                    if (!Directory.Exists(screenshotDirectory))
-                    {
-                        Directory.CreateDirectory(screenshotDirectory);
-                    }
-
-                    // Now copy the screenshot
-                    FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg", true);
-
-                    Console.WriteLine($"{fi.FullName} exists");
+                    Directory.CreateDirectory(screenshotDirectory);
                 }
-                else
+
+                // Now copy the screenshot
+                FileInfo fi = screenshot.CopyTo($"{screenshotDirectory}\\{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg", true);
+
+                Console.WriteLine($"{fi.FullName} exists");
+            }
+            else
+            {
+                screenshotPath = $"{screenshotPath}//{featureName}";
+                if (!Directory.Exists(screenshotPath))
                 {
-                    screenshotPath = $"{screenshotPath}//{featureName}";
-                    if (!Directory.Exists(screenshotPath))
-                    {
-                        Directory.CreateDirectory(screenshotPath);
-                    }
-
-                    String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg";
-                    Console.WriteLine($"About to copy to {fileName}");
-                    FileInfo fi = screenshot.CopyTo(fileName, true);
-                    Console.WriteLine($"{fi.FullName} exists");
+                    Directory.CreateDirectory(screenshotPath);
                 }
+
+                String fileName = $"{screenshotPath}//{DateTime.Now:yyyMMddHHmmssfff}-{scenarioName}-{stepName}.jpg";
+                Console.WriteLine($"About to copy to {fileName}");
+                FileInfo fi = screenshot.CopyTo(fileName, true);
+                Console.WriteLine($"{fi.FullName} exists");
             }
         }
     }
@@ -339,7 +337,8 @@ namespace TransactionMobile.IntegrationTests
                              clientSecret = merchantClient.ClientSecret,
                              securityService = securityService,
                              estateManagement = estateManagementUrl,
-                             transactionProcessorACL = transactionProcessorAcl
+                             transactionProcessorACL = transactionProcessorAcl,
+                             logLevel = "Debug"
                          };
 
             Console.WriteLine(JsonConvert.SerializeObject(config));

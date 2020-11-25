@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Models;
 
     /// <summary>
     /// 
@@ -22,6 +23,7 @@
             this.SecurityService = "http://192.168.1.133:5001";
             this.ClientId = "mobileAppClient";
             this.ClientSecret = "d192cbc46d834d0da90e8a9d50ded543";
+            this.LogLevel = LogLevel.Debug;
         }
 
         #endregion
@@ -61,6 +63,8 @@
         public String TransactionProcessorACL { get; set; }
 
         public String EstateManagement { get; set; }
+
+        public LogLevel LogLevel { get; set; }
 
         #endregion
     }

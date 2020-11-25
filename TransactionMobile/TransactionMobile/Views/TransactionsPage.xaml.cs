@@ -3,7 +3,7 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Common;
-    using Events;
+    using Database;
     using Pages;
     using Xamarin.Forms;
     using Xamarin.Forms.Xaml;
@@ -18,13 +18,10 @@
     [ExcludeFromCodeCoverage]
     public partial class TransactionsPage : ContentPage, ITransactionsPage, IPage
     {
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
         #region Fields
-
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
-
+        
         #endregion
 
         #region Constructors
@@ -34,11 +31,11 @@
         /// </summary>
         /// <param name="analysisLogger">The analysis logger.</param>
         /// <param name="device">The device.</param>
-        public TransactionsPage(IAnalysisLogger analysisLogger,
+        public TransactionsPage(ILoggingDatabaseContext loggingDatabase,
                                 IDevice device)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -75,7 +72,7 @@
         /// </summary>
         public void Init()
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.MobileTopupButton.Clicked += this.MobileTopupButton_Clicked;
             this.MobileWalletButton.Clicked += this.MobileWalletButton_Clicked;

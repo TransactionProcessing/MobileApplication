@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using Common;
-    using Events;
     using UIKit;
 
     /// <summary>
