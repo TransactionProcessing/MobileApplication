@@ -7,9 +7,9 @@
     using System.Threading.Tasks;
     using System.Timers;
     using Common;
+    using Database;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects.Responses;
-    using Events;
     using Models;
     using Newtonsoft.Json;
     using Pages;
@@ -34,11 +34,6 @@
         #region Fields
 
         /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
-
-        /// <summary>
         /// The device
         /// </summary>
         private readonly IDevice Device;
@@ -47,6 +42,8 @@
         /// The estate client
         /// </summary>
         private readonly IEstateClient EstateClient;
+
+        private readonly ILoggingDatabaseContext LoggingDatabase;
 
         /// <summary>
         /// The login page
@@ -93,7 +90,7 @@
         /// <param name="securityServiceClient">The security service client.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
         /// <param name="estateClient">The estate client.</param>
-        /// <param name="analysisLogger">The analysis logger.</param>
+        /// <param name="loggingDatabase">The logging database.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
                               LoginViewModel loginViewModel,
@@ -102,7 +99,7 @@
                               ISecurityServiceClient securityServiceClient,
                               ITransactionProcessorACLClient transactionProcessorAclClient,
                               IEstateClient estateClient,
-                              IAnalysisLogger analysisLogger)
+                              ILoggingDatabaseContext loggingDatabase)
         {
             this.MainPage = mainPage;
             this.LoginPage = loginPage;
@@ -112,7 +109,7 @@
             this.SecurityServiceClient = securityServiceClient;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
             this.EstateClient = estateClient;
-            this.AnalysisLogger = analysisLogger;
+            this.LoggingDatabase = loggingDatabase;
         }
 
         #endregion
@@ -124,7 +121,7 @@
         /// </summary>
         public async Task Start()
         {
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("In Start"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage("In Start"));
 
             this.LoginPage.LoginButtonClick += this.LoginPage_LoginButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
@@ -158,11 +155,11 @@
                 App.Configuration = new DevelopmentConfiguration();
             }
 
-            // TODO: this may well make a server call of some kind in future....
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Id is {App.Configuration.ClientId}"));
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"Client Secret is {App.Configuration.ClientSecret}"));
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"SecurityService Url is {App.Configuration.SecurityService}"));
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Client Id is {App.Configuration.ClientId}"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Client Secret is {App.Configuration.ClientSecret}"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"SecurityService Url is {App.Configuration.SecurityService}"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"EstateManagement Url is {App.Configuration.EstateManagement}"));
         }
 
         /// <summary>
@@ -203,13 +200,13 @@
         {
             try
             {
-                //this.LoginViewModel.EmailAddress = "merchantuser@testmerchant1.co.uk";
-                //this.LoginViewModel.Password = "123456";
+                this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
+                this.LoginViewModel.Password = "123456";
 
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Get Configuration"));
+                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
 
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Get Token"));
+                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage("About to Get Token"));
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                         this.LoginViewModel.Password,
@@ -217,8 +214,7 @@
                                                                                         App.Configuration.ClientSecret,
                                                                                         CancellationToken.None);
 
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create($"About to Cache Token {tokenResponse.AccessToken}"));
-                this.AnalysisLogger.SetUserName(this.LoginViewModel.EmailAddress);
+                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
 
                 // Cache the user token
                 App.TokenResponse = tokenResponse;
@@ -232,7 +228,7 @@
                 // Get the merchants contract details
                 await this.GetMerchantContract();
 
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("Logon Completed"));
+                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage("Logon Completed"));
 
                 // Go to signed in page
                 this.MainPage.Init(this.MainPageViewModel);
@@ -245,12 +241,8 @@
             }
             catch(Exception ex)
             {
-                this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create(ex.Message));
-                if (ex.InnerException != null)
-                {
-                    this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create(ex.InnerException.Message));
-                }
-
+                await this.LoggingDatabase.InsertLogMessages(LoggingDatabaseContext.CreateErrorLogMessages(ex));
+                
                 CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
             }
         }
@@ -285,7 +277,8 @@
         private void MainPage_SupportButtonClicked(Object sender,
                                                    EventArgs e)
         {
-            CrossToastPopUp.Current.ShowToastMessage("Support Clicked");
+            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
+            supportPresenter.Start();
         }
 
         /// <summary>
@@ -340,7 +333,7 @@
         /// <exception cref="System.Exception">Error during logon transaction. Response Code [{response.ResponseCode}] Response Message [{response.ResponseMessage}]</exception>
         private async Task PerformLogonTransaction()
         {
-            this.AnalysisLogger.TrackEvent(DebugInformationEvent.Create("About to Do Logon Transaction"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage("About to perform Logon Transaction"));
 
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
@@ -351,13 +344,13 @@
                                                                             };
 
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
-            this.AnalysisLogger.TrackEvent(MessageSentToHostEvent.Create(App.Configuration.TransactionProcessorACL, requestJson, DateTime.Now));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
             LogonTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformLogonTransaction(App.TokenResponse.AccessToken, logonTransactionRequestMessage, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            this.AnalysisLogger.TrackEvent(MessageReceivedFromHostEvent.Create(responseJson, DateTime.Now));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
 
             if (response.ResponseCode != "0000")
             {

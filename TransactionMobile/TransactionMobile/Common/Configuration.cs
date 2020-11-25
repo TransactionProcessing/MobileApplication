@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using Models;
 
     /// <summary>
     /// 
@@ -51,6 +52,14 @@
         /// The estate management.
         /// </value>
         public String EstateManagement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the log level.
+        /// </summary>
+        /// <value>
+        /// The log level.
+        /// </value>
+        public LogLevel LogLevel { get; set; }
 
         #endregion
     }

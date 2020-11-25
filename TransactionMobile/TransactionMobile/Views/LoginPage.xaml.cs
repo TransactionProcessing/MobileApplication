@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using Events;
+    using Database;
     using Pages;
     using ViewModels;
     using Xamarin.Forms;
@@ -18,12 +18,10 @@
     [ExcludeFromCodeCoverage]
     public partial class LoginPage : ContentPage, ILoginPage, IPage
     {
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
         #region Fields
 
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
 
         /// <summary>
         /// The view model
@@ -37,11 +35,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginPage" /> class.
         /// </summary>
-        /// <param name="analysisLogger">The analysis logger.</param>
-        public LoginPage(IAnalysisLogger analysisLogger)
+        /// <param name="loggingDatabase">The logging database.</param>
+        public LoginPage(ILoggingDatabaseContext loggingDatabase)
         {
-            this.AnalysisLogger = analysisLogger;
-            this.AnalysisLogger.TrackEvent(PageRequestedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase = loggingDatabase;
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -64,7 +62,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(LoginViewModel viewModel)
         {
-            this.AnalysisLogger.TrackEvent(PageInitialisedEvent.Create(this.GetType().Name));
+            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.ViewModel = viewModel;
 

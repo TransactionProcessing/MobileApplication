@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using System.IO;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -9,11 +10,12 @@
     using Android.OS;
     using Android.Runtime;
     using Common;
-    using Events;
+    using Database;
     using Java.Interop;
     using Services;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
+    using Environment = System.Environment;
     using Platform = Xamarin.Essentials.Platform;
 
     /// <summary>
@@ -28,16 +30,16 @@
     public class MainActivity : FormsAppCompatActivity
     {
         #region Fields
-
-        /// <summary>
-        /// The analysis logger
-        /// </summary>
-        private AppCenterAnalysisLogger AnalysisLogger;
-        
+                
         /// <summary>
         /// The device
         /// </summary>
         private IDevice Device;
+
+        /// <summary>
+        /// The logging database
+        /// </summary>
+        private ILoggingDatabaseContext LoggingDatabase;
 
         #endregion
 
@@ -75,8 +77,6 @@
         {
             Console.WriteLine("In Set Configuration");
 
-            App.ConfigHostAddress = configurationHost;
-
             IDevice device = new AndroidDevice();
 
             String deviceId = device.GetDeviceIdentifier();
@@ -108,8 +108,9 @@
             FormsAppCompatActivity.TabLayoutResource = Resource.Layout.Tabbar;
             FormsAppCompatActivity.ToolbarResource = Resource.Layout.Toolbar;
 
+            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             this.Device = new AndroidDevice();
-            this.AnalysisLogger = new AppCenterAnalysisLogger();
+            this.LoggingDatabase = new LoggingDatabaseContext(connectionString);
 
             base.OnCreate(savedInstanceState);
 
@@ -118,7 +119,7 @@
 
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
-            this.LoadApplication(new App(this.Device, this.AnalysisLogger));
+            this.LoadApplication(new App(this.Device, this.LoggingDatabase));
         }
 
         /// <summary>
@@ -130,7 +131,8 @@
                                                        UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
             Exception newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
-            this.AnalysisLogger.TrackCrash(newExc);
+            
+            Task.Run(async () => { await this.LoggingDatabase.InsertLogMessages(LoggingDatabaseContext.CreateFatalLogMessages(newExc)); });
         }
 
         /// <summary>
@@ -142,7 +144,8 @@
                                                             UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
         {
             Exception newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
-            this.AnalysisLogger.TrackCrash(newExc);
+
+            Task.Run(async () => { await this.LoggingDatabase.InsertLogMessages(LoggingDatabaseContext.CreateFatalLogMessages(newExc)); });
         }
 
         #endregion

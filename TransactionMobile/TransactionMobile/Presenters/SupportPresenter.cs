@@ -1,0 +1,105 @@
+﻿namespace TransactionMobile.Presenters
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Common;
+    using Database;
+    using Pages;
+    using Services;
+    using Xamarin.Forms;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="TransactionMobile.Presenters.ISupportPresenter" />
+    public class SupportPresenter : ISupportPresenter
+    {
+        #region Fields
+
+        /// <summary>
+        /// The configuration service client
+        /// </summary>
+        private readonly IConfigurationServiceClient ConfigurationServiceClient;
+
+        /// <summary>
+        /// The device
+        /// </summary>
+        private readonly IDevice Device;
+
+        /// <summary>
+        /// The logging database
+        /// </summary>
+        private readonly ILoggingDatabaseContext LoggingDatabase;
+
+        /// <summary>
+        /// The support page
+        /// </summary>
+        private readonly ISupportPage SupportPage;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SupportPresenter"/> class.
+        /// </summary>
+        /// <param name="supportPage">The support page.</param>
+        /// <param name="loggingDatabase">The logging database.</param>
+        /// <param name="device">The device.</param>
+        /// <param name="configurationServiceClient">The configuration service client.</param>
+        public SupportPresenter(ISupportPage supportPage,
+                                ILoggingDatabaseContext loggingDatabase,
+                                IDevice device,
+                                IConfigurationServiceClient configurationServiceClient)
+        {
+            this.SupportPage = supportPage;
+            this.LoggingDatabase = loggingDatabase;
+            this.Device = device;
+            this.ConfigurationServiceClient = configurationServiceClient;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Starts this instance.
+        /// </summary>
+        public async Task Start()
+        {
+            this.SupportPage.UploadLogsButtonClick += this.SupportPage_UploadLogsButtonClick;
+
+            this.SupportPage.Init();
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.SupportPage);
+        }
+
+        /// <summary>
+        /// Handles the UploadLogsButtonClick event of the SupportPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private async void SupportPage_UploadLogsButtonClick(Object sender,
+                                                             EventArgs e)
+        {
+            while (true)
+            {
+                List<LogMessage> logEntries = await this.LoggingDatabase.GetLogMessages(10);
+
+                if (logEntries.Any() == false)
+                {
+                    break;
+                }
+
+                await this.ConfigurationServiceClient.PostDiagnosticLogs(this.Device.GetDeviceIdentifier(), logEntries, CancellationToken.None);
+
+                // Clear the logs that have been uploaded
+                await this.LoggingDatabase.RemoveUploadedMessages(logEntries);
+            }
+        }
+
+        #endregion
+    }
+}

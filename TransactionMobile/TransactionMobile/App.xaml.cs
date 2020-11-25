@@ -7,7 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Common;
-    using Events;
+    using Database;
     using Models;
     using Newtonsoft.Json;
     using Presenters;
@@ -31,12 +31,7 @@
         /// The configuration
         /// </summary>
         public static IConfiguration Configuration;
-
-        /// <summary>
-        /// The configuration host address
-        /// </summary>
-        public static String ConfigHostAddress;
-
+        
         /// <summary>
         /// Unity container
         /// </summary>
@@ -65,7 +60,7 @@
         /// <summary>
         /// The analysis logger
         /// </summary>
-        private readonly IAnalysisLogger AnalysisLogger;
+        private readonly ILoggingDatabaseContext LoggingDatabase;
 
         /// <summary>
         /// The device
@@ -80,13 +75,15 @@
         /// Initializes a new instance of the <see cref="App" /> class.
         /// </summary>
         /// <param name="device">The device.</param>
-        /// <param name="analysisLogger">The analysis logger.</param>
+        /// <param name="loggingDatabase">The logging database.</param>
         public App(IDevice device,
-                   IAnalysisLogger analysisLogger)
+                   ILoggingDatabaseContext loggingDatabase)
         {
-            Console.WriteLine("In App Ctor");
             this.Device = device;
-            this.AnalysisLogger = analysisLogger;
+            this.LoggingDatabase = loggingDatabase;
+
+            // Init the logging DB
+            this.LoggingDatabase.InitialiseDatabase();
 
             this.InitializeComponent();
 
@@ -95,20 +92,20 @@
             App.Container = Bootstrapper.Run();
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(this.AnalysisLogger, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(this.LoggingDatabase, new ContainerControlledLifetimeManager());
             
             if (App.Configuration == null)
             {
                 Task.Run(async () =>
                          {
-
+                             // TODO: Logging
                              Console.WriteLine("Config is null");
 
-                             Console.WriteLine(App.ConfigHostAddress);
                              IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
 
                              App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
 
+                             // TODO: Logging
                              Console.WriteLine("Config retrieved");
                          });
             }
@@ -148,8 +145,8 @@
         /// </remarks>
         protected override async void OnStart()
         {
+            // TODO: Logging
             Console.WriteLine("In On Start");
-            this.AnalysisLogger.Initialise(true, true, "e5e42a79-6306-4795-a4e1-4988146ec234");
             
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();

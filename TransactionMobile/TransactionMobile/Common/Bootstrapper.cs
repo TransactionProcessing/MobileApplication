@@ -2,7 +2,9 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Net.Http;
+    using Database;
     using EstateManagement.Client;
     using Pages;
     using Plugin.Toast;
@@ -28,8 +30,11 @@
         public static IUnityContainer Run()
         {
             UnityContainer unityContainer = new UnityContainer();
-
+            String dbConnectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             // Common Registrations
+            //unityContainer.RegisterType<ILoggingDatabaseContext, LoggingDatabaseContext>(new SingletonLifetimeManager());
+            //unityContainer.RegisterFactory<Func<String>>((c) => { return dbConnectionString; });
+
             unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new SingletonLifetimeManager());
             unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new SingletonLifetimeManager());
             unityContainer.RegisterType<IEstateClient, EstateClient>(new SingletonLifetimeManager());
@@ -41,6 +46,7 @@
                                                                                                                      if (configSetting == "ConfigServiceUrl")
                                                                                                                      {
                                                                                                                          return "https://pxj6yf.deta.dev";
+                                                                                                                         //return "http://192.168.1.67:1337";
                                                                                                                      }
 
                                                                                                                      if (App.Configuration != null)
@@ -71,6 +77,7 @@
             // Presenter registrations
             unityContainer.RegisterType<ILoginPresenter, LoginPresenter>(new TransientLifetimeManager());
             unityContainer.RegisterType<ITransactionsPresenter, TransactionsPresenter>(new TransientLifetimeManager());
+            unityContainer.RegisterType<ISupportPresenter, SupportPresenter>(new TransientLifetimeManager());
 
             // View registrations
             unityContainer.RegisterType<IMainPage, MainPage>(new TransientLifetimeManager());
@@ -81,6 +88,7 @@
             unityContainer.RegisterType<IMobileTopupPerformTopupPage, MobileTopupPerformTopupPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<ISupportPage, SupportPage>(new TransientLifetimeManager());
 
             // View model registrations
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());
