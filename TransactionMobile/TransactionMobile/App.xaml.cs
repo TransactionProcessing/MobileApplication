@@ -53,6 +53,11 @@
         public static Guid MerchantId;
 
         /// <summary>
+        /// The transaction number
+        /// </summary>
+        private static Int32 TransactionNumber;
+
+        /// <summary>
         /// The contract products
         /// </summary>
         public static List<ContractProductModel> ContractProducts;
@@ -147,12 +152,23 @@
         {
             // TODO: Logging
             Console.WriteLine("In On Start");
+            App.TransactionNumber = 1;
             
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
             
             // show the login page
             await loginPresenter.Start();
+        }
+
+        public static Int32 GetNextTransactionNumber()
+        {
+            return App.TransactionNumber;
+        }
+
+        public static void IncrementTransactionNumber()
+        {
+            Interlocked.Increment(ref App.TransactionNumber);
         }
 
         #endregion
