@@ -339,7 +339,8 @@ namespace TransactionMobile.IntegrationTests
                              clientSecret = merchantClient.ClientSecret,
                              securityService = securityService,
                              estateManagement = estateManagementUrl,
-                             transactionProcessorACL = transactionProcessorAcl
+                             transactionProcessorACL = transactionProcessorAcl,
+                             logLevel = "Debug"
                          };
 
             Console.WriteLine(JsonConvert.SerializeObject(config));
