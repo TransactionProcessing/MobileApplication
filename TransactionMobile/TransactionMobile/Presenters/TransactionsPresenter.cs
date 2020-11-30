@@ -28,9 +28,19 @@
         #region Fields
 
         /// <summary>
+        /// The admin page
+        /// </summary>
+        private readonly IAdminPage AdminPage;
+
+        /// <summary>
         /// The device
         /// </summary>
         private readonly IDevice Device;
+
+        /// <summary>
+        /// The logging database
+        /// </summary>
+        private readonly ILoggingDatabaseContext LoggingDatabase;
 
         /// <summary>
         /// The mobile topup payment failed page
@@ -52,10 +62,6 @@
         /// </summary>
         private readonly MobileTopupPerformTopupViewModel MobileTopupPerformTopupViewModel;
 
-        private readonly IMobileTopupSelectProductPage MobileTopupSelectProductPage;
-
-        private readonly MobileTopupSelectProductViewModel MobileTopupSelectProductViewModel;
-
         /// <summary>
         /// The mobile topup select operator page
         /// </summary>
@@ -67,11 +73,19 @@
         private readonly MobileTopupSelectOperatorViewModel MobileTopupSelectOperatorViewModel;
 
         /// <summary>
+        /// The mobile topup select product page
+        /// </summary>
+        private readonly IMobileTopupSelectProductPage MobileTopupSelectProductPage;
+
+        /// <summary>
+        /// The mobile topup select product view model
+        /// </summary>
+        private readonly MobileTopupSelectProductViewModel MobileTopupSelectProductViewModel;
+
+        /// <summary>
         /// The transaction processor acl client
         /// </summary>
         private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
-
-        private readonly ILoggingDatabaseContext LoggingDatabase;
 
         /// <summary>
         /// The transactions page
@@ -94,6 +108,7 @@
         /// <param name="mobileTopupSelectProductViewModel">The mobile topup select product view model.</param>
         /// <param name="mobileTopupPaymentSuccessPage">The mobile topup payment success page.</param>
         /// <param name="mobileTopupPaymentFailedPage">The mobile topup payment failed page.</param>
+        /// <param name="adminPage">The admin page.</param>
         /// <param name="device">The device.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
         /// <param name="loggingDatabase">The logging database.</param>
@@ -106,6 +121,7 @@
                                      MobileTopupSelectProductViewModel mobileTopupSelectProductViewModel,
                                      IMobileTopupPaymentSuccessPage mobileTopupPaymentSuccessPage,
                                      IMobileTopupPaymentFailedPage mobileTopupPaymentFailedPage,
+                                     IAdminPage adminPage,
                                      IDevice device,
                                      ITransactionProcessorACLClient transactionProcessorAclClient,
                                      ILoggingDatabaseContext loggingDatabase)
@@ -119,6 +135,7 @@
             this.MobileTopupSelectProductViewModel = mobileTopupSelectProductViewModel;
             this.MobileTopupPaymentSuccessPage = mobileTopupPaymentSuccessPage;
             this.MobileTopupPaymentFailedPage = mobileTopupPaymentFailedPage;
+            this.AdminPage = adminPage;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
             this.LoggingDatabase = loggingDatabase;
@@ -140,6 +157,42 @@
 
             this.TransactionsPage.Init();
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.TransactionsPage);
+        }
+
+        /// <summary>
+        /// Handles the ReconciliationButtonClicked event of the AdminPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private async void AdminPage_ReconciliationButtonClicked(Object sender,
+                                                                 EventArgs e)
+        {
+            // TODO: Get the current totals
+
+            // Send a recon message here
+            ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage
+                                                                 {
+                                                                     DeviceIdentifier = this.Device.GetDeviceIdentifier(),
+                                                                     TransactionDateTime = DateTime.Now,
+                                                                     TransactionCount = 0,
+                                                                     TransactionValue = 0
+                                                                 };
+
+            String requestJson = JsonConvert.SerializeObject(reconciliationRequest);
+
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
+
+            ReconciliationResponseMessage response =
+                await this.TransactionProcessorAclClient.PerformReconcilaition(App.TokenResponse.AccessToken, reconciliationRequest, CancellationToken.None);
+
+            String responseJson = JsonConvert.SerializeObject(response);
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
+
+            // TODO: Clear the totals if the recon was successful
+
+            CrossToastPopUp.Current.ShowToastSuccess("Reconciliation completed, totals reset!");
+
+            await Application.Current.MainPage.Navigation.PopToRootAsync();
         }
 
         /// <summary>
@@ -173,16 +226,16 @@
                                                                                  EventArgs e)
         {
             // Check the user has entered a value for the mobile number and amount
-            if (String.IsNullOrEmpty(this.MobileTopupPerformTopupViewModel.CustomerMobileNumber) || this.MobileTopupPerformTopupViewModel.TopupAmount == 0)
+            if (string.IsNullOrEmpty(this.MobileTopupPerformTopupViewModel.CustomerMobileNumber) || this.MobileTopupPerformTopupViewModel.TopupAmount == 0)
             {
-                this.MobileTopupPerformTopupViewModel.CustomerMobileNumber = String.Empty;
+                this.MobileTopupPerformTopupViewModel.CustomerMobileNumber = string.Empty;
                 this.MobileTopupPerformTopupViewModel.TopupAmount = 0;
-                await App.Current.MainPage.DisplayAlert("Invalid Topup Details", "Please enter a mobile number and Topup Amount to continue", "OK");
+                await Application.Current.MainPage.DisplayAlert("Invalid Topup Details", "Please enter a mobile number and Topup Amount to continue", "OK");
             }
             else
             {
                 Boolean mobileTopupResult = await this.PerformMobileTopup(this.MobileTopupPerformTopupViewModel.ContractProductModel);
-                
+
                 App.IncrementTransactionNumber();
 
                 await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Mobile Topup Result is [{mobileTopupResult}]"));
@@ -221,15 +274,15 @@
             this.MobileTopupSelectProductPage.Init(this.MobileTopupSelectProductViewModel);
             this.MobileTopupSelectProductPage.ProductSelected += this.MobileTopupSelectProductPage_ProductSelected;
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.MobileTopupSelectProductPage);
-            
         }
 
         /// <summary>
         /// Handles the ProductSelected event of the MobileTopupSelectProductPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="SelectedItemChangedEventArgs"/> instance containing the event data.</param>
-        private async void MobileTopupSelectProductPage_ProductSelected(object sender, SelectedItemChangedEventArgs e)
+        /// <param name="e">The <see cref="SelectedItemChangedEventArgs" /> instance containing the event data.</param>
+        private async void MobileTopupSelectProductPage_ProductSelected(Object sender,
+                                                                        SelectedItemChangedEventArgs e)
         {
             // Get the selected item
             ContractProductModel selectedProduct = (ContractProductModel)e.SelectedItem;
@@ -254,7 +307,7 @@
         /// <returns></returns>
         private async Task<Boolean> PerformMobileTopup(ContractProductModel contractProduct)
         {
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"About to perform Mobile Topup"));
+            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage("About to perform Mobile Topup"));
 
             SaleTransactionRequestMessage saleTransactionRequestMessage = new SaleTransactionRequestMessage
                                                                           {
@@ -292,10 +345,13 @@
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void TransactionsPage_AdminButtonClick(Object sender,
-                                                       EventArgs e)
+        private async void TransactionsPage_AdminButtonClick(Object sender,
+                                                             EventArgs e)
         {
-            CrossToastPopUp.Current.ShowToastMessage("Admin Clicked");
+            this.AdminPage.ReconciliationButtonClicked += this.AdminPage_ReconciliationButtonClicked;
+
+            this.AdminPage.Init();
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.AdminPage);
         }
 
         /// <summary>
@@ -320,8 +376,9 @@
             this.MobileTopupSelectOperatorViewModel.Operators = new List<ContractProductModel>();
 
             // Get distinct operator names for Mobile Topup
-            this.MobileTopupSelectOperatorViewModel.Operators = App.ContractProducts.Where(c => c.ProductType == 0).GroupBy(c => c.OperatorName).Select(g => g.First()) .ToList();
-            
+            this.MobileTopupSelectOperatorViewModel.Operators =
+                App.ContractProducts.Where(c => c.ProductType == 0).GroupBy(c => c.OperatorName).Select(g => g.First()).ToList();
+
             this.MobileTopupSelectOperatorPage.Init(this.MobileTopupSelectOperatorViewModel);
             this.MobileTopupSelectOperatorPage.OperatorSelected += this.MobileTopupSelectOperatorPage_OperatorSelected;
 

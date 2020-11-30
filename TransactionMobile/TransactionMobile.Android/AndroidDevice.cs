@@ -36,6 +36,12 @@
                 }
             }
 
+            // Hack for emulator device Id
+            if (id == "EMULATOR30X2X6X0")
+            {
+                id = "EMULATOR29X3X2X0";
+            }
+
             return id;
         }
 

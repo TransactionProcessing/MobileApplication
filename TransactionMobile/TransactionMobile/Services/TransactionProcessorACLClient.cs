@@ -142,6 +142,53 @@
         }
 
         /// <summary>
+        /// Performs the reconcilaition.
+        /// </summary>
+        /// <param name="accessToken">The access token.</param>
+        /// <param name="reconciliationRequest">The reconciliation request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<ReconciliationResponseMessage> PerformReconcilaition(String accessToken,
+                                                                               ReconciliationRequestMessage reconciliationRequest,
+                                                                               CancellationToken cancellationToken)
+        {
+            ReconciliationResponseMessage response = null;
+            String requestUri = this.BuildRequestUrl("/api/transactions");
+
+            try
+            {
+                String requestSerialised = JsonConvert.SerializeObject(reconciliationRequest,
+                                                                       new JsonSerializerSettings
+                                                                       {
+                                                                           TypeNameHandling = TypeNameHandling.All
+                                                                       });
+
+                StringContent httpContent = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
+
+                // Add the access token to the client headers
+                this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                // Make the Http Call here
+                HttpResponseMessage httpResponse = await this.HttpClient.PostAsync(requestUri, httpContent, cancellationToken);
+
+                // Process the response
+                String content = await this.HandleResponse(httpResponse, cancellationToken);
+
+                // call was successful so now deserialise the body to the response object
+                response = JsonConvert.DeserializeObject<ReconciliationResponseMessage>(content);
+            }
+            catch (Exception ex)
+            {
+                // An exception has occurred, add some additional information to the message
+                Exception exception = new Exception("Error posting reconciliation transaction.", ex);
+
+                throw exception;
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Builds the request URL.
         /// </summary>
         /// <param name="route">The route.</param>
