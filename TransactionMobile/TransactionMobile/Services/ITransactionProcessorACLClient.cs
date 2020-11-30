@@ -25,12 +25,22 @@ namespace TransactionMobile.Services
         /// Performs the logon transaction.
         /// </summary>
         /// <param name="accessToken">The access token.</param>
-        /// <param name="logonTransactionRequest">The logon transaction request.</param>
+        /// <param name="saleTransactionRequest">The sale transaction request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         Task<SaleTransactionResponseMessage> PerformSaleTransaction(String accessToken,
                                                                       SaleTransactionRequestMessage saleTransactionRequest,
                                                                       CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Performs the reconcilaition.
+        /// </summary>
+        /// <param name="accessToken">The access token.</param>
+        /// <param name="reconciliationRequest">The reconciliation request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<ReconciliationResponseMessage> PerformReconcilaition(String accessToken,
+                                                                    ReconciliationRequestMessage reconciliationRequest,
+                                                                    CancellationToken cancellationToken);
     }
 }

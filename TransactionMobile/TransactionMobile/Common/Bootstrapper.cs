@@ -16,6 +16,7 @@
     using Unity.Lifetime;
     using ViewModels;
     using Views;
+    using Views.Admin;
     using Views.MobileTopup;
 
     [ExcludeFromCodeCoverage]
@@ -89,6 +90,7 @@
             unityContainer.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ISupportPage, SupportPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IAdminPage, AdminPage>(new TransientLifetimeManager());
 
             // View model registrations
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());

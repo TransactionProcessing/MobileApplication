@@ -27,6 +27,7 @@
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();
             Mock<IMobileTopupPaymentSuccessPage> mobileTopupPaymentSuccessPage = new Mock<IMobileTopupPaymentSuccessPage>();
             Mock<IMobileTopupPaymentFailedPage> mobileTopupPaymentFailedPage = new Mock<IMobileTopupPaymentFailedPage>();
+            Mock<IAdminPage> adminPage = new Mock<IAdminPage>();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
             Mock<ILoggingDatabaseContext> loggingDatabase = new Mock<ILoggingDatabaseContext>();
@@ -40,6 +41,7 @@
                                                                                     mobileTopupSelectProductViewModel,
                                                                                     mobileTopupPaymentSuccessPage.Object,
                                                                                     mobileTopupPaymentFailedPage.Object,
+                                                                                    adminPage.Object,
                                                                                     device.Object,
                                                                                     transactionProcessorACLClient.Object,
                                                                                     loggingDatabase.Object);

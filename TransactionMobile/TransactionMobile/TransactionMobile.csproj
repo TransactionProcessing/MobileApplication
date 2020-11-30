@@ -31,7 +31,7 @@
     <PackageReference Include="SecurityService.Client" Version="1.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.57" />
-    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.1-build5" />
+    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.5.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.4.0.991537" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Unity" Version="5.11.4" />
@@ -48,6 +48,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Admin\AdminPage.xaml.cs">
+      <DependentUpon>AdminPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MobileTopup\MobileTopupFailurePage.xaml.cs">
       <DependentUpon>MobileTopupFailurePage.xaml</DependentUpon>
     </Compile>

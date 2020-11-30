@@ -342,7 +342,7 @@
                                                                                 TransactionDateTime = DateTime.Now,
                                                                                 TransactionNumber = App.GetNextTransactionNumber().ToString() // TODO: Need to hold txn number somewhere
             };
-
+            
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
             await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
