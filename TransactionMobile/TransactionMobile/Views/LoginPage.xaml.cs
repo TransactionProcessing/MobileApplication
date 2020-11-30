@@ -18,7 +18,7 @@
     [ExcludeFromCodeCoverage]
     public partial class LoginPage : ContentPage, ILoginPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -35,11 +35,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginPage" /> class.
         /// </summary>
-        /// <param name="loggingDatabase">The logging database.</param>
-        public LoginPage(ILoggingDatabaseContext loggingDatabase)
+        /// <param name="database">The logging database.</param>
+        public LoginPage(IDatabaseContext database)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -62,7 +62,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(LoginViewModel viewModel)
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.ViewModel = viewModel;
 

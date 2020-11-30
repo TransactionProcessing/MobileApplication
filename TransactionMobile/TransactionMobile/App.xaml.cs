@@ -63,9 +63,9 @@
         public static List<ContractProductModel> ContractProducts;
 
         /// <summary>
-        /// The analysis logger
+        /// The database
         /// </summary>
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         /// <summary>
         /// The device
@@ -80,15 +80,15 @@
         /// Initializes a new instance of the <see cref="App" /> class.
         /// </summary>
         /// <param name="device">The device.</param>
-        /// <param name="loggingDatabase">The logging database.</param>
+        /// <param name="database">The database.</param>
         public App(IDevice device,
-                   ILoggingDatabaseContext loggingDatabase)
+                   IDatabaseContext database)
         {
             this.Device = device;
-            this.LoggingDatabase = loggingDatabase;
+            this.Database = database;
 
             // Init the logging DB
-            this.LoggingDatabase.InitialiseDatabase();
+            this.Database.InitialiseDatabase();
 
             this.InitializeComponent();
 
@@ -97,7 +97,7 @@
             App.Container = Bootstrapper.Run();
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(this.LoggingDatabase, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
             
             if (App.Configuration == null)
             {

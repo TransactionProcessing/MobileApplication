@@ -3,11 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Entities;
 
     /// <summary>
     /// 
     /// </summary>
-    public interface ILoggingDatabaseContext
+    public interface IDatabaseContext
     {
         #region Methods
 
@@ -44,6 +45,29 @@
         /// <param name="logMessagesToRemove">The log messages to remove.</param>
         /// <returns></returns>
         Task RemoveUploadedMessages(List<LogMessage> logMessagesToRemove);
+
+        /// <summary>
+        /// Updates the operator totals.
+        /// </summary>
+        /// <param name="operatorId">The operator identifier.</param>
+        /// <param name="transactionCount">The transaction count.</param>
+        /// <param name="transactionValue">The transaction value.</param>
+        /// <returns></returns>
+        Task UpdateOperatorTotals(String operatorId,
+                                  Int32 transactionCount,
+                                  Decimal transactionValue);
+
+        /// <summary>
+        /// Resets the totals.
+        /// </summary>
+        /// <returns></returns>
+        Task ResetTotals();
+
+        /// <summary>
+        /// Gets the totals.
+        /// </summary>
+        /// <returns></returns>
+        Task<OperatorTotals> GetTotals();
 
         #endregion
     }

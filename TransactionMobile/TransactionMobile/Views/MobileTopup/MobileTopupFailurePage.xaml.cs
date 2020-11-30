@@ -19,7 +19,10 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPaymentFailedPage : ContentPage, IMobileTopupPaymentFailedPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        /// <summary>
+        /// The database
+        /// </summary>
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -30,11 +33,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MobileTopupPaymentFailedPage" /> class.
         /// </summary>
-        /// <param name="loggingDatabase">The logging database.</param>
-        public MobileTopupPaymentFailedPage(ILoggingDatabaseContext loggingDatabase)
+        /// <param name="database">The logging database.</param>
+        public MobileTopupPaymentFailedPage(IDatabaseContext database)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -56,7 +59,7 @@
         /// </summary>
         public void Init()
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.CancelButton.Clicked += this.CancelButton_Clicked;
         }
 

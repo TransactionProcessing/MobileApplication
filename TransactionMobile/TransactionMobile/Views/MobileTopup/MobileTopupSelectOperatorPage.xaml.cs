@@ -20,7 +20,7 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupSelectOperatorPage : ContentPage, IMobileTopupSelectOperatorPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -32,10 +32,10 @@
         /// Initializes a new instance of the <see cref="MobileTopupSelectOperatorPage" /> class.
         /// </summary>
         /// <param name="analysisLogger">The analysis logger.</param>
-        public MobileTopupSelectOperatorPage(ILoggingDatabaseContext loggingDatabase)
+        public MobileTopupSelectOperatorPage(IDatabaseContext database)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -58,7 +58,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(MobileTopupSelectOperatorViewModel viewModel)
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.LoadOperators(viewModel);
         }
 

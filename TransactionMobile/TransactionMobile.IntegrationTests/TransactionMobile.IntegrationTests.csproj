@@ -75,6 +75,9 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v9.0\Mono.Android.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -207,8 +210,10 @@
     <Compile Include="Features\Login.feature.cs" />
     <Compile Include="Features\LoginFeature.cs" />
     <Compile Include="Features\LoginSteps.cs" />
+    <Compile Include="Features\ReconciliationSteps.cs" />
     <Compile Include="Features\SafaricomTopup.feature.cs" />
     <Compile Include="Features\SafaricomTopupSteps.cs" />
+    <Compile Include="Pages\AdminPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\MobileTopupFailedPage.cs" />
@@ -225,6 +230,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Features\Login.feature" />
+    <None Include="Features\Reconciliation.feature" />
     <None Include="Features\SafaricomTopup.feature">
       <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>
     </None>

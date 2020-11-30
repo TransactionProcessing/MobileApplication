@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Common;
     using Database;
+    using Database.Entities;
     using Pages;
     using Services;
     using Xamarin.Forms;
@@ -32,7 +33,7 @@
         /// <summary>
         /// The logging database
         /// </summary>
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         /// <summary>
         /// The support page
@@ -47,16 +48,16 @@
         /// Initializes a new instance of the <see cref="SupportPresenter"/> class.
         /// </summary>
         /// <param name="supportPage">The support page.</param>
-        /// <param name="loggingDatabase">The logging database.</param>
+        /// <param name="database">The logging database.</param>
         /// <param name="device">The device.</param>
         /// <param name="configurationServiceClient">The configuration service client.</param>
         public SupportPresenter(ISupportPage supportPage,
-                                ILoggingDatabaseContext loggingDatabase,
+                                IDatabaseContext database,
                                 IDevice device,
                                 IConfigurationServiceClient configurationServiceClient)
         {
             this.SupportPage = supportPage;
-            this.LoggingDatabase = loggingDatabase;
+            this.Database = database;
             this.Device = device;
             this.ConfigurationServiceClient = configurationServiceClient;
         }
@@ -86,7 +87,7 @@
         {
             while (true)
             {
-                List<LogMessage> logEntries = await this.LoggingDatabase.GetLogMessages(10);
+                List<LogMessage> logEntries = await this.Database.GetLogMessages(10);
 
                 if (logEntries.Any() == false)
                 {
@@ -96,7 +97,7 @@
                 await this.ConfigurationServiceClient.PostDiagnosticLogs(this.Device.GetDeviceIdentifier(), logEntries, CancellationToken.None);
 
                 // Clear the logs that have been uploaded
-                await this.LoggingDatabase.RemoveUploadedMessages(logEntries);
+                await this.Database.RemoveUploadedMessages(logEntries);
             }
         }
 

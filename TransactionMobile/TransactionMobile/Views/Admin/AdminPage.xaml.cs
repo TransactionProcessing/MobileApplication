@@ -23,7 +23,7 @@
         /// <summary>
         /// The logging database
         /// </summary>
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -34,11 +34,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AdminPage" /> class.
         /// </summary>
-        /// <param name="loggingDatabase">The logging database.</param>
-        public AdminPage(ILoggingDatabaseContext loggingDatabase)
+        /// <param name="database">The logging database.</param>
+        public AdminPage(IDatabaseContext database)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -61,7 +61,7 @@
         /// </summary>
         public void Init()
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.ReconciliationButton.Clicked += this.ReconciliationButton_Clicked;
         }

@@ -21,7 +21,7 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPerformTopupPage : ContentPage, IMobileTopupPerformTopupPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -39,10 +39,10 @@
         /// Initializes a new instance of the <see cref="MobileTopupPerformTopupPage" /> class.
         /// </summary>
         /// <param name="loggingDatabase">The logging database.</param>
-        public MobileTopupPerformTopupPage(ILoggingDatabaseContext loggingDatabase)
+        public MobileTopupPerformTopupPage(IDatabaseContext loggingDatabase)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = loggingDatabase;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -65,7 +65,7 @@
         /// <param name="viewModel">The view model.</param>
         public void Init(MobileTopupPerformTopupViewModel viewModel)
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.ViewModel = viewModel;
             this.BindingContext = this.ViewModel;

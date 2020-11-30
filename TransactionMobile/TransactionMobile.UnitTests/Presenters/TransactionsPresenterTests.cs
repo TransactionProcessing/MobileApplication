@@ -30,7 +30,7 @@
             Mock<IAdminPage> adminPage = new Mock<IAdminPage>();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
-            Mock<ILoggingDatabaseContext> loggingDatabase = new Mock<ILoggingDatabaseContext>();
+            Mock<IDatabaseContext> database = new Mock<IDatabaseContext>();
 
             TransactionsPresenter transactionsPresenter = new TransactionsPresenter(transactionsPage.Object,
                                                                                     mobileTopupSelectOperatorPage.Object,
@@ -44,7 +44,7 @@
                                                                                     adminPage.Object,
                                                                                     device.Object,
                                                                                     transactionProcessorACLClient.Object,
-                                                                                    loggingDatabase.Object);
+                                                                                    database.Object);
 
             transactionsPresenter.ShouldNotBeNull();
         }

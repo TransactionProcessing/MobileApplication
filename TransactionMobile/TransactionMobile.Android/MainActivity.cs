@@ -39,7 +39,7 @@
         /// <summary>
         /// The logging database
         /// </summary>
-        private ILoggingDatabaseContext LoggingDatabase;
+        private IDatabaseContext Database;
 
         #endregion
 
@@ -110,7 +110,7 @@
 
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             this.Device = new AndroidDevice();
-            this.LoggingDatabase = new LoggingDatabaseContext(connectionString);
+            this.Database = new DatabaseContext(connectionString);
 
             base.OnCreate(savedInstanceState);
 
@@ -119,7 +119,7 @@
 
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
-            this.LoadApplication(new App(this.Device, this.LoggingDatabase));
+            this.LoadApplication(new App(this.Device, this.Database));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@
         {
             Exception newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
             
-            Task.Run(async () => { await this.LoggingDatabase.InsertLogMessages(LoggingDatabaseContext.CreateFatalLogMessages(newExc)); });
+            Task.Run(async () => { await this.Database.InsertLogMessages(DatabaseContext.CreateFatalLogMessages(newExc)); });
         }
 
         /// <summary>
@@ -145,7 +145,7 @@
         {
             Exception newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
 
-            Task.Run(async () => { await this.LoggingDatabase.InsertLogMessages(LoggingDatabaseContext.CreateFatalLogMessages(newExc)); });
+            Task.Run(async () => { await this.Database.InsertLogMessages(DatabaseContext.CreateFatalLogMessages(newExc)); });
         }
 
         #endregion
