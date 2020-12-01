@@ -30,6 +30,11 @@ namespace TransactionMobile.IntegrationTests.Pages
 
         #endregion
 
+        public AdminPage()
+        {
+            this.ReconciliationButton = x => x.Marked("Reconciliation");
+        }
+
         public void ClickReconciliationButton()
         {
             app.WaitForElement(this.ReconciliationButton);
@@ -38,7 +43,7 @@ namespace TransactionMobile.IntegrationTests.Pages
 
         public void CheckReconciliationSuccessMessageToastIsDisplayed()
         {
-            app.WaitForElement("Reconciliation completed, totals reset!");
+            app.WaitForElement("Reconciliation completed, totals reset!", timeout:TimeSpan.FromSeconds(5));
         }
     }
 }

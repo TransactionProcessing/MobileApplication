@@ -96,7 +96,7 @@ namespace TransactionMobile.IntegrationTests
 
         }
 
-        [AfterStep]
+        //[AfterStep]
         public void CheckStepStatus()
         {
             // Build the screenshot name
