@@ -38,9 +38,9 @@
         private readonly IDevice Device;
 
         /// <summary>
-        /// The logging database
+        /// The database
         /// </summary>
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         /// <summary>
         /// The mobile topup payment failed page
@@ -111,7 +111,7 @@
         /// <param name="adminPage">The admin page.</param>
         /// <param name="device">The device.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
-        /// <param name="loggingDatabase">The logging database.</param>
+        /// <param name="database">The logging database.</param>
         public TransactionsPresenter(ITransactionsPage transactionsPage,
                                      IMobileTopupSelectOperatorPage mobileTopupSelectOperatorPage,
                                      MobileTopupSelectOperatorViewModel mobileTopupSelectOperatorViewModel,
@@ -124,7 +124,7 @@
                                      IAdminPage adminPage,
                                      IDevice device,
                                      ITransactionProcessorACLClient transactionProcessorAclClient,
-                                     ILoggingDatabaseContext loggingDatabase)
+                                     IDatabaseContext database)
         {
             this.TransactionsPage = transactionsPage;
             this.MobileTopupSelectOperatorPage = mobileTopupSelectOperatorPage;
@@ -138,7 +138,7 @@
             this.AdminPage = adminPage;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
-            this.LoggingDatabase = loggingDatabase;
+            this.Database = database;
         }
 
         #endregion
@@ -167,30 +167,39 @@
         private async void AdminPage_ReconciliationButtonClicked(Object sender,
                                                                  EventArgs e)
         {
-            // TODO: Get the current totals
+            // Get the current totals
+            OperatorTotals totals = await this.Database.GetTotals();
 
             // Send a recon message here
             ReconciliationRequestMessage reconciliationRequest = new ReconciliationRequestMessage
                                                                  {
                                                                      DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                      TransactionDateTime = DateTime.Now,
-                                                                     TransactionCount = 0,
-                                                                     TransactionValue = 0
+                                                                     TransactionCount = totals.TransactionCount,
+                                                                     TransactionValue = totals.TransactionValue
                                                                  };
 
             String requestJson = JsonConvert.SerializeObject(reconciliationRequest);
 
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
             ReconciliationResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformReconcilaition(App.TokenResponse.AccessToken, reconciliationRequest, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
 
-            // TODO: Clear the totals if the recon was successful
-
-            CrossToastPopUp.Current.ShowToastSuccess("Reconciliation completed, totals reset!");
+            // Clear the totals if the recon was successful
+            if (response.ResponseCode == "0000")
+            {
+                await this.Database.ResetTotals();
+                CrossToastPopUp.Current.ShowToastSuccess("Reconciliation completed, totals reset!");
+            }
+            else
+            {
+                CrossToastPopUp.Current.ShowToastWarning("Reconciliation failed, totals not reset!");
+            }
+            
 
             await Application.Current.MainPage.Navigation.PopToRootAsync();
         }
@@ -238,7 +247,7 @@
 
                 App.IncrementTransactionNumber();
 
-                await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Mobile Topup Result is [{mobileTopupResult}]"));
+                await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Mobile Topup Result is [{mobileTopupResult}]"));
 
                 if (mobileTopupResult)
                 {
@@ -307,7 +316,7 @@
         /// <returns></returns>
         private async Task<Boolean> PerformMobileTopup(ContractProductModel contractProduct)
         {
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage("About to perform Mobile Topup"));
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage("About to perform Mobile Topup"));
 
             SaleTransactionRequestMessage saleTransactionRequestMessage = new SaleTransactionRequestMessage
                                                                           {
@@ -324,18 +333,21 @@
 
             String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);
 
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
             SaleTransactionResponseMessage response =
                 await this.TransactionProcessorAclClient.PerformSaleTransaction(App.TokenResponse.AccessToken, saleTransactionRequestMessage, CancellationToken.None);
 
             String responseJson = JsonConvert.SerializeObject(response);
-            await this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
 
             if (response.ResponseCode != "0000")
             {
                 return false;
             }
+
+            // Update the totals
+            await this.Database.UpdateOperatorTotals(contractProduct.OperatorId.ToString(), 1, this.MobileTopupPerformTopupViewModel.TopupAmount);
 
             return true;
         }

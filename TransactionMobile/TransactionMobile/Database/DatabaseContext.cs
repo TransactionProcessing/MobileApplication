@@ -2,15 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+    using Entities;
     using Models;
     using SQLite;
 
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="TransactionMobile.Database.ILoggingDatabaseContext" />
-    public class LoggingDatabaseContext : ILoggingDatabaseContext
+    /// <seealso cref="TransactionMobile.Database.IDatabaseContext" />
+    public class DatabaseContext : IDatabaseContext
     {
         #region Fields
 
@@ -24,18 +26,18 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingDatabaseContext"/> class.
+        /// Initializes a new instance of the <see cref="DatabaseContext" /> class.
         /// </summary>
         /// <param name="connectionStringResolver">The connection string resolver.</param>
-        public LoggingDatabaseContext(Func<String> connectionStringResolver) : this(connectionStringResolver())
+        public DatabaseContext(Func<String> connectionStringResolver) : this(connectionStringResolver())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingDatabaseContext"/> class.
+        /// Initializes a new instance of the <see cref="DatabaseContext" /> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        public LoggingDatabaseContext(String connectionString)
+        public DatabaseContext(String connectionString)
         {
             this.Connection = new SQLiteAsyncConnection(connectionString);
         }
@@ -51,7 +53,7 @@
         /// <returns></returns>
         public static LogMessage CreateDebugLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Debug);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Debug);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@
         /// <returns></returns>
         public static LogMessage CreateErrorLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Error);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Error);
         }
 
         /// <summary>
@@ -76,7 +78,7 @@
             Exception e = exception;
             while (e != null)
             {
-                logMessages.Add(LoggingDatabaseContext.CreateLogMessage(e.Message, LogLevel.Error));
+                logMessages.Add(DatabaseContext.CreateLogMessage(e.Message, LogLevel.Error));
                 e = e.InnerException;
             }
 
@@ -90,7 +92,7 @@
         /// <returns></returns>
         public static LogMessage CreateFatalLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Fatal);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Fatal);
         }
 
         /// <summary>
@@ -105,7 +107,7 @@
             Exception e = exception;
             while (e != null)
             {
-                logMessages.Add(LoggingDatabaseContext.CreateLogMessage(e.Message, LogLevel.Fatal));
+                logMessages.Add(DatabaseContext.CreateLogMessage(e.Message, LogLevel.Fatal));
                 e = e.InnerException;
             }
 
@@ -119,7 +121,7 @@
         /// <returns></returns>
         public static LogMessage CreateInformationLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Info);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Info);
         }
 
         /// <summary>
@@ -129,7 +131,7 @@
         /// <returns></returns>
         public static LogMessage CreateTraceLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Trace);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Trace);
         }
 
         /// <summary>
@@ -139,7 +141,7 @@
         /// <returns></returns>
         public static LogMessage CreateWarningLogMessage(String message)
         {
-            return LoggingDatabaseContext.CreateLogMessage(message, LogLevel.Warn);
+            return DatabaseContext.CreateLogMessage(message, LogLevel.Warn);
         }
 
         /// <summary>
@@ -159,8 +161,9 @@
         /// </summary>
         public async Task InitialiseDatabase()
         {
-            // Create the required table
+            // Create the required tables
             await this.Connection.CreateTableAsync<LogMessage>();
+            await this.Connection.CreateTableAsync<OperatorTotals>();
         }
 
         /// <summary>
@@ -198,6 +201,93 @@
             {
                 await this.Connection.DeleteAsync(logMessage);
             }
+        }
+
+        /// <summary>
+        /// Updates the operator totals.
+        /// </summary>
+        /// <param name="operatorId">The operator identifier.</param>
+        /// <param name="transactionCount">The transaction count.</param>
+        /// <param name="transactionValue">The transaction value.</param>
+        public async Task UpdateOperatorTotals(String operatorId,
+                                               Int32 transactionCount,
+                                               Decimal transactionValue)
+        {
+            // get the totals record for this operator
+            OperatorTotals operatorTotals = await this.GetOperatorTotals(operatorId);
+
+            if (operatorTotals == null)
+            {
+                operatorTotals = new OperatorTotals
+                                                {
+                                                    OperatorId = operatorId,
+                                                    LastUpdateDateTime = DateTime.UtcNow,
+                                                    TransactionCount = transactionCount,
+                                                    TransactionValue = transactionValue
+                                                };
+
+                // No Totals found so insert a row
+                await this.Connection.InsertAsync(operatorTotals);
+
+            }
+            else
+            {
+                operatorTotals.LastUpdateDateTime = DateTime.Now;
+                operatorTotals.TransactionCount += transactionCount;
+                operatorTotals.TransactionValue += transactionValue;
+
+                // Update the row
+                await this.Connection.UpdateAsync(operatorTotals);
+            }
+        }
+
+        /// <summary>
+        /// Gets the overall totals.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<OperatorTotals>> GetAllTotals()
+        {
+            List<OperatorTotals> totals = await this.Connection.QueryAsync<OperatorTotals>("Select * From OperatorTotals");
+
+            return totals;
+        }
+
+        /// <summary>
+        /// Gets the operator totals.
+        /// </summary>
+        /// <param name="operatorId">The operator identifier.</param>
+        /// <returns></returns>
+        private async Task<OperatorTotals> GetOperatorTotals(String operatorId)
+        {
+            List<OperatorTotals> totals = await this.Connection.QueryAsync<OperatorTotals>("Select * From OperatorTotals Where OperatorId ='" + operatorId + "'");
+
+            OperatorTotals operatorTotals = totals.SingleOrDefault();
+
+            return operatorTotals;
+        }
+
+        /// <summary>
+        /// Resets the totals.
+        /// </summary>
+        public async Task ResetTotals()
+        {
+            await this.Connection.DeleteAllAsync<OperatorTotals>();
+        }
+
+        /// <summary>
+        /// Gets the totals.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<OperatorTotals> GetTotals()
+        {
+            List<OperatorTotals> totals = await this.GetAllTotals();
+
+               return new OperatorTotals
+                       {
+                           LastUpdateDateTime = totals.Any() ? totals.Max(t => t.LastUpdateDateTime) : DateTime.Now,
+                           TransactionCount = totals.Any() ? totals.Sum(t => t.TransactionCount) : 0,
+                           TransactionValue = totals.Any() ? totals.Sum(t => t.TransactionValue) : 0,
+                       };
         }
 
         /// <summary>

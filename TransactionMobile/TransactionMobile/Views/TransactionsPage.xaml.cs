@@ -18,7 +18,7 @@
     [ExcludeFromCodeCoverage]
     public partial class TransactionsPage : ContentPage, ITransactionsPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
         
@@ -31,11 +31,11 @@
         /// </summary>
         /// <param name="analysisLogger">The analysis logger.</param>
         /// <param name="device">The device.</param>
-        public TransactionsPage(ILoggingDatabaseContext loggingDatabase,
+        public TransactionsPage(IDatabaseContext database,
                                 IDevice device)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -72,7 +72,7 @@
         /// </summary>
         public void Init()
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
 
             this.MobileTopupButton.Clicked += this.MobileTopupButton_Clicked;
             this.MobileWalletButton.Clicked += this.MobileWalletButton_Clicked;

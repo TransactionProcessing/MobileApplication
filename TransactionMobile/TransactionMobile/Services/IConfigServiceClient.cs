@@ -7,6 +7,7 @@ namespace TransactionMobile.Services
     using System.Threading.Tasks;
     using Common;
     using Database;
+    using Database.Entities;
     using Unity;
 
     /// <summary>

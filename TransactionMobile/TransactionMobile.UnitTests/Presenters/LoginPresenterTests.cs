@@ -34,7 +34,7 @@ namespace TransactionMobile.UnitTests.Presenters
             Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
             Mock<IEstateClient> estateClient = new Mock<IEstateClient>();
-            Mock<ILoggingDatabaseContext> loggingDatabase = new Mock<ILoggingDatabaseContext>();
+            Mock<IDatabaseContext> loggingDatabase = new Mock<IDatabaseContext>();
             LoginPresenter loginPresenter =
                 new LoginPresenter(loginPage.Object, mainPage.Object, 
                                    loginViewModel, mainPageViewModel,

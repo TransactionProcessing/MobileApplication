@@ -19,7 +19,7 @@
     [ExcludeFromCodeCoverage]
     public partial class MobileTopupPaymentSuccessPage : ContentPage, IMobileTopupPaymentSuccessPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -32,10 +32,10 @@
         /// Initializes a new instance of the <see cref="MobileTopupPaymentSuccessPage" /> class.
         /// </summary>
         /// <param name="loggingDatabase">The logging database.</param>
-        public MobileTopupPaymentSuccessPage(ILoggingDatabaseContext loggingDatabase)
+        public MobileTopupPaymentSuccessPage(IDatabaseContext loggingDatabase)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = loggingDatabase;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -57,7 +57,7 @@
         /// </summary>
         public void Init()
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.CompleteButton.Clicked += this.CompleteButton_Clicked;
         }
 

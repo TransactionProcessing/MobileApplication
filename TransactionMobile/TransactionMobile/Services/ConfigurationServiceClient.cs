@@ -10,6 +10,7 @@
     using ClientProxyBase;
     using Common;
     using Database;
+    using Database.Entities;
     using Newtonsoft.Json;
 
     /// <summary>

@@ -18,7 +18,10 @@
     [ExcludeFromCodeCoverage]
     public partial class MainPage : ContentPage, IMainPage, IPage
     {
-        private readonly ILoggingDatabaseContext LoggingDatabase;
+        /// <summary>
+        /// The database
+        /// </summary>
+        private readonly IDatabaseContext Database;
 
         #region Fields
 
@@ -30,11 +33,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MainPage" /> class.
         /// </summary>
-        /// <param name="loggingDatabase">The logging database.</param>
-        public MainPage(ILoggingDatabaseContext loggingDatabase)
+        /// <param name="database">The logging database.</param>
+        public MainPage(IDatabaseContext database)
         {
-            this.LoggingDatabase = loggingDatabase;
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
+            this.Database = database;
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
             this.InitializeComponent();
         }
 
@@ -72,7 +75,7 @@
         /// <param name="viewModel"></param>
         public void Init(MainPageViewModel viewModel)
         {
-            this.LoggingDatabase.InsertLogMessage(LoggingDatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.TransactionsButton.Clicked += this.TransactionsButton_Clicked;
             this.ReportsButton.Clicked += this.ReportsButton_Clicked;
             this.ProfileButton.Clicked += this.ProfileButton_Clicked;
