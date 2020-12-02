@@ -10,6 +10,8 @@
     using Database;
     using Models;
     using Newtonsoft.Json;
+    using Plugin.Toast;
+    using Plugin.Toast.Abstractions;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
     using Services;
@@ -107,12 +109,16 @@
                              Console.WriteLine("Config is null");
 
                              IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
-
                              App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
 
                              // TODO: Logging
                              Console.WriteLine("Config retrieved");
                          });
+
+                if (App.Configuration == null)
+                {
+                    CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
+                }
             }
         }
 
