@@ -6,8 +6,7 @@
              xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
-             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-             x:Class="TransactionMobile.Views.Admin.AdminPage">
+             x:Class="TransactionMobile.Views.Voucher.VoucherSelectProductPage">
 
     <ContentPage.Content>
         <StackLayout
@@ -26,18 +25,11 @@
                 FontSize="20"
                 HorizontalTextAlignment="Center"
                 Style="{StaticResource LabelStyle}"
-                Text="Admin"
-                AutomationId="AdminLabel"
+                Text="Select Product"
+                AutomationId="SelectProductLabel"
                 TextColor="{DynamicResource Gray-900}" />
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80"></RowDefinition>
-                </Grid.RowDefinitions>
-
-
-                <buttons:SfButton AutomationId="ReconciliationButton" x:Name="ReconciliationButton" Text="Reconciliation" Grid.Row="0" Grid.Column="0" Style="{DynamicResource AdminButtonStyle}"/>
-
+            <Grid x:Name="ProductsGrid" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
             </Grid>
         </StackLayout>
     </ContentPage.Content>

@@ -1,6 +1,5 @@
 ﻿namespace TransactionMobile.IntegrationTests.Pages
 {
-    using System;
     using Common;
     using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -48,24 +47,22 @@
         }
     }
 
-    public class MobileTopupSelectProductPage : BasePage
+    public class VoucherSelectOperatorPage : BasePage
     {
         #region Fields
 
-        private readonly Query CustomProductButton;
-        private readonly Query KES100ProductButton;
+        private readonly Query HealthcareCentre1OperatorButton;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MobileTopupSelectProductPage"/> class.
+        /// Initializes a new instance of the <see cref="MobileTopupSelectOperatorPage"/> class.
         /// </summary>
-        public MobileTopupSelectProductPage()
+        public VoucherSelectOperatorPage()
         {
-            this.CustomProductButton = x => x.Marked("Custom");
-            this.KES100ProductButton = x => x.Marked("100 KES");
+            this.HealthcareCentre1OperatorButton = x => x.Marked("Healthcare Centre 1");
         }
 
         #endregion
@@ -81,22 +78,16 @@
         protected override PlatformQuery Trait =>
             new PlatformQuery
             {
-                Android = x => x.Marked("Select Product"),
-                iOS = x => x.Marked("Select Product")
+                Android = x => x.Marked("Select Operator"),
+                iOS = x => x.Marked("Select Operator")
             };
 
         #endregion
 
-        public void ClickKES100ProductButton()
+        public void ClickHealthcareCentre1OperatorButton()
         {
-            app.WaitForElement(this.KES100ProductButton);
-            app.Tap(this.KES100ProductButton);
-        }
-
-        public void ClickCustomProductButton()
-        {
-            app.WaitForElement(this.CustomProductButton, timeout:TimeSpan.FromSeconds(60));
-            app.Tap(this.CustomProductButton);
+            app.WaitForElement(this.HealthcareCentre1OperatorButton);
+            app.Tap(this.HealthcareCentre1OperatorButton);
         }
     }
 }

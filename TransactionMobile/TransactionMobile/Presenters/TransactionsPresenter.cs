@@ -47,6 +47,22 @@
         /// </summary>
         private readonly IMobileTopupPaymentFailedPage MobileTopupPaymentFailedPage;
 
+        private readonly IVoucherSelectOperatorPage VoucherSelectOperatorPage;
+
+        private readonly VoucherSelectOperatorViewModel VoucherSelectOperatorViewModel;
+
+        private readonly IVoucherSelectProductPage VoucherSelectProductPage;
+
+        private readonly VoucherSelectProductViewModel VoucherSelectProductViewModel;
+
+        private readonly IVoucherPerformVoucherIssuePage VoucherPerformVoucherIssuePage;
+
+        private readonly VoucherPerformVoucherIssueViewModel VoucherPerformVoucherIssueViewModel;
+
+        private readonly IVoucherSuccessPage VoucherSuccessPage;
+
+        private readonly IVoucherFailedPage VoucherFailedPage;
+
         /// <summary>
         /// The mobile topup payment success page
         /// </summary>
@@ -108,6 +124,14 @@
         /// <param name="mobileTopupSelectProductViewModel">The mobile topup select product view model.</param>
         /// <param name="mobileTopupPaymentSuccessPage">The mobile topup payment success page.</param>
         /// <param name="mobileTopupPaymentFailedPage">The mobile topup payment failed page.</param>
+        /// <param name="voucherSelectOperatorPage">The voucher select operator page.</param>
+        /// <param name="voucherSelectOperatorViewModel">The voucher select operator view model.</param>
+        /// <param name="voucherSelectProductPage">The voucher select product page.</param>
+        /// <param name="voucherSelectProductViewModel">The voucher select product view model.</param>
+        /// <param name="voucherPerformVoucherIssuePage">The voucher perform voucher issue page.</param>
+        /// <param name="voucherPerformVoucherIssueViewModel">The voucher perform voucher issue view model.</param>
+        /// <param name="voucherSuccessPage">The voucher success page.</param>
+        /// <param name="voucherFailedPage">The voucher failed page.</param>
         /// <param name="adminPage">The admin page.</param>
         /// <param name="device">The device.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
@@ -121,6 +145,14 @@
                                      MobileTopupSelectProductViewModel mobileTopupSelectProductViewModel,
                                      IMobileTopupPaymentSuccessPage mobileTopupPaymentSuccessPage,
                                      IMobileTopupPaymentFailedPage mobileTopupPaymentFailedPage,
+                                     IVoucherSelectOperatorPage voucherSelectOperatorPage,
+                                     VoucherSelectOperatorViewModel voucherSelectOperatorViewModel,
+                                     IVoucherSelectProductPage voucherSelectProductPage,
+                                     VoucherSelectProductViewModel voucherSelectProductViewModel,
+                                     IVoucherPerformVoucherIssuePage voucherPerformVoucherIssuePage,
+                                     VoucherPerformVoucherIssueViewModel voucherPerformVoucherIssueViewModel,
+                                     IVoucherSuccessPage voucherSuccessPage,
+                                     IVoucherFailedPage voucherFailedPage,
                                      IAdminPage adminPage,
                                      IDevice device,
                                      ITransactionProcessorACLClient transactionProcessorAclClient,
@@ -135,6 +167,14 @@
             this.MobileTopupSelectProductViewModel = mobileTopupSelectProductViewModel;
             this.MobileTopupPaymentSuccessPage = mobileTopupPaymentSuccessPage;
             this.MobileTopupPaymentFailedPage = mobileTopupPaymentFailedPage;
+            this.VoucherSelectOperatorPage = voucherSelectOperatorPage;
+            this.VoucherSelectOperatorViewModel = voucherSelectOperatorViewModel;
+            this.VoucherSelectProductPage = voucherSelectProductPage;
+            this.VoucherSelectProductViewModel = voucherSelectProductViewModel;
+            this.VoucherPerformVoucherIssuePage = voucherPerformVoucherIssuePage;
+            this.VoucherPerformVoucherIssueViewModel = voucherPerformVoucherIssueViewModel;
+            this.VoucherSuccessPage = voucherSuccessPage;
+            this.VoucherFailedPage = voucherFailedPage;
             this.AdminPage = adminPage;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
@@ -153,10 +193,99 @@
             this.TransactionsPage.MobileTopupButtonClick += this.TransactionsPage_MobileTopupButtonClick;
             this.TransactionsPage.MobileWalletButtonClick += this.TransactionsPage_MobileWalletButtonClick;
             this.TransactionsPage.BillPaymentButtonClick += this.TransactionsPage_BillPaymentButtonClick;
+            this.TransactionsPage.VoucherButtonClick += this.TransactionsPage_VoucherButtonClick;
             this.TransactionsPage.AdminButtonClick += this.TransactionsPage_AdminButtonClick;
 
             this.TransactionsPage.Init();
             await Application.Current.MainPage.Navigation.PushAsync((Page)this.TransactionsPage);
+        }
+
+        private async void TransactionsPage_VoucherButtonClick(object sender, EventArgs e)
+        {
+            this.MobileTopupSelectOperatorViewModel.Operators = new List<ContractProductModel>();
+
+            // Get distinct operator names for Mobile Topup
+            this.VoucherSelectOperatorViewModel.Operators =
+                App.ContractProducts.Where(c => c.ProductType == ProductType.Voucher).GroupBy(c => c.OperatorName).Select(g => g.First()).ToList();
+
+            this.VoucherSelectOperatorPage.Init(this.VoucherSelectOperatorViewModel);
+            this.VoucherSelectOperatorPage.OperatorSelected += this.VoucherSelectOperatorPage_OperatorSelected;
+
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.VoucherSelectOperatorPage);
+        }
+
+        private async void VoucherSelectOperatorPage_OperatorSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            // Get the selected item
+            ContractProductModel selectedOperator = (ContractProductModel)e.SelectedItem;
+
+            // Get the products for this operator contract
+            List<ContractProductModel> products = App.ContractProducts.Where(c => c.ContractId == selectedOperator.ContractId && c.ProductType == ProductType.Voucher).ToList();
+
+            products = products.OrderBy(p => p.Value).ToList();
+
+            // Go to the product selection screen
+            this.VoucherSelectProductViewModel.Products = products;
+            this.VoucherSelectProductPage.Init(this.VoucherSelectProductViewModel);
+            this.VoucherSelectProductPage.ProductSelected += this.VoucherSelectProductPage_ProductSelected;
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.VoucherSelectProductPage);
+        }
+
+        private async void VoucherSelectProductPage_ProductSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            // Get the selected item
+            ContractProductModel selectedProduct = (ContractProductModel)e.SelectedItem;
+
+            // Go to the product selection screen
+            this.VoucherPerformVoucherIssueViewModel.ContractProductModel = selectedProduct;
+
+            this.VoucherPerformVoucherIssueViewModel.VoucherAmount = selectedProduct.Value;
+
+            this.VoucherPerformVoucherIssuePage.Init(this.VoucherPerformVoucherIssueViewModel);
+            this.VoucherPerformVoucherIssuePage.IssueVoucherButtonClicked += this.VoucherPerformVoucherIssuePage_IssueVoucherButtonClicked;
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.VoucherPerformVoucherIssuePage);
+        }
+
+        private async void VoucherPerformVoucherIssuePage_IssueVoucherButtonClicked(object sender, EventArgs e)
+        {
+            // Check the user has entered a value for the mobile number and amount
+            if (String.IsNullOrEmpty(this.VoucherPerformVoucherIssueViewModel.RecipientMobileNumber) && String.IsNullOrEmpty(this.VoucherPerformVoucherIssueViewModel.RecipientEmailAddress))
+            {
+                this.VoucherPerformVoucherIssueViewModel.RecipientMobileNumber = String.Empty;
+                this.VoucherPerformVoucherIssueViewModel.RecipientEmailAddress = String.Empty;
+                await Application.Current.MainPage.DisplayAlert("Invalid Voucher Issue Details", "Please enter a recipient mobile number or email address to continue", "OK");
+            }
+            else
+            {
+                Boolean voucherIssueResult = await this.PerformVoucherIssue(this.VoucherPerformVoucherIssueViewModel.ContractProductModel);
+                
+                App.IncrementTransactionNumber();
+
+                await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Voucher Issue Result is [{voucherIssueResult}]"));
+
+                if (voucherIssueResult)
+                {
+                    this.VoucherSuccessPage.Init();
+                    this.VoucherSuccessPage.CompleteButtonClicked += this.VoucherSuccessPage_CompleteButtonClicked;
+                    await Application.Current.MainPage.Navigation.PushAsync((Page)this.VoucherSuccessPage);
+                }
+                else
+                {
+                    this.VoucherFailedPage.Init();
+                    this.VoucherFailedPage.CancelButtonClicked += this.VoucherFailedPage_CancelButtonClicked;
+                    await Application.Current.MainPage.Navigation.PushAsync((Page)this.VoucherFailedPage);
+                }
+            }
+        }
+
+        private async void VoucherFailedPage_CancelButtonClicked(object sender, EventArgs e)
+        {
+            await Application.Current.MainPage.Navigation.PopToRootAsync();
+        }
+
+        private async void VoucherSuccessPage_CompleteButtonClicked(object sender, EventArgs e)
+        {
+            await Application.Current.MainPage.Navigation.PopToRootAsync();
         }
 
         /// <summary>
@@ -276,7 +405,9 @@
             ContractProductModel selectedOperator = (ContractProductModel)e.SelectedItem;
 
             // Get the products for this operator contract
-            List<ContractProductModel> products = App.ContractProducts.Where(c => c.ContractId == selectedOperator.ContractId).ToList();
+            List<ContractProductModel> products = App.ContractProducts.Where(c => c.ContractId == selectedOperator.ContractId && c.ProductType == ProductType.MobileTopup).ToList();
+
+            products = products.OrderBy(p => p.Value).ToList();
 
             // Go to the product selection screen
             this.MobileTopupSelectProductViewModel.Products = products;
@@ -322,14 +453,17 @@
                                                                           {
                                                                               ContractId = contractProduct.ContractId,
                                                                               ProductId = contractProduct.ProductId,
-                                                                              Amount = this.MobileTopupPerformTopupViewModel.TopupAmount,
-                                                                              CustomerAccountNumber = this.MobileTopupPerformTopupViewModel.CustomerMobileNumber,
                                                                               DeviceIdentifier = this.Device.GetDeviceIdentifier(),
-                                                                              OperatorIdentifier = contractProduct.OperatorName,
+                                                                              OperatorIdentifier = contractProduct.OperatorIdentfier,
                                                                               TransactionDateTime = DateTime.Now,
                                                                               TransactionNumber = App.GetNextTransactionNumber().ToString(),
                                                                               CustomerEmailAddress = this.MobileTopupPerformTopupViewModel.CustomerEmailAddress
                                                                           };
+
+            // Add the additional request data
+            saleTransactionRequestMessage.AdditionalRequestMetaData = new Dictionary<String, String>();
+            saleTransactionRequestMessage.AdditionalRequestMetaData.Add("Amount", this.MobileTopupPerformTopupViewModel.TopupAmount.ToString());
+            saleTransactionRequestMessage.AdditionalRequestMetaData.Add("CustomerAccountNumber", this.MobileTopupPerformTopupViewModel.CustomerMobileNumber);
 
             String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);
 
@@ -348,6 +482,48 @@
 
             // Update the totals
             await this.Database.UpdateOperatorTotals(contractProduct.OperatorId.ToString(), 1, this.MobileTopupPerformTopupViewModel.TopupAmount);
+
+            return true;
+        }
+
+        private async Task<Boolean> PerformVoucherIssue(ContractProductModel contractProduct)
+        {
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage("About to perform Voucher Issue"));
+
+            SaleTransactionRequestMessage saleTransactionRequestMessage = new SaleTransactionRequestMessage
+            {
+                ContractId = contractProduct.ContractId,
+                ProductId = contractProduct.ProductId,
+                DeviceIdentifier = this.Device.GetDeviceIdentifier(),
+                OperatorIdentifier = contractProduct.OperatorIdentfier,
+                TransactionDateTime = DateTime.Now,
+                TransactionNumber = App.GetNextTransactionNumber().ToString(),
+                CustomerEmailAddress = this.VoucherPerformVoucherIssueViewModel.CustomerEmailAddress
+            };
+
+            // Add the additional request data
+            saleTransactionRequestMessage.AdditionalRequestMetaData = new Dictionary<String, String>();
+            saleTransactionRequestMessage.AdditionalRequestMetaData.Add("Amount", this.VoucherPerformVoucherIssueViewModel.VoucherAmount.ToString());
+            saleTransactionRequestMessage.AdditionalRequestMetaData.Add("RecipientEmail", this.VoucherPerformVoucherIssueViewModel.RecipientEmailAddress);
+            saleTransactionRequestMessage.AdditionalRequestMetaData.Add("RecipientMobile", this.VoucherPerformVoucherIssueViewModel.RecipientMobileNumber);
+
+            String requestJson = JsonConvert.SerializeObject(saleTransactionRequestMessage);
+
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
+
+            SaleTransactionResponseMessage response =
+                await this.TransactionProcessorAclClient.PerformSaleTransaction(App.TokenResponse.AccessToken, saleTransactionRequestMessage, CancellationToken.None);
+
+            String responseJson = JsonConvert.SerializeObject(response);
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Rcv from Host [{responseJson}]"));
+
+            if (response.ResponseCode != "0000")
+            {
+                return false;
+            }
+
+            // Update the totals
+            await this.Database.UpdateOperatorTotals(contractProduct.OperatorId.ToString(), 1, this.VoucherPerformVoucherIssueViewModel.VoucherAmount);
 
             return true;
         }
@@ -389,7 +565,7 @@
 
             // Get distinct operator names for Mobile Topup
             this.MobileTopupSelectOperatorViewModel.Operators =
-                App.ContractProducts.Where(c => c.ProductType == 0).GroupBy(c => c.OperatorName).Select(g => g.First()).ToList();
+                App.ContractProducts.Where(c => c.ProductType == ProductType.MobileTopup).GroupBy(c => c.OperatorName).Select(g => g.First()).ToList();
 
             this.MobileTopupSelectOperatorPage.Init(this.MobileTopupSelectOperatorViewModel);
             this.MobileTopupSelectOperatorPage.OperatorSelected += this.MobileTopupSelectOperatorPage_OperatorSelected;

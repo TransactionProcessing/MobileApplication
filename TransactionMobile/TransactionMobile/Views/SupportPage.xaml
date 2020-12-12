@@ -36,7 +36,7 @@
                 </Grid.RowDefinitions>
 
 
-                <buttons:SfButton AutomationId="UploadLogsButton" x:Name="UploadLogsButton" Text="Upload Diagnostic Logs" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleMobileTopup}"/>
+                <buttons:SfButton AutomationId="UploadLogsButton" x:Name="UploadLogsButton" Text="Upload Diagnostic Logs" Grid.Row="0" Grid.Column="0" Style="{DynamicResource SupportButtonStyle}"/>
                 
             </Grid>
         </StackLayout>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="TransactionMobile.Views.MobileTopup.MobileTopupPaymentFailedPage"
+    x:Class="TransactionMobile.Views.Voucher.VoucherFailedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:TransactionMobile.Controls;assembly=TransactionMobile"
@@ -29,7 +29,7 @@
                     Margin="0,40,0,0"
                     Style="{StaticResource LabelStyle}"
                     HorizontalTextAlignment="Center"
-                    Text="MOBILE TOPUP FAILURE" />
+                    Text="VOUCHER ISSUE FAILURE" />
 
                 <buttons:SfButton
                     x:Name="CancelButton"
@@ -37,7 +37,7 @@
                     Margin="0,16"
                     MinimumWidthRequest="250"
                     WidthRequest="400"
-                    Style="{DynamicResource MobileTopupButtonStyle}"
+                    Style="{DynamicResource VoucherButtonStyle}"
                     Text="Cancel"
                     AutomationId="CancelButton"/>
 

@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Views.MobileTopup
+﻿namespace TransactionMobile.Views.Voucher
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -18,7 +18,7 @@
     /// <seealso cref="TransactionMobile.Pages.IPage" />
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ExcludeFromCodeCoverage]
-    public partial class MobileTopupSelectProductPage : ContentPage, IMobileTopupSelectProductPage, IPage
+    public partial class VoucherSelectProductPage : ContentPage, IVoucherSelectProductPage, IPage
     {
         private readonly IDatabaseContext Database;
 
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="loggingDatabase">The logging database.</param>
         /// <param name="database"></param>
-        public MobileTopupSelectProductPage(IDatabaseContext database)
+        public VoucherSelectProductPage(IDatabaseContext database)
         {
             this.Database = database;
             this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} ctor"));
@@ -57,7 +57,7 @@
         /// Initializes the specified view model.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        public void Init(MobileTopupSelectProductViewModel viewModel)
+        public void Init(VoucherSelectProductViewModel viewModel)
         {
             this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} Init"));
             this.LoadProducts(viewModel);
@@ -76,7 +76,7 @@
         /// Loads the operators.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
-        private void LoadProducts(MobileTopupSelectProductViewModel viewModel)
+        private void LoadProducts(VoucherSelectProductViewModel viewModel)
         {
             RowDefinitionCollection rowDefinitionCollection = new RowDefinitionCollection();
             for (Int32 i = 0; i < viewModel.Products.Count; i++)
@@ -100,7 +100,7 @@
                                       Command = new Command<SelectedItemChangedEventArgs>(this.Execute),
                                       CommandParameter = new SelectedItemChangedEventArgs(modelProduct, rowCount)
                                   };
-                button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
+                button.SetDynamicResource(VisualElement.StyleProperty, "VoucherButtonStyle");
 
                 this.ProductsGrid.Children.Add(button, 0, rowCount);
                 rowCount++;

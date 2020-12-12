@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="TransactionMobile.Views.MobileTopup.MobileTopupPaymentFailedPage"
+    x:Class="TransactionMobile.Views.Voucher.VoucherSuccessPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:TransactionMobile.Controls;assembly=TransactionMobile"
     xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-    Title="Payment Failure Page"
+    Title="Payment Success Page"
     BackgroundColor="{DynamicResource Gray-100}"
     NavigationPage.HasNavigationBar="False">
 
@@ -21,25 +21,30 @@
                 <controls:SVGImage
                     Margin="0,10,0,0"
                     HeightRequest="80"
-                    WidthRequest="80"
-                    Source="PaymentFailure.svg"/>
-                
+                    WidthRequest="80" 
+                    Source="PaymentSuccess.svg" />
+
                 <!--  Payment status label  -->
                 <Label
                     Margin="0,40,0,0"
                     Style="{StaticResource LabelStyle}"
                     HorizontalTextAlignment="Center"
-                    Text="MOBILE TOPUP FAILURE" />
+                    Text="VOUCHER ISSUE SUCCESSFUL" />
+
+                <!--  Payment description label  -->
+                <Label
+                    Margin="17,8"
+                    Style="{StaticResource DescriptionLabelStyle}"
+                    Text="Thank you for your voucher. An automated payment receipt will be sent to your email entered." />
 
                 <buttons:SfButton
-                    x:Name="CancelButton"
-                    Grid.Row="5"
+                    x:Name="CompleteButton"
                     Margin="0,16"
                     MinimumWidthRequest="250"
-                    WidthRequest="400"
-                    Style="{DynamicResource MobileTopupButtonStyle}"
-                    Text="Cancel"
-                    AutomationId="CancelButton"/>
+                    WidthRequest="250"
+                    Style="{DynamicResource VoucherButtonStyle}"
+                    Text="Complete"
+                    AutomationId="CompleteButton"/>
 
             </StackLayout>
         </ScrollView>

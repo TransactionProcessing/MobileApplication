@@ -42,6 +42,14 @@
         public String OperatorName { get; set; }
 
         /// <summary>
+        /// Gets or sets the operator identfier.
+        /// </summary>
+        /// <value>
+        /// The operator identfier.
+        /// </value>
+        public String OperatorIdentfier { get; set; }
+
+        /// <summary>
         /// Gets or sets the product display text.
         /// </summary>
         /// <value>
@@ -63,7 +71,7 @@
         /// <value>
         /// The type of the product.
         /// </value>
-        public Int32 ProductType { get; set; }
+        public ProductType ProductType { get; set; }
 
         /// <summary>
         /// Gets or sets the value.

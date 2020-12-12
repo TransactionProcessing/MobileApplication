@@ -27,6 +27,14 @@
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();
             Mock<IMobileTopupPaymentSuccessPage> mobileTopupPaymentSuccessPage = new Mock<IMobileTopupPaymentSuccessPage>();
             Mock<IMobileTopupPaymentFailedPage> mobileTopupPaymentFailedPage = new Mock<IMobileTopupPaymentFailedPage>();
+            Mock<IVoucherSelectOperatorPage> voucherSelectOperatorPage = new Mock<IVoucherSelectOperatorPage>();
+            VoucherSelectOperatorViewModel voucherSelectOperatorViewModel = new VoucherSelectOperatorViewModel();
+            Mock<IVoucherSelectProductPage> voucherSelectProductPage = new Mock<IVoucherSelectProductPage>();
+            VoucherSelectProductViewModel voucherSelectProductViewModel = new VoucherSelectProductViewModel();
+            Mock<IVoucherPerformVoucherIssuePage> voucherPerformVoucherIssuePage = new Mock<IVoucherPerformVoucherIssuePage>();
+            VoucherPerformVoucherIssueViewModel voucherPerformVoucherIssueViewModel = new VoucherPerformVoucherIssueViewModel();
+            Mock<IVoucherSuccessPage> voucherSuccessPage = new Mock<IVoucherSuccessPage>();
+            Mock<IVoucherFailedPage> voucherFailedPage = new Mock<IVoucherFailedPage>();
             Mock<IAdminPage> adminPage = new Mock<IAdminPage>();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
@@ -41,6 +49,14 @@
                                                                                     mobileTopupSelectProductViewModel,
                                                                                     mobileTopupPaymentSuccessPage.Object,
                                                                                     mobileTopupPaymentFailedPage.Object,
+                                                                                    voucherSelectOperatorPage.Object,
+                                                                                    voucherSelectOperatorViewModel,
+                                                                                    voucherSelectProductPage.Object,
+                                                                                    voucherSelectProductViewModel,
+                                                                                    voucherPerformVoucherIssuePage.Object,
+                                                                                    voucherPerformVoucherIssueViewModel,
+                                                                                    voucherSuccessPage.Object,
+                                                                                    voucherFailedPage.Object,
                                                                                     adminPage.Object,
                                                                                     device.Object,
                                                                                     transactionProcessorACLClient.Object,

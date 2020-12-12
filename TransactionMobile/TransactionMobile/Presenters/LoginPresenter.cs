@@ -300,7 +300,7 @@
         /// Handles the Elapsed event of the MerchantContractTimer control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs" /> instance containing the event data.</param>
         private async void MerchantContractTimer_Elapsed(Object sender,
                                                          ElapsedEventArgs e)
         {
@@ -308,10 +308,10 @@
             List<ContractResponse> contractResponses =
                 await this.EstateClient.GetMerchantContracts(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
 
+            App.ContractProducts = new List<ContractProductModel>();
+
             foreach (ContractResponse contractResponse in contractResponses)
             {
-                App.ContractProducts = new List<ContractProductModel>();
-
                 foreach (ContractProduct contractResponseProduct in contractResponse.Products)
                 {
                     App.ContractProducts.Add(new ContractProductModel
@@ -319,14 +319,60 @@
                                                  OperatorId = contractResponse.OperatorId,
                                                  ContractId = contractResponse.ContractId,
                                                  ProductId = contractResponseProduct.ProductId,
-                                                 OperatorName = contractResponse.OperatorName,
+                                                 OperatorIdentfier = contractResponse.OperatorName,
+                                                 OperatorName = this.GetOperatorName(contractResponse, contractResponseProduct),
                                                  Value = contractResponseProduct.Value ?? 0,
                                                  IsFixedValue = contractResponseProduct.Value.HasValue,
                                                  ProductDisplayText = contractResponseProduct.DisplayText,
-                                                 ProductType = 0 // TODO: once we have product type in the contract product
-                                             });
+                                                 ProductType = this.GetProductType(contractResponse.OperatorName)
+                    });
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the operator.
+        /// </summary>
+        /// <param name="contractResponse">The contract response.</param>
+        /// <param name="contractProduct">The contract product.</param>
+        /// <returns></returns>
+        private String GetOperatorName(ContractResponse contractResponse,  ContractProduct contractProduct)
+        {
+            String operatorName = null;
+            ProductType productType = this.GetProductType(contractResponse.OperatorName);
+            switch (productType)
+            {
+                case ProductType.Voucher:
+                    operatorName = contractResponse.Description;
+                    break;
+                default:
+                    operatorName = contractResponse.OperatorName;
+                    break;
+
+            }
+
+            return operatorName;
+        }
+
+        /// <summary>
+        /// Gets the type of the product.
+        /// </summary>
+        /// <param name="operatorName">Name of the operator.</param>
+        /// <returns></returns>
+        private ProductType GetProductType(String operatorName)
+        {
+            ProductType productType = ProductType.NotSet;
+            switch(operatorName)
+            {
+                case "Safaricom":
+                    productType = ProductType.MobileTopup;
+                    break;
+                case "Voucher":
+                    productType = ProductType.Voucher;
+                    break;
+            }
+
+            return productType;
         }
 
         /// <summary>

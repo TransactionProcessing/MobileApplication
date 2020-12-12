@@ -63,6 +63,10 @@
         /// </summary>
         public event EventHandler MobileWalletButtonClick;
 
+        /// <summary>
+        /// Occurs when [voucher button click].
+        /// </summary>
+        public event EventHandler VoucherButtonClick;
         #endregion
 
         #region Methods
@@ -77,7 +81,18 @@
             this.MobileTopupButton.Clicked += this.MobileTopupButton_Clicked;
             this.MobileWalletButton.Clicked += this.MobileWalletButton_Clicked;
             this.BillPaymentButton.Clicked += this.BillPaymentButton_Clicked;
+            this.VoucherButton.Clicked += this.VoucherButton_Clicked;
             this.AdminButton.Clicked += this.AdminButton_Clicked;
+        }
+
+        /// <summary>
+        /// Handles the Clicked event of the VoucherButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void VoucherButton_Clicked(object sender, EventArgs e)
+        {
+            this.VoucherButtonClick(sender, e);
         }
 
         /// <summary>

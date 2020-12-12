@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.4.0" />
-    <PackageReference Include="EstateManagement.Client" Version="1.0.2.2" />
+    <PackageReference Include="EstateManagement.Client" Version="1.0.6" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.1.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.1.0" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
@@ -28,10 +28,10 @@
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SecurityService.Client" Version="1.0.0" />
+    <PackageReference Include="SecurityService.Client" Version="1.0.4" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.57" />
-    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.5.1" />
+    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.6.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.4.0.991537" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Unity" Version="5.11.4" />
@@ -72,6 +72,18 @@
     <Compile Update="Views\TransactionsPage.xaml.cs">
       <DependentUpon>TransactionsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Voucher\VoucherFailurePage.xaml.cs">
+      <DependentUpon>VoucherFailurePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Voucher\VoucherSuccessPage.xaml.cs">
+      <DependentUpon>VoucherSuccessPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Voucher\VoucherPerformVoucherIssuePage.xaml.cs">
+      <DependentUpon>VoucherPerformVoucherIssuePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Voucher\VoucherSelectProductPage.xaml.cs">
+      <DependentUpon>VoucherSelectProductPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -92,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Voucher\VoucherSelectOperatorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

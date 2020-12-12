@@ -32,19 +32,19 @@
             
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="80"></RowDefinition>
-                    <RowDefinition Height="80"></RowDefinition>
-                    <RowDefinition Height="80"></RowDefinition>
-                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
                 </Grid.RowDefinitions>
 
 
-                <buttons:SfButton AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleMobileTopup}"/>
-                <buttons:SfButton AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleMobileWallet}"/>
-
-                <buttons:SfButton AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="2" Grid.Column="0" Style="{StaticResource SfButtonStyleBillPayment}"/>
-                <buttons:SfButton AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleAdmin}"/>
-                
+                <buttons:SfButton AutomationId="MobileTopupButton" x:Name="MobileTopupButton" Text="Mobile Topup" Grid.Row="0" Grid.Column="0" Style="{DynamicResource MobileTopupButtonStyle}"/>
+                <buttons:SfButton AutomationId="MobileWalletButton" x:Name="MobileWalletButton" Text="Mobile Wallet" Grid.Row="1" Grid.Column="0" Style="{DynamicResource MobileWalletButtonStyle}"/>
+                <buttons:SfButton AutomationId="BillPaymentButton" x:Name="BillPaymentButton" Text="Bill Payment" Grid.Row="2" Grid.Column="0" Style="{DynamicResource BillPaymentButtonStyle}"/>
+                <buttons:SfButton AutomationId="VoucherButton" x:Name="VoucherButton" Text="Voucher" Grid.Row="3" Grid.Column="0" Style="{DynamicResource VoucherButtonStyle}"/>
+                <buttons:SfButton AutomationId="AdminButton" x:Name="AdminButton" Text="Admin" Grid.Row="4" Grid.Column="0" Style="{DynamicResource AdminButtonStyle}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>
