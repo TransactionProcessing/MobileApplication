@@ -212,7 +212,7 @@ namespace TransactionMobile.IntegrationTests.Common
             }
 
             // Now build and return the container                
-            IContainerService builtContainer = voucherManagementContainer.Build().Start().WaitForPort($"{TransactionMobileDockerHelper.VoucherManagementDockerPort}/tcp", 30000);
+            IContainerService builtContainer = voucherManagementContainer.Build().Start();
 
             logger.LogInformation("Voucher Management  Container Started");
 
