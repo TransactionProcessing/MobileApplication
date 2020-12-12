@@ -29,6 +29,11 @@
         /// </summary>
         event EventHandler MobileWalletButtonClick;
 
+        /// <summary>
+        /// Occurs when [voucher button click].
+        /// </summary>
+        event EventHandler VoucherButtonClick;
+
         #endregion
 
         #region Methods

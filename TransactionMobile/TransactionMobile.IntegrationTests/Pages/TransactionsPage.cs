@@ -17,6 +17,7 @@ namespace TransactionMobile.IntegrationTests.Pages
         private readonly Query MobileTopupButton;
         private readonly Query MobileWalletButton;
         private readonly Query BillPaymentButton;
+        private readonly Query VoucherButton;
         private readonly Query AdminButton;
 
         #endregion
@@ -31,6 +32,7 @@ namespace TransactionMobile.IntegrationTests.Pages
             this.MobileTopupButton = x => x.Marked("MobileTopupButton");
             this.MobileWalletButton = x => x.Marked("MobileWalletButton");
             this.BillPaymentButton = x => x.Marked("BillPaymentButton");
+            this.VoucherButton = x => x.Marked("VoucherButton");
             this.AdminButton = x => x.Marked("AdminButton");
         }
 
@@ -75,6 +77,12 @@ namespace TransactionMobile.IntegrationTests.Pages
         {
             app.WaitForElement(this.AdminButton);
             app.Tap(this.AdminButton);
+        }
+
+        public void ClickVoucherButton()
+        {
+            app.WaitForElement(this.VoucherButton);
+            app.Tap(this.VoucherButton);
         }
     }
 }

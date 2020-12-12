@@ -39,4 +39,16 @@ namespace TransactionMobile.IntegrationTests.Features
         {
         }
     }
+
+    [TestFixture(Platform.Android, Category = "Android")]
+    [TestFixture(Platform.iOS, Category = "iOS")]
+    public partial class VoucherIssueFeature : BaseTestFixture
+    {
+        public VoucherIssueFeature(Platform platform)
+            : base(platform)
+        {
+        }
+    }
+
+
 }

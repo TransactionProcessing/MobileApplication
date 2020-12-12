@@ -42,7 +42,7 @@
                     Margin="0,16"
                     MinimumWidthRequest="250"
                     WidthRequest="250"
-                    Style="{StaticResource SfButtonStyleMobileTopup}"
+                    Style="{DynamicResource MobileTopupButtonStyle}"
                     Text="Complete"
                     AutomationId="CompleteButton"/>
 

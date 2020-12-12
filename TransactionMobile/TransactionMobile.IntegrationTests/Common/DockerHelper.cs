@@ -170,6 +170,55 @@ namespace TransactionMobile.IntegrationTests.Common
         private static String LocalHostAddress;
         #region Methods
 
+        private Int32 VoucherManagementPort;
+        protected String VoucherManagementContainerName;
+        public const Int32 VoucherManagementDockerPort = 5007;
+
+        public static IContainerService SetupVoucherManagementContainer(String containerName, ILogger logger, String imageName,
+                                                               List<INetworkService> networkServices,
+                                                               String hostFolder,
+                                                               (String URL, String UserName, String Password)? dockerCredentials,
+                                                               String securityServiceContainerName,
+                                                               String estateManagementContainerName,
+                                                               String eventStoreContainerName,
+                                                               (string clientId, string clientSecret) clientDetails,
+                                                               Boolean forceLatestImage = false,
+                                                               Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
+        {
+            logger.LogInformation("About to Start Voucher Management Container");
+
+            List<String> environmentVariables = new List<String>();
+            environmentVariables.Add($"EventStoreSettings:ConnectionString=https://{eventStoreContainerName}:{TransactionMobileDockerHelper.EventStoreHttpDockerPort}");
+            environmentVariables.Add($"AppSettings:SecurityService=http://{securityServiceContainerName}:{securityServicePort}");
+            environmentVariables.Add($"AppSettings:EstateManagementApi=http://{estateManagementContainerName}:{TransactionMobileDockerHelper.EstateManagementDockerPort}");
+            environmentVariables.Add($"SecurityConfiguration:Authority=http://{securityServiceContainerName}:{securityServicePort}");
+            environmentVariables.Add($"urls=http://*:{TransactionMobileDockerHelper.VoucherManagementDockerPort}");
+            environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
+            environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
+            
+            ContainerBuilder voucherManagementContainer = new Builder().UseContainer().WithName(containerName)
+                                                                       .WithEnvironment(environmentVariables.ToArray())
+                                                              .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.VoucherManagementDockerPort)
+                                                              .UseNetwork(networkServices.ToArray()).Mount(hostFolder, "/home", MountType.ReadWrite);
+
+            if (String.IsNullOrEmpty(hostFolder) == false)
+            {
+                voucherManagementContainer = voucherManagementContainer.Mount(hostFolder, "/home/txnproc/trace", MountType.ReadWrite);
+            }
+
+            if (dockerCredentials.HasValue)
+            {
+                voucherManagementContainer.WithCredential(dockerCredentials.Value.URL, dockerCredentials.Value.UserName, dockerCredentials.Value.Password);
+            }
+
+            // Now build and return the container                
+            IContainerService builtContainer = voucherManagementContainer.Build().Start();
+
+            logger.LogInformation("Voucher Management  Container Started");
+
+            return builtContainer;
+        }
+
         /// <summary>
         /// Starts the containers for scenario run.
         /// </summary>
@@ -203,6 +252,7 @@ namespace TransactionMobile.IntegrationTests.Common
             this.TransactionProcessorACLContainerName = $"txnprocessoracl{testGuid:N}";
             this.TestHostContainerName = $"testhosts{testGuid:N}";
             this.MobileConfigurationContainerName = $"mobileConfig{this.TestId:N}";
+            this.VoucherManagementContainerName = $"vouchermanagement{testGuid:N}";
 
             (String, String, String) dockerCredentials = ("https://www.docker.com", "stuartferguson", "Sc0tland");
 
@@ -247,6 +297,26 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                      traceFolder,
                                                                                                                      dockerCredentials,
                                                                                                                      true);
+            
+            IContainerService voucherManagementContainer = SetupVoucherManagementContainer(this.VoucherManagementContainerName,
+                                                                                           this.Logger,
+                                                                                           "stuartferguson/vouchermanagement",
+                                                                                           new List<INetworkService>
+                                                                                           {
+                                                                                               testNetwork
+                                                                                           },
+                                                                                           traceFolder,
+                                                                                           dockerCredentials,
+                                                                                           this.SecurityServiceContainerName,
+                                                                                           this.EstateManagementContainerName,
+                                                                                           this.EventStoreContainerName,
+                                                                                           ("serviceClient", "Secret1"),
+                                                                                           true);
+
+            List<String> additionalVariables = new List<String>()
+                                               {
+                                                   $"AppSettings:VoucherManagementApi=http://{this.VoucherManagementContainerName}:{TransactionMobileDockerHelper.VoucherManagementDockerPort}"
+                                               };
 
             IContainerService transactionProcessorContainer = TransactionMobileDockerHelper.SetupTransactionProcessorContainer(this.TransactionProcessorContainerName,
                                                                                                                                this.Logger,
@@ -262,7 +332,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                                this.EventStoreContainerName,
                                                                                                                                ("serviceClient", "Secret1"),
                                                                                                                                this.TestHostContainerName,
-                                                                                                                               true);
+                                                                                                                               true,
+                                                                                                                               additionalEnvironmentVariables: additionalVariables);
 
             IContainerService estateReportingContainer = TransactionMobileDockerHelper.SetupEstateReportingContainer(this.EstateReportingContainerName,
                                                                                                                      this.Logger,
@@ -312,7 +383,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                          estateReportingContainer,
                                          testhostContainer,
                                          databaseServerContainer,
-                                         mobileConfigurationContainer
+                                         mobileConfigurationContainer,
+                                         voucherManagementContainer
                                      });
 
             // Cache the ports
@@ -977,7 +1049,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                            (String clientId, String clientSecret) clientDetails,
                                                                            String testhostContainerName,
                                                                            Boolean forceLatestImage = false,
-                                                                           Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort)
+                                                                           Int32 securityServicePort = TransactionMobileDockerHelper.SecurityServiceDockerPort,
+                                                                           List<String> additionalEnvironmentVariables = null)
         {
             logger.LogInformation("About to Start Transaction Processor Container");
 
@@ -992,6 +1065,11 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
 
             environmentVariables.Add($"OperatorConfiguration:Safaricom:Url=http://{testhostContainerName}:9000/api/safaricom");
+
+            if (additionalEnvironmentVariables != null)
+            {
+                environmentVariables.AddRange(additionalEnvironmentVariables);
+            }
 
             ContainerBuilder transactionProcessorContainer = new Builder().UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())
                                                                           .UseImage(imageName, forceLatestImage).ExposePort(TransactionMobileDockerHelper.TransactionProcessorDockerPort)

@@ -82,7 +82,7 @@
             {
                 rowDefinitionCollection.Add(new RowDefinition
                                             {
-                                                Height = 80
+                                                Height = 60
                                             });
             }
 
@@ -95,13 +95,11 @@
                                   {
                                       Text = modelOperator.OperatorName,
                                       HorizontalOptions = LayoutOptions.FillAndExpand,
-                                      //HeightRequest = 100,
-                                      //WidthRequest = 400,
                                       AutomationId = modelOperator.OperatorName,
                                       Command = new Command<SelectedItemChangedEventArgs>(this.Execute),
                                       CommandParameter = new SelectedItemChangedEventArgs(modelOperator, rowCount)
                                   };
-                button.SetDynamicResource(VisualElement.StyleProperty, "SfButtonStyleMobileTopup");
+                button.SetDynamicResource(VisualElement.StyleProperty, "MobileTopupButtonStyle");
 
                 this.OperatorsGrid.Children.Add(button, 0, rowCount);
                 rowCount++;

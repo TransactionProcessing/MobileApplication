@@ -9,30 +9,19 @@
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
     xmlns:comboBox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms">
 
-    <Color x:Key="PrimaryColor">#f54e5e</Color>
-    <Color x:Key="PrimaryDarkColor">#d0424f</Color>
-    <Color x:Key="PrimaryDarkenColor">#ab3641</Color>
-    <Color x:Key="PrimaryLighterColor">#edcacd</Color>
-    <Color x:Key="PrimaryGradient">#e83f94</Color>
-    <Color x:Key="PrimaryLight">#ffe8f4</Color>
-    <Color x:Key="SecondaryGradient">#7644ad</Color>
-    <Color x:Key="Secondary">#d54381</Color>
-    <Color x:Key="Green">#7ed321</Color>
-    <Color x:Key="Red">#ff4a4a</Color>
-    <Color x:Key="Orange">#ff844a</Color>
-    <Color x:Key="Blue">#4acaff</Color>
-    <Color x:Key="HyperLink">#567cd7</Color>
-    <Color x:Key="FacebookBlue">#4267B2</Color>
+    <Color x:Key="PrimaryColor">#4267B2</Color>
+    <Color x:Key="PrimaryGradient">#4267B2</Color>
+
+    <Color x:Key="Transactions">#31C8E3</Color>
+    <Color x:Key="Reports">#E38C44</Color>
+    <Color x:Key="Profile">#5BE3B6</Color>
+    <Color x:Key="Support">#E37188</Color>
 
     <Color x:Key="MobileTopup">#7ed321</Color>
-    <Color x:Key="MobileTopupGradient">#7ed321</Color>
     <Color x:Key="Admin">#ff4a4a</Color>
-    <Color x:Key="AdminGradient">#ff4a4a</Color>
     <Color x:Key="MobileWallet">#ff844a</Color>
-    <Color x:Key="MobileWalletGradient">#ff844a</Color>
     <Color x:Key="BillPayment">#4acaff</Color>
-    <Color x:Key="BillPaymentGradient">#4acaff</Color>
-
+    <Color x:Key="Voucher">MediumPurple</Color>
 
     <Color x:Key="Gray-100">#f6f7f8</Color>
     <Color x:Key="Gray-200">#ebecef</Color>
@@ -125,16 +114,7 @@
 
     <!--  Common style for buttons  -->
     <Style x:Key="SfButtonStyle" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource PrimaryColor}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource PrimaryGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -144,17 +124,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleMobileTopup" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource MobileTopup}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource MobileTopupGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="MobileTopupButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource MobileTopup}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -164,17 +135,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleMobileWallet" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource MobileWallet}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource MobileWalletGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="VoucherButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Voucher}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -184,17 +146,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleBillPayment" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource BillPayment}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource BillPaymentGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="MobileWalletButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource MobileWallet}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -204,17 +157,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleAdmin" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource Admin}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource AdminGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="BillPaymentButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BillPayment}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -224,17 +168,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleTransactions" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource MobileTopup}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource MobileTopupGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="AdminButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Admin}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -244,17 +179,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleReports" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource MobileWallet}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource MobileWalletGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="TransactionsButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Transactions}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -264,17 +190,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleProfile" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource BillPayment}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource BillPaymentGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="ReportsButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Reports}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -284,17 +201,8 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="SfButtonStyleSupport" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundGradient">
-            <Setter.Value>
-                <graphics:SfLinearGradientBrush>
-                    <graphics:SfLinearGradientBrush.GradientStops>
-                        <graphics:SfGradientStop Offset="0" Color="{DynamicResource Admin}" />
-                        <graphics:SfGradientStop Offset="1" Color="{DynamicResource AdminGradient}" />
-                    </graphics:SfLinearGradientBrush.GradientStops>
-                </graphics:SfLinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="ProfileButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Profile}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
@@ -304,15 +212,17 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-    <!--  Common style for flat buttons  -->
-    <Style x:Key="SfFlatButtonStyle" TargetType="buttons:SfButton">
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{DynamicResource PrimaryColor}" />
+    <Style x:Key="SupportButtonStyle" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Support}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
-
+    
     <!--  Common style for borders  -->
     <Style x:Key="SfBorderStyle" TargetType="border:SfBorder">
         <Setter Property="BackgroundColor" Value="{StaticResource BorderBackgroundColor}" />

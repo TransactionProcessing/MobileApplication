@@ -33,17 +33,17 @@
                 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="80"></RowDefinition>
-                        <RowDefinition Height="80"></RowDefinition>
-                        <RowDefinition Height="80"></RowDefinition>
-                        <RowDefinition Height="80"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <buttons:SfButton AutomationId="TransactionsButton" x:Name="TransactionsButton" Text="Transactions" Grid.Row="0" Grid.Column="0" Style="{StaticResource SfButtonStyleTransactions}"/>
-                    <buttons:SfButton AutomationId="ReportsButton" x:Name="ReportsButton" Text="Reports" Grid.Row="1" Grid.Column="0" Style="{StaticResource SfButtonStyleReports}"/>
+                    <buttons:SfButton AutomationId="TransactionsButton" x:Name="TransactionsButton" Text="Transactions" Grid.Row="0" Grid.Column="0" Style="{DynamicResource TransactionsButtonStyle}"/>
+                    <buttons:SfButton AutomationId="ReportsButton" x:Name="ReportsButton" Text="Reports" Grid.Row="1" Grid.Column="0" Style="{DynamicResource ReportsButtonStyle}"/>
 
-                    <buttons:SfButton AutomationId="ProfileButton" x:Name="ProfileButton" Text="Profile" Grid.Row="2" Grid.Column="0" Style="{StaticResource SfButtonStyleProfile}"/>
-                    <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="3" Grid.Column="0" Style="{StaticResource SfButtonStyleSupport}"/>
+                    <buttons:SfButton AutomationId="ProfileButton" x:Name="ProfileButton" Text="Profile" Grid.Row="2" Grid.Column="0" Style="{DynamicResource ProfileButtonStyle}"/>
+                    <buttons:SfButton AutomationId="SupportButton" x:Name="SupportButton" Text="Support" Grid.Row="3" Grid.Column="0" Style="{DynamicResource SupportButtonStyle}"/>
                     
                 </Grid>
                 <StackLayout Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',

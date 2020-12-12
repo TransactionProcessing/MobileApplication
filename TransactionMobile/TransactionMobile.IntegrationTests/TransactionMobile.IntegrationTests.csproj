@@ -48,7 +48,7 @@
       <HintPath>..\packages\BoDi.1.4.1\lib\net45\BoDi.dll</HintPath>
     </Reference>
     <Reference Include="ClientProxyBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClientProxyBase.0.0.15.7\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
+      <HintPath>..\packages\ClientProxyBase.1.0.1\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
     </Reference>
     <Reference Include="Cucumber.Messages, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b10c5988214f940c, processorArchitecture=MSIL">
       <HintPath>..\packages\Cucumber.Messages.6.0.2\lib\net45\Cucumber.Messages.dll</HintPath>
@@ -57,10 +57,10 @@
       <HintPath>..\packages\Ductus.FluentDocker.2.7.3\lib\net452\Ductus.FluentDocker.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.2.2\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.2.2\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Gherkin, Version=6.0.0.0, Culture=neutral, PublicKeyToken=86496cfa5b4a5851, processorArchitecture=MSIL">
       <HintPath>..\packages\Gherkin.6.0.0\lib\net45\Gherkin.dll</HintPath>
@@ -91,10 +91,10 @@
       <HintPath>..\packages\protobuf-net.Core.3.0.29\lib\net461\protobuf-net.Core.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.0\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.0\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress, Version=0.25.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpCompress.0.25.1\lib\net46\SharpCompress.dll</HintPath>
@@ -213,12 +213,14 @@
     <Compile Include="Features\ReconciliationSteps.cs" />
     <Compile Include="Features\SafaricomTopup.feature.cs" />
     <Compile Include="Features\SafaricomTopupSteps.cs" />
+    <Compile Include="Features\VoucherIssueSteps.cs" />
     <Compile Include="Pages\AdminPage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\MobileTopupFailedPage.cs" />
     <Compile Include="Pages\MobileTopupPerformTopupPage.cs" />
     <Compile Include="Pages\MobileTopupSelectOperatorPage.cs" />
+    <Compile Include="Pages\MobileTopupSelectProductPage.cs" />
     <Compile Include="Pages\MobileTopupSuccessPage.cs" />
     <Compile Include="Pages\TransactionsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -234,6 +236,7 @@
     <None Include="Features\SafaricomTopup.feature">
       <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>
     </None>
+    <None Include="Features\VoucherIssue.feature" />
     <None Include="libman.json" />
     <None Include="packages.config" />
   </ItemGroup>

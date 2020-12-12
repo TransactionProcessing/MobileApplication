@@ -18,6 +18,7 @@
     using Views;
     using Views.Admin;
     using Views.MobileTopup;
+    using Views.Voucher;
 
     [ExcludeFromCodeCoverage]
     public class Bootstrapper
@@ -84,20 +85,39 @@
             unityContainer.RegisterType<IMainPage, MainPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
+            // Mobile Topup
             unityContainer.RegisterType<IMobileTopupSelectOperatorPage, MobileTopupSelectOperatorPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupSelectProductPage, MobileTopupSelectProductPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPerformTopupPage, MobileTopupPerformTopupPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
             unityContainer.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
+
+            // Voucher
+            unityContainer.RegisterType<IVoucherSelectOperatorPage, VoucherSelectOperatorPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IVoucherSelectProductPage, VoucherSelectProductPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IVoucherPerformVoucherIssuePage, VoucherPerformVoucherIssuePage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IVoucherSuccessPage, VoucherSuccessPage>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IVoucherFailedPage, VoucherFailedPage>(new TransientLifetimeManager());
+
+            // Support
             unityContainer.RegisterType<ISupportPage, SupportPage>(new TransientLifetimeManager());
+            
+            // Admin
             unityContainer.RegisterType<IAdminPage, AdminPage>(new TransientLifetimeManager());
 
             // View model registrations
             unityContainer.RegisterType<LoginViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MainPageViewModel>(new TransientLifetimeManager());
+
+            // Mobile Topup
             unityContainer.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupSelectProductViewModel>(new TransientLifetimeManager());
             unityContainer.RegisterType<MobileTopupPerformTopupViewModel>(new TransientLifetimeManager());
+
+            // Voucher
+            unityContainer.RegisterType<VoucherSelectOperatorViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<VoucherSelectProductViewModel>(new TransientLifetimeManager());
+            unityContainer.RegisterType<VoucherPerformVoucherIssueViewModel>(new TransientLifetimeManager());
 
             return unityContainer;
         }
