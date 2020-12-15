@@ -47,13 +47,13 @@
       <HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="ClientProxyBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClientProxyBase.0.0.15.7\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
+      <HintPath>..\packages\ClientProxyBase.1.0.1\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.2.2\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.2.2\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -77,10 +77,10 @@
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.0\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.0\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Shouldly, Version=3.0.2.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
       <HintPath>..\packages\Shouldly.3.0.2\lib\net451\Shouldly.dll</HintPath>
@@ -232,7 +232,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="TransactionProcessorACL.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransactionProcessorACL.DataTransferObjects.1.0.5.1\lib\netstandard2.0\TransactionProcessorACL.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\TransactionProcessorACL.DataTransferObjects.1.0.6.3\lib\netstandard2.0\TransactionProcessorACL.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.4.4.0.991537\lib\netstandard2.0\Xamarin.Forms.Core.dll</HintPath>

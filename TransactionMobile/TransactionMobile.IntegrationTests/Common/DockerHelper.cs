@@ -997,6 +997,7 @@ namespace TransactionMobile.IntegrationTests.Common
             environmentVariables.Add($"AppSettings:TransactionProcessorApi=http://{transactionProcessorContainerName}:{TransactionMobileDockerHelper.TransactionProcessorDockerPort}");
             environmentVariables.Add($"AppSettings:ClientId={clientDetails.clientId}");
             environmentVariables.Add($"AppSettings:ClientSecret={clientDetails.clientSecret}");
+            environmentVariables.Add($"AppSettings:MinimumSupportedApplicationVersion=1.0.5");
 
             ContainerBuilder transactionProcessorACLContainer = new Builder()
                                                                 .UseContainer().WithName(containerName).WithEnvironment(environmentVariables.ToArray())

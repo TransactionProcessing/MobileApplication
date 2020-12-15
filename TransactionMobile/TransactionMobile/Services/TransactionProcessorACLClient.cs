@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Services
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -139,6 +140,27 @@
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Handles the response.
+        /// </summary>
+        /// <param name="responseMessage">The response message.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="ApplicationException">Application needs to be updated to the latest version</exception>
+        protected override async Task<String> HandleResponse(HttpResponseMessage responseMessage,
+                                                       CancellationToken cancellationToken)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.HttpVersionNotSupported)
+            {
+                throw new ApplicationException("Application needs to be updated to the latest version");
+            }
+            else
+            {
+                return await base.HandleResponse(responseMessage, cancellationToken);
+            }
+            
         }
 
         /// <summary>

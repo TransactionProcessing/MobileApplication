@@ -1,12 +1,13 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
-    using Android.App;
     using Android.Content;
     using Android.OS;
     using Android.Provider;
     using Android.Util;
     using Common;
+    using Xamarin.Forms;
+    using Application = Android.App.Application;
 
     /// <summary>
     /// 
@@ -36,13 +37,18 @@
                 }
             }
 
-            // Hack for emulator device Id
-            if (id == "EMULATOR30X2X6X0")
-            {
-                id = "EMULATOR29X3X2X0";
-            }
-
             return id;
+        }
+
+        /// <summary>
+        /// Gets the software version.
+        /// </summary>
+        /// <returns></returns>
+        public String GetSoftwareVersion()
+        {
+            String softwareVersion = Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+
+            return softwareVersion;
         }
 
         #endregion

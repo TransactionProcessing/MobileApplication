@@ -305,8 +305,9 @@
                                                                      DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                      TransactionDateTime = DateTime.Now,
                                                                      TransactionCount = totals.TransactionCount,
-                                                                     TransactionValue = totals.TransactionValue
-                                                                 };
+                                                                     TransactionValue = totals.TransactionValue,
+                                                                     ApplicationVersion = this.Device.GetSoftwareVersion()
+            };
 
             String requestJson = JsonConvert.SerializeObject(reconciliationRequest);
 
@@ -457,8 +458,9 @@
                                                                               OperatorIdentifier = contractProduct.OperatorIdentfier,
                                                                               TransactionDateTime = DateTime.Now,
                                                                               TransactionNumber = App.GetNextTransactionNumber().ToString(),
-                                                                              CustomerEmailAddress = this.MobileTopupPerformTopupViewModel.CustomerEmailAddress
-                                                                          };
+                                                                              CustomerEmailAddress = this.MobileTopupPerformTopupViewModel.CustomerEmailAddress,
+                                                                              ApplicationVersion = this.Device.GetSoftwareVersion()
+            };
 
             // Add the additional request data
             saleTransactionRequestMessage.AdditionalRequestMetaData = new Dictionary<String, String>();
@@ -498,7 +500,8 @@
                 OperatorIdentifier = contractProduct.OperatorIdentfier,
                 TransactionDateTime = DateTime.Now,
                 TransactionNumber = App.GetNextTransactionNumber().ToString(),
-                CustomerEmailAddress = this.VoucherPerformVoucherIssueViewModel.CustomerEmailAddress
+                CustomerEmailAddress = this.VoucherPerformVoucherIssueViewModel.CustomerEmailAddress,
+                ApplicationVersion = this.Device.GetSoftwareVersion()
             };
 
             // Add the additional request data

@@ -17,6 +17,12 @@
         /// <returns></returns>
         String GetDeviceIdentifier();
 
+        /// <summary>
+        /// Gets the software version.
+        /// </summary>
+        /// <returns></returns>
+        String GetSoftwareVersion();
+
         #endregion
     }
 }
