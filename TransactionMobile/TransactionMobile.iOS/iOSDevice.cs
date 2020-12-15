@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Common;
     using UIKit;
+    using Xamarin.Forms;
 
     /// <summary>
     /// 
@@ -21,7 +22,16 @@
         {
             return UIDevice.CurrentDevice.IdentifierForVendor.AsString().Replace("-", "");
         }
-        
+
+        /// <summary>
+        /// Gets the software version.
+        /// </summary>
+        /// <returns></returns>
+        public String GetSoftwareVersion()
+        {
+            return null;
+        }
+
         #endregion
     }
 }

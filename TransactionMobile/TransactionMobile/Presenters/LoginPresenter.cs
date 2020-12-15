@@ -14,6 +14,7 @@
     using Newtonsoft.Json;
     using Pages;
     using Plugin.Toast;
+    using Plugin.Toast.Abstractions;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
     using Services;
@@ -245,8 +246,16 @@
             catch(Exception ex)
             {
                 await this.Database.InsertLogMessages(DatabaseContext.CreateErrorLogMessages(ex));
-                
-                CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
+
+                if (ex.InnerException != null && ex.InnerException is ApplicationException)
+                {
+                    // Application needs to be upgraded to latest version
+                    CrossToastPopUp.Current.ShowToastError("Application version is incompatible, please upgrade to the latest version!!",ToastLength.Long);
+                }
+                else
+                {
+                    CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
+                }
             }
         }
 
@@ -389,7 +398,8 @@
                                                                                 DeviceIdentifier = this.Device.GetDeviceIdentifier(),
                                                                                 RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
-                                                                                TransactionNumber = App.GetNextTransactionNumber().ToString() // TODO: Need to hold txn number somewhere
+                                                                                TransactionNumber = App.GetNextTransactionNumber().ToString(),
+                                                                                ApplicationVersion = this.Device.GetSoftwareVersion()
             };
             
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);

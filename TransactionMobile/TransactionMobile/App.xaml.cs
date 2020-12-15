@@ -105,20 +105,22 @@
             {
                 Task.Run(async () =>
                          {
-                             // TODO: Logging
-                             Console.WriteLine("Config is null");
+                             try
+                             {
+                                 // TODO: Logging
+                                 Console.WriteLine("Config is null");
 
-                             IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
-                             App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+                                 IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+                                 App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
 
-                             // TODO: Logging
-                             Console.WriteLine("Config retrieved");
+                                 // TODO: Logging
+                                 Console.WriteLine("Config retrieved");
+                             }
+                             catch(Exception ex)
+                             {
+                                 CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
+                             }
                          });
-
-                if (App.Configuration == null)
-                {
-                    CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
-                }
             }
         }
 
