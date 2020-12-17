@@ -64,6 +64,24 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GooglePlay|iPhoneSimulator'">
+    <OutputPath>bin\iPhoneSimulator\GooglePlay\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GooglePlay|iPhone'">
+    <OutputPath>bin\iPhone\GooglePlay\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="iOSDevice.cs" />
     <Compile Include="Main.cs" />
@@ -155,9 +173,9 @@
       <Version>0.21.9</Version>
     </PackageReference>
     <PackageReference Include="System.Reflection.Emit">
-          <Version>4.3.0</Version>
-          <ExcludeAssets>All</ExcludeAssets>
-          <IncludeAssets>none</IncludeAssets>
+      <Version>4.3.0</Version>
+      <ExcludeAssets>All</ExcludeAssets>
+      <IncludeAssets>none</IncludeAssets>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
