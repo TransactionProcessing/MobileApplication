@@ -12,6 +12,7 @@
     using Common;
     using Database;
     using Java.Interop;
+    using Microsoft.AppCenter.Distribute;
     using Services;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
@@ -119,8 +120,11 @@
 
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
+            
             this.LoadApplication(new App(this.Device, this.Database));
         }
+
+        
 
         /// <summary>
         /// Currents the domain on unhandled exception.

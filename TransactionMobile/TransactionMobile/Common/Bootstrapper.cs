@@ -47,7 +47,7 @@
                                                                                                                  {
                                                                                                                      if (configSetting == "ConfigServiceUrl")
                                                                                                                      {
-                                                                                                                         return "https://pxj6yf.deta.dev";
+                                                                                                                         return "https://5r8nmm.deta.dev";
                                                                                                                          //return "http://192.168.1.67:1337";
                                                                                                                      }
 
