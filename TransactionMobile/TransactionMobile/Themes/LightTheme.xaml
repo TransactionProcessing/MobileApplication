@@ -124,6 +124,17 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
+    <Style x:Key="SfButtonStyleSmall" TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"></Setter>
+        <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
+        <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+    </Style>
+
     <Style x:Key="MobileTopupButtonStyle" TargetType="buttons:SfButton">
         <Setter Property="BackgroundColor" Value="{DynamicResource MobileTopup}"></Setter>
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />

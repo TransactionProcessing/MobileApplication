@@ -48,6 +48,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  Label to display the title of this page  -->
@@ -126,6 +127,14 @@
                         Style="{StaticResource SfButtonStyle}"
                         Text="LOG IN"
                         AutomationId="LoginButton"/>
+
+                    <buttons:SfButton
+                        x:Name="SupportButton"
+                        Grid.Row="6"
+                        Margin="0,16"
+                        Style="{StaticResource SfButtonStyle}"
+                        Text="Support"
+                        AutomationId="SupportButton"/>
                 </Grid>
 
             </StackLayout>

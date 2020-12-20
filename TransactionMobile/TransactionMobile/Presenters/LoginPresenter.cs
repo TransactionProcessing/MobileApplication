@@ -64,6 +64,8 @@
         /// </summary>
         private readonly IMainPage MainPage;
 
+        private readonly ISupportPage SupportPage;
+
         /// <summary>
         /// The main page view model
         /// </summary>
@@ -88,6 +90,7 @@
         /// </summary>
         /// <param name="loginPage">The login page.</param>
         /// <param name="mainPage">The main page.</param>
+        /// <param name="supportPage">The support page.</param>
         /// <param name="loginViewModel">The login view model.</param>
         /// <param name="mainPageViewModel">The main page view model.</param>
         /// <param name="device">The device.</param>
@@ -97,6 +100,7 @@
         /// <param name="database">The logging database.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
+                              ISupportPage supportPage,
                               LoginViewModel loginViewModel,
                               MainPageViewModel mainPageViewModel,
                               IDevice device,
@@ -106,6 +110,7 @@
                               IDatabaseContext database)
         {
             this.MainPage = mainPage;
+            this.SupportPage = supportPage;
             this.LoginPage = loginPage;
             this.LoginViewModel = loginViewModel;
             this.MainPageViewModel = mainPageViewModel;
@@ -128,9 +133,21 @@
             await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("In Start"));
 
             this.LoginPage.LoginButtonClick += this.LoginPage_LoginButtonClick;
+            this.LoginPage.SupportButtonClick += this.LoginPage_SupportButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
 
             Application.Current.MainPage = new NavigationPage((Page)this.LoginPage);
+        }
+
+        /// <summary>
+        /// Handles the SupportButtonClick event of the LoginPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void LoginPage_SupportButtonClick(object sender, EventArgs e)
+        {
+            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
+            supportPresenter.Start();
         }
 
         /// <summary>
