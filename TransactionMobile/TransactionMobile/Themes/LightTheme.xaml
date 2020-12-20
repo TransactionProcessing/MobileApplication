@@ -129,8 +129,9 @@
         <Setter Property="TextColor" Value="{DynamicResource Gray-White}" />
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
         <Setter Property="BorderWidth" Value="0" />
-        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontSize" Value="10" />
         <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="WidthRequest">100</Setter>
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>

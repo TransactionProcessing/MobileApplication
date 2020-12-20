@@ -132,7 +132,7 @@
                         x:Name="SupportButton"
                         Grid.Row="6"
                         Margin="0,16"
-                        Style="{StaticResource SfButtonStyle}"
+                        Style="{StaticResource SfButtonStyleSmall}"
                         Text="Support"
                         AutomationId="SupportButton"/>
                 </Grid>
