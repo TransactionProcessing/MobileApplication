@@ -10,6 +10,7 @@
     using Database;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects.Responses;
+    using Microsoft.AppCenter.Distribute;
     using Models;
     using Newtonsoft.Json;
     using Pages;
@@ -268,6 +269,7 @@
                 {
                     // Application needs to be upgraded to latest version
                     CrossToastPopUp.Current.ShowToastError("Application version is incompatible, please upgrade to the latest version!!",ToastLength.Long);
+;
                 }
                 else
                 {

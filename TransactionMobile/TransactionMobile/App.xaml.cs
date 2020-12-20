@@ -8,6 +8,8 @@
     using System.Threading.Tasks;
     using Common;
     using Database;
+    using Microsoft.AppCenter;
+    using Microsoft.AppCenter.Distribute;
     using Models;
     using Newtonsoft.Json;
     using Plugin.Toast;
@@ -160,13 +162,63 @@
         {
             // TODO: Logging
             Console.WriteLine("In On Start");
-            App.TransactionNumber = 1;
             
+            Distribute.ReleaseAvailable = OnReleaseAvailable;
+            Distribute.UpdateTrack = UpdateTrack.Public;
+
+            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
+            App.TransactionNumber = 1;
+
+            Distribute.SetEnabledAsync(true).Wait();
+            //Distribute.DisableAutomaticCheckForUpdate();
+            Distribute.CheckForUpdate();
+
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
             
             // show the login page
             await loginPresenter.Start();
+        }
+
+        bool OnReleaseAvailable(ReleaseDetails releaseDetails)
+        {
+            // Look at releaseDetails public properties to get version information, release notes text or release notes URL
+            string versionName = releaseDetails.ShortVersion;
+            string versionCodeOrBuildNumber = releaseDetails.Version;
+            string releaseNotes = releaseDetails.ReleaseNotes;
+            Uri releaseNotesUrl = releaseDetails.ReleaseNotesUrl;
+
+            // custom dialog
+            var title = "Version " + versionName + " available!";
+            Task answer;
+
+            // On mandatory update, user can't postpone
+            if (releaseDetails.MandatoryUpdate)
+            {
+                answer = App.Current.MainPage.DisplayAlert(title, releaseNotes, "Download and Install");
+            }
+            else
+            {
+                answer = App.Current.MainPage.DisplayAlert(title, releaseNotes, "Download and Install", "Later");
+            }
+            answer.ContinueWith((task) =>
+            {
+                // If mandatory or if answer was positive
+                if (releaseDetails.MandatoryUpdate || (task as Task<bool>).Result)
+                {
+                    // Notify SDK that user selected update
+                    Distribute.NotifyUpdateAction(UpdateAction.Update);
+                }
+                else
+                {
+                    // Notify SDK that user selected postpone (for 1 day)
+                    // This method call is ignored by the SDK if the update is mandatory
+                    Distribute.NotifyUpdateAction(UpdateAction.Postpone);
+                }
+            });
+
+            // Return true if you're using your own dialog, false otherwise
+            return true;
         }
 
         public static Int32 GetNextTransactionNumber()
