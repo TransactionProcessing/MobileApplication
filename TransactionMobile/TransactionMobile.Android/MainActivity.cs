@@ -87,7 +87,13 @@
 
             ConfigurationServiceClient configClient = new ConfigurationServiceClient(resolver, new HttpClient());
 
-            Task.Run(async () => { App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None); });
+            Task.Run(async () =>
+                     {
+                         App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
+                         await Distribute.SetEnabledAsync(false);
+                     });
+
+            
         }
 
         [Export("GetDeviceIdentifier")]
