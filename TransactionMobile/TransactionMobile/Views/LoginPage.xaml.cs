@@ -52,6 +52,11 @@
         /// </summary>
         public event EventHandler LoginButtonClick;
 
+        /// <summary>
+        /// Occurs when [support button click].
+        /// </summary>
+        public event EventHandler SupportButtonClick;
+
         #endregion
 
         #region Methods
@@ -73,6 +78,12 @@
             this.PasswordEntry.Completed += this.Password_Completed;
 
             this.LoginButton.Clicked += this.Login_Clicked;
+            //this.SupportButton.Clicked += this.LoginPage_SupportButtonClick;
+        }
+
+        private void LoginPage_SupportButtonClick(object sender, EventArgs e)
+        {
+            this.SupportButtonClick(sender, e);
         }
 
         /// <summary>
@@ -91,6 +102,8 @@
         /// </remarks>
         protected override void OnAppearing()
         {
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} OnAppearing"));
+
             base.OnAppearing();
 
             this.EmailEntry.Focus();

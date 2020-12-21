@@ -61,6 +61,14 @@
         /// </value>
         public LogLevel LogLevel { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [enable automatic updates].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [enable automatic updates]; otherwise, <c>false</c>.
+        /// </value>
+        public Boolean EnableAutoUpdates { get; set; }
+
         #endregion
     }
 }

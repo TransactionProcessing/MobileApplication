@@ -15,6 +15,11 @@
         /// </summary>
         event EventHandler LoginButtonClick;
 
+        /// <summary>
+        /// Occurs when [support button click].
+        /// </summary>
+        event EventHandler SupportButtonClick;
+
         #endregion
 
         #region Methods

@@ -177,6 +177,8 @@
             {
                 await this.Connection.InsertAsync(logMessage);
             }
+
+            Console.WriteLine(logMessage.Message);
         }
 
         /// <summary>

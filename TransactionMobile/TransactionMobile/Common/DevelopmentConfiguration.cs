@@ -24,6 +24,7 @@
             this.ClientId = "mobileAppClient";
             this.ClientSecret = "d192cbc46d834d0da90e8a9d50ded543";
             this.LogLevel = LogLevel.Debug;
+            this.EnableAutoUpdates = false;
         }
 
         #endregion
@@ -65,6 +66,8 @@
         public String EstateManagement { get; set; }
 
         public LogLevel LogLevel { get; set; }
+
+        public Boolean EnableAutoUpdates { get; set; }
 
         #endregion
     }

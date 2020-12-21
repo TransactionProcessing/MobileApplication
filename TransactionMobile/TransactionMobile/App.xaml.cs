@@ -102,7 +102,7 @@
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
-            
+
             if (App.Configuration == null)
             {
                 Task.Run(async () =>
@@ -111,10 +111,8 @@
                              {
                                  // TODO: Logging
                                  Console.WriteLine("Config is null");
-
                                  IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
                                  App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-
                                  // TODO: Logging
                                  Console.WriteLine("Config retrieved");
                              }
@@ -122,7 +120,8 @@
                              {
                                  CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
                              }
-                         });
+                         }).Wait();
+
             }
         }
 
@@ -162,16 +161,26 @@
         {
             // TODO: Logging
             Console.WriteLine("In On Start");
-            
-            Distribute.ReleaseAvailable = OnReleaseAvailable;
-            Distribute.UpdateTrack = UpdateTrack.Public;
 
-            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
+            if (App.Configuration == null)
+            {
+                if (App.Configuration.EnableAutoUpdates)
+                {
+                    Distribute.SetEnabledAsync(true).Wait();
+                    Distribute.CheckForUpdate();
+                }
+                else
+                {
+                    Distribute.DisableAutomaticCheckForUpdate();
+                }
+
+                Distribute.ReleaseAvailable = OnReleaseAvailable;
+                Distribute.UpdateTrack = UpdateTrack.Public;
+
+                AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
+            }
+
             App.TransactionNumber = 1;
-
-            Distribute.SetEnabledAsync(true).Wait();
-            //Distribute.DisableAutomaticCheckForUpdate();
-            Distribute.CheckForUpdate();
 
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
