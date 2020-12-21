@@ -102,7 +102,7 @@
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
-            
+
             if (App.Configuration == null)
             {
                 Task.Run(async () =>
@@ -118,11 +118,11 @@
                                  // TODO: Logging
                                  Console.WriteLine("Config retrieved");
                              }
-                             catch(Exception ex)
+                             catch (Exception ex)
                              {
                                  CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
                              }
-                         });
+                         }).Wait();
             }
         }
 
@@ -165,39 +165,22 @@
             
             App.TransactionNumber = 1;
 
-            if (App.Configuration == null)
+            if (App.Configuration != null)
             {
-                try
+                if (App.Configuration.EnableAutoUpdates)
                 {
-                    // TODO: Logging
-                    Console.WriteLine("Config is null");
-
-                    IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
-                    var deviceIdentifier = this.Device.GetDeviceIdentifier();
-                    App.Configuration = await configurationServiceClient.GetConfiguration(deviceIdentifier, CancellationToken.None);
-
-                    // TODO: Logging
-                    Console.WriteLine("Config retrieved");
+                    await Distribute.SetEnabledAsync(true);
+                    Distribute.CheckForUpdate();
                 }
-                catch (Exception ex)
+                else
                 {
-                    CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
+                    Distribute.DisableAutomaticCheckForUpdate();
                 }
-            }
 
-            if (App.Configuration.EnableAutoUpdates)
-            {
-                Distribute.SetEnabledAsync(true).Wait();
-                Distribute.CheckForUpdate();
+                Distribute.ReleaseAvailable = OnReleaseAvailable;
+                Distribute.UpdateTrack = UpdateTrack.Public;
+                AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
             }
-            else
-            {
-                Distribute.DisableAutomaticCheckForUpdate();
-            }
-
-            Distribute.ReleaseAvailable = OnReleaseAvailable;
-            Distribute.UpdateTrack = UpdateTrack.Public;
-            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
 
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
