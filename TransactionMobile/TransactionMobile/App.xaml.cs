@@ -163,15 +163,41 @@
             // TODO: Logging
             Console.WriteLine("In On Start");
             
-            Distribute.ReleaseAvailable = OnReleaseAvailable;
-            Distribute.UpdateTrack = UpdateTrack.Public;
-
-            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
             App.TransactionNumber = 1;
 
-            Distribute.SetEnabledAsync(true).Wait();
-            //Distribute.DisableAutomaticCheckForUpdate();
-            Distribute.CheckForUpdate();
+            if (App.Configuration == null)
+            {
+                try
+                {
+                    // TODO: Logging
+                    Console.WriteLine("Config is null");
+
+                    IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+                    var deviceIdentifier = this.Device.GetDeviceIdentifier();
+                    App.Configuration = await configurationServiceClient.GetConfiguration(deviceIdentifier, CancellationToken.None);
+
+                    // TODO: Logging
+                    Console.WriteLine("Config retrieved");
+                }
+                catch (Exception ex)
+                {
+                    CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
+                }
+            }
+
+            if (App.Configuration.EnableAutoUpdates)
+            {
+                Distribute.SetEnabledAsync(true).Wait();
+                Distribute.CheckForUpdate();
+            }
+            else
+            {
+                Distribute.DisableAutomaticCheckForUpdate();
+            }
+
+            Distribute.ReleaseAvailable = OnReleaseAvailable;
+            Distribute.UpdateTrack = UpdateTrack.Public;
+            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
 
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
