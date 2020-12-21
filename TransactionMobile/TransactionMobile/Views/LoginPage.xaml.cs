@@ -78,7 +78,7 @@
             this.PasswordEntry.Completed += this.Password_Completed;
 
             this.LoginButton.Clicked += this.Login_Clicked;
-            this.SupportButton.Clicked += this.LoginPage_SupportButtonClick;
+            //this.SupportButton.Clicked += this.LoginPage_SupportButtonClick;
         }
 
         private void LoginPage_SupportButtonClick(object sender, EventArgs e)
@@ -102,6 +102,8 @@
         /// </remarks>
         protected override void OnAppearing()
         {
+            this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"In {this.GetType().Name} OnAppearing"));
+
             base.OnAppearing();
 
             this.EmailEntry.Focus();

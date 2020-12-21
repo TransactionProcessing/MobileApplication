@@ -102,28 +102,6 @@
 
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
-            
-            if (App.Configuration == null)
-            {
-                Task.Run(async () =>
-                         {
-                             try
-                             {
-                                 // TODO: Logging
-                                 Console.WriteLine("Config is null");
-
-                                 IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
-                                 App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-
-                                 // TODO: Logging
-                                 Console.WriteLine("Config retrieved");
-                             }
-                             catch(Exception ex)
-                             {
-                                 CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
-                             }
-                         });
-            }
         }
 
         #endregion
@@ -163,11 +141,25 @@
             // TODO: Logging
             Console.WriteLine("In On Start");
             
-            Distribute.ReleaseAvailable = OnReleaseAvailable;
-            Distribute.UpdateTrack = UpdateTrack.Public;
+            if (App.Configuration == null)
+            {
+                try
+                {
+                    // TODO: Logging
+                    Console.WriteLine("Config is null");
 
-            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
-            App.TransactionNumber = 1;
+                    IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+                    var deviceIdentifier = this.Device.GetDeviceIdentifier();
+                    App.Configuration = await configurationServiceClient.GetConfiguration(deviceIdentifier, CancellationToken.None);
+
+                    // TODO: Logging
+                    Console.WriteLine("Config retrieved");
+                }
+                catch(Exception ex)
+                {
+                    CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
+                }
+            }
 
             if (App.Configuration.EnableAutoUpdates)
             {
@@ -178,6 +170,12 @@
             {
                 Distribute.DisableAutomaticCheckForUpdate();
             }
+
+            Distribute.ReleaseAvailable = OnReleaseAvailable;
+            Distribute.UpdateTrack = UpdateTrack.Public;
+
+            AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
+            App.TransactionNumber = 1;
 
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();

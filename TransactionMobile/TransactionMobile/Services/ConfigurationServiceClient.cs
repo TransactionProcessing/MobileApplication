@@ -76,7 +76,6 @@
 
                 // call was successful so now deserialise the body to the response object
                 response = JsonConvert.DeserializeObject<Configuration>(content);
-                response.EnableAutoUpdates = true;
             }
             catch (Exception ex)
             {
