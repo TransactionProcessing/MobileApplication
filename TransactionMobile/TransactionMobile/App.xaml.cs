@@ -169,9 +169,15 @@
             AppCenter.Start("android=10210e06-8a11-422b-b005-14081dc56375;", typeof(Distribute));
             App.TransactionNumber = 1;
 
-            Distribute.SetEnabledAsync(true).Wait();
-            //Distribute.DisableAutomaticCheckForUpdate();
-            Distribute.CheckForUpdate();
+            if (App.Configuration.EnableAutoUpdates)
+            {
+                Distribute.SetEnabledAsync(true).Wait();
+                Distribute.CheckForUpdate();
+            }
+            else
+            {
+                Distribute.DisableAutomaticCheckForUpdate();
+            }
 
             // Handle when your app starts
             ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();

@@ -90,7 +90,7 @@
             Task.Run(async () =>
                      {
                          App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
-                         await Distribute.SetEnabledAsync(false);
+                         App.Configuration.EnableAutoUpdates = false;
                      });
 
             

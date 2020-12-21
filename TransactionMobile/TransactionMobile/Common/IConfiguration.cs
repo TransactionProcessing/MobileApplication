@@ -57,6 +57,9 @@
         /// The log level.
         /// </value>
         LogLevel LogLevel { get; set; }
+
+        Boolean EnableAutoUpdates { get; set; }
+
         #endregion
     }
 }
