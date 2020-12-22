@@ -162,7 +162,7 @@
             // TODO: Logging
             Console.WriteLine("In On Start");
 
-            if (App.Configuration == null)
+            if (App.Configuration != null)
             {
                 if (App.Configuration.EnableAutoUpdates)
                 {
