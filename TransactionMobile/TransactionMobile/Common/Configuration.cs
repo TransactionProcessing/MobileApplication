@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Models;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// 
@@ -35,6 +36,7 @@
         /// <value>
         /// The security service.
         /// </value>
+        [JsonProperty("securityServiceUri")]
         public String SecurityService { get; set; }
 
         /// <summary>
@@ -43,6 +45,7 @@
         /// <value>
         /// The transaction processor acl.
         /// </value>
+        [JsonProperty("transactionProcessorACLUri")]
         public String TransactionProcessorACL { get; set; }
 
         /// <summary>
@@ -51,6 +54,7 @@
         /// <value>
         /// The estate management.
         /// </value>
+        [JsonProperty("estateManagementUri")]
         public String EstateManagement { get; set; }
 
         /// <summary>
