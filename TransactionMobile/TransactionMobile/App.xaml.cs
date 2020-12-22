@@ -96,7 +96,7 @@
 
             this.InitializeComponent();
 
-            SyncfusionLicenseProvider.RegisterLicense("MjcxMTQzQDMxMzgyZTMxMmUzMFJmTmpPay9hVk9xRlRoRDA4YjhhTmxzTldnOUc2UURBOGQ0S3NpR3BENEk9");
+            SyncfusionLicenseProvider.RegisterLicense("MzcxNTgwQDMxMzgyZTM0MmUzMEpNaXFsaFQ5bFErcVord05LSkVUeVd0MWRyaVE0NllvcFJmRzVZTWVTNlE9");
 
             App.Container = Bootstrapper.Run();
 
