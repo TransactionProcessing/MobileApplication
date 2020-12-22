@@ -38,7 +38,7 @@ namespace TransactionMobile.UnitTests.Presenters
             Mock<IDatabaseContext> loggingDatabase = new Mock<IDatabaseContext>();
             LoginPresenter loginPresenter =
                 new LoginPresenter(loginPage.Object, mainPage.Object,
-                                   //supportPage.Object,
+                                   supportPage.Object,
                                    loginViewModel, mainPageViewModel,
                                    device.Object, securityServiceClient.Object, 
                                    transactionProcessorACLClient.Object,
