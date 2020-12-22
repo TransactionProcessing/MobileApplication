@@ -101,7 +101,7 @@
         /// <param name="database">The logging database.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
-                              //ISupportPage supportPage,
+                              ISupportPage supportPage,
                               LoginViewModel loginViewModel,
                               MainPageViewModel mainPageViewModel,
                               IDevice device,
@@ -111,7 +111,7 @@
                               IDatabaseContext database)
         {
             this.MainPage = mainPage;
-            //this.SupportPage = supportPage;
+            this.SupportPage = supportPage;
             this.LoginPage = loginPage;
             this.LoginViewModel = loginViewModel;
             this.MainPageViewModel = mainPageViewModel;
@@ -134,7 +134,7 @@
             await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("In Start"));
 
             this.LoginPage.LoginButtonClick += this.LoginPage_LoginButtonClick;
-            //this.LoginPage.SupportButtonClick += this.LoginPage_SupportButtonClick;
+            this.LoginPage.SupportButtonClick += this.LoginPage_SupportButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
 
             await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("In Start2"));
