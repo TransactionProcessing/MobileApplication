@@ -90,7 +90,7 @@ jobs:
         name: screenshots
         path: /Users/runner/screenshots/**/*
 
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v3
+    #- name: Setup tmate session
+    #  if: failure()
+    #  uses: mxschmitt/action-tmate@v3
 
