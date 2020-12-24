@@ -172,13 +172,13 @@
         /// <param name="logMessage">The log message.</param>
         public async Task InsertLogMessage(LogMessage logMessage)
         {
+            Console.WriteLine(logMessage.Message);
+
             LogLevel messageLevel = (LogLevel)Enum.Parse(typeof(LogLevel), logMessage.LogLevel, true);
             if (App.Configuration == null || messageLevel <= App.Configuration.LogLevel)
             {
                 await this.Connection.InsertAsync(logMessage);
             }
-
-            Console.WriteLine(logMessage.Message);
         }
 
         /// <summary>

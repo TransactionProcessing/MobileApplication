@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -90,8 +91,15 @@
             Task.Run(async () =>
                      {
                          App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
-                         App.Configuration.EnableAutoUpdates = false;
-                     });
+
+                         foreach (var registration in App.Container.Registrations
+                                                               .Where(p => p.RegisteredType == typeof(object)))
+                         {
+                             registration.LifetimeManager.RemoveValue();
+                         }
+                         App.Container = Bootstrapper.Run();
+
+                     }).Wait();
 
             
         }

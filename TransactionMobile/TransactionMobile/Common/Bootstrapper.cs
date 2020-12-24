@@ -32,15 +32,11 @@
         public static IUnityContainer Run()
         {
             UnityContainer unityContainer = new UnityContainer();
-            String dbConnectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
-            // Common Registrations
-            //unityContainer.RegisterType<ILoggingDatabaseContext, LoggingDatabaseContext>(new SingletonLifetimeManager());
-            //unityContainer.RegisterFactory<Func<String>>((c) => { return dbConnectionString; });
 
-            unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new SingletonLifetimeManager());
-            unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new SingletonLifetimeManager());
-            unityContainer.RegisterType<IEstateClient, EstateClient>(new SingletonLifetimeManager());
-            unityContainer.RegisterType<IConfigurationServiceClient, ConfigurationServiceClient>(new SingletonLifetimeManager());
+            unityContainer.RegisterType<ISecurityServiceClient, SecurityServiceClient>(new TransientLifetimeManager());
+            unityContainer.RegisterType<ITransactionProcessorACLClient, TransactionProcessorACLClient>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IEstateClient, EstateClient>(new TransientLifetimeManager());
+            unityContainer.RegisterType<IConfigurationServiceClient, ConfigurationServiceClient>(new TransientLifetimeManager());
             HttpClient httpClient = new HttpClient();
             unityContainer.RegisterInstance(httpClient, new SingletonLifetimeManager());
             unityContainer.RegisterType<Func<String, String>>(new InjectionFactory(c => new Func<String, String>(configSetting =>
@@ -48,7 +44,6 @@
                                                                                                                      if (configSetting == "ConfigServiceUrl")
                                                                                                                      {
                                                                                                                          return "https://5r8nmm.deta.dev";
-                                                                                                                         //return "http://192.168.1.67:1337";
                                                                                                                      }
 
                                                                                                                      if (App.Configuration != null)

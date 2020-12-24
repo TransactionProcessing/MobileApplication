@@ -137,8 +137,6 @@
             this.LoginPage.SupportButtonClick += this.LoginPage_SupportButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
 
-            await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("In Start2"));
-
             Application.Current.MainPage = new NavigationPage((Page)this.LoginPage);
         }
 
@@ -174,16 +172,18 @@
         /// </summary>
         private async Task GetConfiguration()
         {
-            if (App.Configuration == null)
-            {
-                App.Configuration = new DevelopmentConfiguration();
-            }
+            //if (App.Configuration == null)
+            //{
+            //    App.Configuration = new DevelopmentConfiguration();
+            //}
 
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Id is {App.Configuration.ClientId}"));
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Secret is {App.Configuration.ClientSecret}"));
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"SecurityService Url is {App.Configuration.SecurityService}"));
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"EstateManagement Url is {App.Configuration.EstateManagement}"));
+            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Id is {App.Configuration.ClientId}"));
+            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Secret is {App.Configuration.ClientSecret}"));
+            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"SecurityService Url is {App.Configuration.SecurityService}"));
+            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
+            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"EstateManagement Url is {App.Configuration.EstateManagement}"));
+            String config = JsonConvert.SerializeObject(App.Configuration);
+            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage(config));
         }
 
         /// <summary>
@@ -230,7 +230,15 @@
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
 
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Token"));
+                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
+
+                var g = await this.SecurityServiceClient.GetClients(CancellationToken.None);
+                foreach (ClientDetails clientDetails in g)
+                {
+                    await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"{clientDetails.ClientId}"));
+                }
+
+                
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                         this.LoginViewModel.Password,

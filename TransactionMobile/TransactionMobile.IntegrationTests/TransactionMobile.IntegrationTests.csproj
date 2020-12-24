@@ -260,6 +260,9 @@
     </None>
     <None Include="Features\VoucherIssue.feature" />
     <None Include="libman.json" />
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
