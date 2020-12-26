@@ -21,7 +21,6 @@
     using Services;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
-    using Unity;
     using ViewModels;
     using Xamarin.Forms;
     using Timer = System.Timers.Timer;
@@ -71,12 +70,7 @@
         /// The main page view model
         /// </summary>
         private readonly MainPageViewModel MainPageViewModel;
-
-        /// <summary>
-        /// The security service client
-        /// </summary>
-        private readonly ISecurityServiceClient SecurityServiceClient;
-
+        
         /// <summary>
         /// The transaction processor acl client
         /// </summary>
@@ -95,7 +89,6 @@
         /// <param name="loginViewModel">The login view model.</param>
         /// <param name="mainPageViewModel">The main page view model.</param>
         /// <param name="device">The device.</param>
-        /// <param name="securityServiceClient">The security service client.</param>
         /// <param name="transactionProcessorAclClient">The transaction processor acl client.</param>
         /// <param name="estateClient">The estate client.</param>
         /// <param name="database">The logging database.</param>
@@ -105,7 +98,6 @@
                               LoginViewModel loginViewModel,
                               MainPageViewModel mainPageViewModel,
                               IDevice device,
-                              ISecurityServiceClient securityServiceClient,
                               ITransactionProcessorACLClient transactionProcessorAclClient,
                               IEstateClient estateClient,
                               IDatabaseContext database)
@@ -116,7 +108,6 @@
             this.LoginViewModel = loginViewModel;
             this.MainPageViewModel = mainPageViewModel;
             this.Device = device;
-            this.SecurityServiceClient = securityServiceClient;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
             this.EstateClient = estateClient;
             this.Database = database;
@@ -147,7 +138,7 @@
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void LoginPage_SupportButtonClick(object sender, EventArgs e)
         {
-            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
+            ISupportPresenter supportPresenter = App.Container.GetInstance<ISupportPresenter>();
             supportPresenter.Start();
         }
 
@@ -172,16 +163,6 @@
         /// </summary>
         private async Task GetConfiguration()
         {
-            //if (App.Configuration == null)
-            //{
-            //    App.Configuration = new DevelopmentConfiguration();
-            //}
-
-            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Id is {App.Configuration.ClientId}"));
-            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Client Secret is {App.Configuration.ClientSecret}"));
-            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"SecurityService Url is {App.Configuration.SecurityService}"));
-            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"TransactionProcessorACL Url is {App.Configuration.TransactionProcessorACL}"));
-            //await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"EstateManagement Url is {App.Configuration.EstateManagement}"));
             String config = JsonConvert.SerializeObject(App.Configuration);
             await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage(config));
         }
@@ -224,6 +205,7 @@
         {
             try
             {
+                ISecurityServiceClient securityServiceClient = App.Container.GetInstance<ISecurityServiceClient>();
                 //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
 
@@ -232,7 +214,7 @@
 
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
 
-                var g = await this.SecurityServiceClient.GetClients(CancellationToken.None);
+                var g = await securityServiceClient.GetClients(CancellationToken.None);
                 foreach (ClientDetails clientDetails in g)
                 {
                     await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"{clientDetails.ClientId}"));
@@ -240,11 +222,11 @@
 
                 
                 // Attempt to login with the user details
-                TokenResponse tokenResponse = await this.SecurityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
-                                                                                        this.LoginViewModel.Password,
-                                                                                        App.Configuration.ClientId,
-                                                                                        App.Configuration.ClientSecret,
-                                                                                        CancellationToken.None);
+                TokenResponse tokenResponse = await securityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
+                                                                                   this.LoginViewModel.Password,
+                                                                                   App.Configuration.ClientId,
+                                                                                   App.Configuration.ClientSecret,
+                                                                                   CancellationToken.None);
 
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
 
@@ -318,7 +300,7 @@
         private void MainPage_SupportButtonClicked(Object sender,
                                                    EventArgs e)
         {
-            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
+            ISupportPresenter supportPresenter = App.Container.GetInstance<ISupportPresenter>();
             supportPresenter.Start();
         }
 
@@ -330,8 +312,15 @@
         private void MainPage_TransactionsButtonClicked(Object sender,
                                                         EventArgs e)
         {
-            ITransactionsPresenter transactionsPresenter = App.Container.Resolve<ITransactionsPresenter>();
-            transactionsPresenter.Start();
+            try
+            {
+                ITransactionsPresenter transactionsPresenter = App.Container.GetInstance<ITransactionsPresenter>();
+                transactionsPresenter.Start();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>

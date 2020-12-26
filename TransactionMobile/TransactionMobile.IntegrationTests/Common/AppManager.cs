@@ -78,6 +78,7 @@ namespace TransactionMobile.IntegrationTests.Common
         
         public static void StartApp()
         {
+            
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             
             if (Platform == Platform.Android)

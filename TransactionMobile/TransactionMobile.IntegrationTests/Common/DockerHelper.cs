@@ -611,7 +611,7 @@ namespace TransactionMobile.IntegrationTests.Common
             command.CommandType = CommandType.Text;
             await command.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>

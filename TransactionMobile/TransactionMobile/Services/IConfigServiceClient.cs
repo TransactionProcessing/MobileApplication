@@ -8,7 +8,6 @@ namespace TransactionMobile.Services
     using Common;
     using Database;
     using Database.Entities;
-    using Unity;
 
     /// <summary>
     /// 

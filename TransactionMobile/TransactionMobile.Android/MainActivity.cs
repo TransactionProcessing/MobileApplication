@@ -12,8 +12,10 @@
     using Android.Runtime;
     using Common;
     using Database;
+    using EstateManagement.Client;
     using Java.Interop;
     using Microsoft.AppCenter.Distribute;
+    using SecurityService.Client;
     using Services;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
@@ -91,13 +93,21 @@
             Task.Run(async () =>
                      {
                          App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
-
-                         foreach (var registration in App.Container.Registrations
-                                                               .Where(p => p.RegisteredType == typeof(object)))
-                         {
-                             registration.LifetimeManager.RemoveValue();
-                         }
+                         App.Container.Configure((c) =>
+                                                 {
+                                                     c.For<ISecurityServiceClient>().ClearAll();
+                                                     c.For<IEstateClient>().ClearAll();
+                                                     c.For<ITransactionProcessorACLClient>().ClearAll();
+                                                 });
                          App.Container = Bootstrapper.Run();
+
+                         String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
+                         DatabaseContext database = new DatabaseContext(connectionString);
+                         App.Container.Configure((c) =>
+                                                 {
+                                                     c.For<IDevice>().Use(device).Transient();
+                                                     c.For<IDatabaseContext>().Use(database).Transient();
+                                                 });
 
                      }).Wait();
 

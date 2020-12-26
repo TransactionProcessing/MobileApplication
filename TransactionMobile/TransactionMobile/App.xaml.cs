@@ -17,9 +17,8 @@
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
     using Services;
+    using StructureMap;
     using Syncfusion.Licensing;
-    using Unity;
-    using Unity.Lifetime;
     using Xamarin.Forms;
 
     /// <summary>
@@ -39,7 +38,7 @@
         /// <summary>
         /// Unity container
         /// </summary>
-        public static IUnityContainer Container;
+        public static IContainer Container;
 
         /// <summary>
         /// The token response
@@ -100,8 +99,11 @@
 
             App.Container = Bootstrapper.Run();
 
-            App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
+            App.Container.Configure((c) =>
+                                    {
+                                        c.For<IDevice>().Use(device).Transient();
+                                        c.For<IDatabaseContext>().Use(database).Transient();
+                                    });
 
             if (App.Configuration == null)
             {
@@ -111,7 +113,7 @@
                              {
                                  // TODO: Logging
                                  Console.WriteLine("Config is null");
-                                 IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+                                 IConfigurationServiceClient configurationServiceClient = App.Container.GetInstance<IConfigurationServiceClient>();
                                  App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
                                  // TODO: Logging
                                  Console.WriteLine("Config retrieved");
@@ -183,7 +185,7 @@
             App.TransactionNumber = 1;
 
             // Handle when your app starts
-            ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
+            ILoginPresenter loginPresenter = App.Container.GetInstance<ILoginPresenter>();
             
             // show the login page
             await loginPresenter.Start();
