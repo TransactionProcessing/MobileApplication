@@ -414,7 +414,9 @@ namespace TransactionMobile.IntegrationTests.Common
             this.ACLHttpClient.BaseAddress = new Uri(TransactionProcessorAclBaseAddressResolver(string.Empty));
 
             this.MobileConfigHttpClient = new HttpClient();
-            
+
+            await this.InitialiseAppConfig();
+
             await this.LoadEventStoreProjections().ConfigureAwait(false);
 
             await PopulateSubscriptionServiceConfiguration().ConfigureAwait(false);
@@ -437,6 +439,29 @@ namespace TransactionMobile.IntegrationTests.Common
                                                                                                                              true);
 
             this.Containers.Add(subscriptionServiceContainer);
+        }
+
+        private async Task InitialiseAppConfig()
+        {
+            DevelopmentConfiguration config = new DevelopmentConfiguration();
+            config.EnableAutoUpdates = false;
+            config.ClientId = "merchantClient";
+            config.ClientSecret = "Secret1";
+            config.EstateManagement = this.EstateManagementBaseAddress;
+            config.SecurityService = this.SecurityServiceBaseAddress;
+            config.TransactionProcessorACL = this.TransactionProcessorACLBaseAddress;
+            config.DeviceIdentifier = AppManager.GetDeviceIdentifier();
+            config.id = AppManager.GetDeviceIdentifier();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{this.MobileConfigBaseAddress}/configuration");
+            request.Content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await this.MobileConfigHttpClient.SendAsync(request, CancellationToken.None).ConfigureAwait(false);
+
+            response.StatusCode.ShouldBe(HttpStatusCode.Created);
+
+            //HttpRequestMessage request2 = new HttpRequestMessage(HttpMethod.Get, $"{this.MobileConfigBaseAddress}/configuration/{config.id}");
+            //var response2 = await this.MobileConfigHttpClient.SendAsync(request2, CancellationToken.None).ConfigureAwait(false);
+            //var responseString = await response2.Content.ReadAsStringAsync();
         }
 
         public String GetLocalConnectionString(String databaseName)
@@ -586,7 +611,7 @@ namespace TransactionMobile.IntegrationTests.Common
             command.CommandType = CommandType.Text;
             await command.ExecuteNonQueryAsync(CancellationToken.None).ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Stops the containers for scenario run.
         /// </summary>
@@ -1281,6 +1306,55 @@ namespace TransactionMobile.IntegrationTests.Common
         /// </summary>
         public const Int32 TransactionProcessorDockerPort = 5002;
 
+        #endregion
+    }
+
+    public class DevelopmentConfiguration
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the client identifier.
+        /// </summary>
+        /// <value>
+        /// The client identifier.
+        /// </value>
+        public String ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client secret.
+        /// </summary>
+        /// <value>
+        /// The client secret.
+        /// </value>
+        public String ClientSecret { get; set; }
+
+        /// <summary>
+        /// Gets or sets the security service.
+        /// </summary>
+        /// <value>
+        /// The security service.
+        /// </value>
+        [JsonProperty("securityServiceUri")]
+        public String SecurityService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the transaction processor acl.
+        /// </summary>
+        /// <value>
+        /// The transaction processor acl.
+        /// </value>
+        [JsonProperty("transactionProcessorACLUri")]
+        public String TransactionProcessorACL { get; set; }
+
+        [JsonProperty("estateManagementUri")]
+        public String EstateManagement { get; set; }
+        
+        public Boolean EnableAutoUpdates { get; set; }
+
+        public String DeviceIdentifier { get; set; }
+
+        public String id { get; set; }
         #endregion
     }
 }

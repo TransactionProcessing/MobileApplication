@@ -315,40 +315,38 @@ namespace TransactionMobile.IntegrationTests
                 this.TestingContext.AddClientDetails(clientId, secret, allowedGrantTypes);
             }
 
-            var merchantClient = this.TestingContext.GetClientDetails("merchantClient");
+            //var merchantClient = this.TestingContext.GetClientDetails("merchantClient");
 
-            String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
-            String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
-            String estateManagementUrl = this.TestingContext.DockerHelper.EstateManagementBaseAddress;
+            //String securityService = this.TestingContext.DockerHelper.SecurityServiceBaseAddress;
+            //String transactionProcessorAcl = this.TestingContext.DockerHelper.TransactionProcessorACLBaseAddress;
+            //String estateManagementUrl = this.TestingContext.DockerHelper.EstateManagementBaseAddress;
             String mobileConfigUrl = this.TestingContext.DockerHelper.MobileConfigBaseAddress;
 
-            Console.WriteLine($"securityService [{securityService}]");
-            Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
-            Console.WriteLine($"estateManagementUrl [{estateManagementUrl}]");
-            Console.WriteLine($"mobileConfigUrl [{mobileConfigUrl}]");
+            //Console.WriteLine($"securityService [{securityService}]");
+            //Console.WriteLine($"transactionProcessorAcl [{transactionProcessorAcl}]");
+            //Console.WriteLine($"estateManagementUrl [{estateManagementUrl}]");
+            //Console.WriteLine($"mobileConfigUrl [{mobileConfigUrl}]");
 
             // Setup the config host
-            var deviceIdentifier = AppManager.GetDeviceIdentifier();
-            var config = new
-                         {
-                             id = deviceIdentifier,
-                             deviceIdentifier,
-                             clientId = merchantClient.ClientId,
-                             clientSecret = merchantClient.ClientSecret,
-                             securityService = securityService,
-                             estateManagement = estateManagementUrl,
-                             transactionProcessorACL = transactionProcessorAcl,
-                             logLevel = "Debug"
-                         };
+            //var deviceIdentifier = AppManager.GetDeviceIdentifier();
+            //DevelopmentConfiguration config = new DevelopmentConfiguration();
+            //config.EnableAutoUpdates = false;
+            //config.ClientId = merchantClient.ClientId;
+            //config.ClientSecret = merchantClient.ClientSecret;
+            //config.EstateManagement = estateManagementUrl;
+            //config.SecurityService = securityService;
+            //config.TransactionProcessorACL = transactionProcessorAcl;
+            //config.DeviceIdentifier = AppManager.GetDeviceIdentifier();
+            //config.id = AppManager.GetDeviceIdentifier();
 
-            Console.WriteLine(JsonConvert.SerializeObject(config));
-            Console.WriteLine($"Uri [{ mobileConfigUrl}/configuration]");
+            //Console.WriteLine(JsonConvert.SerializeObject(config));
+            //Console.WriteLine($"Uri [{ mobileConfigUrl}/configuration]");
 
-            StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration");
-            message.Content = content;
+            //StringContent content = new StringContent(JsonConvert.SerializeObject(config), Encoding.UTF8, "application/json");
+            //HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, $"{mobileConfigUrl}/configuration");
+            //message.Content = content;
 
-            await this.TestingContext.DockerHelper.MobileConfigHttpClient.SendAsync(message, CancellationToken.None).ConfigureAwait(false);
+            //await this.TestingContext.DockerHelper.MobileConfigHttpClient.SendAsync(message, CancellationToken.None).ConfigureAwait(false);
 
             AppManager.SetConfiguration(mobileConfigUrl);
         }

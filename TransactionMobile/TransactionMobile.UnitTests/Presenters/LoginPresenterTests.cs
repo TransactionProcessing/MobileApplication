@@ -32,7 +32,6 @@ namespace TransactionMobile.UnitTests.Presenters
             LoginViewModel loginViewModel = new LoginViewModel();
             MainPageViewModel mainPageViewModel = new MainPageViewModel();
             Mock<IDevice> device = new Mock<IDevice>();
-            Mock<ISecurityServiceClient> securityServiceClient = new Mock<ISecurityServiceClient>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
             Mock<IEstateClient> estateClient = new Mock<IEstateClient>();
             Mock<IDatabaseContext> loggingDatabase = new Mock<IDatabaseContext>();
@@ -40,7 +39,7 @@ namespace TransactionMobile.UnitTests.Presenters
                 new LoginPresenter(loginPage.Object, mainPage.Object,
                                    supportPage.Object,
                                    loginViewModel, mainPageViewModel,
-                                   device.Object, securityServiceClient.Object, 
+                                   device.Object, 
                                    transactionProcessorACLClient.Object,
                                    estateClient.Object,
                                    loggingDatabase.Object);

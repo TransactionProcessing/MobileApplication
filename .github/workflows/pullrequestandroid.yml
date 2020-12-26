@@ -63,7 +63,7 @@ jobs:
     - name: Restore Nuget Packages
       run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
-    - name: Build Code
+    - name: Build Code     
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
@@ -90,7 +90,7 @@ jobs:
         name: screenshots
         path: /Users/runner/screenshots/**/*
 
-    - name: Setup tmate session
-      if: failure()
-      uses: mxschmitt/action-tmate@v3
+    #- name: Setup tmate session
+    #  if: failure()
+    #  uses: mxschmitt/action-tmate@v3
 

@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -11,8 +12,10 @@
     using Android.Runtime;
     using Common;
     using Database;
+    using EstateManagement.Client;
     using Java.Interop;
     using Microsoft.AppCenter.Distribute;
+    using SecurityService.Client;
     using Services;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
@@ -90,8 +93,23 @@
             Task.Run(async () =>
                      {
                          App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
-                         App.Configuration.EnableAutoUpdates = false;
-                     });
+                         App.Container.Configure((c) =>
+                                                 {
+                                                     c.For<ISecurityServiceClient>().ClearAll();
+                                                     c.For<IEstateClient>().ClearAll();
+                                                     c.For<ITransactionProcessorACLClient>().ClearAll();
+                                                 });
+                         App.Container = Bootstrapper.Run();
+
+                         String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
+                         DatabaseContext database = new DatabaseContext(connectionString);
+                         App.Container.Configure((c) =>
+                                                 {
+                                                     c.For<IDevice>().Use(device).Transient();
+                                                     c.For<IDatabaseContext>().Use(database).Transient();
+                                                 });
+
+                     }).Wait();
 
             
         }
