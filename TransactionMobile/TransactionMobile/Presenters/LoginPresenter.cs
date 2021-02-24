@@ -6,6 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
+    using Clients;
     using Common;
     using Database;
     using EstateManagement.Client;
@@ -18,12 +19,12 @@
     using Plugin.Toast.Abstractions;
     using SecurityService.Client;
     using SecurityService.DataTransferObjects.Responses;
-    using Services;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;
     using Xamarin.Forms;
     using Timer = System.Timers.Timer;
+    using Unity;
 
     /// <summary>
     /// 
@@ -42,7 +43,7 @@
         /// <summary>
         /// The estate client
         /// </summary>
-        private readonly IEstateClient EstateClient;
+        private IEstateClient EstateClient;
 
         /// <summary>
         /// The database
@@ -74,7 +75,7 @@
         /// <summary>
         /// The transaction processor acl client
         /// </summary>
-        private readonly ITransactionProcessorACLClient TransactionProcessorAclClient;
+        private ITransactionProcessorACLClient TransactionProcessorAclClient;
 
         #endregion
 
@@ -138,7 +139,7 @@
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void LoginPage_SupportButtonClick(object sender, EventArgs e)
         {
-            ISupportPresenter supportPresenter = App.Container.GetInstance<ISupportPresenter>();
+            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
             supportPresenter.Start();
         }
 
@@ -163,8 +164,21 @@
         /// </summary>
         private async Task GetConfiguration()
         {
-            String config = JsonConvert.SerializeObject(App.Configuration);
-            await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage(config));
+            // Get the application configuration here
+            try
+            {
+                IConfigurationServiceClient configurationServiceClient = App.Container.Resolve<IConfigurationServiceClient>();
+                App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
+                // TODO: Logging
+                
+                String config = JsonConvert.SerializeObject(App.Configuration);
+                await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage(config));
+            }
+            catch (Exception ex)
+            {
+                // TODO: Handle this scenario better on CI :|
+                throw new ApplicationException("Error getting configuration for device!");
+            }
         }
 
         /// <summary>
@@ -205,7 +219,12 @@
         {
             try
             {
-                ISecurityServiceClient securityServiceClient = App.Container.GetInstance<ISecurityServiceClient>();
+                ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
+                if (App.IsIntegrationTestMode == true)
+                {
+                    this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
+                    this.EstateClient = App.Container.Resolve<IEstateClient>();
+                }
                 //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
 
@@ -213,13 +232,6 @@
                 await this.GetConfiguration();
 
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
-
-                var g = await securityServiceClient.GetClients(CancellationToken.None);
-                foreach (ClientDetails clientDetails in g)
-                {
-                    await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"{clientDetails.ClientId}"));
-                }
-
                 
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await securityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
@@ -227,7 +239,6 @@
                                                                                    App.Configuration.ClientId,
                                                                                    App.Configuration.ClientSecret,
                                                                                    CancellationToken.None);
-
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
 
                 // Cache the user token
@@ -238,7 +249,7 @@
 
                 // Get the merchants current balance
                 await this.GetMerchantBalance();
-
+                
                 // Get the merchants contract details
                 await this.GetMerchantContract();
 
@@ -300,7 +311,7 @@
         private void MainPage_SupportButtonClicked(Object sender,
                                                    EventArgs e)
         {
-            ISupportPresenter supportPresenter = App.Container.GetInstance<ISupportPresenter>();
+            ISupportPresenter supportPresenter = App.Container.Resolve<ISupportPresenter>();
             supportPresenter.Start();
         }
 
@@ -314,7 +325,7 @@
         {
             try
             {
-                ITransactionsPresenter transactionsPresenter = App.Container.GetInstance<ITransactionsPresenter>();
+                ITransactionsPresenter transactionsPresenter = App.Container.Resolve<ITransactionsPresenter>();
                 transactionsPresenter.Start();
             }
             catch(Exception ex)
@@ -334,7 +345,7 @@
             // Go to the API and get the merchant's contract details
             List<ContractResponse> contractResponses =
                 await this.EstateClient.GetMerchantContracts(App.TokenResponse.AccessToken, App.EstateId, App.MerchantId, CancellationToken.None);
-
+            
             App.ContractProducts = new List<ContractProductModel>();
 
             foreach (ContractResponse contractResponse in contractResponses)
@@ -352,7 +363,7 @@
                                                  IsFixedValue = contractResponseProduct.Value.HasValue,
                                                  ProductDisplayText = contractResponseProduct.DisplayText,
                                                  ProductType = this.GetProductType(contractResponse.OperatorName)
-                    });
+                                             });
                 }
             }
         }
@@ -419,7 +430,12 @@
                                                                                 TransactionNumber = App.GetNextTransactionNumber().ToString(),
                                                                                 ApplicationVersion = this.Device.GetSoftwareVersion()
             };
-            
+
+            if (logonTransactionRequestMessage.DeviceIdentifier == "EMULATOR30X0X26X0")
+            {
+                logonTransactionRequestMessage.DeviceIdentifier = "EMULATOR30X2X6X0";
+            }
+
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
             await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 

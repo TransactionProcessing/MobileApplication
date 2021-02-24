@@ -6,6 +6,7 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Clients;
     using Common;
     using Database;
     using Microsoft.AppCenter;
@@ -16,9 +17,9 @@
     using Plugin.Toast.Abstractions;
     using Presenters;
     using SecurityService.DataTransferObjects.Responses;
-    using Services;
-    using StructureMap;
     using Syncfusion.Licensing;
+    using Unity;
+    using Unity.Lifetime;
     using Xamarin.Forms;
 
     /// <summary>
@@ -34,11 +35,16 @@
         /// The configuration
         /// </summary>
         public static IConfiguration Configuration;
-        
+
+        /// <summary>
+        /// The is integration test mode
+        /// </summary>
+        public static Boolean IsIntegrationTestMode;
+
         /// <summary>
         /// Unity container
         /// </summary>
-        public static IContainer Container;
+        public static IUnityContainer Container;
 
         /// <summary>
         /// The token response
@@ -99,32 +105,8 @@
 
             App.Container = Bootstrapper.Run();
 
-            App.Container.Configure((c) =>
-                                    {
-                                        c.For<IDevice>().Use(device).Transient();
-                                        c.For<IDatabaseContext>().Use(database).Transient();
-                                    });
-
-            if (App.Configuration == null)
-            {
-                Task.Run(async () =>
-                         {
-                             try
-                             {
-                                 // TODO: Logging
-                                 Console.WriteLine("Config is null");
-                                 IConfigurationServiceClient configurationServiceClient = App.Container.GetInstance<IConfigurationServiceClient>();
-                                 App.Configuration = await configurationServiceClient.GetConfiguration(this.Device.GetDeviceIdentifier(), CancellationToken.None);
-                                 // TODO: Logging
-                                 Console.WriteLine("Config retrieved");
-                             }
-                             catch(Exception ex)
-                             {
-                                 CrossToastPopUp.Current.ShowToastWarning("Error retrieving configuration.", ToastLength.Long);
-                             }
-                         }).Wait();
-
-            }
+            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
         }
 
         #endregion
@@ -162,8 +144,6 @@
         protected override async void OnStart()
         {
             // TODO: Logging
-            Console.WriteLine("In On Start");
-
             if (App.Configuration != null)
             {
                 if (App.Configuration.EnableAutoUpdates)
@@ -185,8 +165,8 @@
             App.TransactionNumber = 1;
 
             // Handle when your app starts
-            ILoginPresenter loginPresenter = App.Container.GetInstance<ILoginPresenter>();
-            
+            ILoginPresenter loginPresenter = App.Container.Resolve<ILoginPresenter>();
+
             // show the login page
             await loginPresenter.Start();
         }

@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Services
+﻿namespace TransactionMobile.Clients
 {
     using System;
     using System.Net;
@@ -15,8 +15,8 @@
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="ClientProxyBase.ClientProxyBase" />
-    /// <seealso cref="TransactionMobile.Services.ITransactionProcessorACLClient" />
+    /// <seealso cref="ClientProxyBase" />
+    /// <seealso cref="ITransactionProcessorACLClient" />
     public class TransactionProcessorACLClient : ClientProxyBase, ITransactionProcessorACLClient
     {
         #region Fields

@@ -1,135 +1,109 @@
-﻿namespace TransactionMobile.IntegrationTests.Common
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Shouldly;
-    using TechTalk.SpecFlow;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-    /// <summary>
-    /// 
-    /// </summary>
+namespace TransactionMobile.IntegrationTests.Common
+{
+    using EstateManagement.DataTransferObjects.Responses;
+    using TransactionMobile.IntegrationTestClients;
+    using ContractProduct = IntegrationTestClients.ContractProduct;
+
     public class TestingContext
     {
-        #region Fields
-
-        /// <summary>
-        /// The clients
-        /// </summary>
-        private readonly List<ClientDetails> Clients;
-
-        /// <summary>
-        /// The estates
-        /// </summary>
-        private readonly List<EstateDetails> Estates;
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestingContext"/> class.
-        /// </summary>
         public TestingContext()
         {
-            this.Estates = new List<EstateDetails>();
-            this.Clients = new List<ClientDetails>();
+            this.Estates = new List<EstateModel>();
         }
 
-        #endregion
+        private List<EstateModel> Estates;
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the access token.
-        /// </summary>
-        /// <value>
-        /// The access token.
-        /// </value>
-        public String AccessToken { get; set; }
-
-        //public NlogLogger Logger { get; set; }
-
-        /// <summary>
-        /// Gets or sets the docker helper.
-        /// </summary>
-        /// <value>
-        /// The docker helper.
-        /// </value>
-        public TransactionMobileDockerHelper DockerHelper { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Adds the client details.
-        /// </summary>
-        /// <param name="clientId">The client identifier.</param>
-        /// <param name="clientSecret">The client secret.</param>
-        /// <param name="grantType">Type of the grant.</param>
-        public void AddClientDetails(String clientId,
-                                     String clientSecret,
-                                     String grantType)
+        public void AddEstate(Guid estateId,
+                              String estateName)
         {
-            this.Clients.Add(ClientDetails.Create(clientId, clientSecret, grantType));
+            this.Estates.Add(new EstateModel
+                             {
+                                 EstateId = estateId,
+                                 EstateName = estateName
+                             });
         }
 
-        /// <summary>
-        /// Adds the estate details.
-        /// </summary>
-        /// <param name="estateId">The estate identifier.</param>
-        /// <param name="estateName">Name of the estate.</param>
-        public void AddEstateDetails(Guid estateId,
-                                     String estateName)
+        public EstateModel GetEstate(string estateName)
         {
-            this.Estates.Add(EstateDetails.Create(estateId, estateName));
+            return this.Estates.Single(e => e.EstateName == estateName);
         }
 
-        /// <summary>
-        /// Gets the client details.
-        /// </summary>
-        /// <param name="clientId">The client identifier.</param>
-        /// <returns></returns>
-        public ClientDetails GetClientDetails(String clientId)
+        public void AddOperator(String estateName,
+                                Guid operatorId,
+                                String operatorName,
+                                Boolean requireCustomMerchantNumber,
+                                Boolean requireCustomTerminalNumber)
         {
-            ClientDetails clientDetails = this.Clients.SingleOrDefault(c => c.ClientId == clientId);
-
-            clientDetails.ShouldNotBeNull();
-
-            return clientDetails;
+            EstateModel estateModel = this.Estates.Single(e => e.EstateName == estateName);
+            estateModel.AddOperator(operatorId, operatorName, requireCustomMerchantNumber, requireCustomTerminalNumber);
         }
 
-        /// <summary>
-        /// Gets the estate details.
-        /// </summary>
-        /// <param name="tableRow">The table row.</param>
-        /// <returns></returns>
-        public EstateDetails GetEstateDetails(TableRow tableRow)
+        public void AddMerchant(String estateName,
+                                Guid merchantId,
+                                String merchantName,
+                                String merchantUserName,
+                                String password,
+                                String givenName,
+                                String familyName)
         {
-            String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
-
-            EstateDetails estateDetails = this.Estates.SingleOrDefault(e => e.EstateName == estateName);
-
-            estateDetails.ShouldNotBeNull();
-
-            return estateDetails;
+            EstateModel estateModel = this.GetEstate(estateName);
+            estateModel.AddMerchant(merchantId, merchantName, merchantUserName, password, givenName, familyName);
         }
 
-        /// <summary>
-        /// Gets the estate details.
-        /// </summary>
-        /// <param name="estateName">Name of the estate.</param>
-        /// <returns></returns>
-        public EstateDetails GetEstateDetails(String estateName)
+        public Merchant GetMerchant(String estateName,
+                                    String merchantName)
         {
-            EstateDetails estateDetails = this.Estates.SingleOrDefault(e => e.EstateName == estateName);
+            EstateModel estate = this.GetEstate(estateName);
+            Merchant merchant = estate.GetMerchant(merchantName);
 
-            estateDetails.ShouldNotBeNull();
-
-            return estateDetails;
+            return merchant;
         }
 
-        #endregion
+        public void AddMerchantDeposit(String estateName,
+                                       String merchantName,
+                                       Decimal depositAmount,
+                                       DateTime depositDateTime)
+        {
+            EstateModel estate = this.GetEstate(estateName);
+            Merchant merchant = estate.GetMerchant(merchantName);
+            
+            merchant.AddDeposit(depositAmount, depositDateTime);
+        }
+        
+        public void AddContract(String estateName,
+                                Guid contractId,
+                                String operatorName,
+                                String contactDescription)
+        {
+            EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
+            estate.AddContract(contractId, operatorName,contactDescription);
+
+            Contract contract = estate.GetContract(contactDescription);
+            AppManager.UpdateTestContract(contract);
+        }
+
+        public void AddContractProduct(String estateName, String contractDescription, Guid contractProductId, String productName, String displayText, Decimal? value)
+        {
+            EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
+            Contract contract = estate.GetContract(contractDescription);
+            contract.AddContractProduct(contractProductId, productName, displayText,value);
+            AppManager.UpdateTestContract(contract);
+        }
+
+        public void AddContractProductTransactionFee(String estateName, String contractDescription, String productName, Guid contractProductTransactionFeeId, String calculationType, String feeDescription , Decimal value)
+        {
+            EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
+            Contract contract = estate.GetContract(contractDescription);
+            ContractProduct contractProduct = contract.GetContractProduct(productName);
+            // TODO: Convert calculation type (maybe an enum)
+            contractProduct.AddTransactionFee(contractProductTransactionFeeId, 0, feeDescription, value);
+            AppManager.UpdateTestContract(contract);
+        }
     }
 }

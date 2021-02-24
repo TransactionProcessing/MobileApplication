@@ -219,16 +219,8 @@
   <ItemGroup>
     <Compile Include="BaseSteps.cs" />
     <Compile Include="Common\AppManager.cs" />
-    <Compile Include="Common\ClientDetails.cs" />
-    <Compile Include="Common\Contract.cs" />
-    <Compile Include="Common\DockerHelper.cs" />
-    <Compile Include="Common\EstateDetails.cs" />
-    <Compile Include="Common\EventStoreHttp.cs" />
-    <Compile Include="Common\ILogger.cs" />
-    <Compile Include="Common\Product.cs" />
     <Compile Include="Common\SpecflowTableHelper.cs" />
     <Compile Include="Common\TestingContext.cs" />
-    <Compile Include="Common\TransactionFee.cs" />
     <Compile Include="Features\Login.feature.cs" />
     <Compile Include="Features\LoginFeature.cs" />
     <Compile Include="Features\LoginSteps.cs" />
@@ -250,14 +242,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Common\config\db.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Features\Login.feature" />
     <None Include="Features\Reconciliation.feature" />
-    <None Include="Features\SafaricomTopup.feature">
-      <LastGenOutput>SafaricomTopup1.feature.cs</LastGenOutput>
-    </None>
+    <None Include="Features\SafaricomTopup.feature" />
     <None Include="Features\VoucherIssue.feature" />
     <None Include="libman.json" />
     <None Include="nlog.config">
@@ -266,25 +253,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DBScripts\1 - EFMigrationsHistory.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DBScripts\2 - CatchUpSubscription.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DBScripts\3 - EventStoreServer.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DBScripts\4 - Subscription.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DBScripts\5 - Indexes.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="projections\continuous\MerchantAggregator.js" />
-    <None Include="projections\continuous\MerchantBalanceCalculator.js" />
+    <ProjectReference Include="..\TransactionMobile.IntegrationTestClients\TransactionMobile.IntegrationTestClients.csproj">
+      <Project>{ac6f98c0-930b-4a79-9d8b-69c4d1520618}</Project>
+      <Name>TransactionMobile.IntegrationTestClients</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
