@@ -19,10 +19,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
 
-    - name: Switch to Xcode 12.3
-      run: |
-        sudo rm -f ${HOME}/Library/Preferences/Xamarin/Settings.plist
-        sudo xcode-select -s "/Applications/Xcode_12.3.app"
+#    - name: Switch to Xcode 12.3
+#      run: |
+        #sudo rm -f ${HOME}/Library/Preferences/Xamarin/Settings.plist
+        #sudo xcode-select -s "/Applications/Xcode_12.3.app"
       
     - name: Cache Simulator Data
       run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"  
