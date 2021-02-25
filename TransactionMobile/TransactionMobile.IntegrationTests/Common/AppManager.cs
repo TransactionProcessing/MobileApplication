@@ -12,6 +12,7 @@ namespace TransactionMobile.IntegrationTests.Common
 {
     using System.Diagnostics;
     using System.Threading;
+    using IntegrationTestClients;
     using Newtonsoft.Json;
     using NUnit.Framework;
 
@@ -64,21 +65,50 @@ namespace TransactionMobile.IntegrationTests.Common
             return deviceIdentifier;
         }
 
-        public static void SetConfiguration(String configHostAddress)
+        public static void SetIntegrationTestModeOn()
         {
             if (AppManager.platform == Platform.Android)
             {
-                AppManager.app.Invoke("SetConfiguration", configHostAddress);
+                AppManager.app.Invoke("SetIntegrationTestModeOn");
             }
-            else if(AppManager.platform == Platform.iOS)
+            else if (AppManager.platform == Platform.iOS)
             {
-                AppManager.app.Invoke("SetConfiguration:", configHostAddress);
+                AppManager.app.Invoke("SetIntegrationTestModeOn:", String.Empty);
             }
         }
-        
+
+        public static void UpdateTestMerchant(Merchant merchant)
+        {
+            String merchantData = JsonConvert.SerializeObject(merchant);
+
+            // Build the voucher data
+            if (AppManager.platform == Platform.Android)
+            {
+                AppManager.app.Invoke("UpdateTestMerchant", merchantData);
+            }
+            else if (AppManager.platform == Platform.iOS)
+            {
+                AppManager.app.Invoke("UpdateTestMerchant:", merchantData);
+            }
+        }
+
+        public static void UpdateTestContract(Contract contract)
+        {
+            String contractData = JsonConvert.SerializeObject(contract);
+
+            // Build the voucher data
+            if (AppManager.platform == Platform.Android)
+            {
+                AppManager.app.Invoke("UpdateTestContract", contractData);
+            }
+            else if (AppManager.platform == Platform.iOS)
+            {
+                AppManager.app.Invoke("UpdateTestContract:", contractData);
+            }
+        }
+
         public static void StartApp()
         {
-            
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             
             if (Platform == Platform.Android)
@@ -95,6 +125,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                       .ApkFile(Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk")).EnableLocalScreenshots().StartApp();
                 }
 
+                // Enable integration test mode
+                AppManager.SetIntegrationTestModeOn();
                 return;
             }
 
@@ -116,6 +148,8 @@ namespace TransactionMobile.IntegrationTests.Common
                                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app")).DeviceIdentifier(deviceIdentifier)
                                       .StartApp();
                 }
+                // Enable integration test mode
+                AppManager.SetIntegrationTestModeOn();
                 return;
             }
         }

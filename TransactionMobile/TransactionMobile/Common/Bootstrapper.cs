@@ -1,19 +1,22 @@
 ﻿namespace TransactionMobile.Common
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
     using System.Threading;
+    using Clients;
     using Database;
     using EstateManagement.Client;
+    using IntegrationTestClients;
     using Pages;
     using Plugin.Toast;
     using Presenters;
     using SecurityService.Client;
-    using Services;
-    using StructureMap;
+    using Unity;
+    using Unity.Lifetime;
     using ViewModels;
     using Views;
     using Views.Admin;
@@ -29,121 +32,121 @@
         /// Runs this instance.
         /// </summary>
         /// <returns></returns>
-        public static IContainer Run()
+        public static IUnityContainer Run()
         {
-            Registry registry = new Registry();
-            registry.IncludeRegistry<ClientsRegistry>();
-            registry.IncludeRegistry<PresenterRegistry>();
-            registry.IncludeRegistry<ViewRegistry>();
-            registry.IncludeRegistry<ViewModelRegistry>();
-            IContainer container = new Container(registry);
-            
+            IUnityContainer container = new UnityContainer();
+
+            Bootstrapper.RegisterClients(container);
+            Bootstrapper.RegisterPresenters(container);
+            Bootstrapper.RegisterViews(container);
+            Bootstrapper.RegisterViewModels(container);
+
             return container;
         }
 
         #endregion
-    }
 
-    public class ClientsRegistry : Registry
-    {
-        public ClientsRegistry()
+        private static void RegisterClients(IUnityContainer container)
         {
-            this.For<ISecurityServiceClient>().Use<SecurityServiceClient>().Singleton();
-            this.For<ITransactionProcessorACLClient>().Use<TransactionProcessorACLClient>().Singleton();
-            this.For<IEstateClient>().Use<EstateClient>().Singleton();
-            this.For<IConfigurationServiceClient>().Use<ConfigurationServiceClient>().Singleton();
-            this.For<HttpClient>().Add(new HttpClient());
-            this.For<Func<String, String>>().Add(new Func<String, String>(configSetting =>
-                                                                          {
-                                                                              if (configSetting == "ConfigServiceUrl")
-                                                                              {
-                                                                                  return "https://5r8nmm.deta.dev";
-                                                                              }
+            if (App.IsIntegrationTestMode)
+            {
+                container.RegisterSingleton<IConfigurationServiceClient, TestConfigurationServiceClient>();
+                container.RegisterSingleton<ISecurityServiceClient, TestSecurityServiceClient>();
+                container.RegisterSingleton<ITransactionProcessorACLClient, TestTransactionProcessorACLClient>();
+                container.RegisterSingleton<IEstateClient, TestEstateClient>();
+            }
+            else
+            {
+                container.RegisterSingleton<IConfigurationServiceClient, ConfigurationServiceClient>();
+                container.RegisterSingleton<ISecurityServiceClient, SecurityServiceClient>();
+                container.RegisterSingleton<ITransactionProcessorACLClient, TransactionProcessorACLClient>();
+                container.RegisterSingleton<IEstateClient, EstateClient>();
 
-                                                                              if (App.Configuration != null)
-                                                                              {
-                                                                                  IConfiguration config = App.Configuration;
+                container.RegisterInstance(new HttpClient());
+                container.RegisterInstance<Func<String, String>>(
+                new Func<String, String>(configSetting =>
+                {
+                    if (configSetting == "ConfigServiceUrl")
+                    {
+                        return "https://5r8nmm.deta.dev";
+                    }
 
-                                                                                  if (configSetting == "TransactionProcessorACL")
-                                                                                  {
-                                                                                      return config.TransactionProcessorACL;
-                                                                                  }
+                    if (App.Configuration != null)
+                    {
+                        IConfiguration config = App.Configuration;
 
-                                                                                  if (configSetting == "EstateManagementApi")
-                                                                                  {
-                                                                                      return config.EstateManagement;
-                                                                                  }
+                        if (configSetting == "SecurityService")
+                        {
+                            return config.SecurityService;
+                        }
 
-                                                                                  if (configSetting == "SecurityService")
-                                                                                  {
-                                                                                      return config.SecurityService;
-                                                                                  }
+                        if (configSetting == "TransactionProcessorACL")
+                        {
+                            return config.TransactionProcessorACL;
+                        }
 
-                                                                                  return string.Empty;
-                                                                              }
+                        if (configSetting == "EstateManagementApi")
+                        {
+                            return config.EstateManagement;
+                        }
 
-                                                                              return string.Empty;
-                                                                          }));
+                        return string.Empty;
+                    }
+
+                    return string.Empty;
+                }));
+            }
         }
-    }
 
-    public class PresenterRegistry : Registry
-    {
-        public PresenterRegistry()
+        private static void RegisterPresenters(IUnityContainer container)
         {
-            this.For<ILoginPresenter>().Add<LoginPresenter>().Transient();
-            this.For<ITransactionsPresenter>().Add<TransactionsPresenter>().Transient();
-            this.For<ISupportPresenter>().Add<SupportPresenter>().Transient();
+            container.RegisterType<ILoginPresenter, LoginPresenter>(new TransientLifetimeManager());
+            container.RegisterType<ISupportPresenter, SupportPresenter>(new TransientLifetimeManager());
+            container.RegisterType<ITransactionsPresenter, TransactionsPresenter>(new TransientLifetimeManager());
         }
-    }
-    public class ViewRegistry : Registry
-    {
-        public ViewRegistry()
+
+        private static void RegisterViews(IUnityContainer container)
         {
             // General
-            this.For<IMainPage>().Use<MainPage>().Transient();
-            this.For<ILoginPage>().Use<LoginPage>().Transient();
-            this.For<ITransactionsPage>().Use<TransactionsPage>().Transient();
+            container.RegisterType<IMainPage, MainPage>(new TransientLifetimeManager());
+            container.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
+            container.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
 
             // Mobile Topup
-            this.For<IMobileTopupSelectOperatorPage>().Use<MobileTopupSelectOperatorPage>().Transient();
-            this.For<IMobileTopupSelectProductPage>().Use<MobileTopupSelectProductPage>().Transient();
-            this.For<IMobileTopupPerformTopupPage>().Use<MobileTopupPerformTopupPage>().Transient();
-            this.For<IMobileTopupPaymentSuccessPage>().Use<MobileTopupPaymentSuccessPage>().Transient();
-            this.For<IMobileTopupPaymentFailedPage>().Use<MobileTopupPaymentFailedPage>().Transient();
+            container.RegisterType<IMobileTopupSelectOperatorPage, MobileTopupSelectOperatorPage>(new TransientLifetimeManager());
+            container.RegisterType<IMobileTopupSelectProductPage, MobileTopupSelectProductPage>(new TransientLifetimeManager());
+            container.RegisterType<IMobileTopupPerformTopupPage, MobileTopupPerformTopupPage>(new TransientLifetimeManager());
+            container.RegisterType<IMobileTopupPaymentSuccessPage, MobileTopupPaymentSuccessPage>(new TransientLifetimeManager());
+            container.RegisterType<IMobileTopupPaymentFailedPage, MobileTopupPaymentFailedPage>(new TransientLifetimeManager());
 
             // Voucher
-            this.For<IVoucherSelectOperatorPage>().Use<VoucherSelectOperatorPage>().Transient();
-            this.For<IVoucherSelectProductPage>().Use<VoucherSelectProductPage>().Transient();
-            this.For<IVoucherPerformVoucherIssuePage>().Use<VoucherPerformVoucherIssuePage>().Transient();
-            this.For<IVoucherSuccessPage>().Use<VoucherSuccessPage>().Transient();
-            this.For<IVoucherFailedPage>().Use<VoucherFailedPage>().Transient();
+            container.RegisterType<IVoucherSelectOperatorPage, VoucherSelectOperatorPage>(new TransientLifetimeManager());
+            container.RegisterType<IVoucherSelectProductPage, VoucherSelectProductPage>(new TransientLifetimeManager());
+            container.RegisterType<IVoucherPerformVoucherIssuePage, VoucherPerformVoucherIssuePage>(new TransientLifetimeManager());
+            container.RegisterType<IVoucherSuccessPage, VoucherSuccessPage>(new TransientLifetimeManager());
+            container.RegisterType<IVoucherFailedPage, VoucherFailedPage>(new TransientLifetimeManager());
 
             // Support
-            this.For<ISupportPage>().Use<SupportPage>().Transient();
-            
-            // Admin
-            this.For<IAdminPage>().Use<AdminPage>().Transient();
-        }
-    }
+            container.RegisterType<ISupportPage, SupportPage>(new TransientLifetimeManager());
 
-    public class ViewModelRegistry : Registry
-    {
-        public ViewModelRegistry()
+            // Admin
+            container.RegisterType<IAdminPage, AdminPage>(new TransientLifetimeManager());
+        }
+        private static void RegisterViewModels(IUnityContainer container)
         {
             // General
-            this.For<LoginViewModel>().Transient();
-            this.For<MainPageViewModel>().Transient();
+            container.RegisterType<LoginViewModel>(new TransientLifetimeManager());
+            container.RegisterType<MainPageViewModel>(new TransientLifetimeManager());
 
             // Mobile Topup
-            this.For<MobileTopupSelectOperatorViewModel>().Transient();
-            this.For<MobileTopupSelectProductViewModel>().Transient();
-            this.For<MobileTopupPerformTopupViewModel>().Transient();
+            container.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());
+            container.RegisterType<MobileTopupSelectProductViewModel>(new TransientLifetimeManager());
+            container.RegisterType<MobileTopupPerformTopupViewModel>(new TransientLifetimeManager());
 
             // Voucher
-            this.For<VoucherSelectOperatorViewModel>().Transient();
-            this.For<VoucherSelectProductViewModel>().Transient();
-            this.For<VoucherPerformVoucherIssueViewModel>().Transient();
+            container.RegisterType<VoucherSelectOperatorViewModel>(new TransientLifetimeManager());
+            container.RegisterType<VoucherSelectProductViewModel>(new TransientLifetimeManager());
+            container.RegisterType<VoucherPerformVoucherIssueViewModel>(new TransientLifetimeManager());
         }
     }
 }

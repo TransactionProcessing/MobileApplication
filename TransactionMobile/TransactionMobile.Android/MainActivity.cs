@@ -1,6 +1,7 @@
 ﻿namespace TransactionMobile.Droid
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
@@ -10,13 +11,19 @@
     using Android.Content.PM;
     using Android.OS;
     using Android.Runtime;
+    using Clients;
     using Common;
     using Database;
     using EstateManagement.Client;
+    using EstateManagement.DataTransferObjects.Responses;
+    using IntegrationTestClients;
     using Java.Interop;
+    using Java.Util;
     using Microsoft.AppCenter.Distribute;
+    using Newtonsoft.Json;
     using SecurityService.Client;
-    using Services;
+    using Unity;
+    using Unity.Lifetime;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
     using Environment = System.Environment;
@@ -72,46 +79,50 @@
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-        /// <summary>
-        /// Sets the configuration.
-        /// </summary>
-        /// <param name="configurationHost">The configuration host.</param>
-        [Export("SetConfiguration")]
-        public void SetConfiguration(String configurationHost)
+        [Export("SetIntegrationTestModeOn")]
+        public void SetIntegrationTestModeOn()
         {
-            Console.WriteLine("In Set Configuration");
+            Console.WriteLine($"Inside SetIntegrationTestModeOn");
+            App.IsIntegrationTestMode = true;
+            App.Container = Bootstrapper.Run();
 
             IDevice device = new AndroidDevice();
+            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
+            DatabaseContext database = new DatabaseContext(connectionString);
+            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
+        }
 
-            String deviceId = device.GetDeviceIdentifier();
+        [Export("UpdateTestMerchant")]
+        public void UpdateTestMerchant(String merchantData)
+        {
+            if (App.IsIntegrationTestMode == true)
+            {
+                Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
+                TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+                transactionProcessorAclClient.UpdateTestMerchant(merchant);
 
-            // Now get the configuration
-            Func<String, String> resolver = new Func<String, String>(configSetting => { return configurationHost; });
+                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                estateClient.UpdateTestMerchant(merchant);
 
-            ConfigurationServiceClient configClient = new ConfigurationServiceClient(resolver, new HttpClient());
+                TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+                Dictionary<String, String> claims = new Dictionary<String, String>();
+                claims.Add("EstateId", merchant.EstateId.ToString());
+                claims.Add("MerchantId", merchant.MerchantId.ToString());
+                securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
+            }
+        }
 
-            Task.Run(async () =>
-                     {
-                         App.Configuration = await configClient.GetConfiguration(deviceId, CancellationToken.None);
-                         App.Container.Configure((c) =>
-                                                 {
-                                                     c.For<ISecurityServiceClient>().ClearAll();
-                                                     c.For<IEstateClient>().ClearAll();
-                                                     c.For<ITransactionProcessorACLClient>().ClearAll();
-                                                 });
-                         App.Container = Bootstrapper.Run();
-
-                         String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
-                         DatabaseContext database = new DatabaseContext(connectionString);
-                         App.Container.Configure((c) =>
-                                                 {
-                                                     c.For<IDevice>().Use(device).Transient();
-                                                     c.For<IDatabaseContext>().Use(database).Transient();
-                                                 });
-
-                     }).Wait();
-
-            
+        [Export("UpdateTestContract")]
+        public void UpdateTestContract(String contractData)
+        {
+            if (App.IsIntegrationTestMode == true)
+            {
+                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
+                Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
+                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                estateClient.UpdateTestContract(contract);
+            }
         }
 
         [Export("GetDeviceIdentifier")]

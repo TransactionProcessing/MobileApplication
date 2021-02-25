@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="EstateManagement.Client" Version="1.0.5.2" />
+		<PackageReference Include="SecurityService.Client" Version="1.0.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\TransactionMobile.Clients\TransactionMobile.Clients.csproj" />
+	</ItemGroup>
+</Project>

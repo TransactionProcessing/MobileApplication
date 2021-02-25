@@ -1,5 +1,6 @@
 ﻿namespace TransactionMobile.UnitTests.Presenters
 {
+    using Clients;
     using Common;
     using Database;
     using Moq;
@@ -8,7 +9,6 @@
     using Services;
     using Shouldly;
     using TransactionMobile.Presenters;
-    using TransactionMobile.Services;
     using TransactionMobile.ViewModels;
     using ViewModels;
 

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TransactionMobile.Services
+﻿namespace TransactionMobile.Clients
 {
+    using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common;
-    using Database;
-    using Database.Entities;
 
     /// <summary>
     /// 

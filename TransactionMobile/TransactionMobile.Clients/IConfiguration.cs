@@ -1,16 +1,11 @@
-﻿namespace TransactionMobile.Common
+﻿namespace TransactionMobile.Clients
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
-    using Models;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="TransactionMobile.Common.IConfiguration" />
-    [ExcludeFromCodeCoverage]
-    public class Configuration : IConfiguration
+    public interface IConfiguration
     {
         #region Properties
 
@@ -20,7 +15,7 @@
         /// <value>
         /// The client identifier.
         /// </value>
-        public String ClientId { get; set; }
+        String ClientId { get; set; }
 
         /// <summary>
         /// Gets or sets the client secret.
@@ -28,7 +23,7 @@
         /// <value>
         /// The client secret.
         /// </value>
-        public String ClientSecret { get; set; }
+        String ClientSecret { get; set; }
 
         /// <summary>
         /// Gets or sets the security service.
@@ -36,8 +31,7 @@
         /// <value>
         /// The security service.
         /// </value>
-        [JsonProperty("securityServiceUri")]
-        public String SecurityService { get; set; }
+        String SecurityService { get; set; }
 
         /// <summary>
         /// Gets or sets the transaction processor acl.
@@ -45,8 +39,7 @@
         /// <value>
         /// The transaction processor acl.
         /// </value>
-        [JsonProperty("transactionProcessorACLUri")]
-        public String TransactionProcessorACL { get; set; }
+        String TransactionProcessorACL { get; set; }
 
         /// <summary>
         /// Gets or sets the estate management.
@@ -54,8 +47,7 @@
         /// <value>
         /// The estate management.
         /// </value>
-        [JsonProperty("estateManagementUri")]
-        public String EstateManagement { get; set; }
+        String EstateManagement { get; set; }
 
         /// <summary>
         /// Gets or sets the log level.
@@ -63,15 +55,9 @@
         /// <value>
         /// The log level.
         /// </value>
-        public LogLevel LogLevel { get; set; }
+        LogLevel LogLevel { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [enable automatic updates].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [enable automatic updates]; otherwise, <c>false</c>.
-        /// </value>
-        public Boolean EnableAutoUpdates { get; set; }
+        Boolean EnableAutoUpdates { get; set; }
 
         #endregion
     }
