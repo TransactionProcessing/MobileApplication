@@ -59,6 +59,18 @@
         {
             String[] splitToken = accessToken.Split('|');
 
+            saleTransactionRequest.AdditionalRequestMetaData.TryGetValue("Amount", out String amount);
+
+            if (amount == "1000")
+            {
+                return new SaleTransactionResponseMessage
+                       {
+                           ResponseCode = "1000",
+                           EstateId = Guid.Parse(splitToken[0]),
+                           MerchantId = Guid.Parse(splitToken[1])
+                       };
+            }
+
             return new SaleTransactionResponseMessage
                    {
                        ResponseCode = "0000",
