@@ -58,7 +58,7 @@
       <HintPath>..\packages\BoDi.1.4.1\lib\net45\BoDi.dll</HintPath>
     </Reference>
     <Reference Include="ClientProxyBase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClientProxyBase.1.0.1\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
+      <HintPath>..\packages\ClientProxyBase.1.0.8\lib\netstandard2.0\ClientProxyBase.dll</HintPath>
     </Reference>
     <Reference Include="Cucumber.Messages, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b10c5988214f940c, processorArchitecture=MSIL">
       <HintPath>..\packages\Cucumber.Messages.6.0.2\lib\net45\Cucumber.Messages.dll</HintPath>
@@ -73,10 +73,10 @@
       <HintPath>..\packages\EmptyFiles.2.3.3\lib\net461\EmptyFiles.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.11.1\lib\netstandard2.0\EstateManagement.Client.dll</HintPath>
     </Reference>
     <Reference Include="EstateManagement.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EstateManagement.Client.1.0.6\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\EstateManagement.Client.1.0.11.1\lib\netstandard2.0\EstateManagement.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="Gherkin, Version=6.0.0.0, Culture=neutral, PublicKeyToken=86496cfa5b4a5851, processorArchitecture=MSIL">
       <HintPath>..\packages\Gherkin.6.0.0\lib\net45\Gherkin.dll</HintPath>
@@ -107,10 +107,10 @@
       <HintPath>..\packages\protobuf-net.Core.3.0.73\lib\net461\protobuf-net.Core.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.6.4\lib\netstandard2.0\SecurityService.Client.dll</HintPath>
     </Reference>
     <Reference Include="SecurityService.DataTransferObjects, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SecurityService.Client.1.0.4\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
+      <HintPath>..\packages\SecurityService.Client.1.0.6.4\lib\netstandard2.0\SecurityService.DataTransferObjects.dll</HintPath>
     </Reference>
     <Reference Include="SharpCompress, Version=0.26.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpCompress.0.26.0\lib\net46\SharpCompress.dll</HintPath>

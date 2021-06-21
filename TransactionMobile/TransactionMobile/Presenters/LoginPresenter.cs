@@ -414,7 +414,6 @@
             LogonTransactionRequestMessage logonTransactionRequestMessage = new LogonTransactionRequestMessage
                                                                             {
                                                                                 DeviceIdentifier = this.Device.GetDeviceIdentifier(),
-                                                                                RequireConfigurationInResponse = false,
                                                                                 TransactionDateTime = DateTime.Now,
                                                                                 TransactionNumber = App.GetNextTransactionNumber().ToString(),
                                                                                 ApplicationVersion = this.Device.GetSoftwareVersion()

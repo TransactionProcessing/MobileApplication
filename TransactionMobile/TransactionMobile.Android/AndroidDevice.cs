@@ -30,6 +30,9 @@
                 {
                     Context context = Application.Context;
                     id = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+
+                    if (id == "d6b3e40886681417")
+                        return "EMULATOR30X0X26X0";
                 }
                 catch(Exception ex)
                 {

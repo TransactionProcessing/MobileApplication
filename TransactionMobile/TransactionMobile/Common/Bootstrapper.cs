@@ -52,7 +52,17 @@
             this.For<ITransactionProcessorACLClient>().Use<TransactionProcessorACLClient>().Singleton();
             this.For<IEstateClient>().Use<EstateClient>().Singleton();
             this.For<IConfigurationServiceClient>().Use<ConfigurationServiceClient>().Singleton();
-            this.For<HttpClient>().Add(new HttpClient());
+            HttpClientHandler httpClientHandler = new HttpClientHandler
+                                                  {
+                                                      ServerCertificateCustomValidationCallback = (message,
+                                                                                                   certificate2,
+                                                                                                   arg3,
+                                                                                                   arg4) =>
+                                                                                                  {
+                                                                                                      return true;
+                                                                                                  }
+                                                  };
+            this.For<HttpClient>().Add(new HttpClient(httpClientHandler));
             this.For<Func<String, String>>().Add(new Func<String, String>(configSetting =>
                                                                           {
                                                                               if (configSetting == "ConfigServiceUrl")
