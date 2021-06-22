@@ -80,7 +80,7 @@ namespace TransactionMobile.IntegrationTests.Common
         public static void UpdateTestMerchant(Merchant merchant)
         {
             String merchantData = JsonConvert.SerializeObject(merchant);
-
+            
             // Build the voucher data
             if (AppManager.platform == Platform.Android)
             {
@@ -109,6 +109,8 @@ namespace TransactionMobile.IntegrationTests.Common
 
         public static void StartApp()
         {
+            String x = Environment.GetEnvironmentVariable("ANDROID_HOME");
+
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             
             if (Platform == Platform.Android)

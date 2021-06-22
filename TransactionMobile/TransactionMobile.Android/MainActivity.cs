@@ -18,6 +18,7 @@
     using EstateManagement.DataTransferObjects.Responses;
     using IntegrationTestClients;
     using Java.Interop;
+    using Java.Lang;
     using Java.Util;
     using Microsoft.AppCenter.Distribute;
     using Newtonsoft.Json;
@@ -27,7 +28,10 @@
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
     using Environment = System.Environment;
+    using Exception = System.Exception;
+    using Object = System.Object;
     using Platform = Xamarin.Essentials.Platform;
+    using String = System.String;
 
     /// <summary>
     /// 
@@ -94,23 +98,52 @@
         }
 
         [Export("UpdateTestMerchant")]
-        public void UpdateTestMerchant(String merchantData)
+        public String UpdateTestMerchant(String merchantData)
         {
-            if (App.IsIntegrationTestMode == true)
+            StringBuilder sb = new StringBuilder();
+            try
             {
-                Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
-                TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
-                transactionProcessorAclClient.UpdateTestMerchant(merchant);
+                if (App.IsIntegrationTestMode == true)
+                {
+                    Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
 
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestMerchant(merchant);
+                    if (App.Container == null)
+                    {
+                        sb.Append("container is null");
+                    }
 
-                TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
-                Dictionary<String, String> claims = new Dictionary<String, String>();
-                claims.Add("EstateId", merchant.EstateId.ToString());
-                claims.Add("MerchantId", merchant.MerchantId.ToString());
-                securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
+                    TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+                    if (transactionProcessorAclClient == null)
+                    {
+                        sb.Append("acl client is null");
+                    }
+                    transactionProcessorAclClient.UpdateTestMerchant(merchant);
+                    sb.Append("Acl merchant updated");
+
+                    TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                    if (estateClient == null)
+                    {
+                        sb.Append("estate client is null");
+                    }
+                    estateClient.UpdateTestMerchant(merchant);
+                    sb.Append("estate client merchant updated");
+
+                    TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+                    Dictionary<String, String> claims = new Dictionary<String, String>();
+                    claims.Add("estateId", merchant.EstateId.ToString());
+                    claims.Add("merchantId", merchant.MerchantId.ToString());
+                    securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
+                    sb.Append("security client merchant updated");
+                }
             }
+            catch(Exception e)
+            {
+                sb.Append(e.Message);
+            }
+
+            return sb.ToString();
+            
+            
         }
 
         [Export("UpdateTestContract")]

@@ -32,12 +32,12 @@
                 Merchant existingMerchant = this.Merchants.Single(m => m.MerchantId == merchant.MerchantId);
                 this.Merchants.Remove(existingMerchant);
                 this.Merchants.Add(merchant);
-                Console.WriteLine($"Merchant {merchant.MerchantName} updated [{merchant.MerchantId}]");
+                //Console.WriteLine($"Merchant {merchant.MerchantName} updated [{merchant.MerchantId}]");
             }
             else
             {
                 this.Merchants.Add(merchant);
-                Console.WriteLine($"Merchant {merchant.MerchantName} added [{merchant.MerchantId}]");
+                //Console.WriteLine($"Merchant {merchant.MerchantName} added [{merchant.MerchantId}]");
             }
         }
 
@@ -198,6 +198,14 @@
                    {
                        AvailableBalance = depositSum
                    };
+        }
+
+        public async Task<List<MerchantBalanceHistoryResponse>> GetMerchantBalanceHistory(String accessToken,
+                                                                                          Guid estateId,
+                                                                                          Guid merchantId,
+                                                                                          CancellationToken cancellationToken)
+        {
+            return null;
         }
 
         public async Task<List<ContractResponse>> GetMerchantContracts(String accessToken,
