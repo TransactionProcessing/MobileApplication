@@ -54,8 +54,8 @@
 
             String json = JsonConvert.SerializeObject(user);
 
-            user.userDetails.Claims.TryGetValue("EstateId", out String estateId);
-            user.userDetails.Claims.TryGetValue("MerchantId", out String merchantId);
+            user.userDetails.Claims.TryGetValue("estateId", out String estateId);
+            user.userDetails.Claims.TryGetValue("merchantId", out String merchantId);
             
             return TokenResponse.Create($"{estateId}|{merchantId}", null, 0, DateTimeOffset.Now);
         }
@@ -63,6 +63,12 @@
         #region Not Implemented
         public async Task<CreateApiResourceResponse> CreateApiResource(CreateApiResourceRequest createApiResourceRequest,
                                                                        CancellationToken cancellationToken)
+        {
+            return null;
+        }
+
+        public async Task<CreateApiScopeResponse> CreateApiScope(CreateApiScopeRequest createApiScopeRequest,
+                                                                 CancellationToken cancellationToken)
         {
             return null;
         }
@@ -97,7 +103,18 @@
             return null;
         }
 
+        public async Task<ApiScopeDetails> GetApiScope(String apiScopeName,
+                                                       CancellationToken cancellationToken)
+        {
+            return null;
+        }
+
         public async Task<List<ApiResourceDetails>> GetApiResources(CancellationToken cancellationToken)
+        {
+            return null;
+        }
+
+        public async Task<List<ApiScopeDetails>> GetApiScopes(CancellationToken cancellationToken)
         {
             return null;
         }
