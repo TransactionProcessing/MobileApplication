@@ -429,12 +429,7 @@
                                                                                 TransactionNumber = App.GetNextTransactionNumber().ToString(),
                                                                                 ApplicationVersion = this.Device.GetSoftwareVersion()
             };
-
-            if (logonTransactionRequestMessage.DeviceIdentifier == "EMULATOR30X0X26X0")
-            {
-                logonTransactionRequestMessage.DeviceIdentifier = "EMULATOR30X2X6X0";
-            }
-
+            
             String requestJson = JsonConvert.SerializeObject(logonTransactionRequestMessage);
             await this.Database.InsertLogMessage(DatabaseContext.CreateInformationLogMessage($"Message Sent to Host [{requestJson}]"));
 
