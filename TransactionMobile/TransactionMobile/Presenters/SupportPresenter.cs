@@ -5,12 +5,13 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Clients;
     using Common;
     using Database;
     using Database.Entities;
     using Pages;
-    using Services;
     using Xamarin.Forms;
+    using LogMessage = Database.Entities.LogMessage;
 
     /// <summary>
     /// 
@@ -94,7 +95,18 @@
                     break;
                 }
 
-                await this.ConfigurationServiceClient.PostDiagnosticLogs(this.Device.GetDeviceIdentifier(), logEntries, CancellationToken.None);
+                // TODO: Translate log messages
+                List<TransactionMobile.Clients.LogMessage> logMessageModels = new List<TransactionMobile.Clients.LogMessage>();
+
+                logEntries.ForEach(l => logMessageModels.Add(new TransactionMobile.Clients.LogMessage
+                {
+                                                                 LogLevel = l.LogLevel,
+                                                                 Message = l.Message,
+                                                                 EntryDateTime = l.EntryDateTime,
+                                                                 Id = l.Id
+                                                             }));
+
+                await this.ConfigurationServiceClient.PostDiagnosticLogs(this.Device.GetDeviceIdentifier(), logMessageModels, CancellationToken.None);
 
                 // Clear the logs that have been uploaded
                 await this.Database.RemoveUploadedMessages(logEntries);

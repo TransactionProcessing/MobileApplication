@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Services
+﻿namespace TransactionMobile.Clients
 {
     using System;
     using System.Collections.Generic;
@@ -8,16 +8,13 @@
     using System.Threading;
     using System.Threading.Tasks;
     using ClientProxyBase;
-    using Common;
-    using Database;
-    using Database.Entities;
     using Newtonsoft.Json;
 
     /// <summary>
     /// 
     /// </summary>
     /// <seealso cref="ClientProxyBase" />
-    /// <seealso cref="TransactionMobile.Services.IConfigurationServiceClient" />
+    /// <seealso cref="IConfigurationServiceClient" />
     public class ConfigurationServiceClient : ClientProxyBase, IConfigurationServiceClient
     {
         /// <summary>

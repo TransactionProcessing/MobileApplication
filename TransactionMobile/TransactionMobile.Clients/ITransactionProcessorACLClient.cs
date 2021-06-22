@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TransactionMobile.Services
+﻿namespace TransactionMobile.Clients
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using TransactionProcessorACL.DataTransferObjects;

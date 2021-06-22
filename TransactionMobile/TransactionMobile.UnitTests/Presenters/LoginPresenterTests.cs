@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TransactionMobile.UnitTests.Presenters
 {
+    using Clients;
     using Common;
     using Database;
     using EstateManagement.Client;
@@ -16,7 +17,6 @@ namespace TransactionMobile.UnitTests.Presenters
     using Services;
     using Shouldly;
     using TransactionMobile.Presenters;
-    using TransactionMobile.Services;
     using TransactionMobile.ViewModels;
     using ViewModels;
 

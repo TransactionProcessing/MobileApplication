@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Entities;
-    using Models;
+    using Clients;
     using SQLite;
+    using LogMessage = Entities.LogMessage;
 
     /// <summary>
     /// 
@@ -172,7 +172,7 @@
         /// <param name="logMessage">The log message.</param>
         public async Task InsertLogMessage(LogMessage logMessage)
         {
-            Console.WriteLine(logMessage.Message);
+            //Console.WriteLine(logMessage.Message);
 
             LogLevel messageLevel = (LogLevel)Enum.Parse(typeof(LogLevel), logMessage.LogLevel, true);
             if (App.Configuration == null || messageLevel <= App.Configuration.LogLevel)

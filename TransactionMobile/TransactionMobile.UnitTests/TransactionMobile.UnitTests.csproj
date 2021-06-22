@@ -266,6 +266,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TransactionMobile.Clients\TransactionMobile.Clients.csproj">
+      <Project>{bbb08d92-5bde-442f-b19a-40ab843e3126}</Project>
+      <Name>TransactionMobile.Clients</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TransactionMobile\TransactionMobile.csproj">
       <Project>{AC489537-0F82-433C-911F-AB4715010BDB}</Project>
       <Name>TransactionMobile</Name>
