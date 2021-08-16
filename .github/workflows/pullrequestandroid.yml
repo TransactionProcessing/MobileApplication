@@ -32,7 +32,7 @@ jobs:
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
     - name: Run Unit Tests
-      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.13.2/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
