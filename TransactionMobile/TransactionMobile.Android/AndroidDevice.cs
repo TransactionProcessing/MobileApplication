@@ -30,6 +30,11 @@
                 {
                     Context context = Application.Context;
                     id = Settings.Secure.GetString(context.ContentResolver, Settings.Secure.AndroidId);
+
+                    if (id != "d6b3e40886681417")
+                    {
+                        id = "d6b3e40886681417";
+                    }
                 }
                 catch(Exception ex)
                 {
