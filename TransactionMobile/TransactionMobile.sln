@@ -17,9 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.UnitTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.IntegrationTests", "TransactionMobile.IntegrationTests\TransactionMobile.IntegrationTests.csproj", "{EA765C43-D3E4-4DBE-870C-BBF43485A124}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.Clients", "TransactionMobile.Clients\TransactionMobile.Clients.csproj", "{BBB08D92-5BDE-442F-B19A-40AB843E3126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.Clients", "TransactionMobile.Clients\TransactionMobile.Clients.csproj", "{BBB08D92-5BDE-442F-B19A-40AB843E3126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionMobile.IntegrationTestClients", "TransactionMobile.IntegrationTestClients\TransactionMobile.IntegrationTestClients.csproj", "{AC6F98C0-930B-4A79-9D8B-69C4D1520618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransactionMobile.IntegrationTestClients", "TransactionMobile.IntegrationTestClients\TransactionMobile.IntegrationTestClients.csproj", "{AC6F98C0-930B-4A79-9D8B-69C4D1520618}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
