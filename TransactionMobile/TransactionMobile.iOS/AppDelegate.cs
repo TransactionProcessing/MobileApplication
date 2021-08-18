@@ -69,6 +69,8 @@
         public override Boolean FinishedLaunching(UIApplication app,
                                                   NSDictionary options)
         {
+            Calabash.Start();
+
             //AppDomain.CurrentDomain.UnhandledException += this.CurrentDomainOnUnhandledException;
             //TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
 
@@ -78,7 +80,7 @@
 
             Forms.Init();
 
-            Calabash.Start();
+            
 
             //SfBorderRenderer.Init();
             //SfButtonRenderer.Init();
