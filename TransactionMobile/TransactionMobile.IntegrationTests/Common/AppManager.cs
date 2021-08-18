@@ -144,7 +144,7 @@ namespace TransactionMobile.IntegrationTests.Common
                 else
                 {
 
-                    String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
+                    String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Debug");
                     app = ConfigureApp.iOS
                                       // Used to run a .app file on an ios simulator:
                                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app")).DeviceIdentifier(deviceIdentifier)
