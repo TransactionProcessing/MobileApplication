@@ -149,6 +149,7 @@ namespace TransactionMobile.IntegrationTests.Common
                                       // Used to run a .app file on an ios simulator:
                                       .AppBundle(Path.Combine(binariesFolder, "TransactionMobile.iOS.app")).DeviceIdentifier(deviceIdentifier)
                                       .StartApp();
+                    
                 }
                 // Enable integration test mode
                 AppManager.SetIntegrationTestModeOn();
