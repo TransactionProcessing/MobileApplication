@@ -37,16 +37,16 @@ jobs:
       run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
     - name: Build Code
-      run: msbuild /p:Configuration="Debug" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
     
     - name: Run Unit Tests
-      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Debug/TransactionMobile.UnitTests.dll
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
     #- name: Create Screenshot Folder
     #  run: mkdir -p /Users/runner/screenshots
 
     - name: Run Integration Tests - iOS
-      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Debug/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
    
     - uses: actions/upload-artifact@v2.2.1
       if: failure()

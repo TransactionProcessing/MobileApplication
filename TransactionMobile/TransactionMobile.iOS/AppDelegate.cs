@@ -69,20 +69,20 @@
         public override Boolean FinishedLaunching(UIApplication app,
                                                   NSDictionary options)
         {
-            AppDomain.CurrentDomain.UnhandledException += this.CurrentDomainOnUnhandledException;
-            TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
+            //AppDomain.CurrentDomain.UnhandledException += this.CurrentDomainOnUnhandledException;
+            //TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
 
-            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
+            //String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             this.Device = new iOSDevice();
-            this.Database = new DatabaseContext(connectionString);
+            this.Database = null;//new DatabaseContext(connectionString);
 
             Forms.Init();
 
             Calabash.Start();
 
-            SfBorderRenderer.Init();
-            SfButtonRenderer.Init();
-            SfTabViewRenderer.Init();
+            //SfBorderRenderer.Init();
+            //SfButtonRenderer.Init();
+            //SfTabViewRenderer.Init();
 
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
