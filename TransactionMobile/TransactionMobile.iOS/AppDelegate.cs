@@ -50,7 +50,7 @@
         private IDatabaseContext Database;
 
         #endregion
-
+        
         #region Methods
 
         //

@@ -28,13 +28,9 @@
 	<string>com.companyname.TransactionMobile</string>
 	<key>CFBundleVersion</key>
 	<string>1.0.5</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>TransactionMobile</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>UIMainStoryboardFile</key>
-	<string>LaunchScreen</string>
 </dict>
 </plist>
