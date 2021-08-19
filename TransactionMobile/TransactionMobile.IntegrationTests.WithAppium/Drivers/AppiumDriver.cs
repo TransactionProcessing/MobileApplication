@@ -34,7 +34,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "emulator-5554");
             
             String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..","..", @"TransactionMobile.Android\bin\Release");
+            String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..",@"TransactionMobile.Android\bin\Release");
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk");
             driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
 
