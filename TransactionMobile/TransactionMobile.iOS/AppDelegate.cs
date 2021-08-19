@@ -69,7 +69,7 @@
         public override Boolean FinishedLaunching(UIApplication app,
                                                   NSDictionary options)
         {
-            Calabash.Start();
+            global::Xamarin.Forms.Forms.Init();
 
             //AppDomain.CurrentDomain.UnhandledException += this.CurrentDomainOnUnhandledException;
             //TaskScheduler.UnobservedTaskException += this.TaskSchedulerOnUnobservedTaskException;
@@ -78,13 +78,16 @@
             this.Device = new iOSDevice();
             this.Database = new DatabaseContext(connectionString);
 
-            Forms.Init();
             
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
 
             this.LoadApplication(new App(this.Device, this.Database));
+
+//#if ENABLE_TEST_CLOUD
+            Xamarin.Calabash.Start();
+//#endif
 
             return base.FinishedLaunching(app, options);
         }
