@@ -7,50 +7,46 @@ on:
 
 jobs:  
   
-  buildios:
-    name: "Build and Test Pull Requests - iOS"
-    env:
-        ANDROID_HOME: "/Users/runner/Library/Android/sdk"
-        ScreenshotFolder: "/Users/runner/screenshots"
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-        Device: "iPhone 11 (14.4)"
-    runs-on: macos-latest
+  #buildios:
+  #  name: "Build and Test Pull Requests - iOS"
+  #  env:
+  #      ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+  #      ScreenshotFolder: "/Users/runner/screenshots"
+  #      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  #      Device: "iPhone 11 (14.4)"
+  #  runs-on: macos-latest
 
-    steps:
-    - uses: actions/checkout@v2.3.4
-
-#    - name: Switch to Xcode 12.3
-#      run: |
-        #sudo rm -f ${HOME}/Library/Preferences/Xamarin/Settings.plist
-        #sudo xcode-select -s "/Applications/Xcode_12.3.app"
-      
-    - name: Cache Simulator Data
-      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"  
-          
-    - name: log out simulators
-      run: xcrun instruments -s devices
-     
-    - name: Setup Nuget
-      uses: olegtarasov/download-nuget@v1
-          
-    - name: Restore Nuget Packages
-      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
-
-    - name: Build Code
-      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+  #  steps:
+  #  - uses: actions/checkout@v2.3.4
     
-    - name: Run Unit Tests
-      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
-   
-    #- name: Create Screenshot Folder
-    #  run: mkdir -p /Users/runner/screenshots
+      
+  #  - name: Cache Simulator Data
+  #    run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"  
+          
+  #  - name: log out simulators
+  #    run: xcrun instruments -s devices
+     
+  #  - name: Setup Nuget
+  #    uses: olegtarasov/download-nuget@v1
+          
+  #  - name: Restore Nuget Packages
+  #    run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
-    - name: Run Integration Tests - iOS
-      run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+  #  - name: Build Code
+  #    run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+    
+  #  - name: Run Unit Tests
+  #    run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
-    - uses: actions/upload-artifact@v2.2.1
-      if: failure()
-      with:
-        name: screenshots
-        path: /Users/runner/screenshots/**/*
+  #  #- name: Create Screenshot Folder
+  #  #  run: mkdir -p /Users/runner/screenshots
+
+  #  - name: Run Integration Tests - iOS
+  #    run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+   
+  #  - uses: actions/upload-artifact@v2.2.1
+  #    if: failure()
+  #    with:
+  #      name: screenshots
+  #      path: /Users/runner/screenshots/**/*
 

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Configurations>Debug;Release;TestAutomation</Configurations>
   </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="EstateManagement.Client" Version="1.0.11.1" />

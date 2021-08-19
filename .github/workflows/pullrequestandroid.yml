@@ -22,6 +22,14 @@ jobs:
     - run: sdkmanager "build-tools;30.0.2"
     - run: adb devices
     
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.12.0'
+
+    - name: Set up Appium
+      run: npm install appium
+
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
           
@@ -43,7 +51,7 @@ jobs:
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
       with:
-          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android&&cat == PRTest"
+          cmd: dotnet test TransactionMobile.IntegrationTests.WithAppium\TransactionMobile.IntegrationTests.WithAppium.csproj
           api: 28
           tag: default
           abi: x86   
