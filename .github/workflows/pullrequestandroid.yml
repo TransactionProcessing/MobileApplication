@@ -28,7 +28,7 @@ jobs:
         node-version: '12.12.0'
 
     - name: Set up Appium
-      run: npm install appium
+      run: npm install -g appium
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
