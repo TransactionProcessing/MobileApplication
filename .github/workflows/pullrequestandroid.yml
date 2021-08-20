@@ -30,6 +30,7 @@ jobs:
     - name: Set up Appium
       run: |
         npm install -g appium
+        npm install -g appium-espresso-driver
         appium&
 
     - name: Setup Nuget
