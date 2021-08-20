@@ -22,8 +22,15 @@ jobs:
     - run: sdkmanager "build-tools;30.0.2"
     - run: adb devices
     
-    - name: Install and Run Appium Server
-      uses: moatazeldebsy/appium-server-gitHub-action@V1.0.4
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.12.0'
+
+    - name: Set up Appium
+      run: |
+        npm install -g appium
+        appium
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
