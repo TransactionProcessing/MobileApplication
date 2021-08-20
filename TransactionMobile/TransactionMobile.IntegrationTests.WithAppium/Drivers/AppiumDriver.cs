@@ -41,15 +41,17 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppPackage, "com.transactionprocessing.transactionmobile");
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppActivity, "crc64a6ab01768311dfa8.MainActivity");
 
-            Driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
-            //AppiumLocalService appiumService = new AppiumServiceBuilder().UsingAnyFreePort().Build();
+            //Driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
-            //if (appiumService.IsRunning == false)
-            //{
-            //    appiumService.Start();
-            //}
+            if (appiumService.IsRunning == false)
+            {
+                appiumService.Start();
 
-            //Driver = new AndroidDriver<AndroidElement>(appiumService, driverOptions);
+                Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
+            }
+
+            Driver = new AndroidDriver<AndroidElement>(appiumService, driverOptions);
         }
 
         public void StopApp()

@@ -30,7 +30,7 @@ jobs:
     - name: Set up Appium
       run: |
         npm install -g appium --unsafe-perm=true --allow-root
-        appium&
+        #appium&
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
