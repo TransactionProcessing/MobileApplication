@@ -57,7 +57,7 @@ jobs:
           api: 28
           tag: default
           abi: x86   
-          verbose: false
+          verbose: true
 
     - uses: actions/upload-artifact@v2.2.1
       if: failure()
