@@ -37,7 +37,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             String binariesFolder = Path.Combine(assemblyFolder, "..","..", "..", "..",@"TransactionMobile.Android/bin/Release");
             var apkPath = Path.Combine(binariesFolder, "com.transactionprocessing.transactionmobile.apk");
             driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
-            driverOptions.AddAdditionalCapability("espressoBuildConfig", "\\\"espressoBuildConfig\\\": \\\"{ \\\"additionalAppDependencies\\\": [ \\\"com.google.android.material:material:1.0.0\\\", \\\"androidx.lifecycle:lifecycle-extensions:2.1.0\\\" ] }\\\"}");
+            driverOptions.AddAdditionalCapability("espressoBuildConfig", "\"espressoBuildConfig\": \"{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }\"}");
 
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppPackage, "com.transactionprocessing.transactionmobile");
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppActivity, "crc64a6ab01768311dfa8.MainActivity");
