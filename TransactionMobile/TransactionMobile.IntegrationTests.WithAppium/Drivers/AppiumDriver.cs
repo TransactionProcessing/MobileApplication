@@ -27,7 +27,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalCapability("adbExecTimeout", 180000);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "Espresso");
-            driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
+            //driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
             driverOptions.AddAdditionalCapability("enforceAppInstall", true);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "9.0");
