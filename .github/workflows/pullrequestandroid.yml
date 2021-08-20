@@ -29,8 +29,7 @@ jobs:
 
     - name: Set up Appium
       run: |
-        npm install -g appium
-        npm install -g appium-espresso-driver
+        npm install -g appium --unsafe-perm=true --allow-root
         appium&
 
     - name: Setup Nuget
