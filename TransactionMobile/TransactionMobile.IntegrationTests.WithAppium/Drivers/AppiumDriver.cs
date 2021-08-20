@@ -51,7 +51,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
             }
 
-            Driver = new AndroidDriver<AndroidElement>(appiumService, driverOptions);
+            Driver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
         }
 
         public void StopApp()
