@@ -30,7 +30,7 @@ jobs:
     - name: Set up Appium
       run: |
         npm install -g appium
-        appium
+        appium&
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
