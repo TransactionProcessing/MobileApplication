@@ -25,7 +25,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
         public void StartApp()
         {
             var driverOptions = new AppiumOptions();
-            driverOptions.AddAdditionalCapability("adbExecTimeout", 180000);
+            driverOptions.AddAdditionalCapability("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "Espresso");
             //driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
             driverOptions.AddAdditionalCapability("enforceAppInstall", true);
@@ -41,7 +41,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppPackage, "com.transactionprocessing.transactionmobile");
             //driverOptions.AddAdditionalCapability(AndroidMobileCapabilityType.AppActivity, "crc64a6ab01768311dfa8.MainActivity");
 
-            Driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromSeconds(180));
+            Driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
             //AppiumLocalService appiumService = new AppiumServiceBuilder().UsingAnyFreePort().Build();
 
             //if (appiumService.IsRunning == false)
