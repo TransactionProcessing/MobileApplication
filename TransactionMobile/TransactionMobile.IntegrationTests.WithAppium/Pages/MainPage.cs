@@ -102,5 +102,23 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             });
 
         }
+
+        public static async Task WaitForToastMessage(this AndroidDriver<AndroidElement> driver,
+                                                     String expectedToast)
+        {
+            await Retry.For(async () =>
+                            {
+                                //var element = driver.FindElementByAccessibilityId(selector);
+                                //element.ShouldBeNull();
+
+                                var args = new Dictionary<string, object>
+                                           {
+                                               {"text", expectedToast},
+                                               {"isRegexp", false}
+                                           };
+                                driver.ExecuteScript("mobile: isToastVisible", args);
+
+                            });
+        }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 {
     using System.IO;
     using System.Reflection;
-    using IntegrationTestClients;
-    using Newtonsoft.Json;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Android;
@@ -28,7 +25,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             driverOptions.AddAdditionalCapability("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "Espresso");
             // TODO: Only do this locally
-            //driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
+            driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
             driverOptions.AddAdditionalCapability("enforceAppInstall", true);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "9.0");
@@ -65,67 +62,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
         public void StopApp()
         {
             Driver.Quit();
-        }
-    }
-
-    public class BackdoorDriver
-    {
-        private readonly AppiumDriver AppiumDriver;
-
-        public BackdoorDriver(AppiumDriver appiumDriver)
-        {
-            AppiumDriver = appiumDriver;
-        }
-
-        public void SetIntegrationModeOn()
-        {
-            ExecuteBackdoor("SetIntegrationTestModeOn", "");
-        }
-
-        public void UpdateTestMerchant(Merchant merchant)
-        {
-            String merchantData = JsonConvert.SerializeObject(merchant);
-            ExecuteBackdoor("UpdateTestMerchant", merchantData);
-        }
-
-        public void UpdateTestContract(Contract contract)
-        {
-            String contractData = JsonConvert.SerializeObject(contract);
-            ExecuteBackdoor("UpdateTestContract", contractData);
-        }
-
-        private void ExecuteBackdoor(string methodName, string value)
-        {
-            Dictionary<String, Object> args = CreateBackdoorArgs(methodName, value);
-            
-            AppiumDriver.Driver.ExecuteScript("mobile: backdoor", args);
-        }
-
-        private static Dictionary<string, object> CreateBackdoorArgs(string methodName, string value)
-        {
-            return new Dictionary<string, object>
-                       {
-                           {"target", "application"},
-                           {
-                               "methods", new List<Dictionary<string, object>>
-                                          {
-                                              new Dictionary<string, object>
-                                              {
-                                                  {"name", methodName},
-                                                  {
-                                                      "args", new List<Dictionary<string, object>>
-                                                              {
-                                                                  new Dictionary<string, object>
-                                                                  {
-                                                                      {"value", value},
-                                                                      {"type", "String"}
-                                                                  }
-                                                              }
-                                                  }
-                                              }
-                                          }
-                           }
-                       };
         }
     }
 }

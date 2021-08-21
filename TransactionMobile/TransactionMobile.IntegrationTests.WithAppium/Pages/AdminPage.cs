@@ -33,9 +33,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             element.Click();
         }
 
-        public void CheckReconciliationSuccessMessageToastIsDisplayed()
+        public async Task CheckReconciliationSuccessMessageToastIsDisplayed()
         {
-            //app.WaitForElement("Reconciliation completed, totals reset!", timeout: TimeSpan.FromSeconds(5));
+            await app.WaitForToastMessage("Reconciliation completed, totals reset!");
         }
     }
 }

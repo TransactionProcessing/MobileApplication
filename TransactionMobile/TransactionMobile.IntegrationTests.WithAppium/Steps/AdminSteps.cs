@@ -48,9 +48,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         }
 
         [Then(@"the reconciliation success message toast will be displayed")]
-        public void ThenTheReconciliationSuccessMessageToastWillBeDisplayed()
+        public async Task ThenTheReconciliationSuccessMessageToastWillBeDisplayed()
         {
-            this.AdminPage.CheckReconciliationSuccessMessageToastIsDisplayed();
+            await this.AdminPage.CheckReconciliationSuccessMessageToastIsDisplayed();
         }
 
     }
