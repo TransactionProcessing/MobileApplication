@@ -24,7 +24,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         public AdminPage()
         {
-            this.ReconciliationButton = "Reconciliation";
+            this.ReconciliationButton = "ReconciliationButton";
         }
 
         public async Task ClickReconciliationButton()
