@@ -8,6 +8,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
     using System.Threading.Tasks;
     using Common;
     using Pages;
+    using Pages.MobileTopup;
     using Shouldly;
     using TechTalk.SpecFlow;
 
