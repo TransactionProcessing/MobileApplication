@@ -323,15 +323,8 @@
         private void MainPage_TransactionsButtonClicked(Object sender,
                                                         EventArgs e)
         {
-            try
-            {
-                ITransactionsPresenter transactionsPresenter = App.Container.Resolve<ITransactionsPresenter>();
-                transactionsPresenter.Start();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            ITransactionsPresenter transactionsPresenter = App.Container.Resolve<ITransactionsPresenter>();
+            transactionsPresenter.Start();
         }
 
         /// <summary>

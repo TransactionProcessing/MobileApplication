@@ -34,11 +34,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.AvailableBalanceLabel = "AvailableBalanceValueLabel";
         }
 
-        public void ClickTransactionsButton()
+        public async Task ClickTransactionsButton()
         {
-            //AppManager.App.ScrollUpTo(this.TransactionsButton);
-            //app.WaitForElement(this.TransactionsButton);
-            //app.Tap(this.TransactionsButton);
+            var element = await app.WaitForElementByAccessibilityId(this.TransactionsButton);
+            element.Click();
         }
 
         public void ClickReportsButton()

@@ -77,7 +77,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             merchant.AddDeposit(depositAmount, depositDateTime);
         }
 
-        public void AddContract(String estateName,
+        public Contract AddContract(String estateName,
                                 Guid contractId,
                                 String operatorName,
                                 String contactDescription)
@@ -86,25 +86,25 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             estate.AddContract(contractId, operatorName, contactDescription);
 
             Contract contract = estate.GetContract(contactDescription);
-            //AppManager.UpdateTestContract(contract);
+            return contract;
         }
 
-        public void AddContractProduct(String estateName, String contractDescription, Guid contractProductId, String productName, String displayText, Decimal? value)
+        public Contract AddContractProduct(String estateName, String contractDescription, Guid contractProductId, String productName, String displayText, Decimal? value)
         {
             EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
             Contract contract = estate.GetContract(contractDescription);
             contract.AddContractProduct(contractProductId, productName, displayText, value);
-            //AppManager.UpdateTestContract(contract);
+            return contract;
         }
 
-        public void AddContractProductTransactionFee(String estateName, String contractDescription, String productName, Guid contractProductTransactionFeeId, String calculationType, String feeDescription, Decimal value)
+        public Contract AddContractProductTransactionFee(String estateName, String contractDescription, String productName, Guid contractProductTransactionFeeId, String calculationType, String feeDescription, Decimal value)
         {
             EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
             Contract contract = estate.GetContract(contractDescription);
             ContractProduct contractProduct = contract.GetContractProduct(productName);
             // TODO: Convert calculation type (maybe an enum)
             contractProduct.AddTransactionFee(contractProductTransactionFeeId, 0, feeDescription, value);
-            //AppManager.UpdateTestContract(contract);
+            return contract;
         }
     }
 }

@@ -25,6 +25,10 @@
 
         #region Constructors
 
+        public DatabaseContext()
+        {
+            
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseContext" /> class.
         /// </summary>
@@ -39,7 +43,10 @@
         /// <param name="connectionString">The connection string.</param>
         public DatabaseContext(String connectionString)
         {
-            this.Connection = new SQLiteAsyncConnection(connectionString);
+            if (connectionString != String.Empty)
+            {
+                this.Connection = new SQLiteAsyncConnection(connectionString);
+            }
         }
 
         #endregion
@@ -151,6 +158,9 @@
         /// <returns></returns>
         public async Task<List<LogMessage>> GetLogMessages(Int32 batchSize)
         {
+            if (this.Connection == null)
+                return new List<LogMessage>();
+
             List<LogMessage> messages = await this.Connection.Table<LogMessage>().OrderBy(l => l.EntryDateTime).Take(batchSize).ToListAsync();
 
             return messages;
@@ -161,6 +171,9 @@
         /// </summary>
         public async Task InitialiseDatabase()
         {
+            if (this.Connection == null)
+                return;
+
             // Create the required tables
             await this.Connection.CreateTableAsync<LogMessage>();
             await this.Connection.CreateTableAsync<OperatorTotals>();
@@ -172,8 +185,9 @@
         /// <param name="logMessage">The log message.</param>
         public async Task InsertLogMessage(LogMessage logMessage)
         {
-            //Console.WriteLine(logMessage.Message);
-
+            if (this.Connection == null)
+                return;
+            
             LogLevel messageLevel = (LogLevel)Enum.Parse(typeof(LogLevel), logMessage.LogLevel, true);
             if (App.Configuration == null || messageLevel <= App.Configuration.LogLevel)
             {
@@ -199,6 +213,8 @@
         /// <param name="logMessagesToRemove">The log messages to remove.</param>
         public async Task RemoveUploadedMessages(List<LogMessage> logMessagesToRemove)
         {
+            if (this.Connection == null)
+                return;
             foreach (LogMessage logMessage in logMessagesToRemove)
             {
                 await this.Connection.DeleteAsync(logMessage);
@@ -215,6 +231,9 @@
                                                Int32 transactionCount,
                                                Decimal transactionValue)
         {
+            if (this.Connection == null)
+                return;
+
             // get the totals record for this operator
             OperatorTotals operatorTotals = await this.GetOperatorTotals(operatorId);
 
@@ -249,6 +268,9 @@
         /// <returns></returns>
         private async Task<List<OperatorTotals>> GetAllTotals()
         {
+            if (this.Connection == null)
+                return new List<OperatorTotals>();
+
             List<OperatorTotals> totals = await this.Connection.QueryAsync<OperatorTotals>("Select * From OperatorTotals");
 
             return totals;
@@ -261,6 +283,9 @@
         /// <returns></returns>
         private async Task<OperatorTotals> GetOperatorTotals(String operatorId)
         {
+            if (this.Connection == null)
+                return new OperatorTotals();
+
             List<OperatorTotals> totals = await this.Connection.QueryAsync<OperatorTotals>("Select * From OperatorTotals Where OperatorId ='" + operatorId + "'");
 
             OperatorTotals operatorTotals = totals.SingleOrDefault();
@@ -273,6 +298,9 @@
         /// </summary>
         public async Task ResetTotals()
         {
+            if (this.Connection == null)
+                return;
+            
             await this.Connection.DeleteAllAsync<OperatorTotals>();
         }
 

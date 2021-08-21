@@ -26,7 +26,7 @@
                 HorizontalTextAlignment="Center"
                 Style="{StaticResource LabelStyle}"
                 Text="Select Product"
-                AutomationId="SelectOperatorLabel"
+                AutomationId="SelectProductLabel"
                 TextColor="{DynamicResource Gray-900}" />
 
             <Grid x:Name="ProductsGrid" HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">

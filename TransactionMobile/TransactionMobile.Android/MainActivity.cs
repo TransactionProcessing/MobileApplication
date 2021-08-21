@@ -55,7 +55,7 @@
         /// <summary>
         /// The logging database
         /// </summary>
-        private IDatabaseContext Database;
+        private DatabaseContext Database;
 
         #endregion
 
@@ -155,8 +155,7 @@
             App.Container = Bootstrapper.Run();
 
             IDevice device = new AndroidDevice();
-            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
-            DatabaseContext database = new DatabaseContext(connectionString);
+            IDatabaseContext database = new DatabaseContext(String.Empty);
             App.Container.RegisterInstance(database, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(device, new ContainerControlledLifetimeManager());
         }

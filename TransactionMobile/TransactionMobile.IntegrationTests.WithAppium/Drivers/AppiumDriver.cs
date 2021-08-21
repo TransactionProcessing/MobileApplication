@@ -27,7 +27,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             var driverOptions = new AppiumOptions();
             driverOptions.AddAdditionalCapability("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "Espresso");
-            //driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
+            driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
             driverOptions.AddAdditionalCapability("enforceAppInstall", true);
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
             driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "9.0");
@@ -85,6 +85,12 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
         {
             String merchantData = JsonConvert.SerializeObject(merchant);
             ExecuteBackdoor("UpdateTestMerchant", merchantData);
+        }
+
+        public void UpdateTestContract(Contract contract)
+        {
+            String contractData = JsonConvert.SerializeObject(contract);
+            ExecuteBackdoor("UpdateTestContract", contractData);
         }
 
         private void ExecuteBackdoor(string methodName, string value)

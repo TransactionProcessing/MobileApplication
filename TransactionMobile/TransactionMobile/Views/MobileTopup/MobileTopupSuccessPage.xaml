@@ -29,6 +29,7 @@
                     Margin="0,40,0,0"
                     Style="{StaticResource LabelStyle}"
                     HorizontalTextAlignment="Center"
+                    AutomationId="MobileTopupSuccessful"
                     Text="MOBILE TOPUP SUCCESSFUL" />
 
                 <!--  Payment description label  -->

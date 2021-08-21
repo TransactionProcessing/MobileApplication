@@ -42,9 +42,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 this.TestingContext.AddEstate(estateId, estateName);
             }
         }
-
         [Given(@"I have created the following operators")]
-        public void GivenIHaveCreatedTheFollowingOperators(Table table)
+        [When(@"I create the following operators")]
+        public async Task WhenICreateTheFollowingOperators(Table table)
         {
             foreach (TableRow tableRow in table.Rows)
             {
@@ -56,7 +56,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
                 this.TestingContext.AddOperator(estateName, operatorId, operatorName, requireCustomMerchantNumber, requireCustomTerminalNumber);
             }
-        }
+        }        
 
         [Given("I create the following merchants")]
         [When(@"I create the following merchants")]
@@ -92,6 +92,69 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 this.TestingContext.AddMerchantDeposit(estateName, merchantName, amount, depositDateTime);
                 Merchant merchant = this.TestingContext.GetMerchant(estateName, merchantName);
                 this.Backdoor.UpdateTestMerchant(merchant);
+            }
+        }
+
+        
+        [Given(@"I create a contract with the following values")]
+        public async Task GivenICreateAContractWithTheFollowingValues(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
+                Guid contractId = Guid.NewGuid();
+                String operatorName = SpecflowTableHelper.GetStringRowValue(tableRow, "OperatorName");
+                String contractDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "ContractDescription");
+
+                var contract = this.TestingContext.AddContract(estateName, contractId, operatorName, contractDescription);
+                this.Backdoor.UpdateTestContract(contract);
+            }
+        }
+
+        [When(@"I create the following Products")]
+        public async Task WhenICreateTheFollowingProducts(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
+                String contractDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "ContractDescription");
+                Guid contractProductId = Guid.NewGuid();
+                String productName = SpecflowTableHelper.GetStringRowValue(tableRow, "ProductName");
+                String displayText = SpecflowTableHelper.GetStringRowValue(tableRow, "DisplayText");
+
+                Decimal? productValue = null;
+                String productValueString = SpecflowTableHelper.GetStringRowValue(tableRow, "Value");
+                if (String.IsNullOrEmpty(SpecflowTableHelper.GetStringRowValue(tableRow, "Value")) == false)
+                {
+                    productValue = Decimal.Parse(productValueString);
+                }
+                var contract = this.TestingContext.AddContractProduct(estateName, contractDescription, contractProductId, productName,
+                                                       displayText, productValue);
+                this.Backdoor.UpdateTestContract(contract);
+            }
+        }
+
+        [When(@"I add the following Transaction Fees")]
+        public async Task WhenIAddTheFollowingTransactionFees(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
+                String contractDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "ContractDescription");
+                String productName = SpecflowTableHelper.GetStringRowValue(tableRow, "ProductName");
+                Guid contractProductTransactionFeeId = Guid.NewGuid();
+                String calculationType = SpecflowTableHelper.GetStringRowValue(tableRow, "CalculationType");
+                String feeDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "FeeDescription");
+                Decimal value = SpecflowTableHelper.GetDecimalValue(tableRow, "Value");
+                var contract = this.TestingContext.AddContractProductTransactionFee(estateName,
+                                                                     contractDescription,
+                                                                     productName,
+                                                                     contractProductTransactionFeeId,
+                                                                     calculationType,
+                                                                     feeDescription,
+                                                                     value);
+                this.Backdoor.UpdateTestContract(contract);
+
             }
         }
     }
