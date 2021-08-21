@@ -27,6 +27,7 @@
     using Unity.Lifetime;
     using Xamarin.Forms;
     using Xamarin.Forms.Platform.Android;
+    using Application = Android.App.Application;
     using Environment = System.Environment;
     using Exception = System.Exception;
     using Object = System.Object;
@@ -54,7 +55,7 @@
         /// <summary>
         /// The logging database
         /// </summary>
-        private IDatabaseContext Database;
+        private DatabaseContext Database;
 
         #endregion
 
@@ -82,92 +83,7 @@
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
-        [Export("SetIntegrationTestModeOn")]
-        public void SetIntegrationTestModeOn()
-        {
-            Console.WriteLine($"Inside SetIntegrationTestModeOn");
-            App.IsIntegrationTestMode = true;
-            App.Container = Bootstrapper.Run();
-
-            IDevice device = new AndroidDevice();
-            String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
-            DatabaseContext database = new DatabaseContext(connectionString);
-            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-        }
-
-        [Export("UpdateTestMerchant")]
-        public String UpdateTestMerchant(String merchantData)
-        {
-            StringBuilder sb = new StringBuilder();
-            try
-            {
-                if (App.IsIntegrationTestMode == true)
-                {
-                    Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
-
-                    if (App.Container == null)
-                    {
-                        sb.Append("container is null");
-                    }
-
-                    TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
-                    if (transactionProcessorAclClient == null)
-                    {
-                        sb.Append("acl client is null");
-                    }
-                    transactionProcessorAclClient.UpdateTestMerchant(merchant);
-                    sb.Append("Acl merchant updated");
-
-                    TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                    if (estateClient == null)
-                    {
-                        sb.Append("estate client is null");
-                    }
-                    estateClient.UpdateTestMerchant(merchant);
-                    sb.Append("estate client merchant updated");
-
-                    TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
-                    Dictionary<String, String> claims = new Dictionary<String, String>();
-                    claims.Add("estateId", merchant.EstateId.ToString());
-                    claims.Add("merchantId", merchant.MerchantId.ToString());
-                    securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
-                    sb.Append("security client merchant updated");
-                }
-            }
-            catch(Exception e)
-            {
-                sb.Append(e.Message);
-            }
-
-            return sb.ToString();
-            
-            
-        }
-
-        [Export("UpdateTestContract")]
-        public void UpdateTestContract(String contractData)
-        {
-            if (App.IsIntegrationTestMode == true)
-            {
-                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
-                Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestContract(contract);
-            }
-        }
-
-        [Export("GetDeviceIdentifier")]
-        public String GetDeviceIdentifier()
-        {
-            Console.WriteLine("In Get Device Identifier");
-
-            IDevice device = new AndroidDevice();
-
-            return device.GetDeviceIdentifier();
-        }
-
+        
         /// <summary>
         /// Called when [create].
         /// </summary>
@@ -221,5 +137,98 @@
         }
 
         #endregion
+    }
+
+    [Preserve(AllMembers = true)]
+    [Application]
+    public class ThisApp : Application
+    {
+        protected ThisApp(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+        {
+        }
+
+        [Export("SetIntegrationTestModeOn")]
+        public void SetIntegrationTestModeOn(String arg)
+        {
+            Console.WriteLine($"Inside SetIntegrationTestModeOn");
+            App.IsIntegrationTestMode = true;
+            App.Container = Bootstrapper.Run();
+
+            IDevice device = new AndroidDevice();
+            IDatabaseContext database = new DatabaseContext(String.Empty);
+            App.Container.RegisterInstance(database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(device, new ContainerControlledLifetimeManager());
+        }
+
+        [Export("UpdateTestMerchant")]
+        public String UpdateTestMerchant(String merchantData)
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                if (App.IsIntegrationTestMode == true)
+                {
+                    Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
+
+                    if (App.Container == null)
+                    {
+                        sb.Append("container is null");
+                    }
+
+                    TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+                    if (transactionProcessorAclClient == null)
+                    {
+                        sb.Append("acl client is null");
+                    }
+                    transactionProcessorAclClient.UpdateTestMerchant(merchant);
+                    sb.Append("Acl merchant updated");
+
+                    TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                    if (estateClient == null)
+                    {
+                        sb.Append("estate client is null");
+                    }
+                    estateClient.UpdateTestMerchant(merchant);
+                    sb.Append("estate client merchant updated");
+
+                    TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+                    Dictionary<String, String> claims = new Dictionary<String, String>();
+                    claims.Add("estateId", merchant.EstateId.ToString());
+                    claims.Add("merchantId", merchant.MerchantId.ToString());
+                    securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
+                    sb.Append("security client merchant updated");
+                }
+            }
+            catch (Exception e)
+            {
+                sb.Append(e.Message);
+            }
+
+            return sb.ToString();
+
+
+        }
+
+        [Export("UpdateTestContract")]
+        public void UpdateTestContract(String contractData)
+        {
+            if (App.IsIntegrationTestMode == true)
+            {
+                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
+                Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
+                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                estateClient.UpdateTestContract(contract);
+            }
+        }
+
+        [Export("GetDeviceIdentifier")]
+        public String GetDeviceIdentifier()
+        {
+            Console.WriteLine("In Get Device Identifier");
+
+            IDevice device = new AndroidDevice();
+
+            return device.GetDeviceIdentifier();
+        }
     }
 }
