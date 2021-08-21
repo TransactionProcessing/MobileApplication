@@ -23,6 +23,12 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
             await this.MainPage.ClickTransactionsButton();
         }
 
+        [Then(@"the Transactions Page is displayed")]
+        public async Task ThenTheTransactionsPageIsDisplayed()
+        {
+            await this.TransactionsPage.AssertOnPage();
+        }
+
         [Given(@"I tap on the Admin button")]
         public async Task GivenITapOnTheAdminButton()
         {
