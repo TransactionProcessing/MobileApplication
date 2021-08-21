@@ -14,7 +14,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
     {
         TransactionsPage TransactionsPage = new TransactionsPage();
 
+        private MainPage MainPage = new MainPage();
         private AdminPage AdminPage = new AdminPage();
+
+        [Given(@"I tap on the Transactions button")]
+        public async Task GivenITapOnTheTransactionsButton()
+        {
+            await this.MainPage.ClickTransactionsButton();
+        }
 
         [Given(@"I tap on the Admin button")]
         public async Task GivenITapOnTheAdminButton()

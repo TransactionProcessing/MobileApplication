@@ -4,6 +4,6 @@
 
     public class VoucherSuccessPage : BasePage
     {
-        protected override String Trait => "VoucherIssueSuccess";
+        protected override String Trait => "VoucherIssueSuccessful";
     }
 }
