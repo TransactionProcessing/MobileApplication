@@ -5,6 +5,7 @@ using System.Text;
 namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
     using System.Threading.Tasks;
+    using Features;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using OpenQA.Selenium.Appium.Android;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
@@ -77,6 +78,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
     public static class Extenstion
     {
+        public static AndroidElement GetAlert(this AndroidDriver<AndroidElement> driver)
+        {
+            return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
+        }
+
         public static async Task<AndroidElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);

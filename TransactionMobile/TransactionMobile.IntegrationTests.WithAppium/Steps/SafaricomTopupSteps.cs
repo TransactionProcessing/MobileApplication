@@ -7,6 +7,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
     using System.Linq;
     using System.Threading.Tasks;
     using Common;
+    using Drivers;
     using Pages;
     using Pages.MobileTopup;
     using Shouldly;
@@ -89,7 +90,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         [When(@"I click the back button")]
         public void WhenIClickTheBackButton()
         {
-            //AppManager.App.Back();
+            AppiumDriver.Driver.Navigate().Back();
         }
 
         [When(@"I tap on Perform Topup")]

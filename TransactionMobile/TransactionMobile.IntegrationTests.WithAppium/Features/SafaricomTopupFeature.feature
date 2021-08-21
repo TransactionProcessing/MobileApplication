@@ -127,7 +127,6 @@ Scenario: Failed Safaricom Topup
 	
 	Then The Topup Failed Screen will be displayed
 
-@ignore
 Scenario: Failed Validation Topup
 	Given I am on the Login Screen
 	

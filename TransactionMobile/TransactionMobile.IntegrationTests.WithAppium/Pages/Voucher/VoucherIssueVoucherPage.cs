@@ -2,6 +2,10 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Drivers;
+    using MobileTopup;
+    using OpenQA.Selenium;
+    using Shouldly;
 
     public class VoucherIssueVoucherPage : BasePage
     {
@@ -74,11 +78,17 @@
         public void AssertVoucherValidationErrorDisplayed()
         {
             this.app.HideKeyboard();
-            //String errorMessage = "Please enter a mobile number and Topup Amount to continue";
-            //app.WaitForElement(errorMessage, timeout: TimeSpan.FromMinutes(2));
-
-            //// Dismiss the error
-            //app.Tap("OK");
+            String errorMessage = "Please enter a mobile number and Topup Amount to continue";
+            var alertElement = this.app.GetAlert();
+            alertElement.ShouldNotBeNull();
+            alertElement.Text.ShouldBe(errorMessage);
+            IAlert alert = null;
+            Should.NotThrow(() =>
+                            {
+                                alert = AppiumDriver.Driver.SwitchTo().Alert();
+                                alert.ShouldNotBeNull();
+                                alert.Accept();
+                            });
         }
     }
 }
