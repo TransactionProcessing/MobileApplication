@@ -27,13 +27,13 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
             this.Backdoor = backdoor;
             this.ScenarioContext = scenarioContext;
             this.TestingContext = testingContext;
-
-            this.Backdoor.SetIntegrationModeOn().Wait();
         }
 
         [Given(@"I have created the following estates")]
-        public void GivenIHaveCreatedTheFollowingEstates(Table table)
+        public async Task GivenIHaveCreatedTheFollowingEstates(Table table)
         {
+            await this.Backdoor.SetIntegrationModeOn();
+
             foreach (TableRow tableRow in table.Rows)
             {
                 Guid estateId = Guid.NewGuid();
