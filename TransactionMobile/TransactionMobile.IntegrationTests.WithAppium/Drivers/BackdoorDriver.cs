@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net.Mqtt;
+    using System.Text;
+    using System.Threading.Tasks;
     using Common;
     using IntegrationTestClients;
     using Newtonsoft.Json;
@@ -12,34 +15,37 @@
         {
         }
 
-        public void SetIntegrationModeOn()
+        public async Task SetIntegrationModeOn()
         {
-            this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
+            await this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
         }
 
-        public void UpdateTestMerchant(Merchant merchant)
+        public async Task UpdateTestMerchant(Merchant merchant)
         {
             String merchantData = JsonConvert.SerializeObject(merchant);
-            this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
+            await this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
         }
 
-        public void UpdateTestContract(Contract contract)
+        public async Task UpdateTestContract(Contract contract)
         {
             String contractData = JsonConvert.SerializeObject(contract);
-            this.ExecuteBackdoor("UpdateTestContract", contractData);
+            await this.ExecuteBackdoor("UpdateTestContract", contractData);
         }
 
-        private void ExecuteBackdoor(string methodName, string value)
-        {
-            Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
-
+        private async Task ExecuteBackdoor(string methodName, string value)
+        {           
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
             {
+                Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
                 AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
             }
             else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
-                AppiumDriver.iOSDriver.ExecuteScript("mobile: backdoor", args);
+                //AppiumDriver.iOSDriver.ExecuteScript("mobile: backdoor", args);
+                var client = await MqttClient.CreateAsync("127.0.0.1", 1883);
+                var result = await client.ConnectAsync();
+                MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/{methodName}", Encoding.Default.GetBytes(value));
+                await client.PublishAsync(m, MqttQualityOfService.ExactlyOnce);
             }
         }
 
