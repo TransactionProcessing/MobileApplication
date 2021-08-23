@@ -28,7 +28,7 @@ Background:
 	| Deposit1  | 100.00 | Today     | Test Merchant 1 | Test Estate 1 |
 	| Deposit2  | 100.00 | Yesterday | Test Merchant 1 | Test Estate 1 |
 
-@PRTest
+@PRTest @ignore
 Scenario: Successful Voucher Issue
 	Given I am on the Login Screen
 	
