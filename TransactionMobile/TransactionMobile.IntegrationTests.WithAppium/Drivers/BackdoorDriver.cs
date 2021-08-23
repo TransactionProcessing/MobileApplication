@@ -52,7 +52,7 @@
 
                 client
                     .MessageStream
-                    .Where(msg => msg.Topic == "IOSBackdoor/response")
+                    .Where(msg => msg.Topic == "IOSBackdoor/responses")
                     .Subscribe(msg => Console.WriteLine(Encoding.Default.GetString(msg.Payload)));
 
             }
