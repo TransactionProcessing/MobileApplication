@@ -34,7 +34,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             {
                 appiumService.Start();
 
-                Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
+                //Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
             }
 
             appiumService.OutputDataReceived += AppiumService_OutputDataReceived;
@@ -90,7 +90,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 
         private void AppiumService_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
         {
-            Console.WriteLine(e.Data);
+            //Console.WriteLine(e.Data);
         }
 
         public void StopApp()

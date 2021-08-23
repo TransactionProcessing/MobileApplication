@@ -49,11 +49,11 @@
 
                 var x = client.MessageStream;
                 //Rx Subscription to receive all the messages for the subscribed topics
-
-                client
-                    .MessageStream
-                    .Where(msg => msg.Topic == "IOSBackdoor/responses")
-                    .Subscribe(msg => Console.WriteLine(Encoding.Default.GetString(msg.Payload)));
+                Console.WriteLine($"message count {x.Count()}");
+                //client
+                //    .MessageStream
+                //    .Where(msg => msg.Topic == "IOSBackdoor/responses")
+                //    .Subscribe(msg => Console.WriteLine(Encoding.Default.GetString(msg.Payload)));
 
             }
         }
