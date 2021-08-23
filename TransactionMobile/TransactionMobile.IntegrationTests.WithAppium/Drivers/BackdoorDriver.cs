@@ -41,7 +41,6 @@
             }
             else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
-                //AppiumDriver.iOSDriver.ExecuteScript("mobile: backdoor", args);
                 var client = await MqttClient.CreateAsync("127.0.0.1", 1883);
                 var result = await client.ConnectAsync();
                 MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/{methodName}", Encoding.Default.GetBytes(value));
