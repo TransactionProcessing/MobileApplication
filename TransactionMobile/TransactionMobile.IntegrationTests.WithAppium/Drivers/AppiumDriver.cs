@@ -75,13 +75,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 var apkPath = Path.Combine(binariesFolder, "TransactionMobile.iOS.app");
-                driverOptions.AddAdditionalCapability(MobileCapabilityType.App, "");
+                driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "XCUITest");
                 driverOptions.AddAdditionalCapability("useNewWDA", false);
                 driverOptions.AddAdditionalCapability("wdaStartupRetries", "4");
                 driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
                 driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
+                driverOptions.AddAdditionalCapability("showXcodeLog", true);
 
                 AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
