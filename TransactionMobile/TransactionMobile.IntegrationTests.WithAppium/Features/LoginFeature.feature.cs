@@ -19,29 +19,24 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [Xunit.TraitAttribute("Category", "background")]
-    [Xunit.TraitAttribute("Category", "login")]
-    public partial class LoginFeatureFeature : object, Xunit.IClassFixture<LoginFeatureFeature.FixtureData>, System.IDisposable
+    [NUnit.Framework.TestFixtureAttribute()]
+    [NUnit.Framework.DescriptionAttribute("LoginFeature")]
+    [NUnit.Framework.CategoryAttribute("background")]
+    [NUnit.Framework.CategoryAttribute("login")]
+    public partial class LoginFeatureFeature
     {
         
-        private static TechTalk.SpecFlow.ITestRunner testRunner;
+        private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
                 "background",
                 "login"};
         
-        private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
-        
 #line 1 "LoginFeature.feature"
 #line hidden
         
-        public LoginFeatureFeature(LoginFeatureFeature.FixtureData fixtureData, TransactionMobile_IntegrationTests_WithAppium_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
-        {
-            this._testOutputHelper = testOutputHelper;
-            this.TestInitialize();
-        }
-        
-        public static void FeatureSetup()
+        [NUnit.Framework.OneTimeSetUpAttribute()]
+        public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "LoginFeature", null, ProgrammingLanguage.CSharp, new string[] {
@@ -50,16 +45,19 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        public static void FeatureTearDown()
+        [NUnit.Framework.OneTimeTearDownAttribute()]
+        public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
+        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
+        [NUnit.Framework.TearDownAttribute()]
         public virtual void TestTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -68,7 +66,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<Xunit.Abstractions.ITestOutputHelper>(_testOutputHelper);
+            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -85,34 +83,34 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         {
 #line 4
 #line hidden
-            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName"});
-            table8.AddRow(new string[] {
+            table12.AddRow(new string[] {
                         "Test Estate 1"});
 #line 6
- testRunner.Given("I have created the following estates", ((string)(null)), table8, "Given ");
+ testRunner.Given("I have created the following estates", ((string)(null)), table12, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "RequireCustomMerchantNumber",
                         "RequireCustomTerminalNumber"});
-            table9.AddRow(new string[] {
+            table13.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "True",
                         "True"});
 #line 10
- testRunner.Given("I have created the following operators", ((string)(null)), table9, "Given ");
+ testRunner.Given("I have created the following operators", ((string)(null)), table13, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                         "MerchantName",
                         "EstateName",
                         "EmailAddress",
                         "Password",
                         "GivenName",
                         "FamilyName"});
-            table10.AddRow(new string[] {
+            table14.AddRow(new string[] {
                         "Test Merchant 1",
                         "Test Estate 1",
                         "merchantuser@testmerchant1.co.uk",
@@ -120,36 +118,30 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "TestMerchant",
                         "User1"});
 #line 14
- testRunner.Given("I create the following merchants", ((string)(null)), table10, "Given ");
+ testRunner.Given("I create the following merchants", ((string)(null)), table14, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                         "Amount",
                         "DateTime",
                         "MerchantName",
                         "EstateName"});
-            table11.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "1000.00",
                         "Today",
                         "Test Merchant 1",
                         "Test Estate 1"});
-            table11.AddRow(new string[] {
+            table15.AddRow(new string[] {
                         "1000.00",
                         "Yesterday",
                         "Test Merchant 1",
                         "Test Estate 1"});
 #line 18
- testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table11, "Given ");
+ testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table15, "Given ");
 #line hidden
         }
         
-        void System.IDisposable.Dispose()
-        {
-            this.TestTearDown();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Login as Merchant")]
-        [Xunit.TraitAttribute("FeatureTitle", "LoginFeature")]
-        [Xunit.TraitAttribute("Description", "Login as Merchant")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Login as Merchant")]
         public virtual void LoginAsMerchant()
         {
             string[] tagsOfScenario = ((string[])(null));
@@ -195,22 +187,6 @@ this.FeatureBackground();
 #line hidden
             }
             this.ScenarioCleanup();
-        }
-        
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
-        [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        public class FixtureData : System.IDisposable
-        {
-            
-            public FixtureData()
-            {
-                LoginFeatureFeature.FeatureSetup();
-            }
-            
-            void System.IDisposable.Dispose()
-            {
-                LoginFeatureFeature.FeatureTearDown();
-            }
         }
     }
 }

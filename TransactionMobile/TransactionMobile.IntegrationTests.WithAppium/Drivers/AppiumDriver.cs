@@ -19,7 +19,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
         public static MobileTestPlatform MobileTestPlatform;
 
         public static AndroidDriver<AndroidElement> AndroidDriver;
-        //public static AndroidDriver<AndroidElement> Driver;
 
         public static IOSDriver<IOSElement> iOSDriver;
 

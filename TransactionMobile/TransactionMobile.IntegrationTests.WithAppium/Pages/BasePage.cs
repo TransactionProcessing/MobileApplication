@@ -68,6 +68,18 @@
             }
         }
 
+        public async Task WaitForToastMessage(String x)
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                await AppiumDriver.AndroidDriver.WaitForToastMessage(x);
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                await AppiumDriver.iOSDriver.WaitForToastMessage(x);
+            }
+        }
+
         public void HideKeyboard()
         {
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)

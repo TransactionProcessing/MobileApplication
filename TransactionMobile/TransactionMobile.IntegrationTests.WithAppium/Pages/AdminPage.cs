@@ -35,7 +35,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         public async Task CheckReconciliationSuccessMessageToastIsDisplayed()
         {
-            //await this.WaitForToastMessage("Reconciliation completed, totals reset!");
+            await this.WaitForToastMessage("Reconciliation completed, totals reset!");
         }
     }
 }
