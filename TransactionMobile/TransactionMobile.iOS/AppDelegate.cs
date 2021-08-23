@@ -162,7 +162,6 @@
                 Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
                 TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
                 estateClient.UpdateTestContract(contract);
-                SendResponse("contract added");
             }
         }
 
