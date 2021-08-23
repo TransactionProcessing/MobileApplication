@@ -223,6 +223,7 @@
             try
             {
                 sb.AppendLine("started");
+                sb.AppendLine($"IsIntegrationTestMode == {App.IsIntegrationTestMode}");
                 ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
                 if (App.IsIntegrationTestMode == true)
                 {
