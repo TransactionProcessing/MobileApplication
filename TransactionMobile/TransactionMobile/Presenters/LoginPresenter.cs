@@ -223,7 +223,6 @@
             try
             {
                 sb.AppendLine("started");
-                sb.AppendLine($"IsIntegrationTestMode == {App.IsIntegrationTestMode}");
                 ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
                 if (App.IsIntegrationTestMode == true)
                 {
@@ -284,7 +283,7 @@
                 }
                 else
                 {
-                    CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!" + sb.ToString());
+                    CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again! - Exception: {ex.Message} Debug: {sb}");
                 }
             }
         }
