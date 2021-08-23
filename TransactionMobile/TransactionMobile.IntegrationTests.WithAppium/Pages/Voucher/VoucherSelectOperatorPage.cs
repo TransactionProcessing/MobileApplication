@@ -37,7 +37,7 @@
 
         public async Task ClickHealthcareCentre1OperatorButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.HealthcareCentre1OperatorButton);
+            var element = await this.WaitForElementByAccessibilityId(this.HealthcareCentre1OperatorButton);
 
             element.Click();
         }

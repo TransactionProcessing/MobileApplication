@@ -1,5 +1,5 @@
 ﻿@background @login
-Feature: LoginFeature
+Feature: Login
 
 Background: 
 	
@@ -26,4 +26,4 @@ Scenario: Login as Merchant
 	And I enter '123456' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
-	#And the available balance is shown as 2000.00
+	And the available balance is shown as 2000.00

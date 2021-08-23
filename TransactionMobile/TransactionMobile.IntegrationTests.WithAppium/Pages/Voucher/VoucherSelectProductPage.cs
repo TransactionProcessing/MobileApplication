@@ -37,7 +37,7 @@
 
         public async Task ClickKES10ProductButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.KES10ProductButton);
+            var element = await this.WaitForElementByAccessibilityId(this.KES10ProductButton);
 
             element.Click();
         }

@@ -47,21 +47,21 @@
 
         public async Task EnterRecipientMobileNumber(String recipientMobileNumber)
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.RecipientMobileNumberEntry);
+            var element = await this.WaitForElementByAccessibilityId(this.RecipientMobileNumberEntry);
 
             element.SendKeys(recipientMobileNumber);
         }
 
         public async Task EnterRecipientEmailAddress(String recipientEmailAddress)
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.RecipientEmailAddressEntry);
+            var element = await this.WaitForElementByAccessibilityId(this.RecipientEmailAddressEntry);
 
             element.SendKeys(recipientEmailAddress);
         }
 
         public async Task EnterCustomerEmailAddress(String customerEmailAddress)
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.CustomerEmailAddressEntry);
+            var element = await this.WaitForElementByAccessibilityId(this.CustomerEmailAddressEntry);
 
             element.SendKeys(customerEmailAddress);
         }
@@ -69,23 +69,23 @@
 
         public async Task ClickIssueVoucherButton()
         {
-            this.app.HideKeyboard();
-            var element = await this.app.WaitForElementByAccessibilityId(this.IssueVoucherButton);
+            this.HideKeyboard();
+            var element = await this.WaitForElementByAccessibilityId(this.IssueVoucherButton);
 
             element.Click();
         }
 
         public void AssertVoucherValidationErrorDisplayed()
         {
-            this.app.HideKeyboard();
+            this.HideKeyboard();
             String errorMessage = "Please enter a mobile number and Topup Amount to continue";
-            var alertElement = this.app.GetAlert();
+            var alertElement = this.GetAlert();
             alertElement.ShouldNotBeNull();
             alertElement.Text.ShouldBe(errorMessage);
             IAlert alert = null;
             Should.NotThrow(() =>
                             {
-                                alert = AppiumDriver.Driver.SwitchTo().Alert();
+                                alert = this.SwitchToAlert();
                                 alert.ShouldNotBeNull();
                                 alert.Accept();
                             });

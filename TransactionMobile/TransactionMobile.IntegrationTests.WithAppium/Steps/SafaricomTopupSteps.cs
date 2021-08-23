@@ -15,8 +15,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
     [Binding]
     [Scope(Tag = "safaricomtopup")]
-    public class SafaricomTopupSteps
-    {
+    public class SafaricomTopupSteps {
+
+
         MainPage MainPage = new MainPage();
         TransactionsPage TransactionsPage = new TransactionsPage();
         MobileTopupSelectOperatorPage SelectOperatorPage = new MobileTopupSelectOperatorPage();
@@ -24,6 +25,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         MobileTopupPerformTopupPage MobileTopupPerformTopupPage = new MobileTopupPerformTopupPage();
         MobileTopupSuccessPage MobileTopupSuccessPage = new MobileTopupSuccessPage();
         MobileTopupFailedPage MobileTopupFailedPage = new MobileTopupFailedPage();
+
+        public SafaricomTopupSteps()
+        {
+            
+        }
 
         [Given(@"I tap on the Transactions button")]
         public async Task GivenITapOnTheTransactionsButton()
@@ -90,7 +96,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         [When(@"I click the back button")]
         public void WhenIClickTheBackButton()
         {
-            AppiumDriver.Driver.Navigate().Back();
+            this.MainPage.NavigateBack();
         }
 
         [When(@"I tap on Perform Topup")]

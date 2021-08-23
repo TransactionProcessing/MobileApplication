@@ -37,7 +37,7 @@
 
         public async Task ClickSafaricomOperatorButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.SafaricomOperatorButton);
+            var element = await this.WaitForElementByAccessibilityId(this.SafaricomOperatorButton);
             element.Click();
         }
     }

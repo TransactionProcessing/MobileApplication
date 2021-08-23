@@ -19,31 +19,26 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [Xunit.TraitAttribute("Category", "background")]
-    [Xunit.TraitAttribute("Category", "login")]
-    [Xunit.TraitAttribute("Category", "admin")]
-    public partial class AdminFeature : object, Xunit.IClassFixture<AdminFeature.FixtureData>, System.IDisposable
+    [NUnit.Framework.TestFixtureAttribute()]
+    [NUnit.Framework.DescriptionAttribute("Admin")]
+    [NUnit.Framework.CategoryAttribute("background")]
+    [NUnit.Framework.CategoryAttribute("login")]
+    [NUnit.Framework.CategoryAttribute("admin")]
+    public partial class AdminFeature
     {
         
-        private static TechTalk.SpecFlow.ITestRunner testRunner;
+        private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
                 "background",
                 "login",
                 "admin"};
         
-        private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
-        
 #line 1 "AdminFeature.feature"
 #line hidden
         
-        public AdminFeature(AdminFeature.FixtureData fixtureData, TransactionMobile_IntegrationTests_WithAppium_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
-        {
-            this._testOutputHelper = testOutputHelper;
-            this.TestInitialize();
-        }
-        
-        public static void FeatureSetup()
+        [NUnit.Framework.OneTimeSetUpAttribute()]
+        public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Admin", null, ProgrammingLanguage.CSharp, new string[] {
@@ -53,16 +48,19 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        public static void FeatureTearDown()
+        [NUnit.Framework.OneTimeTearDownAttribute()]
+        public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
+        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
+        [NUnit.Framework.TearDownAttribute()]
         public virtual void TestTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -71,7 +69,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<Xunit.Abstractions.ITestOutputHelper>(_testOutputHelper);
+            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -218,15 +216,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
 #line hidden
         }
         
-        void System.IDisposable.Dispose()
-        {
-            this.TestTearDown();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Successful Reconciliation")]
-        [Xunit.TraitAttribute("FeatureTitle", "Admin")]
-        [Xunit.TraitAttribute("Description", "Successful Reconciliation")]
-        [Xunit.TraitAttribute("Category", "PRTest")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Successful Reconciliation")]
+        [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulReconciliation()
         {
             string[] tagsOfScenario = new string[] {
@@ -294,22 +286,6 @@ this.FeatureBackground();
 #line hidden
             }
             this.ScenarioCleanup();
-        }
-        
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
-        [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        public class FixtureData : System.IDisposable
-        {
-            
-            public FixtureData()
-            {
-                AdminFeature.FeatureSetup();
-            }
-            
-            void System.IDisposable.Dispose()
-            {
-                AdminFeature.FeatureTearDown();
-            }
         }
     }
 }

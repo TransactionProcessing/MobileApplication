@@ -1,16 +1,18 @@
 ﻿namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
     using System;
+    using System.Reflection.Metadata;
     using System.Threading.Tasks;
+    using Common;
     using Drivers;
+    using Features;
+    using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Android;
     using Shouldly;
     using Steps;
 
     public abstract class BasePage
     {
-        protected AndroidDriver<AndroidElement> app => AppiumDriver.Driver;
-
         protected abstract String Trait { get; }
 
         public async Task AssertOnPage(TimeSpan? timeout = null)
@@ -21,7 +23,7 @@
                             {
                                 String message = "Unable to verify on page: " + this.GetType().Name;
 
-                                Should.NotThrow(() =>this.app.WaitForElementByAccessibilityId(this.Trait), message);
+                                Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
                             },
                             TimeSpan.FromMinutes(1),
                             timeout).ConfigureAwait(false);
@@ -37,7 +39,77 @@
             timeout = timeout ?? TimeSpan.FromSeconds(5);
             var message = "Unable to verify *not* on page: " + this.GetType().Name;
 
-            Should.NotThrow(() => this.app.WaitForNoElementByAccessibilityId(this.Trait), message);
+            Should.NotThrow(() => this.WaitForNoElementByAccessibilityId(this.Trait), message);
+        }
+
+        public async Task<IWebElement> WaitForElementByAccessibilityId(String x, TimeSpan? timeout = null)
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                return await AppiumDriver.AndroidDriver.WaitForElementByAccessibilityId(x, timeout);
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                return await AppiumDriver.iOSDriver.WaitForElementByAccessibilityId(x, timeout);
+            }
+
+            return null;
+        }
+
+        public async Task WaitForNoElementByAccessibilityId(String x)
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                await AppiumDriver.AndroidDriver.WaitForNoElementByAccessibilityId(x);
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                await AppiumDriver.iOSDriver.WaitForNoElementByAccessibilityId(x);
+            }
+        }
+
+        public void HideKeyboard()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                AppiumDriver.AndroidDriver.HideKeyboard();
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                AppiumDriver.iOSDriver.HideKeyboard();
+            }
+        }
+
+        public IWebElement GetAlert()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                return AppiumDriver.AndroidDriver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
+            }
+
+            return null;
+        }
+
+        public IAlert SwitchToAlert()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                return AppiumDriver.AndroidDriver.SwitchTo().Alert();
+            }
+
+            return null;
+        }
+
+        public void NavigateBack()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                AppiumDriver.AndroidDriver.Navigate().Back();
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                AppiumDriver.iOSDriver.Navigate().Back();
+            }
         }
     }
 }
