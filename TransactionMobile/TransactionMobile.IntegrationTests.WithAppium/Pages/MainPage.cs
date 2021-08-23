@@ -163,6 +163,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             {
                 if (driver.PageSource.Contains(expectedToast))
                 {
+                    Console.WriteLine(driver.PageSource);
                     isDisplayed = true;
                     break;
                 }

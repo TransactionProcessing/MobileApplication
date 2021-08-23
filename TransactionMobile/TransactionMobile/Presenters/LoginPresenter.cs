@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
@@ -217,20 +218,24 @@
         private async void LoginPage_LoginButtonClick(Object sender,
                                                       EventArgs e)
         {
+            StringBuilder sb = new StringBuilder();
+
             try
             {
+                sb.AppendLine("started");
                 ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
                 if (App.IsIntegrationTestMode == true)
                 {
+                    sb.AppendLine("IsIntegrationTestMode == true");
                     this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
                     this.EstateClient = App.Container.Resolve<IEstateClient>();
                 }
                 //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
-
+                
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
-
+                sb.AppendLine("Got Configuration");
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
                 
                 // Attempt to login with the user details
@@ -241,18 +246,19 @@
                                                                                    CancellationToken.None);
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
 
+                sb.AppendLine("Got token");
                 // Cache the user token
                 App.TokenResponse = tokenResponse;
 
                 // Do the initial logon transaction
                 await this.PerformLogonTransaction();
-
+                sb.AppendLine("Did logon");
                 // Get the merchants current balance
                 await this.GetMerchantBalance();
-                
+                sb.AppendLine("Got balance");
                 // Get the merchants contract details
                 await this.GetMerchantContract();
-
+                sb.AppendLine("got Contract");
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("Logon Completed"));
 
                 // Go to signed in page
@@ -262,6 +268,7 @@
                 this.MainPage.SupportButtonClicked += this.MainPage_SupportButtonClicked;
                 this.MainPage.ProfileButtonClicked += this.MainPage_ProfileButtonClicked;
 
+                sb.AppendLine("about to set main page");
                 Application.Current.MainPage = new NavigationPage((Page)this.MainPage);
             }
             catch(Exception ex)
@@ -276,7 +283,7 @@
                 }
                 else
                 {
-                    CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
+                    CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!" + sb.ToString());
                 }
             }
         }
