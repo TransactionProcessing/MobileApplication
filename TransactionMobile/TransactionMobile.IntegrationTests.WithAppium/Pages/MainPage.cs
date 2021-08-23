@@ -4,6 +4,7 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Features;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -156,16 +157,21 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         public static async Task WaitForToastMessage(this IOSDriver<IOSElement> driver,
                                                      String expectedToast)
         {
-            await Retry.For(async () =>
-                            {
-                                var args = new Dictionary<string, object>
-                                           {
-                                               {"text", expectedToast},
-                                               {"isRegexp", false}
-                                           };
-                                driver.ExecuteScript("mobile: isToastVisible", args);
+            Boolean isDisplayed = false;
+            int count = 0;
+            do
+            {
+                if (driver.PageSource.Contains(expectedToast))
+                {
+                    isDisplayed = true;
+                    break;
+                }
+                Thread.Sleep(200);//Add your custom wait if exists
+                count++;
 
-                            });
+            } while (count < 10);
+            
+            isDisplayed.ShouldBeTrue();
         }
     }
 }
