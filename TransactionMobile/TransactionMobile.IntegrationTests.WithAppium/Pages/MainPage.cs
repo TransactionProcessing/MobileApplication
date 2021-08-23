@@ -7,12 +7,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
     using System.Threading.Tasks;
     using Features;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+    using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Android;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
     using OpenQA.Selenium.Appium.Interfaces;
+    using OpenQA.Selenium.Appium.iOS;
+    using OpenQA.Selenium.Remote;
     using Shouldly;
     using Steps;
-    using Xunit;
 
     public class MainPage : BasePage
     {
@@ -37,7 +39,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         public async Task ClickTransactionsButton()
         {
-            var element = await app.WaitForElementByAccessibilityId(this.TransactionsButton);
+            var element = await this.WaitForElementByAccessibilityId(this.TransactionsButton);
             element.Click();
         }
 
@@ -63,7 +65,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             //AppResult label = null;
             //app.ScrollDownTo(this.AvailableBalanceLabel);
-            var element = await app.WaitForElementByAccessibilityId(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
+            var element = await this.WaitForElementByAccessibilityId(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
             
             String availableBalanceText = element.Text.Replace(" KES", String.Empty);
 
@@ -78,15 +80,16 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
     public static class Extenstion
     {
+        // TODO: May need a platform switch
         public static AndroidElement GetAlert(this AndroidDriver<AndroidElement> driver)
         {
             return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
         }
 
-        public static async Task<AndroidElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
+        public static async Task<IWebElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
-            AndroidElement element = null;
+            IWebElement element = null;
             await Retry.For(async () =>
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
@@ -94,6 +97,32 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             });
 
             return element;
+
+        }
+
+        public static async Task<IWebElement> WaitForElementByAccessibilityId(this IOSDriver<IOSElement> driver, String selector, TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(60);
+            IWebElement element = null;
+            await Retry.For(async () =>
+                            {
+                                element = driver.FindElementByAccessibilityId(selector);
+                                element.ShouldNotBeNull();
+                            });
+
+            return element;
+
+        }
+
+        public static async Task WaitForNoElementByAccessibilityId(this IOSDriver<IOSElement> driver, String selector, TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(60);
+
+            await Retry.For(async () =>
+                            {
+                                var element = driver.FindElementByAccessibilityId(selector);
+                                element.ShouldBeNull();
+                            });
 
         }
 
@@ -114,9 +143,21 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             await Retry.For(async () =>
                             {
-                                //var element = driver.FindElementByAccessibilityId(selector);
-                                //element.ShouldBeNull();
+                                var args = new Dictionary<string, object>
+                                           {
+                                               {"text", expectedToast},
+                                               {"isRegexp", false}
+                                           };
+                                driver.ExecuteScript("mobile: isToastVisible", args);
 
+                            });
+        }
+
+        public static async Task WaitForToastMessage(this IOSDriver<IOSElement> driver,
+                                                     String expectedToast)
+        {
+            await Retry.For(async () =>
+                            {
                                 var args = new Dictionary<string, object>
                                            {
                                                {"text", expectedToast},

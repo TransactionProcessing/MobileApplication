@@ -19,31 +19,26 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [Xunit.TraitAttribute("Category", "background")]
-    [Xunit.TraitAttribute("Category", "login")]
-    [Xunit.TraitAttribute("Category", "safaricomtopup")]
-    public partial class SafaricomTopupFeature : object, Xunit.IClassFixture<SafaricomTopupFeature.FixtureData>, System.IDisposable
+    [NUnit.Framework.TestFixtureAttribute()]
+    [NUnit.Framework.DescriptionAttribute("SafaricomTopup")]
+    [NUnit.Framework.CategoryAttribute("background")]
+    [NUnit.Framework.CategoryAttribute("login")]
+    [NUnit.Framework.CategoryAttribute("safaricomtopup")]
+    public partial class SafaricomTopupFeature
     {
         
-        private static TechTalk.SpecFlow.ITestRunner testRunner;
+        private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
                 "background",
                 "login",
                 "safaricomtopup"};
         
-        private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
-        
 #line 1 "SafaricomTopupFeature.feature"
 #line hidden
         
-        public SafaricomTopupFeature(SafaricomTopupFeature.FixtureData fixtureData, TransactionMobile_IntegrationTests_WithAppium_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
-        {
-            this._testOutputHelper = testOutputHelper;
-            this.TestInitialize();
-        }
-        
-        public static void FeatureSetup()
+        [NUnit.Framework.OneTimeSetUpAttribute()]
+        public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SafaricomTopup", null, ProgrammingLanguage.CSharp, new string[] {
@@ -53,16 +48,19 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        public static void FeatureTearDown()
+        [NUnit.Framework.OneTimeTearDownAttribute()]
+        public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
+        [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
         
+        [NUnit.Framework.TearDownAttribute()]
         public virtual void TestTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -71,7 +69,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<Xunit.Abstractions.ITestOutputHelper>(_testOutputHelper);
+            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
         public virtual void ScenarioStart()
@@ -88,52 +86,52 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         {
 #line 4
 #line hidden
-            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName"});
-            table12.AddRow(new string[] {
+            table16.AddRow(new string[] {
                         "Test Estate 1"});
 #line 6
- testRunner.Given("I have created the following estates", ((string)(null)), table12, "Given ");
+ testRunner.Given("I have created the following estates", ((string)(null)), table16, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "RequireCustomMerchantNumber",
                         "RequireCustomTerminalNumber"});
-            table13.AddRow(new string[] {
+            table17.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "True",
                         "True"});
 #line 10
- testRunner.Given("I have created the following operators", ((string)(null)), table13, "Given ");
+ testRunner.Given("I have created the following operators", ((string)(null)), table17, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "ContractDescription"});
-            table14.AddRow(new string[] {
+            table18.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract"});
 #line 14
- testRunner.Given("I create a contract with the following values", ((string)(null)), table14, "Given ");
+ testRunner.Given("I create a contract with the following values", ((string)(null)), table18, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "ContractDescription",
                         "ProductName",
                         "DisplayText",
                         "Value"});
-            table15.AddRow(new string[] {
+            table19.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract",
                         "100 KES Topup",
                         "100 KES",
                         "100.00"});
-            table15.AddRow(new string[] {
+            table19.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract",
@@ -141,9 +139,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "Custom",
                         ""});
 #line 18
- testRunner.When("I create the following Products", ((string)(null)), table15, "When ");
+ testRunner.When("I create the following Products", ((string)(null)), table19, "When ");
 #line hidden
-            TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "ContractDescription",
@@ -151,7 +149,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "CalculationType",
                         "FeeDescription",
                         "Value"});
-            table16.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract",
@@ -159,7 +157,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "Fixed",
                         "Merchant Commission",
                         "2.00"});
-            table16.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract",
@@ -167,7 +165,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "Percentage",
                         "Merchant Commission",
                         "0.025"});
-            table16.AddRow(new string[] {
+            table20.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "Safaricom Contract",
@@ -176,16 +174,16 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "Merchant Commission",
                         "2.50"});
 #line 23
- testRunner.When("I add the following Transaction Fees", ((string)(null)), table16, "When ");
+ testRunner.When("I add the following Transaction Fees", ((string)(null)), table20, "When ");
 #line hidden
-            TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                         "MerchantName",
                         "EstateName",
                         "EmailAddress",
                         "Password",
                         "GivenName",
                         "FamilyName"});
-            table17.AddRow(new string[] {
+            table21.AddRow(new string[] {
                         "Test Merchant 1",
                         "Test Estate 1",
                         "merchantuser@testmerchant1.co.uk",
@@ -193,39 +191,33 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "TestMerchant",
                         "User1"});
 #line 29
- testRunner.Given("I create the following merchants", ((string)(null)), table17, "Given ");
+ testRunner.Given("I create the following merchants", ((string)(null)), table21, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
                         "Reference",
                         "Amount",
                         "DateTime",
                         "MerchantName",
                         "EstateName"});
-            table18.AddRow(new string[] {
+            table22.AddRow(new string[] {
                         "Deposit1",
                         "1000.00",
                         "Today",
                         "Test Merchant 1",
                         "Test Estate 1"});
-            table18.AddRow(new string[] {
+            table22.AddRow(new string[] {
                         "Deposit2",
                         "1000.00",
                         "Yesterday",
                         "Test Merchant 1",
                         "Test Estate 1"});
 #line 33
- testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table18, "Given ");
+ testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table22, "Given ");
 #line hidden
         }
         
-        void System.IDisposable.Dispose()
-        {
-            this.TestTearDown();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Successful Safaricom Topup")]
-        [Xunit.TraitAttribute("FeatureTitle", "SafaricomTopup")]
-        [Xunit.TraitAttribute("Description", "Successful Safaricom Topup")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Successful Safaricom Topup")]
         public virtual void SuccessfulSafaricomTopup()
         {
             string[] tagsOfScenario = ((string[])(null));
@@ -296,14 +288,14 @@ this.FeatureBackground();
 #line 59
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount"});
-                table19.AddRow(new string[] {
+                table23.AddRow(new string[] {
                             "123456789",
                             "10"});
 #line 61
- testRunner.When("I enter the following topup details", ((string)(null)), table19, "When ");
+ testRunner.When("I enter the following topup details", ((string)(null)), table23, "When ");
 #line hidden
 #line 64
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -315,10 +307,9 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Successful Safaricom Topup with Email Address Captured")]
-        [Xunit.TraitAttribute("FeatureTitle", "SafaricomTopup")]
-        [Xunit.TraitAttribute("Description", "Successful Safaricom Topup with Email Address Captured")]
-        [Xunit.TraitAttribute("Category", "PRTest")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Successful Safaricom Topup with Email Address Captured")]
+        [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulSafaricomTopupWithEmailAddressCaptured()
         {
             string[] tagsOfScenario = new string[] {
@@ -390,16 +381,16 @@ this.FeatureBackground();
 #line 90
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount",
                             "CustomerEmailAddress"});
-                table20.AddRow(new string[] {
+                table24.AddRow(new string[] {
                             "123456789",
                             "10",
                             "testcustomer@customer.co.uk"});
 #line 92
- testRunner.When("I enter the following topup details", ((string)(null)), table20, "When ");
+ testRunner.When("I enter the following topup details", ((string)(null)), table24, "When ");
 #line hidden
 #line 96
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -411,9 +402,8 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Failed Safaricom Topup")]
-        [Xunit.TraitAttribute("FeatureTitle", "SafaricomTopup")]
-        [Xunit.TraitAttribute("Description", "Failed Safaricom Topup")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Failed Safaricom Topup")]
         public virtual void FailedSafaricomTopup()
         {
             string[] tagsOfScenario = ((string[])(null));
@@ -484,14 +474,14 @@ this.FeatureBackground();
 #line 121
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount"});
-                table21.AddRow(new string[] {
+                table25.AddRow(new string[] {
                             "123456789",
                             "1000"});
 #line 123
- testRunner.When("I enter the following topup details", ((string)(null)), table21, "When ");
+ testRunner.When("I enter the following topup details", ((string)(null)), table25, "When ");
 #line hidden
 #line 126
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -503,9 +493,8 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Failed Validation Topup")]
-        [Xunit.TraitAttribute("FeatureTitle", "SafaricomTopup")]
-        [Xunit.TraitAttribute("Description", "Failed Validation Topup")]
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Failed Validation Topup")]
         public virtual void FailedValidationTopup()
         {
             string[] tagsOfScenario = ((string[])(null));
@@ -576,14 +565,14 @@ this.FeatureBackground();
 #line 151
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount"});
-                table22.AddRow(new string[] {
+                table26.AddRow(new string[] {
                             "",
                             "100000"});
 #line 153
- testRunner.When("I enter the following topup details", ((string)(null)), table22, "When ");
+ testRunner.When("I enter the following topup details", ((string)(null)), table26, "When ");
 #line hidden
 #line 156
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -600,14 +589,14 @@ this.FeatureBackground();
 #line 163
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount"});
-                table23.AddRow(new string[] {
+                table27.AddRow(new string[] {
                             "123456789",
                             ""});
 #line 165
- testRunner.When("I enter the following topup details", ((string)(null)), table23, "When ");
+ testRunner.When("I enter the following topup details", ((string)(null)), table27, "When ");
 #line hidden
 #line 168
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -617,22 +606,6 @@ this.FeatureBackground();
 #line hidden
             }
             this.ScenarioCleanup();
-        }
-        
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
-        [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        public class FixtureData : System.IDisposable
-        {
-            
-            public FixtureData()
-            {
-                SafaricomTopupFeature.FeatureSetup();
-            }
-            
-            void System.IDisposable.Dispose()
-            {
-                SafaricomTopupFeature.FeatureTearDown();
-            }
         }
     }
 }

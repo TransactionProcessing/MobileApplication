@@ -45,31 +45,31 @@
 
         public async Task ClickMobileTopupButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.MobileTopupButton);
+            var element = await this.WaitForElementByAccessibilityId(this.MobileTopupButton);
             element.Click();
         }
 
         public async Task ClickMobileWalletButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.MobileWalletButton);
+            var element = await this.WaitForElementByAccessibilityId(this.MobileWalletButton);
             element.Click();
         }
 
         public async Task ClickBillPaymentButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.BillPaymentButton);
+            var element = await this.WaitForElementByAccessibilityId(this.BillPaymentButton);
             element.Click();
         }
 
         public async Task ClickAdminButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.AdminButton);
+            var element = await this.WaitForElementByAccessibilityId(this.AdminButton);
             element.Click();
         }
 
         public async Task ClickVoucherButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.VoucherButton);
+            var element = await this.WaitForElementByAccessibilityId(this.VoucherButton);
             element.Click();
         }
     }

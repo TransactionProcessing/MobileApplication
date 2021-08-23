@@ -20,10 +20,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("LoginFeature")]
+    [NUnit.Framework.DescriptionAttribute("Login")]
     [NUnit.Framework.CategoryAttribute("background")]
     [NUnit.Framework.CategoryAttribute("login")]
-    public partial class LoginFeatureFeature
+    public partial class LoginFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,14 +32,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                 "background",
                 "login"};
         
-#line 1 "LoginFeature.feature"
+#line 1 "Login.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "LoginFeature", null, ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Login", null, ProgrammingLanguage.CSharp, new string[] {
                         "background",
                         "login"});
             testRunner.OnFeatureStart(featureInfo);
@@ -83,34 +83,34 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         {
 #line 4
 #line hidden
-            TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName"});
-            table12.AddRow(new string[] {
+            table8.AddRow(new string[] {
                         "Test Estate 1"});
 #line 6
- testRunner.Given("I have created the following estates", ((string)(null)), table12, "Given ");
+ testRunner.Given("I have created the following estates", ((string)(null)), table8, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "RequireCustomMerchantNumber",
                         "RequireCustomTerminalNumber"});
-            table13.AddRow(new string[] {
+            table9.AddRow(new string[] {
                         "Test Estate 1",
                         "Safaricom",
                         "True",
                         "True"});
 #line 10
- testRunner.Given("I have created the following operators", ((string)(null)), table13, "Given ");
+ testRunner.Given("I have created the following operators", ((string)(null)), table9, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                         "MerchantName",
                         "EstateName",
                         "EmailAddress",
                         "Password",
                         "GivenName",
                         "FamilyName"});
-            table14.AddRow(new string[] {
+            table10.AddRow(new string[] {
                         "Test Merchant 1",
                         "Test Estate 1",
                         "merchantuser@testmerchant1.co.uk",
@@ -118,25 +118,25 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "TestMerchant",
                         "User1"});
 #line 14
- testRunner.Given("I create the following merchants", ((string)(null)), table14, "Given ");
+ testRunner.Given("I create the following merchants", ((string)(null)), table10, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                         "Amount",
                         "DateTime",
                         "MerchantName",
                         "EstateName"});
-            table15.AddRow(new string[] {
+            table11.AddRow(new string[] {
                         "1000.00",
                         "Today",
                         "Test Merchant 1",
                         "Test Estate 1"});
-            table15.AddRow(new string[] {
+            table11.AddRow(new string[] {
                         "1000.00",
                         "Yesterday",
                         "Test Merchant 1",
                         "Test Estate 1"});
 #line 18
- testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table15, "Given ");
+ testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table11, "Given ");
 #line hidden
         }
         
@@ -184,6 +184,9 @@ this.FeatureBackground();
 #line hidden
 #line 28
  testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 29
+ testRunner.And("the available balance is shown as 2000.00", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

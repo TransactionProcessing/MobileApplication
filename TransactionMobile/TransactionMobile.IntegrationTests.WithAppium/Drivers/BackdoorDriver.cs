@@ -2,16 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using Common;
     using IntegrationTestClients;
     using Newtonsoft.Json;
 
     public class BackdoorDriver
     {
-        private readonly AppiumDriver AppiumDriver;
-
-        public BackdoorDriver(AppiumDriver appiumDriver)
+        public BackdoorDriver()
         {
-            this.AppiumDriver = appiumDriver;
         }
 
         public void SetIntegrationModeOn()
@@ -34,12 +32,24 @@
         private void ExecuteBackdoor(string methodName, string value)
         {
             Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
-            
-            AppiumDriver.Driver.ExecuteScript("mobile: backdoor", args);
+
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                AppiumDriver.iOSDriver.ExecuteScript("mobile: backdoor", args);
+            }
         }
 
         private static Dictionary<string, object> CreateBackdoorArgs(string methodName, string value)
         {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                methodName = $"{methodName}:";
+            }
+
             return new Dictionary<string, object>
                    {
                        {"target", "application"},

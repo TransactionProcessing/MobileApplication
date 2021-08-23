@@ -39,13 +39,13 @@
 
         public async Task ClickKES100ProductButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.KES100ProductButton);
+            var element = await this.WaitForElementByAccessibilityId(this.KES100ProductButton);
             element.Click();
         }
 
         public async Task ClickCustomProductButton()
         {
-            var element = await this.app.WaitForElementByAccessibilityId(this.CustomProductButton);
+            var element = await this.WaitForElementByAccessibilityId(this.CustomProductButton);
             element.Click();
         }
     }

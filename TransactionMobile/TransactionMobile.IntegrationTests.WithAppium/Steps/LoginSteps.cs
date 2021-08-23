@@ -10,7 +10,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
     using TechTalk.SpecFlow;
     using TransactionMobile.IntegrationTests.WithAppium.Drivers;
     using TransactionMobile.IntegrationTests.WithAppium.Pages;
-    using Xunit;
 
     [Binding]
     [Scope(Tag = "login")]
