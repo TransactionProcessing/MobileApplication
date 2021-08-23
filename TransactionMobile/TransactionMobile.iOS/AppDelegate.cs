@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Net.Mqtt;
+    using System.Text;
     using System.Threading.Tasks;
     using Clients;
     using Common;
@@ -90,7 +92,7 @@
 
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
-
+            
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
@@ -128,6 +130,15 @@
             DatabaseContext database = new DatabaseContext(connectionString);
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
+            SendResponse("Integration Test Set to On");
+            }
+
+        private void SendResponse(String response)
+        {
+            var client = MqttClient.CreateAsync("127.0.0.1", 1883).Result;
+            client.ConnectAsync().Wait();
+            MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/responses", Encoding.Default.GetBytes(response));
+            client.PublishAsync(m, MqttQualityOfService.ExactlyOnce).Wait();
         }
 
         //[Export("UpdateTestMerchant:")]
@@ -138,15 +149,19 @@
                 Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
                 TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
                 transactionProcessorAclClient.UpdateTestMerchant(merchant);
+                SendResponse("merchant added 1");
 
                 TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
                 estateClient.UpdateTestMerchant(merchant);
+                SendResponse("merchant added 2");
 
                 TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
                 Dictionary<String, String> claims = new Dictionary<String, String>();
                 claims.Add("EstateId", merchant.EstateId.ToString());
                 claims.Add("MerchantId", merchant.MerchantId.ToString());
                 securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
+
+                SendResponse("User Created");
             }
         }
 
@@ -159,6 +174,7 @@
                 Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
                 TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
                 estateClient.UpdateTestContract(contract);
+                SendResponse("contract added");
             }
         }
 

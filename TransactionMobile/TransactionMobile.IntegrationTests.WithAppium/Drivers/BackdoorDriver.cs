@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net.Mqtt;
+    using System.Reactive.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using Common;
@@ -45,6 +46,15 @@
                 var result = await client.ConnectAsync();
                 MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/{methodName}", Encoding.Default.GetBytes(value));
                 await client.PublishAsync(m, MqttQualityOfService.ExactlyOnce);
+
+                var x = client.MessageStream;
+                //Rx Subscription to receive all the messages for the subscribed topics
+
+                client
+                    .MessageStream
+                    .Where(msg => msg.Topic == "IOSBackdoor/response")
+                    .Subscribe(msg => Console.WriteLine(Encoding.Default.GetString(msg.Payload)));
+
             }
         }
 
