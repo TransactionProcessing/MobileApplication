@@ -171,7 +171,8 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                 count++;
 
             } while (count < 10);
-            
+
+            Console.WriteLine(driver.PageSource);
             isDisplayed.ShouldBeTrue();
         }
     }
