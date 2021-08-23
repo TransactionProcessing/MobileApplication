@@ -44,17 +44,8 @@
             {
                 var client = await MqttClient.CreateAsync("127.0.0.1", 1883);
                 var result = await client.ConnectAsync();
-                MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/{methodName}", Encoding.Default.GetBytes(value));
-                await client.PublishAsync(m, MqttQualityOfService.ExactlyOnce);
-
-                var x = client.MessageStream;
-                //Rx Subscription to receive all the messages for the subscribed topics
-                Console.WriteLine($"message count {x.Count()}");
-                //client
-                //    .MessageStream
-                //    .Where(msg => msg.Topic == "IOSBackdoor/responses")
-                //    .Subscribe(msg => Console.WriteLine(Encoding.Default.GetString(msg.Payload)));
-
+                MqttApplicationMessage m = new MqttApplicationMessage(methodName, Encoding.Default.GetBytes(value));
+                await client.PublishAsync(m, MqttQualityOfService.AtLeastOnce);
             }
         }
 

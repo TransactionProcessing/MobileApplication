@@ -102,17 +102,17 @@
         private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
         {
             // here is where you implement the backdoors
-            if (e.Subtopic == "SetIntegrationTestModeOn")
+            if (e.Topic == "SetIntegrationTestModeOn")
             {
                 SetIntegrationTestModeOn();
             }
 
-            if (e.Subtopic == "UpdateTestMerchant")
+            if (e.Topic == "UpdateTestMerchant")
             { 
                 UpdateTestMerchant(e.Payload);
             }
 
-            if (e.Subtopic == "UpdateTestContract")
+            if (e.Topic == "UpdateTestContract")
             {
                 UpdateTestContract(e.Payload);
             }
@@ -121,7 +121,6 @@
         //[Export("SetIntegrationTestModeOn:")]
         public void SetIntegrationTestModeOn()
         {
-            Console.WriteLine($"Inside SetIntegrationTestModeOn");
             App.IsIntegrationTestMode = true;
             App.Container = Bootstrapper.Run();
 
@@ -130,15 +129,7 @@
             DatabaseContext database = new DatabaseContext(connectionString);
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
-            SendResponse("Integration Test Set to On");
-            }
 
-        private void SendResponse(String response)
-        {
-            var client = MqttClient.CreateAsync("127.0.0.1", 1883).Result;
-            client.ConnectAsync().Wait();
-            MqttApplicationMessage m = new MqttApplicationMessage($"IOSBackdoor/responses", Encoding.Default.GetBytes(response));
-            client.PublishAsync(m, MqttQualityOfService.ExactlyOnce).Wait();
         }
 
         //[Export("UpdateTestMerchant:")]
@@ -149,19 +140,16 @@
                 Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
                 TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
                 transactionProcessorAclClient.UpdateTestMerchant(merchant);
-                SendResponse("merchant added 1");
-
+                
                 TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
                 estateClient.UpdateTestMerchant(merchant);
-                SendResponse("merchant added 2");
-
+                
                 TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
                 Dictionary<String, String> claims = new Dictionary<String, String>();
                 claims.Add("EstateId", merchant.EstateId.ToString());
                 claims.Add("MerchantId", merchant.MerchantId.ToString());
                 securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
-
-                SendResponse("User Created");
+                
             }
         }
 
