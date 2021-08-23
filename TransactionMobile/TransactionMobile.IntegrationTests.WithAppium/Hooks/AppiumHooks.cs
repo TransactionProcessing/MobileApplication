@@ -20,6 +20,8 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
         [BeforeScenario()]
         public void StartAndroidApp()
         {
+            Console.WriteLine(AppiumDriver.MobileTestPlatform);
+
             _appiumDriver.StartApp();
         }
 
