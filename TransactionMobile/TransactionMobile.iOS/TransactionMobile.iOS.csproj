@@ -202,6 +202,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\TransactionMobile.Backdoor\TransactionMobile.Backdoor.csproj">
+      <Project>{5ad49717-f93f-4ec4-a70c-3b8681bba0fe}</Project>
+      <Name>TransactionMobile.Backdoor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TransactionMobile.Clients\TransactionMobile.Clients.csproj">
       <Project>{bbb08d92-5bde-442f-b19a-40ab843e3126}</Project>
       <Name>TransactionMobile.Clients</Name>

@@ -14,6 +14,7 @@
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
     using Syncfusion.XForms.iOS.TabView;
+    using TransactionMobile.Backdoor;
     using TransactionMobile.IntegrationTestClients;
     using UIKit;
     using Unity;
@@ -75,7 +76,7 @@
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             this.Device = new iOSDevice();
             this.Database = new DatabaseContext(connectionString);
-
+            
             Forms.Init();
 
             Calabash.Start();
@@ -84,13 +85,38 @@
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
 
+            // Initialize the MQTT backdoor
+            Task t = Backdoor.Instance.Initialize(mqttHost: "http://127.0.0.1:1883");
+
+            // Handle backdoor events
+            Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
+
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
         }
 
-        [Export("SetIntegrationTestModeOn:")]
+        private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
+        {
+            // here is where you implement the backdoors
+            if (e.Subtopic == "SetIntegrationTestModeOn")
+            {
+                SetIntegrationTestModeOn();
+            }
+
+            if (e.Subtopic == "UpdateTestMerchant")
+            { 
+                UpdateTestMerchant(e.Payload);
+            }
+
+            if (e.Subtopic == "UpdateTestContract")
+            {
+                UpdateTestContract(e.Payload);
+            }
+        }
+
+        //[Export("SetIntegrationTestModeOn:")]
         public void SetIntegrationTestModeOn()
         {
             Console.WriteLine($"Inside SetIntegrationTestModeOn");
@@ -104,7 +130,7 @@
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
         }
 
-        [Export("UpdateTestMerchant:")]
+        //[Export("UpdateTestMerchant:")]
         public void UpdateTestMerchant(String merchantData)
         {
             if (App.IsIntegrationTestMode == true)
@@ -124,7 +150,7 @@
             }
         }
 
-        [Export("UpdateTestContract:")]
+        //[Export("UpdateTestContract:")]
         public void UpdateTestContract(String contractData)
         {
             if (App.IsIntegrationTestMode == true)
