@@ -18,7 +18,7 @@
 
         public async Task SetIntegrationModeOn()
         {
-            await this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
+            await this.ExecuteBackdoor("SetIntegrationTestModeOn", "true");
         }
 
         public async Task UpdateTestMerchant(Merchant merchant)
