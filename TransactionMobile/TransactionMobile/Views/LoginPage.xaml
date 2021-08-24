@@ -139,6 +139,7 @@
                     <Label
                         FontFamily="{StaticResource Montserrat-SemiBold}"
                         FontSize="15"
+                        Grid.Row="7"
                         HorizontalTextAlignment="Center"
                         Style="{StaticResource LabelStyle}"
                         AutomationId="DebugLabel"
