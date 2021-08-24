@@ -230,6 +230,10 @@
                     this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
                     this.EstateClient = App.Container.Resolve<IEstateClient>();
                 }
+                else
+                {
+                    sb.AppendLine("IsIntegrationTestMode == false");
+                }
                 //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
                 
