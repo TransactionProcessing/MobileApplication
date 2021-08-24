@@ -44,6 +44,7 @@
             {
                 var client = await MqttClient.CreateAsync("127.0.0.1", 1883);
                 var result = await client.ConnectAsync();
+                Console.WriteLine($"client.IsConnected {client.IsConnected}");
                 MqttApplicationMessage m = new MqttApplicationMessage(methodName, Encoding.Default.GetBytes(value));
                 await client.PublishAsync(m, MqttQualityOfService.AtLeastOnce);
             }
