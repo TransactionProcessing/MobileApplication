@@ -46,6 +46,11 @@
                 var result = await client.ConnectAsync();
                 Console.WriteLine($"client.IsConnected {client.IsConnected}");
                 MqttApplicationMessage m = new MqttApplicationMessage($"Backdoor/{methodName}", Encoding.Default.GetBytes(value));
+
+                await client.SubscribeAsync($"Backdoor/#", MqttQualityOfService.AtMostOnce); // QoS0
+
+                client.MessageStream.Subscribe(msg => Console.WriteLine($"Topic [{msg.Topic}] Payload: [{Encoding.Default.GetString(msg.Payload)}]"));
+                
                 await client.PublishAsync(m, MqttQualityOfService.AtLeastOnce);
             }
         }
