@@ -56,6 +56,20 @@
             return null;
         }
 
+        public async Task<String> GetPageSource()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                return await AppiumDriver.AndroidDriver.GetPageSource();
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                return await AppiumDriver.iOSDriver.GetPageSource();
+            }
+
+            return null;
+        }
+
         public async Task WaitForNoElementByAccessibilityId(String x)
         {
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)

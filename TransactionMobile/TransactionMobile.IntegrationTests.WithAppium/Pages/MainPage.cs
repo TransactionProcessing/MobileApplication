@@ -175,5 +175,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             Console.WriteLine(driver.PageSource);
             isDisplayed.ShouldBeTrue();
         }
+
+        public static async Task<String> GetPageSource(this AndroidDriver<AndroidElement> driver)
+        {
+            return driver.PageSource;
+        }
+
+        public static async Task<String> GetPageSource(this IOSDriver<IOSElement> driver)
+        {
+            return driver.PageSource;
+        }
     }
 }

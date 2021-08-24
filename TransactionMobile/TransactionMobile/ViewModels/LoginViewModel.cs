@@ -28,6 +28,11 @@
 
         #endregion
 
+        public LoginViewModel()
+        {
+            this.Label = "Debug";
+        }
+
         #region Properties
 
         /// <summary>

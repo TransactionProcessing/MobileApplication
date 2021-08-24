@@ -47,8 +47,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
             element.Click();
 
-            IWebElement element1 = await this.WaitForElementByAccessibilityId("DebugLabel");
-            Console.WriteLine(element1.Text);
+            try
+            {
+                IWebElement element1 = await this.WaitForElementByAccessibilityId("DebugLabel");
+                Console.WriteLine(element1.Text);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(await this.GetPageSource());
+            }
         }
     }
 }
