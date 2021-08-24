@@ -88,7 +88,7 @@
             SfTabViewRenderer.Init();
 
             // Initialize the MQTT backdoor
-            Task t = Backdoor.Instance.Initialize(mqttHost: "http://127.0.0.1:1883");
+            Task t = Backdoor.Instance.Initialize(mqttHost: "127.0.0.1");
 
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
