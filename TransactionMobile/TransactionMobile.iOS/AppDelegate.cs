@@ -3,7 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net.Mqtt;
+    using System.Net.NetworkInformation;
+    using System.Net.Sockets;
     using System.Text;
     using System.Threading.Tasks;
     using Clients;
@@ -87,8 +90,13 @@
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
 
+            var x =  NetworkInterface.GetAllNetworkInterfaces()
+                                   .Where(ni => ni.Name.Equals("en0"))
+                                   .First().GetIPProperties().UnicastAddresses
+                                   .Where(add => add.Address.AddressFamily == AddressFamily.InterNetwork)
+                                   .First().Address.ToString();
             // Initialize the MQTT backdoor
-            Task t = Backdoor.Instance.Initialize(mqttHost: "127.0.0.1");
+            Task t = Backdoor.Instance.Initialize(mqttHost: x);
 
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;

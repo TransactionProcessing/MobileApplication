@@ -223,16 +223,19 @@
             try
             {
                 sb.AppendLine("started");
+                this.LoginViewModel.Label = sb.ToString();
                 ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
                 if (App.IsIntegrationTestMode == true)
                 {
                     sb.AppendLine("IsIntegrationTestMode == true");
+                    this.LoginViewModel.Label = sb.ToString();
                     this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
                     this.EstateClient = App.Container.Resolve<IEstateClient>();
                 }
                 else
                 {
                     sb.AppendLine("IsIntegrationTestMode == false");
+                    this.LoginViewModel.Label = sb.ToString();
                 }
                 //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
@@ -240,6 +243,7 @@
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
                 sb.AppendLine("Got Configuration");
+                this.LoginViewModel.Label = sb.ToString();
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
                 
                 // Attempt to login with the user details
