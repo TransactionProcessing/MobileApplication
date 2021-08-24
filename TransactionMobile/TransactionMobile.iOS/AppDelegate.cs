@@ -102,7 +102,7 @@
         private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
         {
             // here is where you implement the backdoors
-            if (e.Subtopic == "SetIntegrationTestModeOn")
+            if (e.Topic.Contains("SetIntegrationTestModeOn"))
             {
                 SetIntegrationTestModeOn();
             }
