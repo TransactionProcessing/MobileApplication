@@ -102,17 +102,17 @@
         private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
         {
             // here is where you implement the backdoors
-            if (e.Topic == "SetIntegrationTestModeOn")
+            if (e.Subtopic == "SetIntegrationTestModeOn")
             {
                 SetIntegrationTestModeOn();
             }
 
-            if (e.Topic == "UpdateTestMerchant")
+            if (e.Subtopic == "UpdateTestMerchant")
             { 
                 UpdateTestMerchant(e.Payload);
             }
 
-            if (e.Topic == "UpdateTestContract")
+            if (e.Subtopic == "UpdateTestContract")
             {
                 UpdateTestContract(e.Payload);
             }
