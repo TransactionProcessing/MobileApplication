@@ -47,7 +47,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
             element.Click();
 
-            await this.WaitForToastMessage("Incorrect username or password entered, please try again!");
+            //await this.WaitForToastMessage("Incorrect username or password entered, please try again!");
         }
     }
 }

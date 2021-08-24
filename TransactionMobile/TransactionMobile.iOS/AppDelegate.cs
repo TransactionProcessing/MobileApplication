@@ -107,12 +107,12 @@
                 SetIntegrationTestModeOn();
             }
 
-            if (e.Subtopic == "UpdateTestMerchant")
+            if (e.Topic.Contains("UpdateTestMerchant"))
             { 
                 UpdateTestMerchant(e.Payload);
             }
 
-            if (e.Subtopic == "UpdateTestContract")
+            if (e.Topic.Contains("UpdateTestContract"))
             {
                 UpdateTestContract(e.Payload);
             }
