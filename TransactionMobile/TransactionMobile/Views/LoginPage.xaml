@@ -135,6 +135,16 @@
                         Style="{StaticResource SfButtonStyleSmall}"
                         Text="Support"
                         AutomationId="SupportButton"/>
+
+                    <Label
+                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                        FontSize="15"
+                        HorizontalTextAlignment="Center"
+                        Style="{StaticResource LabelStyle}"
+                        AutomationId="DebugLabel"
+                        Text="{Binding Label}"
+                        TextColor="{DynamicResource Gray-900}"
+                    />
                 </Grid>
 
             </StackLayout>

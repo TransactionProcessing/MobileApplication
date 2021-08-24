@@ -21,6 +21,11 @@
         /// </summary>
         private String password;
 
+        /// <summary>
+        /// The label
+        /// </summary>
+        private String label;
+
         #endregion
 
         #region Properties
@@ -60,6 +65,19 @@
             {
                 this.password = value;
                 this.OnPropertyChanged(nameof(this.Password));
+            }
+        }
+
+        public String Label
+        {
+            get
+            {
+                return this.label;
+            }
+            set
+            {
+                this.label = value;
+                this.OnPropertyChanged(nameof(this.Label));
             }
         }
 

@@ -289,6 +289,9 @@
                 {
                     CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again! - Exception: {ex.Message} Debug: {sb}");
                 }
+
+                // Set a label on screen
+                this.LoginViewModel.Label = sb.ToString();
             }
         }
 
