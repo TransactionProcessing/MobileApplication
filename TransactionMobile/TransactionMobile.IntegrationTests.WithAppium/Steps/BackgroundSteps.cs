@@ -82,17 +82,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 await this.Backdoor.UpdateTestMerchant(merchant);
             }
         }
-
-        [Given(@"the mobile application is started")]
-        public void GivenTheMobileApplicationIsStarted()
-        {
-            //if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
-            //{
-            //    this.AppiumDriver.StartApp();
-            //}
-        }
-
-
+        
         [Given(@"I make the following manual merchant deposits")]
         public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table)
         {

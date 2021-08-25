@@ -20,8 +20,6 @@ Background:
 	| 1000.00 | Today     | Test Merchant 1 | Test Estate 1 |
 	| 1000.00 | Yesterday | Test Merchant 1 | Test Estate 1 |
 
-	#Given the mobile application is started
-
 @PRTest
 Scenario: Login as Merchant
 	Given I am on the Login Screen
