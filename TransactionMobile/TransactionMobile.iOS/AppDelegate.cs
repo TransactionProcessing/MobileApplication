@@ -90,7 +90,7 @@
             
             // TODO: Check for test data file
             //PushFile will be used
-            FileInfo fi = new FileInfo("/data/local/tmp/testdata.bmp");
+            FileInfo fi = new FileInfo("/var/root/testdata.bmp");
             if (fi.Exists)
             {
                 this.SetIntegrationTestModeOn();
