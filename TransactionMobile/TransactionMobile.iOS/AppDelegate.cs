@@ -87,31 +87,28 @@
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
-            
-            //// TODO: Check for test data file
-            ////PushFile will be used
-            //FileInfo fi = new FileInfo("/var/root/testdata.bmp");
-            //if (fi.Exists)
-            //{
-            //    this.SetIntegrationTestModeOn();
 
-            //    // Read the file 
-            //    String fileData = File.ReadAllText(fi.FullName);
+            // Initialize the MQTT backdoor
+            Task t = Backdoor.Instance.Initialize();
 
-            //    TestData t = JsonConvert.DeserializeObject<TestData>(fileData);
-            //    this.UpdateTestMerchant(t.Merchant);
-            //    foreach (Contract contract in t.Contracts)
-            //    {
-            //        this.UpdateTestContract(contract);
-            //    }
-            //}
-            
+            // Handle backdoor events
+            Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
+
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
         }
-        
+
+        private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
+        {
+            // here is where you implement the backdoors
+            if (e.Subtopic == "SetIntegrationTestModeOn")
+            {
+                SetIntegrationTestModeOn();
+            }
+        }
+
         private void SetIntegrationTestModeOn()
         {
             App.IsIntegrationTestMode = true;
