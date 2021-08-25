@@ -88,23 +88,23 @@
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
             
-            // TODO: Check for test data file
-            //PushFile will be used
-            FileInfo fi = new FileInfo("/var/root/testdata.bmp");
-            if (fi.Exists)
-            {
-                this.SetIntegrationTestModeOn();
+            //// TODO: Check for test data file
+            ////PushFile will be used
+            //FileInfo fi = new FileInfo("/var/root/testdata.bmp");
+            //if (fi.Exists)
+            //{
+            //    this.SetIntegrationTestModeOn();
 
-                // Read the file 
-                String fileData = File.ReadAllText(fi.FullName);
+            //    // Read the file 
+            //    String fileData = File.ReadAllText(fi.FullName);
 
-                TestData t = JsonConvert.DeserializeObject<TestData>(fileData);
-                this.UpdateTestMerchant(t.Merchant);
-                foreach (Contract contract in t.Contracts)
-                {
-                    this.UpdateTestContract(contract);
-                }
-            }
+            //    TestData t = JsonConvert.DeserializeObject<TestData>(fileData);
+            //    this.UpdateTestMerchant(t.Merchant);
+            //    foreach (Contract contract in t.Contracts)
+            //    {
+            //        this.UpdateTestContract(contract);
+            //    }
+            //}
             
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
