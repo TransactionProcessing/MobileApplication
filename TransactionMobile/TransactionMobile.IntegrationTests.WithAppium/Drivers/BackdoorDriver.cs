@@ -67,7 +67,7 @@
                     this.Merchant,
                     this.Contracts
                                };
-                AppiumDriver.iOSDriver.PushFile("/data/local/tmp/testdata.txt", JsonConvert.SerializeObject(fileData));
+                AppiumDriver.iOSDriver.PushFile("@com.companyname.TransactionMobile:documents/testdata.txt", JsonConvert.SerializeObject(fileData));
             }
         }
 

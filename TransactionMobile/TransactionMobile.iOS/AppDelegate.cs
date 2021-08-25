@@ -90,7 +90,7 @@
             
             // TODO: Check for test data file
             //PushFile will be used
-            FileInfo fi = new FileInfo("/data/local/tmp/testdata.txt");
+            FileInfo fi = new FileInfo("@com.companyname.TransactionMobile:documents/testdata.txt");
             if (fi.Exists)
             {
                 this.SetIntegrationTestModeOn();

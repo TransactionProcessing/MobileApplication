@@ -36,5 +36,12 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Document Type 1</string>
+		</dict>
+	</array>
 </dict>
 </plist>

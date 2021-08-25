@@ -70,7 +70,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 var driverOptions = new AppiumOptions();
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "iOS");
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "iPhone Simulator");
-                driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "14.4");
+                driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "12.4");
 
                 String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
