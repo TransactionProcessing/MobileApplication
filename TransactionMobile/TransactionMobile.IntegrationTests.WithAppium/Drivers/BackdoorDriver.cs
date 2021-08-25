@@ -67,7 +67,7 @@
                     this.Merchant,
                     this.Contracts
                                };
-                AppiumDriver.iOSDriver.PushFile("testdata.txt", JsonConvert.SerializeObject(fileData));
+                AppiumDriver.iOSDriver.PushFile("testdata.jpg", JsonConvert.SerializeObject(fileData));
             }
         }
 
