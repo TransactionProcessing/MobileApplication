@@ -44,7 +44,7 @@
             else
             {
                 // Send MQTT message
-                var client = await MqttClient.CreateAsync("localhost", 1887);
+                var client = await MqttClient.CreateAsync("localhost", 1883);
 
                 MqttApplicationMessage message = new MqttApplicationMessage(methodName, Encoding.Default.GetBytes(value));
 

@@ -37,7 +37,7 @@ jobs:
     - name: Install Mosquitto
       run: |
         brew install mosquitto
-        mosquitto -d -p 1887
+        mosquitto -d -p 1883
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
