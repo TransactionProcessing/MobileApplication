@@ -20,13 +20,17 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
         private readonly TestingContext TestingContext;
 
+        private readonly AppiumDriver AppiumDriver;
+
         public BackgroundSteps(BackdoorDriver backdoor,
                                ScenarioContext scenarioContext,
-                               TestingContext testingContext)
+                               TestingContext testingContext,
+                               AppiumDriver appiumDriver)
         {
             this.Backdoor = backdoor;
             this.ScenarioContext = scenarioContext;
             this.TestingContext = testingContext;
+            this.AppiumDriver = appiumDriver;
         }
 
         [Given(@"I have created the following estates")]
@@ -78,6 +82,17 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 await this.Backdoor.UpdateTestMerchant(merchant);
             }
         }
+
+        [Given(@"the mobile application is started")]
+        public void GivenTheMobileApplicationIsStarted()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                this.AppiumDriver.StartApp();
+                this.Backdoor.PushTestDataFile();
+            }
+        }
+
 
         [Given(@"I make the following manual merchant deposits")]
         public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table)

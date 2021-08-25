@@ -135,7 +135,7 @@
                         Text="Support"
                         AutomationId="SupportButton"/>
 
-                    <Label
+                    <!--<Label
                         FontFamily="{StaticResource Montserrat-SemiBold}"
                         FontSize="15"
                         Grid.Row="6"
@@ -144,7 +144,7 @@
                         AutomationId="DebugLabel"
                         Text="{Binding Label}"
                         TextColor="{DynamicResource Gray-900}"
-                    />
+                    />-->
                 </Grid>
 
             </StackLayout>

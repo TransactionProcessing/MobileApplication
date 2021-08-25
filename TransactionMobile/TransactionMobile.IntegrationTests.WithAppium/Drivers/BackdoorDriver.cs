@@ -1,67 +1,78 @@
 ﻿namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net.Mqtt;
-    using System.Reactive.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Common;
     using IntegrationTestClients;
     using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reactive.Linq;
+    using System.Threading.Tasks;
 
     public class BackdoorDriver
     {
+        private Merchant Merchant = null;
+
+        private List<Contract> Contracts = new List<Contract>();
         public BackdoorDriver()
         {
         }
 
         public async Task SetIntegrationModeOn()
         {
-            await this.ExecuteBackdoor("SetIntegrationTestModeOn", "true");
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                await this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
+            }
         }
 
         public async Task UpdateTestMerchant(Merchant merchant)
         {
-            String merchantData = JsonConvert.SerializeObject(merchant);
-            await this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                String merchantData = JsonConvert.SerializeObject(merchant);
+                await this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
+            }
+            else if(AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                this.Merchant = merchant;
+            }
         }
 
         public async Task UpdateTestContract(Contract contract)
         {
-            String contractData = JsonConvert.SerializeObject(contract);
-            await this.ExecuteBackdoor("UpdateTestContract", contractData);
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                String contractData = JsonConvert.SerializeObject(contract);
+                await this.ExecuteBackdoor("UpdateTestContract", contractData);
+            }
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                this.Contracts.Add(contract);
+            }
         }
 
         private async Task ExecuteBackdoor(string methodName, string value)
         {           
-            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
-            {
-                Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
-                AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
-            }
-            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
-            {
-                var client = await MqttClient.CreateAsync("127.0.0.1", 1883);
-                var result = await client.ConnectAsync();
-                Console.WriteLine($"client.IsConnected {client.IsConnected}");
-                MqttApplicationMessage m = new MqttApplicationMessage($"Backdoor/{methodName}", Encoding.Default.GetBytes(value));
+            Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
+            AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
+        }
 
-                await client.SubscribeAsync($"Backdoor/#", MqttQualityOfService.AtMostOnce); // QoS0
-
-                client.MessageStream.Subscribe(msg => Console.WriteLine($"Topic [{msg.Topic}] Payload: [{Encoding.Default.GetString(msg.Payload)}]"));
-                
-                await client.PublishAsync(m, MqttQualityOfService.AtLeastOnce);
+        public void PushTestDataFile()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                var fileData = new
+                               {
+                    this.Merchant,
+                    this.Contracts
+                               };
+                AppiumDriver.iOSDriver.PushFile("/data/local/tmp/testdata.txt", JsonConvert.SerializeObject(fileData));
             }
         }
 
         private static Dictionary<string, object> CreateBackdoorArgs(string methodName, string value)
         {
-            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
-            {
-                methodName = $"{methodName}:";
-            }
-
             return new Dictionary<string, object>
                    {
                        {"target", "application"},

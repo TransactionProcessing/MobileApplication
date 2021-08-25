@@ -295,7 +295,7 @@
                 }
 
                 // Set a label on screen
-                this.LoginViewModel.Label = sb.ToString();
+                //this.LoginViewModel.Label = sb.ToString();
             }
         }
 

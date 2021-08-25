@@ -83,51 +83,36 @@
             this.Database = new DatabaseContext(connectionString);
             
             Forms.Init();
-
-            Calabash.Start();
-
+            
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
+            
+            // TODO: Check for test data file
+            //PushFile will be used
+            FileInfo fi = new FileInfo("/data/local/tmp/testdata.txt");
+            if (fi.Exists)
+            {
+                this.SetIntegrationTestModeOn();
 
-            //var x =  NetworkInterface.GetAllNetworkInterfaces()
-            //                       .Where(ni => ni.Name.Equals("en0"))
-            //                       .First().GetIPProperties().UnicastAddresses
-            //                       .Where(add => add.Address.AddressFamily == AddressFamily.InterNetwork)
-            //                       .First().Address.ToString();
-            // Initialize the MQTT backdoor
-            Task t = Backdoor.Instance.Initialize("localhost");
+                // Read the file 
+                String fileData = File.ReadAllText(fi.FullName);
 
-            // Handle backdoor events
-            Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
+                TestData t = JsonConvert.DeserializeObject<TestData>(fileData);
+                this.UpdateTestMerchant(t.Merchant);
+                foreach (Contract contract in t.Contracts)
+                {
+                    this.UpdateTestContract(contract);
+                }
+            }
             
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
         }
-
-        private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
-        {
-            // here is where you implement the backdoors
-            if (e.Topic.Contains("SetIntegrationTestModeOn"))
-            {
-                SetIntegrationTestModeOn();
-            }
-
-            if (e.Topic.Contains("UpdateTestMerchant"))
-            { 
-                UpdateTestMerchant(e.Payload);
-            }
-
-            if (e.Topic.Contains("UpdateTestContract"))
-            {
-                UpdateTestContract(e.Payload);
-            }
-        }
-
-        //[Export("SetIntegrationTestModeOn:")]
-        public void SetIntegrationTestModeOn()
+        
+        private void SetIntegrationTestModeOn()
         {
             App.IsIntegrationTestMode = true;
             App.Container = Bootstrapper.Run();
@@ -139,38 +124,26 @@
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
 
         }
-
-        //[Export("UpdateTestMerchant:")]
-        public void UpdateTestMerchant(String merchantData)
+        
+        private void UpdateTestMerchant(Merchant merchant)
         {
-            if (App.IsIntegrationTestMode == true)
-            {
-                Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
-                TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
-                transactionProcessorAclClient.UpdateTestMerchant(merchant);
-                
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestMerchant(merchant);
-                
-                TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
-                Dictionary<String, String> claims = new Dictionary<String, String>();
-                claims.Add("EstateId", merchant.EstateId.ToString());
-                claims.Add("MerchantId", merchant.MerchantId.ToString());
-                securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
-                
-            }
+            TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+            transactionProcessorAclClient.UpdateTestMerchant(merchant);
+            
+            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+            estateClient.UpdateTestMerchant(merchant);
+          
+            TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+            Dictionary<String, String> claims = new Dictionary<String, String>();
+            claims.Add("EstateId", merchant.EstateId.ToString());
+            claims.Add("MerchantId", merchant.MerchantId.ToString());
+            securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
         }
-
-        //[Export("UpdateTestContract:")]
-        public void UpdateTestContract(String contractData)
-        {
-            if (App.IsIntegrationTestMode == true)
-            {
-                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
-                Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestContract(contract);
-            }
+        
+        private void UpdateTestContract(Contract contract)
+        { 
+            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+            estateClient.UpdateTestContract(contract);
         }
 
         /// <summary>
@@ -200,5 +173,11 @@
         }
 
         #endregion
+    }
+
+    public class TestData
+    {
+        public Merchant Merchant { get; set; }
+        public List<Contract> Contracts { get; set; }
     }
 }

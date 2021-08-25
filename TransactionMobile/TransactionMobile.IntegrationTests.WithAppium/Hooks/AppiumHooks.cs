@@ -4,6 +4,7 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
 {
+    using Common;
     using TechTalk.SpecFlow;
     using TransactionMobile.IntegrationTests.WithAppium.Drivers;
 
@@ -20,9 +21,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
         [BeforeScenario()]
         public void StartAndroidApp()
         {
-            Console.WriteLine(AppiumDriver.MobileTestPlatform);
-
-            _appiumDriver.StartApp();
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
+            {
+                _appiumDriver.StartApp();
+            }
         }
 
         [AfterScenario()]

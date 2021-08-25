@@ -33,7 +33,7 @@ namespace TransactionMobile.Backdoor
             var client = await MqttClient.CreateAsync(this.mqttHost, configuration);
             var sessionState = await client.ConnectAsync(new MqttClientCredentials(clientId: this.clientId));
 
-            await client.SubscribeAsync($"{this.baseTopic}/#", MqttQualityOfService.AtMostOnce); // QoS0
+            await client.SubscribeAsync($"{this.baseTopic}/#", MqttQualityOfService.AtLeastOnce); // QoS0
 
             client.MessageStream.Subscribe(msg => HandleReceivedMessage(msg));
             initialized = true;
