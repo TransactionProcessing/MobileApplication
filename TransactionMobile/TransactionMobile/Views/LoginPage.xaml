@@ -48,8 +48,6 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!--  Label to display the title of this page  -->
@@ -140,7 +138,7 @@
                     <Label
                         FontFamily="{StaticResource Montserrat-SemiBold}"
                         FontSize="15"
-                        Grid.Row="7"
+                        Grid.Row="6"
                         HorizontalTextAlignment="Center"
                         Style="{StaticResource LabelStyle}"
                         AutomationId="DebugLabel"

@@ -96,7 +96,7 @@
             //                       .Where(add => add.Address.AddressFamily == AddressFamily.InterNetwork)
             //                       .First().Address.ToString();
             // Initialize the MQTT backdoor
-            Task t = Backdoor.Instance.Initialize();
+            Task t = Backdoor.Instance.Initialize("localhost");
 
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
