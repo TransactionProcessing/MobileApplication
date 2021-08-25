@@ -33,12 +33,6 @@ jobs:
     - name: Set up Appium
       run: |
         npm install -g appium --unsafe-perm=true --allow-root
-        #appium&
-
-    - name: Install Mosquitto
-      run: |
-        brew install mosquitto
-        mosquitto -d -p 1883
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
