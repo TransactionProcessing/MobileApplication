@@ -21,10 +21,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
         [BeforeScenario()]
         public void StartAndroidApp()
         {
-            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
-            {
-                _appiumDriver.StartApp();
-            }
+            _appiumDriver.StartApp();
         }
 
         [AfterScenario()]

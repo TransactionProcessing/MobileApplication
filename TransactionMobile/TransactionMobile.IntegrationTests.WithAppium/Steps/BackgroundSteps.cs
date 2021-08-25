@@ -86,10 +86,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         [Given(@"the mobile application is started")]
         public void GivenTheMobileApplicationIsStarted()
         {
-            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
-            {
-                this.AppiumDriver.StartApp();
-            }
+            //if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            //{
+            //    this.AppiumDriver.StartApp();
+            //}
         }
 
 
