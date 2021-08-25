@@ -89,7 +89,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
                 this.AppiumDriver.StartApp();
-                this.Backdoor.PushTestDataFile();
             }
         }
 
