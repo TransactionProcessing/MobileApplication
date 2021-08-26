@@ -43,13 +43,7 @@
             }
             else
             {
-                // Send MQTT message
-                var client = await MqttClient.CreateAsync("localhost", 1883);
-                await client.ConnectAsync();
-
-                MqttApplicationMessage message = new MqttApplicationMessage(methodName, Encoding.Default.GetBytes(value));
-
-                await client.PublishAsync(message, MqttQualityOfService.ExactlyOnce);
+                // Not required
             }
         }
 

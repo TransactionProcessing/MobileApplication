@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Net.Mqtt;
     using System.Net.NetworkInformation;
     using System.Net.Sockets;
     using System.Text;
@@ -19,7 +18,6 @@
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
     using Syncfusion.XForms.iOS.TabView;
-    using TransactionMobile.Backdoor;
     using TransactionMobile.IntegrationTestClients;
     using UIKit;
     using Unity;
@@ -87,36 +85,11 @@
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
-
-            // Initialize the MQTT backdoor
-            //Backdoor.Instance.Initialize().Wait();
             
-            // Handle backdoor events
-            Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
-
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
-        }
-
-        private void HandleBackdoorEvent(object sender, BackdoorEventArgs e)
-        {
-            // here is where you implement the backdoors
-            if (e.Subtopic == "SetIntegrationTestModeOn")
-            {
-                SetIntegrationTestModeOn();
-            }
-
-            if (e.Subtopic == "UpdateTestMerchant")
-            {
-                UpdateTestMerchant(e.Payload);
-            }
-
-            if (e.Subtopic == "UpdateTestContract")
-            {
-                UpdateTestContract(e.Payload);
-            }
         }
 
         private void SetIntegrationTestModeOn()

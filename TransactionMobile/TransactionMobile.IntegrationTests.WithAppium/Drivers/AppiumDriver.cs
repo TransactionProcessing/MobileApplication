@@ -5,7 +5,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 {
     using System.IO;
     using System.Reflection;
-    using Backdoor;
     using Common;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium;
@@ -86,9 +85,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability("showXcodeLog", true);
 
                 AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
-
-                Backdoor.Instance.Initialize().Wait();
-                Console.WriteLine(Backdoor.Instance.IsConnected);
             }
         }
 

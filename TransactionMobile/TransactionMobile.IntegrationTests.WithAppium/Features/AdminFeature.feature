@@ -35,7 +35,7 @@ Background:
 	| Deposit1  | 1000.00 | Today     | Test Merchant 1 | Test Estate 1 |
 	| Deposit2  | 1000.00 | Yesterday | Test Merchant 1 | Test Estate 1 |
 
-@PRTest @ignore
+@PRTest
 Scenario: Successful Reconciliation
 	Given I am on the Login Screen
 
