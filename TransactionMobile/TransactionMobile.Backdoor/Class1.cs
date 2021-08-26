@@ -16,6 +16,7 @@ namespace TransactionMobile.Backdoor
         private string baseTopic;
         private string clientId;
 
+        public Boolean IsConnected { get; set; }
 
 
         public async Task Initialize(string mqttHost = "localhost", string baseTopic = "Backdoor", string clientId = "MobileApp")
@@ -32,11 +33,12 @@ namespace TransactionMobile.Backdoor
             var configuration = new MqttConfiguration();
             var client = await MqttClient.CreateAsync(this.mqttHost, configuration);
             var sessionState = await client.ConnectAsync(new MqttClientCredentials(clientId: this.clientId));
-
+            
             await client.SubscribeAsync($"{this.baseTopic}/#", MqttQualityOfService.AtLeastOnce); // QoS0
 
             client.MessageStream.Subscribe(msg => HandleReceivedMessage(msg));
             initialized = true;
+            this.IsConnected = client.IsConnected;
         }
 
         private void HandleReceivedMessage(MqttApplicationMessage message)

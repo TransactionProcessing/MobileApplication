@@ -89,8 +89,8 @@
             SfTabViewRenderer.Init();
 
             // Initialize the MQTT backdoor
-            Task t = Backdoor.Instance.Initialize();
-
+            Backdoor.Instance.Initialize().Wait();
+            
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
 
@@ -170,11 +170,5 @@
         }
 
         #endregion
-    }
-
-    public class TestData
-    {
-        public Merchant Merchant { get; set; }
-        public List<Contract> Contracts { get; set; }
     }
 }
