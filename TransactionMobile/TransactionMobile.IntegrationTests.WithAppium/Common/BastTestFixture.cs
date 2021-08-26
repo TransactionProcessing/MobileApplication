@@ -19,7 +19,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
     {
         protected BaseTestFixture(MobileTestPlatform mobileTestPlatform)
         {
-            //AppiumDriver.MobileTestPlatform = MobileTestPlatform.iOS;
+            AppiumDriver.MobileTestPlatform = mobileTestPlatform;
         }
     }
 }
