@@ -28,16 +28,16 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 
         public void StartApp()
         {
-            //AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
+            AppiumLocalService appiumService = new AppiumServiceBuilder().UsingPort(4723).Build();
 
-            //if (appiumService.IsRunning == false)
-            //{
-            //    appiumService.Start();
+            if (appiumService.IsRunning == false)
+            {
+                appiumService.Start();
 
-            //    //Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
-            //}
+                //Console.WriteLine($"appiumService.IsRunning - {appiumService.IsRunning}");
+            }
 
-            //appiumService.OutputDataReceived += AppiumService_OutputDataReceived;
+            appiumService.OutputDataReceived += AppiumService_OutputDataReceived;
 
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
             {
@@ -58,10 +58,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability("espressoBuildConfig",
                                                       "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
 
-                AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
+                //AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
 
 
-                //AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+                AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
 
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
@@ -83,7 +83,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
                 driverOptions.AddAdditionalCapability("showXcodeLog", true);
 
-                //AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+                AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
         }
 
