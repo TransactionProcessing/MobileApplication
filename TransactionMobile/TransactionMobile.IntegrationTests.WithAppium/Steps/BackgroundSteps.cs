@@ -4,10 +4,13 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using Common;
     using Drivers;
     using IntegrationTestClients;
+    using Newtonsoft.Json;
+    using Pages;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -20,24 +23,23 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
         private readonly TestingContext TestingContext;
 
-        private readonly AppiumDriver AppiumDriver;
+        private LoginPage LoginPage = new LoginPage();
+        private TestModePage TestModePage = new TestModePage();
 
         public BackgroundSteps(BackdoorDriver backdoor,
                                ScenarioContext scenarioContext,
-                               TestingContext testingContext,
-                               AppiumDriver appiumDriver)
+                               TestingContext testingContext)
         {
             this.Backdoor = backdoor;
             this.ScenarioContext = scenarioContext;
             this.TestingContext = testingContext;
-            this.AppiumDriver = appiumDriver;
         }
 
         [Given(@"I have created the following estates")]
         public async Task GivenIHaveCreatedTheFollowingEstates(Table table)
         {
             await this.Backdoor.SetIntegrationModeOn();
-
+        
             foreach (TableRow tableRow in table.Rows)
             {
                 Guid estateId = Guid.NewGuid();
@@ -159,6 +161,25 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                                                                      value);
                 await this.Backdoor.UpdateTestContract(contract);
 
+            }
+        }
+
+        [Given(@"the application in in test mode")]
+        public async Task GivenTheApplicationInInTestMode()
+        {
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                await this.LoginPage.ClickTestModeButton();
+                
+                var m = this.TestingContext.GetMerchant();
+                var merchantData = JsonConvert.SerializeObject(m);
+                var c = this.TestingContext.GetContracts();
+                var contractData = JsonConvert.SerializeObject(c);
+                await this.TestModePage.EnterPin("1234");
+                
+                await this.TestModePage.EnterTestContractData(contractData);
+                await this.TestModePage.EnterTestMerchantData(merchantData);
+                await this.TestModePage.ClickSetTestModeButton();
             }
         }
     }

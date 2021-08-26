@@ -35,6 +35,8 @@ Background:
 	| Deposit1  | 1000.00 | Today     | Test Merchant 1 | Test Estate 1 |
 	| Deposit2  | 1000.00 | Yesterday | Test Merchant 1 | Test Estate 1 |
 
+	Given the application in in test mode
+
 Scenario: Successful Safaricom Topup
 	Given I am on the Login Screen
 	
@@ -65,7 +67,7 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
-@PRTest
+@PRTest @ignore
 Scenario: Successful Safaricom Topup with Email Address Captured
 	Given I am on the Login Screen
 	

@@ -28,17 +28,22 @@ namespace TransactionMobile.UnitTests.Presenters
         {
             Mock<ILoginPage> loginPage = new Mock<ILoginPage>();
             Mock<IMainPage> mainPage = new Mock<IMainPage>();
+            Mock<ITestModePage> testModePage = new Mock<ITestModePage>();
             Mock<ISupportPage> supportPage = new Mock<ISupportPage>();
             LoginViewModel loginViewModel = new LoginViewModel();
             MainPageViewModel mainPageViewModel = new MainPageViewModel();
+            TestModePageViewModel testModePageViewModel = new TestModePageViewModel();
             Mock<IDevice> device = new Mock<IDevice>();
             Mock<ITransactionProcessorACLClient> transactionProcessorACLClient = new Mock<ITransactionProcessorACLClient>();
             Mock<IEstateClient> estateClient = new Mock<IEstateClient>();
             Mock<IDatabaseContext> loggingDatabase = new Mock<IDatabaseContext>();
             LoginPresenter loginPresenter =
                 new LoginPresenter(loginPage.Object, mainPage.Object,
+                                   testModePage.Object,
                                    supportPage.Object,
-                                   loginViewModel, mainPageViewModel,
+                                   loginViewModel, 
+                                   mainPageViewModel,
+                                   testModePageViewModel,
                                    device.Object, 
                                    transactionProcessorACLClient.Object,
                                    estateClient.Object,
