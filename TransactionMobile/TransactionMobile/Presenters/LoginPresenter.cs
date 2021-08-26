@@ -230,7 +230,7 @@
                 }
                 else
                 {
-
+                    this.LoginViewModel.EmailAddress = "Backdoor Not Connected";
                     sb.AppendLine("started");
                     //this.LoginViewModel.Label = sb.ToString();
                     ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
