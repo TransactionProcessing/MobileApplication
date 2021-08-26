@@ -67,7 +67,7 @@ Scenario: Successful Safaricom Topup
 	
 	Then The Topup Successful Screen will be displayed
 
-@PRTest @ignore
+@PRTest 
 Scenario: Successful Safaricom Topup with Email Address Captured
 	Given I am on the Login Screen
 	
