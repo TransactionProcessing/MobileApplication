@@ -7,6 +7,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
+    using Backdoor;
     using Clients;
     using Common;
     using Database;
@@ -222,62 +223,73 @@
 
             try
             {
-                sb.AppendLine("started");
-                //this.LoginViewModel.Label = sb.ToString();
-                ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
-                if (App.IsIntegrationTestMode == true)
+                if (Backdoor.Instance.IsConnected)
                 {
-                    sb.AppendLine("IsIntegrationTestMode == true");
-                    //this.LoginViewModel.Label = sb.ToString();
-                    this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
-                    this.EstateClient = App.Container.Resolve<IEstateClient>();
+                    this.LoginViewModel.EmailAddress = "Backdoor Connected";
+                    return;
                 }
                 else
                 {
-                    sb.AppendLine("IsIntegrationTestMode == false");
+
+                    sb.AppendLine("started");
                     //this.LoginViewModel.Label = sb.ToString();
+                    ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
+                    if (App.IsIntegrationTestMode == true)
+                    {
+                        sb.AppendLine("IsIntegrationTestMode == true");
+                        //this.LoginViewModel.Label = sb.ToString();
+                        this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
+                        this.EstateClient = App.Container.Resolve<IEstateClient>();
+                    }
+                    else
+                    {
+                        sb.AppendLine("IsIntegrationTestMode == false");
+                        //this.LoginViewModel.Label = sb.ToString();
+                    }
+                    //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
+                    //this.LoginViewModel.Password = "123456";
+
+                    await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
+                    await this.GetConfiguration();
+                    sb.AppendLine("Got Configuration");
+                    //this.LoginViewModel.Label = sb.ToString();
+                    await
+                        this.Database.InsertLogMessage(DatabaseContext
+                                                           .CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
+
+                    // Attempt to login with the user details
+                    TokenResponse tokenResponse = await securityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
+                                                                                       this.LoginViewModel.Password,
+                                                                                       App.Configuration.ClientId,
+                                                                                       App.Configuration.ClientSecret,
+                                                                                       CancellationToken.None);
+                    await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
+
+                    sb.AppendLine("Got token");
+                    // Cache the user token
+                    App.TokenResponse = tokenResponse;
+
+                    // Do the initial logon transaction
+                    await this.PerformLogonTransaction();
+                    sb.AppendLine("Did logon");
+                    // Get the merchants current balance
+                    await this.GetMerchantBalance();
+                    sb.AppendLine("Got balance");
+                    // Get the merchants contract details
+                    await this.GetMerchantContract();
+                    sb.AppendLine("got Contract");
+                    await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("Logon Completed"));
+
+                    // Go to signed in page
+                    this.MainPage.Init(this.MainPageViewModel);
+                    this.MainPage.TransactionsButtonClicked += this.MainPage_TransactionsButtonClicked;
+                    this.MainPage.ReportsButtonClicked += this.MainPage_ReportsButtonClicked;
+                    this.MainPage.SupportButtonClicked += this.MainPage_SupportButtonClicked;
+                    this.MainPage.ProfileButtonClicked += this.MainPage_ProfileButtonClicked;
+
+                    sb.AppendLine("about to set main page");
+                    Application.Current.MainPage = new NavigationPage((Page)this.MainPage);
                 }
-                //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
-                //this.LoginViewModel.Password = "123456";
-                
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
-                await this.GetConfiguration();
-                sb.AppendLine("Got Configuration");
-                //this.LoginViewModel.Label = sb.ToString();
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
-                
-                // Attempt to login with the user details
-                TokenResponse tokenResponse = await securityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
-                                                                                   this.LoginViewModel.Password,
-                                                                                   App.Configuration.ClientId,
-                                                                                   App.Configuration.ClientSecret,
-                                                                                   CancellationToken.None);
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Cache Token {tokenResponse.AccessToken}"));
-
-                sb.AppendLine("Got token");
-                // Cache the user token
-                App.TokenResponse = tokenResponse;
-
-                // Do the initial logon transaction
-                await this.PerformLogonTransaction();
-                sb.AppendLine("Did logon");
-                // Get the merchants current balance
-                await this.GetMerchantBalance();
-                sb.AppendLine("Got balance");
-                // Get the merchants contract details
-                await this.GetMerchantContract();
-                sb.AppendLine("got Contract");
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("Logon Completed"));
-
-                // Go to signed in page
-                this.MainPage.Init(this.MainPageViewModel);
-                this.MainPage.TransactionsButtonClicked += this.MainPage_TransactionsButtonClicked;
-                this.MainPage.ReportsButtonClicked += this.MainPage_ReportsButtonClicked;
-                this.MainPage.SupportButtonClicked += this.MainPage_SupportButtonClicked;
-                this.MainPage.ProfileButtonClicked += this.MainPage_ProfileButtonClicked;
-
-                sb.AppendLine("about to set main page");
-                Application.Current.MainPage = new NavigationPage((Page)this.MainPage);
             }
             catch(Exception ex)
             {

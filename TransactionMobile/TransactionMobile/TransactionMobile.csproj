@@ -122,6 +122,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TransactionMobile.Backdoor\TransactionMobile.Backdoor.csproj" />
     <ProjectReference Include="..\TransactionMobile.Clients\TransactionMobile.Clients.csproj" />
     <ProjectReference Include="..\TransactionMobile.IntegrationTestClients\TransactionMobile.IntegrationTestClients.csproj" />
   </ItemGroup>

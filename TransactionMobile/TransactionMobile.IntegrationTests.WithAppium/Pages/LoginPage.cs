@@ -47,7 +47,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
             element.Click();
-            
+
+            IWebElement element1 = await this.WaitForElementByAccessibilityId(this.EmailEntry);
+            Console.WriteLine($"Email Entry is [{element1.Text}]");
             //try
             //{
             //    IWebElement element1 = await this.WaitForElementByAccessibilityId("DebugLabel");
