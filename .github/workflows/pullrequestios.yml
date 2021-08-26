@@ -7,46 +7,45 @@ on:
 
 jobs:  
   
-  #buildios:
-  #  name: "Build and Test Pull Requests - iOS"
-  #  env:
-  #      ANDROID_HOME: "/Users/runner/Library/Android/sdk"
-  #      ScreenshotFolder: "/Users/runner/screenshots"
-  #      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  #      Device: "iPhone 11 (14.4)"
-  #  runs-on: macos-latest
+  buildios:
+    name: "Build and Test Pull Requests - iOS"
+    env:
+        ANDROID_HOME: "/Users/runner/Library/Android/sdk"
+        ScreenshotFolder: "/Users/runner/screenshots"
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        Device: "iPhone 11 (14.4)"
+    runs-on: macos-latest
 
-  #  steps:
-  #  - uses: actions/checkout@v2.3.4
-    
-      
-  #  - name: Cache Simulator Data
-  #    run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"  
+    steps:
+    - uses: actions/checkout@v2.3.4
           
-  #  - name: log out simulators
-  #    run: xcrun instruments -s devices
+    - name: Cache Simulator Data
+      run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"  
+          
+    - name: log out simulators
+      run: xcrun instruments -s devices
      
-  #  - name: Setup Nuget
-  #    uses: olegtarasov/download-nuget@v1
+    #- name: Set up Node.js
+    #  uses: actions/setup-node@v1
+    #  with:
+    #    node-version: '12.12.0'
+
+    #- name: Set up Appium
+    #  run: |
+    #    npm install -g appium --unsafe-perm=true --allow-root
+
+    - name: Setup Nuget
+      uses: olegtarasov/download-nuget@v1
           
-  #  - name: Restore Nuget Packages
-  #    run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
+    - name: Restore Nuget Packages
+      run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
-  #  - name: Build Code
-  #    run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
+    - name: Build Code
+      run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
     
-  #  - name: Run Unit Tests
-  #    run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+    - name: Run Unit Tests
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
    
-  #  #- name: Create Screenshot Folder
-  #  #  run: mkdir -p /Users/runner/screenshots
-
-  #  - name: Run Integration Tests - iOS
-  #    run: mono ./TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == iOS"   
+    #- name: Run Integration Tests - iOS
+    #  run: dotnet test TransactionMobile/TransactionMobile.IntegrationTests.WithAppium/TransactionMobile.IntegrationTests.WithAppium.csproj  --filter Category=PRTest
    
-  #  - uses: actions/upload-artifact@v2.2.1
-  #    if: failure()
-  #    with:
-  #      name: screenshots
-  #      path: /Users/runner/screenshots/**/*
-

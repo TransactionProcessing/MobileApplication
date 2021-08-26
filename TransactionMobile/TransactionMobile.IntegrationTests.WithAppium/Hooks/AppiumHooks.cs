@@ -4,6 +4,7 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
 {
+    using Common;
     using TechTalk.SpecFlow;
     using TransactionMobile.IntegrationTests.WithAppium.Drivers;
 

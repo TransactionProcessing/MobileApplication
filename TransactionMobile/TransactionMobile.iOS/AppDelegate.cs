@@ -3,6 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using System.Net.NetworkInformation;
+    using System.Net.Sockets;
+    using System.Text;
     using System.Threading.Tasks;
     using Clients;
     using Common;
@@ -75,25 +79,21 @@
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             this.Device = new iOSDevice();
             this.Database = new DatabaseContext(connectionString);
-
+            
             Forms.Init();
-
-            Calabash.Start();
-
+            
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
-
+            
             // TODO: fix this
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
         }
 
-        [Export("SetIntegrationTestModeOn:")]
-        public void SetIntegrationTestModeOn()
+        private void SetIntegrationTestModeOn()
         {
-            Console.WriteLine($"Inside SetIntegrationTestModeOn");
             App.IsIntegrationTestMode = true;
             App.Container = Bootstrapper.Run();
 
@@ -102,38 +102,30 @@
             DatabaseContext database = new DatabaseContext(connectionString);
             App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
+
         }
-
-        [Export("UpdateTestMerchant:")]
-        public void UpdateTestMerchant(String merchantData)
+        
+        private void UpdateTestMerchant(String merchantData)
         {
-            if (App.IsIntegrationTestMode == true)
-            {
-                Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
-                TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
-                transactionProcessorAclClient.UpdateTestMerchant(merchant);
-
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestMerchant(merchant);
-
-                TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
-                Dictionary<String, String> claims = new Dictionary<String, String>();
-                claims.Add("EstateId", merchant.EstateId.ToString());
-                claims.Add("MerchantId", merchant.MerchantId.ToString());
-                securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
-            }
+            Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
+            TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+            transactionProcessorAclClient.UpdateTestMerchant(merchant);
+            
+            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+            estateClient.UpdateTestMerchant(merchant);
+          
+            TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+            Dictionary<String, String> claims = new Dictionary<String, String>();
+            claims.Add("EstateId", merchant.EstateId.ToString());
+            claims.Add("MerchantId", merchant.MerchantId.ToString());
+            securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
         }
-
-        [Export("UpdateTestContract:")]
-        public void UpdateTestContract(String contractData)
+        
+        private void UpdateTestContract(String contractData)
         {
-            if (App.IsIntegrationTestMode == true)
-            {
-                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
-                Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
-                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-                estateClient.UpdateTestContract(contract);
-            }
+            Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
+            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+            estateClient.UpdateTestContract(contract);
         }
 
         /// <summary>

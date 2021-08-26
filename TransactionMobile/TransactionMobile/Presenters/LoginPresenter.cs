@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Timers;
@@ -219,6 +220,7 @@
         {
             try
             {
+                //this.LoginViewModel.Label = sb.ToString();
                 ISecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>();
                 if (App.IsIntegrationTestMode == true)
                 {
@@ -230,9 +232,11 @@
 
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
                 await this.GetConfiguration();
-
-                await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
                 
+                await
+                    this.Database.InsertLogMessage(DatabaseContext
+                                                       .CreateDebugLogMessage($"About to Get Token for User [{this.LoginViewModel.EmailAddress} with Password [{this.LoginViewModel.Password}]]"));
+
                 // Attempt to login with the user details
                 TokenResponse tokenResponse = await securityServiceClient.GetToken(this.LoginViewModel.EmailAddress,
                                                                                    this.LoginViewModel.Password,
@@ -252,7 +256,7 @@
                 
                 // Get the merchants contract details
                 await this.GetMerchantContract();
-
+                
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("Logon Completed"));
 
                 // Go to signed in page
@@ -262,6 +266,7 @@
                 this.MainPage.SupportButtonClicked += this.MainPage_SupportButtonClicked;
                 this.MainPage.ProfileButtonClicked += this.MainPage_ProfileButtonClicked;
 
+                
                 Application.Current.MainPage = new NavigationPage((Page)this.MainPage);
             }
             catch(Exception ex)
@@ -276,7 +281,7 @@
                 }
                 else
                 {
-                    CrossToastPopUp.Current.ShowToastWarning("Incorrect username or password entered, please try again!");
+                    CrossToastPopUp.Current.ShowToastWarning($"Incorrect username or password entered, please try again!");
                 }
             }
         }

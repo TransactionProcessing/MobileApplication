@@ -21,7 +21,17 @@
         /// </summary>
         private String password;
 
+        /// <summary>
+        /// The label
+        /// </summary>
+        //private String label;
+
         #endregion
+
+        public LoginViewModel()
+        {
+            //this.Label = "Debug";
+        }
 
         #region Properties
 
@@ -62,6 +72,19 @@
                 this.OnPropertyChanged(nameof(this.Password));
             }
         }
+
+        //public String Label
+        //{
+        //    get
+        //    {
+        //        return this.label;
+        //    }
+        //    set
+        //    {
+        //        this.label = value;
+        //        this.OnPropertyChanged(nameof(this.Label));
+        //    }
+        //}
 
         #endregion
     }

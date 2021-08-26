@@ -1,10 +1,15 @@
 ﻿namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 {
-    using System;
-    using System.Collections.Generic;
     using Common;
     using IntegrationTestClients;
     using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net.Mqtt;
+    using System.Reactive.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
     public class BackdoorDriver
     {
@@ -12,44 +17,38 @@
         {
         }
 
-        public void SetIntegrationModeOn()
+        public async Task SetIntegrationModeOn()
         {
-            this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
+            await this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
         }
 
-        public void UpdateTestMerchant(Merchant merchant)
+        public async Task UpdateTestMerchant(Merchant merchant)
         {
             String merchantData = JsonConvert.SerializeObject(merchant);
-            this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
+            await this.ExecuteBackdoor("UpdateTestMerchant", merchantData);
         }
 
-        public void UpdateTestContract(Contract contract)
+        public async Task UpdateTestContract(Contract contract)
         {
             String contractData = JsonConvert.SerializeObject(contract);
-            this.ExecuteBackdoor("UpdateTestContract", contractData);
+            await this.ExecuteBackdoor("UpdateTestContract", contractData);
         }
 
-        private void ExecuteBackdoor(string methodName, string value)
+        private async Task ExecuteBackdoor(string methodName, string value)
         {
-            Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
-
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
             {
+                Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
                 AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
             }
-            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            else
             {
-                AppiumDriver.iOSDriver.ExecuteScript("mobile: backdoor", args);
+                // Not required
             }
         }
 
         private static Dictionary<string, object> CreateBackdoorArgs(string methodName, string value)
         {
-            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
-            {
-                methodName = $"{methodName}:";
-            }
-
             return new Dictionary<string, object>
                    {
                        {"target", "application"},

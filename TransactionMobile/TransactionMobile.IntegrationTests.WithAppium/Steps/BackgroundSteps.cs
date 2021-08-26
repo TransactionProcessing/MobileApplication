@@ -20,20 +20,24 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
         private readonly TestingContext TestingContext;
 
+        private readonly AppiumDriver AppiumDriver;
+
         public BackgroundSteps(BackdoorDriver backdoor,
                                ScenarioContext scenarioContext,
-                               TestingContext testingContext)
+                               TestingContext testingContext,
+                               AppiumDriver appiumDriver)
         {
             this.Backdoor = backdoor;
             this.ScenarioContext = scenarioContext;
             this.TestingContext = testingContext;
-
-            this.Backdoor.SetIntegrationModeOn();
+            this.AppiumDriver = appiumDriver;
         }
 
         [Given(@"I have created the following estates")]
-        public void GivenIHaveCreatedTheFollowingEstates(Table table)
+        public async Task GivenIHaveCreatedTheFollowingEstates(Table table)
         {
+            await this.Backdoor.SetIntegrationModeOn();
+
             foreach (TableRow tableRow in table.Rows)
             {
                 Guid estateId = Guid.NewGuid();
@@ -75,10 +79,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 this.TestingContext.AddMerchant(estateName, merchantId, merchantName, emailAddress, password, givenName, familyName);
 
                 Merchant merchant = this.TestingContext.GetMerchant(estateName, merchantName);
-                this.Backdoor.UpdateTestMerchant(merchant);
+                await this.Backdoor.UpdateTestMerchant(merchant);
             }
         }
-
+        
         [Given(@"I make the following manual merchant deposits")]
         public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table)
         {
@@ -91,7 +95,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
 
                 this.TestingContext.AddMerchantDeposit(estateName, merchantName, amount, depositDateTime);
                 Merchant merchant = this.TestingContext.GetMerchant(estateName, merchantName);
-                this.Backdoor.UpdateTestMerchant(merchant);
+                await this.Backdoor.UpdateTestMerchant(merchant);
             }
         }
 
@@ -107,7 +111,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 String contractDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "ContractDescription");
 
                 var contract = this.TestingContext.AddContract(estateName, contractId, operatorName, contractDescription);
-                this.Backdoor.UpdateTestContract(contract);
+                await this.Backdoor.UpdateTestContract(contract);
             }
         }
 
@@ -130,7 +134,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 }
                 var contract = this.TestingContext.AddContractProduct(estateName, contractDescription, contractProductId, productName,
                                                        displayText, productValue);
-                this.Backdoor.UpdateTestContract(contract);
+                await this.Backdoor.UpdateTestContract(contract);
             }
         }
 
@@ -153,7 +157,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                                                                      calculationType,
                                                                      feeDescription,
                                                                      value);
-                this.Backdoor.UpdateTestContract(contract);
+                await this.Backdoor.UpdateTestContract(contract);
 
             }
         }

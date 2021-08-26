@@ -5,6 +5,7 @@ using System.Text;
 namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
     using System.Threading.Tasks;
+    using Drivers;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
     using OpenQA.Selenium.Appium.Enums;
@@ -46,6 +47,18 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
             element.Click();
+
+            //IWebElement element1 = await this.WaitForElementByAccessibilityId(this.EmailEntry);
+            //Console.WriteLine($"Email Entry is [{element1.Text}]");
+            //try
+            //{
+            //    IWebElement element1 = await this.WaitForElementByAccessibilityId("DebugLabel");
+            //    Console.WriteLine(element1.Text);
+            //}
+            //catch(Exception ex)
+            //{
+            //    Console.WriteLine(await this.GetPageSource());
+            //}
         }
     }
 }
