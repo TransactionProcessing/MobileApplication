@@ -107,6 +107,16 @@
             {
                 SetIntegrationTestModeOn();
             }
+
+            if (e.Subtopic == "UpdateTestMerchant")
+            {
+                UpdateTestMerchant(e.Payload);
+            }
+
+            if (e.Subtopic == "UpdateTestContract")
+            {
+                UpdateTestContract(e.Payload);
+            }
         }
 
         private void SetIntegrationTestModeOn()
@@ -122,8 +132,9 @@
 
         }
         
-        private void UpdateTestMerchant(Merchant merchant)
+        private void UpdateTestMerchant(String merchantData)
         {
+            Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
             TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
             transactionProcessorAclClient.UpdateTestMerchant(merchant);
             
@@ -137,8 +148,9 @@
             securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
         }
         
-        private void UpdateTestContract(Contract contract)
-        { 
+        private void UpdateTestContract(String contractData)
+        {
+            Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
             TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
             estateClient.UpdateTestContract(contract);
         }
