@@ -89,7 +89,7 @@
             SfTabViewRenderer.Init();
 
             // Initialize the MQTT backdoor
-            Backdoor.Instance.Initialize().Wait();
+            //Backdoor.Instance.Initialize().Wait();
             
             // Handle backdoor events
             Backdoor.Instance.BackdoorEvent += HandleBackdoorEvent;
