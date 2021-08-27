@@ -102,8 +102,9 @@
             }
             else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
-                if (AppiumDriver.iOSDriver.IsKeyboardShown())
-                    AppiumDriver.iOSDriver.HideKeyboard();
+                //if (AppiumDriver.iOSDriver.IsKeyboardShown())
+                //    AppiumDriver.iOSDriver.HideKeyboard();
+                AppiumDriver.iOSDriver.FindElementByName("Done").Click();
             }
         }
 
