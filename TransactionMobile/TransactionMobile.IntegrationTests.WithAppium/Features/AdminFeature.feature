@@ -37,7 +37,7 @@ Background:
 
 	Given the application in in test mode
 
-@PRTest
+@PRTest @ignore
 Scenario: Successful Reconciliation
 	Given I am on the Login Screen
 
