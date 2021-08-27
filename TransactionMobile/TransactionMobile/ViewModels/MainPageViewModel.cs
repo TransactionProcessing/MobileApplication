@@ -27,4 +27,54 @@ namespace TransactionMobile.ViewModels
             }
         }
     }
+
+    public class TestModePageViewModel : BindableObject
+    {
+        public TestModePageViewModel()
+        {
+        }
+
+        private string pinNumber;
+
+        private string testContractData;
+        private string testMerchantData;
+        public String PinNumber
+        {
+            get
+            {
+                return this.pinNumber;
+            }
+            set
+            {
+                this.pinNumber = value;
+                this.OnPropertyChanged(nameof(this.PinNumber));
+            }
+        }
+
+        public String TestContractData
+        {
+            get
+            {
+                return this.testContractData;
+            }
+            set
+            {
+                this.testContractData = value;
+                this.OnPropertyChanged(nameof(this.TestContractData));
+            }
+        }
+
+        public String TestMerchantData
+        {
+            get
+            {
+                return this.testMerchantData;
+            }
+            set
+            {
+                this.testMerchantData = value;
+                this.OnPropertyChanged(nameof(this.TestMerchantData));
+            }
+        }
+    }
 }

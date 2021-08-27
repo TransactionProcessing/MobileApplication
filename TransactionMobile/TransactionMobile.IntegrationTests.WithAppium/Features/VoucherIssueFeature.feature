@@ -28,6 +28,8 @@ Background:
 	| Deposit1  | 100.00 | Today     | Test Merchant 1 | Test Estate 1 |
 	| Deposit2  | 100.00 | Yesterday | Test Merchant 1 | Test Estate 1 |
 
+	Given the application in in test mode
+
 @PRTest
 Scenario: Successful Voucher Issue
 	Given I am on the Login Screen

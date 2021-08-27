@@ -135,16 +135,14 @@
                         Text="Support"
                         AutomationId="SupportButton"/>
 
-                    <!--<Label
-                        FontFamily="{StaticResource Montserrat-SemiBold}"
-                        FontSize="15"
-                        Grid.Row="6"
-                        HorizontalTextAlignment="Center"
-                        Style="{StaticResource LabelStyle}"
-                        AutomationId="DebugLabel"
-                        Text="{Binding Label}"
-                        TextColor="{DynamicResource Gray-900}"
-                    />-->
+                    <Button Text="TestMode" Grid.Row="7" x:Name="TestModeButton" AutomationId="TestModeButton" HeightRequest="1" WidthRequest="1">
+                        <Button.IsVisible>
+                            <OnPlatform x:TypeArguments="x:Boolean">
+                                <On Platform="iOS">true</On>
+                                <On Platform="Android">true</On>
+                            </OnPlatform>
+                        </Button.IsVisible>
+                    </Button>
                 </Grid>
 
             </StackLayout>

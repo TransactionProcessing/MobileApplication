@@ -121,6 +121,7 @@
             // General
             container.RegisterType<IMainPage, MainPage>(new TransientLifetimeManager());
             container.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
+            container.RegisterType<ITestModePage, TestModePage>(new TransientLifetimeManager());
             container.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
 
             // Mobile Topup
@@ -148,6 +149,7 @@
             // General
             container.RegisterType<LoginViewModel>(new TransientLifetimeManager());
             container.RegisterType<MainPageViewModel>(new TransientLifetimeManager());
+            container.RegisterType<TestModePageViewModel>(new TransientLifetimeManager());
 
             // Mobile Topup
             container.RegisterType<MobileTopupSelectOperatorViewModel>(new TransientLifetimeManager());

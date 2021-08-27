@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -12,6 +13,7 @@
     using Database;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects.Responses;
+    using IntegrationTestClients;
     using Microsoft.AppCenter.Distribute;
     using Models;
     using Newtonsoft.Json;
@@ -26,6 +28,8 @@
     using Xamarin.Forms;
     using Timer = System.Timers.Timer;
     using Unity;
+    using Unity.Lifetime;
+    using ContractProduct = EstateManagement.DataTransferObjects.Responses.ContractProduct;
 
     /// <summary>
     /// 
@@ -66,13 +70,17 @@
         /// </summary>
         private readonly IMainPage MainPage;
 
+        private readonly ITestModePage TestModePage;
+
         private readonly ISupportPage SupportPage;
 
         /// <summary>
         /// The main page view model
         /// </summary>
         private readonly MainPageViewModel MainPageViewModel;
-        
+
+        private readonly TestModePageViewModel TestModePageViewModel;
+
         /// <summary>
         /// The transaction processor acl client
         /// </summary>
@@ -96,19 +104,23 @@
         /// <param name="database">The logging database.</param>
         public LoginPresenter(ILoginPage loginPage,
                               IMainPage mainPage,
+                              ITestModePage testModePage,
                               ISupportPage supportPage,
                               LoginViewModel loginViewModel,
                               MainPageViewModel mainPageViewModel,
+                              TestModePageViewModel testModePageViewModel,
                               IDevice device,
                               ITransactionProcessorACLClient transactionProcessorAclClient,
                               IEstateClient estateClient,
                               IDatabaseContext database)
         {
             this.MainPage = mainPage;
+            this.TestModePage = testModePage;
             this.SupportPage = supportPage;
             this.LoginPage = loginPage;
             this.LoginViewModel = loginViewModel;
             this.MainPageViewModel = mainPageViewModel;
+            this.TestModePageViewModel = testModePageViewModel;
             this.Device = device;
             this.TransactionProcessorAclClient = transactionProcessorAclClient;
             this.EstateClient = estateClient;
@@ -128,9 +140,71 @@
 
             this.LoginPage.LoginButtonClick += this.LoginPage_LoginButtonClick;
             this.LoginPage.SupportButtonClick += this.LoginPage_SupportButtonClick;
+            this.LoginPage.TestModeButtonClick += this.LoginPage_TestModeButtonClick;
             this.LoginPage.Init(this.LoginViewModel);
 
             Application.Current.MainPage = new NavigationPage((Page)this.LoginPage);
+        }
+
+        private async void LoginPage_TestModeButtonClick(object sender, EventArgs e)
+        {
+            // Show the test mode page
+
+            this.TestModePage.SetTestModeButtonClick += TestModePage_SetTestModeButtonClick;
+
+            this.TestModePage.Init(this.TestModePageViewModel);
+            await Application.Current.MainPage.Navigation.PushAsync((Page)this.TestModePage);
+        }
+
+        private async void TestModePage_SetTestModeButtonClick(object sender, EventArgs e)
+        {
+            // TODO: Validate Pin
+            // Set app in Test mode here
+            App.IsIntegrationTestMode = true;
+            App.Container = Bootstrapper.Run();
+
+            IDatabaseContext database = new DatabaseContext(String.Empty);
+            IDevice device = new TestDevice();
+            App.Container.RegisterInstance(typeof(IDatabaseContext), database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(typeof(IDevice),device, new ContainerControlledLifetimeManager());
+
+            // Read the test data
+            var testMerchantData = this.TestModePageViewModel.TestMerchantData;
+            var testContractData = this.TestModePageViewModel.TestContractData;
+
+            UpdateTestMerchant(testMerchantData);
+            UpdateTestContracts(testContractData);
+
+            await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+        private void UpdateTestContracts(String contractData)
+        {
+            List<Contract> contracts = JsonConvert.DeserializeObject<List<Contract>>(contractData);
+            if (contracts.Any())
+            {
+                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                foreach (Contract contract in contracts)
+                {
+                    estateClient.UpdateTestContract(contract);
+                }
+            }
+        }
+
+        private void UpdateTestMerchant(String merchantData)
+        {
+            Merchant merchant = JsonConvert.DeserializeObject<Merchant>(merchantData);
+            TestTransactionProcessorACLClient transactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>() as TestTransactionProcessorACLClient;
+            transactionProcessorAclClient.UpdateTestMerchant(merchant);
+            
+            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+            estateClient.UpdateTestMerchant(merchant);
+            
+            TestSecurityServiceClient securityServiceClient = App.Container.Resolve<ISecurityServiceClient>() as TestSecurityServiceClient;
+            Dictionary<String, String> claims = new Dictionary<String, String>();
+            claims.Add("estateId", merchant.EstateId.ToString());
+            claims.Add("merchantId", merchant.MerchantId.ToString());
+            securityServiceClient.CreateUserDetails(merchant.MerchantUserName, claims);
         }
 
         /// <summary>

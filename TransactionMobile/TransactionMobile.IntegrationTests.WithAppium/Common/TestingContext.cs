@@ -66,6 +66,22 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             return merchant;
         }
 
+        public Merchant GetMerchant()
+        {
+            EstateModel estate = this.Estates.Single();
+            Merchant merchant = estate.Merchants.Single();
+
+            return merchant;
+        }
+
+        public List<Contract> GetContracts()
+        {
+            EstateModel estate = this.Estates.Single();
+            List<Contract> contracts = estate.Contracts;
+
+            return contracts;
+        }
+
         public void AddMerchantDeposit(String estateName,
                                        String merchantName,
                                        Decimal depositAmount,

@@ -41,12 +41,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
             {
-
                 var driverOptions = new AppiumOptions();
                 driverOptions.AddAdditionalCapability("adbExecTimeout", TimeSpan.FromMinutes(5).Milliseconds);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "Espresso");
                 // TODO: Only do this locally
-                //driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
+                driverOptions.AddAdditionalCapability("forceEspressoRebuild", true);
                 driverOptions.AddAdditionalCapability("enforceAppInstall", true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "9.0");
@@ -59,7 +58,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability("espressoBuildConfig",
                                                       "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
 
-                //Driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
+                //AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
 
 
                 AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
@@ -69,7 +68,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             {
                 var driverOptions = new AppiumOptions();
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformName, "iOS");
-                driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "iPhone Simulator");
+                driverOptions.AddAdditionalCapability(MobileCapabilityType.DeviceName, "iPhone 11");
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "14.4");
 
                 String assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -78,11 +77,16 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "XCUITest");
-                driverOptions.AddAdditionalCapability("useNewWDA", false);
-                driverOptions.AddAdditionalCapability("wdaStartupRetries", "4");
-                driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
-                driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
-                driverOptions.AddAdditionalCapability("showXcodeLog", true);
+                driverOptions.AddAdditionalCapability("useNewWDA", true);
+                driverOptions.AddAdditionalCapability("wdaLaunchTimeout", 999999999);
+                driverOptions.AddAdditionalCapability("wdaConnectionTimeout", 999999999);
+                driverOptions.AddAdditionalCapability("restart", true);
+                //driverOptions.AddAdditionalCapability("wdaStartupRetries", "10");
+                //driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
+                //driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
+                //driverOptions.AddAdditionalCapability("showXcodeLog", true);
+                //driverOptions.AddAdditionalCapability("unicodeKeyboard", true);
+                //driverOptions.AddAdditionalCapability("resetKeyboard", true);
 
                 AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
@@ -90,7 +94,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
 
         private void AppiumService_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
         {
-            Console.WriteLine(e.Data);
+            //Console.WriteLine(e.Data);
         }
 
         public void StopApp()

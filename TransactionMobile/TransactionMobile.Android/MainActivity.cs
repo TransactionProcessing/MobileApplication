@@ -156,8 +156,8 @@
 
             IDevice device = new AndroidDevice();
             IDatabaseContext database = new DatabaseContext(String.Empty);
-            App.Container.RegisterInstance(database, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(device, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(typeof(IDatabaseContext), database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(typeof(IDevice), device, new ContainerControlledLifetimeManager());
         }
 
         [Export("UpdateTestMerchant")]

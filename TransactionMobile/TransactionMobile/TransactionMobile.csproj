@@ -58,6 +58,9 @@
     <Compile Update="Views\Admin\AdminPage.xaml.cs">
       <DependentUpon>AdminPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TestModePage.xaml.cs">
+      <DependentUpon>TestModePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MobileTopup\MobileTopupFailurePage.xaml.cs">
       <DependentUpon>MobileTopupFailurePage.xaml</DependentUpon>
     </Compile>

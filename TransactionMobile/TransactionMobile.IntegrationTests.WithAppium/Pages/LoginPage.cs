@@ -19,6 +19,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         private readonly String EmailEntry;
         private readonly String PasswordEntry;
         private readonly String LoginButton;
+        private readonly String TestModeButton;
         private readonly String ErrorLabel;
 
         public LoginPage()
@@ -26,6 +27,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.EmailEntry = "EmailEntry";
             this.PasswordEntry = "PasswordEntry";
             this.LoginButton = "LoginButton";
+            this.TestModeButton = "TestModeButton";
             this.ErrorLabel = "ErrorLabel";
         }
 
@@ -47,18 +49,59 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.LoginButton);
             element.Click();
-
-            //IWebElement element1 = await this.WaitForElementByAccessibilityId(this.EmailEntry);
-            //Console.WriteLine($"Email Entry is [{element1.Text}]");
-            //try
-            //{
-            //    IWebElement element1 = await this.WaitForElementByAccessibilityId("DebugLabel");
-            //    Console.WriteLine(element1.Text);
-            //}
-            //catch(Exception ex)
-            //{
-            //    Console.WriteLine(await this.GetPageSource());
-            //}
         }
+
+        public async Task ClickTestModeButton()
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.TestModeButton);
+            element.Click();
+        }
+    }
+
+    public class TestModePage : BasePage
+    {
+        private readonly String PinEntry;
+        private readonly String TestContractDataEntry;
+        private readonly String TestMerchantDataEntry;
+
+        private readonly String SetTestModeButton;
+        public TestModePage()
+        {
+            this.PinEntry = "PinEntry";
+            this.TestMerchantDataEntry = "TestMerchantDataEntry";
+            this.TestContractDataEntry = "TestContractDataEntry";
+            this.SetTestModeButton = "SetTestModeButton";
+        }
+
+        public async Task EnterPin(String pinNumber)
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.PinEntry);
+            element.SendKeys(pinNumber);
+        }
+
+        public async Task EnterTestMerchantData(String testMerchantData)
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.TestMerchantDataEntry);
+            element.SendKeys(testMerchantData);
+        }
+
+        public async Task EnterTestContractData(String testContractData)
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.TestContractDataEntry);
+            element.SendKeys(testContractData);
+        }
+
+        public async Task ClickSetTestModeButton()
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.SetTestModeButton);
+            element.Click();
+        }
+
+        protected override String Trait => "TestModeLabel";
     }
 }
