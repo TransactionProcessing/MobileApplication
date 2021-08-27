@@ -30,7 +30,6 @@ jobs:
     - name: Set up Appium
       run: |
         npm install -g appium --unsafe-perm=true --allow-root
-        #appium&
 
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
@@ -41,14 +40,11 @@ jobs:
     - name: Build Code     
       run: msbuild /p:Configuration="Release" /p:Platform="iPhoneSimulator" /t:Build TransactionMobile/TransactionMobile.sln
 
-    #- name: Run Unit Tests
-    #  run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
+    - name: Run Unit Tests
+      run: mono $GITHUB_WORKSPACE/TransactionMobile/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe TransactionMobile/TransactionMobile.UnitTests/bin/Release/TransactionMobile.UnitTests.dll
 
     - name: Build APK
       run: msbuild TransactionMobile/TransactionMobile.Android/TransactionMobile.Android.csproj -target:SignAndroidPackage /p:Configuration=Release  
-
-    #- name: Create Screenshot Folder
-    #  run: mkdir -p /Users/runner/screenshots
    
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
@@ -59,20 +55,10 @@ jobs:
           abi: x86   
           verbose: true
 
-    - uses: actions/upload-artifact@v2.2.1
-      if: failure()
-      with:
-        name: screenshots
-        path: /Users/runner/screenshots/**/*
-
     - name: Save logcat output
       uses: actions/upload-artifact@master
       if: failure()
       with:
         name: logcat
         path: artifacts/logcat.log
-
-    #- name: Setup tmate session
-    #  if: failure()
-    #  uses: mxschmitt/action-tmate@v3
 
