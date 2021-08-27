@@ -104,7 +104,8 @@
             {
                 //if (AppiumDriver.iOSDriver.IsKeyboardShown())
                 //    AppiumDriver.iOSDriver.HideKeyboard();
-                AppiumDriver.iOSDriver.FindElementByName("Done").Click();
+                //AppiumDriver.iOSDriver.FindElementByName("Done").Click();
+                //AppiumDriver.iOSDriver.HideKeyboard();
             }
         }
 

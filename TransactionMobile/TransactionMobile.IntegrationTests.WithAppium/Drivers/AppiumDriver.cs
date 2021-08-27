@@ -82,6 +82,8 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
                 driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
                 driverOptions.AddAdditionalCapability("showXcodeLog", true);
+                driverOptions.AddAdditionalCapability("unicodeKeyboard", true);
+                driverOptions.AddAdditionalCapability("resetKeyboard", true);
 
                 AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
