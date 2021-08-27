@@ -19,13 +19,13 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Hooks
         }
 
         [BeforeScenario()]
-        public void StartAndroidApp()
+        public void StartApp()
         {
             _appiumDriver.StartApp();
         }
 
         [AfterScenario()]
-        public void ShutdownAndroidApp()
+        public void ShutdownApp()
         {
             _appiumDriver.StopApp();
         }
