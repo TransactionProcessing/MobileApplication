@@ -26,7 +26,7 @@ Background:
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
-	And I enter '123456' as the Password
+	And I enter '1234567' as the Password
 	And I tap on Login
 	Then the Merchant Home Page is displayed
 	And the available balance is shown as 2000.00
