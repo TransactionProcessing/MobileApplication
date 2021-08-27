@@ -100,8 +100,8 @@
             IDevice device = new iOSDevice();
             String connectionString = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TransactionProcessing.db");
             DatabaseContext database = new DatabaseContext(connectionString);
-            App.Container.RegisterInstance(this.Database, new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance(this.Device, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(typeof(IDatabaseContext),this.Database, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance(typeof(IDevice),this.Device, new ContainerControlledLifetimeManager());
 
         }
         
