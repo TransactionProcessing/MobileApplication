@@ -173,9 +173,7 @@
             UpdateTestMerchant(testMerchantData);
             UpdateTestContracts(testContractData);
 
-            CrossToastPopUp.Current.ShowToastSuccess("In Test Mode");
             await Application.Current.MainPage.Navigation.PopAsync();
-
         }
 
         private void UpdateTestContracts(String contractData)
