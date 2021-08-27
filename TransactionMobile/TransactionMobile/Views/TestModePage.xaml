@@ -50,10 +50,10 @@
                     Style="{StaticResource SfBorderStyle}">
                     <controls:BorderlessEntry
                         x:Name="TestMerchantDataEntry"
-                        Placeholder="Pin"
+                        Placeholder="Merchant Data"
                         PlaceholderColor="{DynamicResource Gray-700}"
                         Style="{StaticResource EntryStyle}"
-                        Text="{Binding TestMerchantDataEntry}"
+                        Text="{Binding TestMerchantData}"
                         TextColor="{DynamicResource Gray-900}"
                         AutomationId="TestMerchantDataEntry"/>
                 </border:SfBorder>
@@ -63,10 +63,10 @@
                     Style="{StaticResource SfBorderStyle}">
                     <controls:BorderlessEntry
                         x:Name="TestContractDataEntry"
-                        Placeholder="Pin"
+                        Placeholder="Contract Data"
                         PlaceholderColor="{DynamicResource Gray-700}"
                         Style="{StaticResource EntryStyle}"
-                        Text="{Binding TestContractDataEntry}"
+                        Text="{Binding TestContractData}"
                         TextColor="{DynamicResource Gray-900}"
                         AutomationId="TestContractDataEntry"/>
                 </border:SfBorder>

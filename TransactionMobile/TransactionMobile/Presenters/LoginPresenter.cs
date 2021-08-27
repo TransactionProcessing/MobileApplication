@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -179,9 +180,15 @@
 
         private void UpdateTestContracts(String contractData)
         {
-            Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
-            TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
-            estateClient.UpdateTestContract(contract);
+            List<Contract> contracts = JsonConvert.DeserializeObject<List<Contract>>(contractData);
+            if (contracts.Any())
+            {
+                TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
+                foreach (Contract contract in contracts)
+                {
+                    estateClient.UpdateTestContract(contract);
+                }
+            }
         }
 
         private void UpdateTestMerchant(String merchantData)

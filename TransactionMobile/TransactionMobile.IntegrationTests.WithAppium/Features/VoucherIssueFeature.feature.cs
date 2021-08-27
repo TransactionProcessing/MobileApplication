@@ -179,11 +179,13 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Successful Voucher Issue")]
+        [NUnit.Framework.IgnoreAttribute("Ignored scenario")]
         [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulVoucherIssue()
         {
             string[] tagsOfScenario = new string[] {
-                    "PRTest"};
+                    "PRTest",
+                    "ignore"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Successful Voucher Issue", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 34
