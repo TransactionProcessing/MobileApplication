@@ -180,6 +180,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 await this.TestModePage.EnterTestContractData(contractData);
                 await this.TestModePage.EnterTestMerchantData(merchantData);
                 await this.TestModePage.ClickSetTestModeButton();
+
+                var source = AppiumDriver.iOSDriver.GetPageSource();
+                Console.WriteLine(source);
             }
         }
     }
