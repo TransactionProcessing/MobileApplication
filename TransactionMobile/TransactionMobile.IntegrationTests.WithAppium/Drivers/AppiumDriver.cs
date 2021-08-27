@@ -78,7 +78,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "XCUITest");
                 driverOptions.AddAdditionalCapability("useNewWDA", false);
-                driverOptions.AddAdditionalCapability("wdaStartupRetries", "4");
+                driverOptions.AddAdditionalCapability("wdaStartupRetries", "10");
                 driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
                 driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
                 driverOptions.AddAdditionalCapability("showXcodeLog", true);
