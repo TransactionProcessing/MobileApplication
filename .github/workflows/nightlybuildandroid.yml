@@ -25,7 +25,11 @@ jobs:
     
     - name: Setup Nuget
       uses: olegtarasov/download-nuget@v1
-          
+
+    - name: Set up Appium
+      run: |
+        npm install -g appium --unsafe-perm=true --allow-root
+                  
     - name: Restore Nuget Packages
       run: mono $NUGET_EXE restore TransactionMobile/TransactionMobile.sln -source "https://api.nuget.org/v3/index.json;https://www.myget.org/F/transactionprocessing/api/v3/index.json"
 
@@ -41,7 +45,7 @@ jobs:
     - name: Run Integration Tests - Android
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
       with:
-          cmd: mono TransactionMobile/packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe TransactionMobile/TransactionMobile.IntegrationTests/bin/Release/TransactionMobile.IntegrationTests.dll --where "cat == Android"
+          cmd: dotnet test TransactionMobile/TransactionMobile.IntegrationTests.WithAppium/TransactionMobile.IntegrationTests.WithAppium.csproj --filter Category=Android
           api: 24
           tag: default
           abi: x86   
