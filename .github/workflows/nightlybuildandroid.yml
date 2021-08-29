@@ -46,10 +46,10 @@ jobs:
       uses: malinskiy/action-android/emulator-run-cmd@release/0.0.6
       with:
           cmd: dotnet test TransactionMobile/TransactionMobile.IntegrationTests.WithAppium/TransactionMobile.IntegrationTests.WithAppium.csproj --filter Category=Android
-          api: 24
+          api: 28
           tag: default
           abi: x86   
-          verbose: false
+          verbose: true
 
     - uses: actions/upload-artifact@v2.2.1
       if: failure()
