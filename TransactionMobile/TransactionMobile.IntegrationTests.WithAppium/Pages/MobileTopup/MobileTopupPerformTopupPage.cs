@@ -46,6 +46,7 @@
 
         public async Task EnterCustomerMobileNumber(String customerMobileNumber)
         {
+            this.HideKeyboard();
             var element = await this.WaitForElementByAccessibilityId(this.CustomerMobileNumberEntry);
 
             element.SendKeys(customerMobileNumber);
@@ -53,6 +54,7 @@
 
         public async Task EnterCustomerEmailAddress(String customerEmailAddress)
         {
+            this.HideKeyboard();
             var element = await this.WaitForElementByAccessibilityId(this.CustomerEmailAddressEntry);
 
             element.SendKeys(customerEmailAddress);
@@ -60,6 +62,7 @@
 
         public async Task EnterTopupAmount(Decimal topupAmount)
         {
+            this.HideKeyboard();
             var element = await this.WaitForElementByAccessibilityId(this.TopupAmountEntry);
 
             element.SendKeys(topupAmount.ToString());
