@@ -13,6 +13,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
     using OpenQA.Selenium.Appium.Android.UiAutomator;
     using OpenQA.Selenium.Appium.Interfaces;
     using OpenQA.Selenium.Appium.iOS;
+    using OpenQA.Selenium.Interactions;
     using OpenQA.Selenium.Remote;
     using Shouldly;
     using Steps;
@@ -94,6 +95,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             await Retry.For(async () =>
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
+
+                                TouchActions action = new TouchActions(driver);
+                                action.Scroll(element, 10, 100);
+                                action.Perform();
+
                                 element.ShouldNotBeNull();
                             });
 
@@ -108,6 +114,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             await Retry.For(async () =>
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
+
+                                TouchActions action = new TouchActions(driver);
+                                action.Scroll(element, 10, 100);
+                                action.Perform();
+
                                 element.ShouldNotBeNull();
                             });
 
