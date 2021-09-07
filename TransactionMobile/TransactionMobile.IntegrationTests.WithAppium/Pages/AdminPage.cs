@@ -29,6 +29,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         public async Task ClickReconciliationButton()
         {
+            this.HideKeyboard();
             var element = await this.WaitForElementByAccessibilityId(this.ReconciliationButton);
             element.Click();
         }

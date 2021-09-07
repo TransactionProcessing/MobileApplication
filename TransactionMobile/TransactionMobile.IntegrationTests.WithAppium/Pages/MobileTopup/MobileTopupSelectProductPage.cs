@@ -45,6 +45,7 @@
 
         public async Task ClickCustomProductButton()
         {
+            this.HideKeyboard();
             var element = await this.WaitForElementByAccessibilityId(this.CustomProductButton);
             element.Click();
         }
