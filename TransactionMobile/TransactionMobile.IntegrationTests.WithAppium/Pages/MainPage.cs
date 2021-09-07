@@ -9,6 +9,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
     using Features;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Android;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
     using OpenQA.Selenium.Appium.Interfaces;
@@ -96,7 +97,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
 
-                                TouchActions action = new TouchActions(driver);
+                                TouchActions action = new TouchActions((AppiumDriver<AndroidElement>)driver);
                                 action.Scroll(element, 10, 100);
                                 action.Perform();
 
@@ -115,7 +116,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
 
-                                TouchActions action = new TouchActions(driver);
+                                TouchActions action = new TouchActions((AppiumDriver<IOSElement>)driver);
                                 action.Scroll(element, 10, 100);
                                 action.Perform();
 
