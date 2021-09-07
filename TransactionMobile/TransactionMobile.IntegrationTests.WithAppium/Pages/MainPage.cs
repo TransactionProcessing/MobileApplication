@@ -92,16 +92,12 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         public static async Task<IWebElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
-            IWebElement element = null;
+            AndroidElement element = null;
             await Retry.For(async () =>
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
-
-                                TouchActions action = new TouchActions((AppiumDriver<AndroidElement>)driver);
-                                action.Scroll(element, 10, 100);
-                                action.Perform();
-
                                 element.ShouldNotBeNull();
+                                await driver.ScrollTo(element.Id);
                             });
 
             return element;
@@ -111,16 +107,12 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         public static async Task<IWebElement> WaitForElementByAccessibilityId(this IOSDriver<IOSElement> driver, String selector, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
-            IWebElement element = null;
+            IOSElement element = null;
             await Retry.For(async () =>
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
-
-                                TouchActions action = new TouchActions((AppiumDriver<IOSElement>)driver);
-                                action.Scroll(element, 10, 100);
-                                action.Perform();
-
                                 element.ShouldNotBeNull();
+                                await driver.ScrollTo(element.Id);
                             });
 
             return element;
@@ -196,6 +188,22 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         public static async Task<String> GetPageSource(this IOSDriver<IOSElement> driver)
         {
             return driver.PageSource;
+        }
+
+        public static async Task ScrollTo(this AndroidDriver<AndroidElement> driver, String elementId)
+        {
+            Dictionary<String, Object> args = new Dictionary<String, Object>();
+            args.Add("element", elementId);
+            args.Add("direction", "down");
+            driver.ExecuteScript("mobile:scroll", args);
+        }
+
+        public static async Task ScrollTo(this IOSDriver<IOSElement> driver, String elementId)
+        {
+            Dictionary<String, Object> args = new Dictionary<String, Object>();
+            args.Add("element", elementId);
+            args.Add("direction", "down");
+            driver.ExecuteScript("mobile:scroll", args);
         }
     }
 }
