@@ -6,7 +6,8 @@
              xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
-             x:Class="TransactionMobile.Views.MobileTopup.MobileTopupSelectOperatorPage">
+             x:Class="TransactionMobile.Views.MobileTopup.MobileTopupSelectOperatorPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Content>
         <StackLayout

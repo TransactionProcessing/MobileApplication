@@ -55,7 +55,7 @@
 
             return null;
         }
-
+        
         public async Task<String> GetPageSource()
         {
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)

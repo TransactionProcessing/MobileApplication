@@ -4,6 +4,7 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
+    using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
     using Features;
@@ -12,20 +13,28 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
     using OpenQA.Selenium.Appium;
     using OpenQA.Selenium.Appium.Android;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
+    using OpenQA.Selenium.Appium.Interactions;
     using OpenQA.Selenium.Appium.Interfaces;
     using OpenQA.Selenium.Appium.iOS;
+    using OpenQA.Selenium.Appium.MultiTouch;
     using OpenQA.Selenium.Interactions;
     using OpenQA.Selenium.Remote;
     using Shouldly;
     using Steps;
+    using PointerInputDevice = OpenQA.Selenium.Interactions.PointerInputDevice;
 
     public class MainPage : BasePage
     {
         protected override String Trait => "HomeLabel";
+
         private readonly String TransactionsButton;
+
         private readonly String ReportsButton;
+
         private readonly String ProfileButton;
+
         private readonly String SupportButton;
+
         private readonly String AvailableBalanceLabel;
 
         /// <summary>
@@ -33,7 +42,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         /// </summary>
         public MainPage()
         {
-            this.TransactionsButton ="TransactionsButton";
+            this.TransactionsButton = "TransactionsButton";
             this.ReportsButton = "ReportsButton";
             this.ProfileButton = "ProfileButton";
             this.SupportButton = "SupportButton";
@@ -66,10 +75,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         public async Task<Decimal> GetAvailableBalanceValue(TimeSpan? timeout = default(TimeSpan?))
         {
-            //AppResult label = null;
-            //app.ScrollDownTo(this.AvailableBalanceLabel);
-            var element = await this.WaitForElementByAccessibilityId(this.AvailableBalanceLabel, timeout: TimeSpan.FromSeconds(30));
-            
+            //await this.ScrollTo(this.Trait, this.AvailableBalanceLabel);
+            var element = await this.WaitForElementByAccessibilityId(this.AvailableBalanceLabel, timeout:TimeSpan.FromSeconds(30));
+
             String availableBalanceText = element.Text.Replace(" KES", String.Empty);
 
             if (Decimal.TryParse(availableBalanceText, out Decimal balanceValue) == false)
@@ -89,7 +97,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             return driver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
         }
 
-        public static async Task<IWebElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
+        public static async Task<IWebElement> WaitForElementByAccessibilityId(this AndroidDriver<AndroidElement> driver,
+                                                                              String selector,
+                                                                              TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
             AndroidElement element = null;
@@ -97,14 +107,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
                                 element.ShouldNotBeNull();
-                                await driver.ScrollTo(element.Id);
                             });
 
             return element;
 
         }
 
-        public static async Task<IWebElement> WaitForElementByAccessibilityId(this IOSDriver<IOSElement> driver, String selector, TimeSpan? timeout = null)
+        public static async Task<IWebElement> WaitForElementByAccessibilityId(this IOSDriver<IOSElement> driver,
+                                                                              String selector,
+                                                                              TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
             IOSElement element = null;
@@ -112,14 +123,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                             {
                                 element = driver.FindElementByAccessibilityId(selector);
                                 element.ShouldNotBeNull();
-                                await driver.ScrollTo(element.Id);
                             });
 
             return element;
 
         }
 
-        public static async Task WaitForNoElementByAccessibilityId(this IOSDriver<IOSElement> driver, String selector, TimeSpan? timeout = null)
+        public static async Task WaitForNoElementByAccessibilityId(this IOSDriver<IOSElement> driver,
+                                                                   String selector,
+                                                                   TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
 
@@ -131,7 +143,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 
         }
 
-        public static async Task WaitForNoElementByAccessibilityId(this AndroidDriver<AndroidElement> driver, String selector, TimeSpan? timeout = null)
+        public static async Task WaitForNoElementByAccessibilityId(this AndroidDriver<AndroidElement> driver,
+                                                                   String selector,
+                                                                   TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(60);
 
@@ -171,7 +185,8 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
                     isDisplayed = true;
                     break;
                 }
-                Thread.Sleep(200);//Add your custom wait if exists
+
+                Thread.Sleep(200); //Add your custom wait if exists
                 count++;
 
             } while (count < 10);
@@ -188,22 +203,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         public static async Task<String> GetPageSource(this IOSDriver<IOSElement> driver)
         {
             return driver.PageSource;
-        }
-
-        public static async Task ScrollTo(this AndroidDriver<AndroidElement> driver, String elementId)
-        {
-            Dictionary<String, Object> args = new Dictionary<String, Object>();
-            args.Add("element", elementId);
-            args.Add("direction", "down");
-            driver.ExecuteScript("mobile:scroll", args);
-        }
-
-        public static async Task ScrollTo(this IOSDriver<IOSElement> driver, String elementId)
-        {
-            Dictionary<String, Object> args = new Dictionary<String, Object>();
-            args.Add("element", elementId);
-            args.Add("direction", "down");
-            driver.ExecuteScript("mobile:scroll", args);
         }
     }
 }

@@ -9,7 +9,8 @@
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              mc:Ignorable="d"
-             x:Class="TransactionMobile.Views.MobileTopup.MobileTopupPerformTopupPage">
+             x:Class="TransactionMobile.Views.MobileTopup.MobileTopupPerformTopupPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>

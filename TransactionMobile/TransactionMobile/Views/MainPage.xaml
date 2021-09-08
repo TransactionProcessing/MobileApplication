@@ -7,10 +7,18 @@
              xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
-             x:Class="TransactionMobile.Views.MainPage">
+             x:Class="TransactionMobile.Views.MainPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Content>
-        <ScrollView>
+        <ScrollView HorizontalOptions="Center">
+            <ScrollView.VerticalOptions>
+                <OnIdiom
+                    x:TypeArguments="LayoutOptions"
+                    Default="CenterAndExpand"
+                    Phone="FillAndExpand" />
+            </ScrollView.VerticalOptions>
+
             <StackLayout
                 Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
                                                                  PhoneLandscape='150,32',
@@ -33,10 +41,10 @@
                 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="60"></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
-                        <RowDefinition Height="60"></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
                     </Grid.RowDefinitions>
 
                     <buttons:SfButton AutomationId="TransactionsButton" x:Name="TransactionsButton" Text="Transactions" Grid.Row="0" Grid.Column="0" Style="{DynamicResource TransactionsButtonStyle}"/>

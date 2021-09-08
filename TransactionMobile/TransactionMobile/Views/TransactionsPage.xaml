@@ -7,7 +7,8 @@
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
              mc:Ignorable="d"
              x:Class="TransactionMobile.Views.TransactionsPage"
-             BackgroundColor="{DynamicResource Gray-200}">
+             BackgroundColor="{DynamicResource Gray-200}"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Content>
         <StackLayout
@@ -32,11 +33,11 @@
             
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
                 </Grid.RowDefinitions>
 
 

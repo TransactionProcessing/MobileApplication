@@ -7,7 +7,8 @@
              mc:Ignorable="d"
              xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
-             x:Class="TransactionMobile.Views.Admin.AdminPage">
+             x:Class="TransactionMobile.Views.Admin.AdminPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Content>
         <StackLayout
