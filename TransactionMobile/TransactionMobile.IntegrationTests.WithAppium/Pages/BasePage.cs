@@ -30,6 +30,13 @@
 
         }
 
+        public async Task AssertOnPage()
+        {
+            String message = "Unable to verify on page: " + this.GetType().Name;
+
+            Should.NotThrow(() => this.WaitForElementByAccessibilityId(this.Trait), message);
+        }
+
         /// <summary>
         /// Verifies that the trait is no longer present. Defaults to a 5 second wait.
         /// </summary>

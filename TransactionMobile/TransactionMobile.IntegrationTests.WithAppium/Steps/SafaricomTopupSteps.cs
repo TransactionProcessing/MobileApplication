@@ -94,9 +94,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         }
 
         [When(@"I click the back button")]
-        public void WhenIClickTheBackButton()
+        public async Task WhenIClickTheBackButton()
         {
-            this.MainPage.NavigateBack();
+            await Retry.For(async () =>
+                            {
+                                this.MainPage.NavigateBack();
+                                await this.SelectProductPage.AssertOnPage();
+                            });
+
         }
 
         [When(@"I tap on Perform Topup")]
