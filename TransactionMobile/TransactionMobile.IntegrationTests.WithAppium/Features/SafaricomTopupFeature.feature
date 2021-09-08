@@ -129,7 +129,37 @@ Scenario: Failed Safaricom Topup
 	
 	Then The Topup Failed Screen will be displayed
 
-Scenario: Failed Validation Topup
+Scenario: Failed Validation Topup - No Amount
+	Given I am on the Login Screen
+	
+	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
+	And I enter '123456' as the Password
+	And I tap on Login
+	
+	Then the Merchant Home Page is displayed
+
+	And the available balance is shown as 2000.00
+
+	Given I tap on the Transactions button
+	Then the Transactions Page is displayed
+	
+	Given I tap on the Mobile Topup button
+	Then the Mobile Topup Select Operator Page is displayed
+	
+	Given I tap on the Safaricom button
+	Then the Mobile Topup Select Product Page is displayed
+	
+	Given I tap on the Custom button
+	Then the Mobile Topup Topup Details Page is displayed
+		
+	When I enter the following topup details
+	| CustomerMobileNumber | TopupAmount |
+	| 123456789            |             |
+	And I tap on Perform Topup
+	
+	Then The Topup Validation Error will be displayed
+
+Scenario: Failed Validation Topup - No Mobile Number
 	Given I am on the Login Screen
 	
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
@@ -157,16 +187,4 @@ Scenario: Failed Validation Topup
 	|                      | 100000      |
 	And I tap on Perform Topup
 	
-	Then The Topup Validation Error will be displayed
-
-	When I click the back button
-
-	Given I tap on the Custom button
-	Then the Mobile Topup Topup Details Page is displayed
-
-	When I enter the following topup details
-	| CustomerMobileNumber | TopupAmount |
-	| 123456789            |             |
-	And I tap on Perform Topup
-	
-	Then The Topup Validation Error will be displayed
+	Then The Topup Validation Error will be displayed	

@@ -98,7 +98,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         {
             await Retry.For(async () =>
                             {
-                                this.MainPage.NavigateBack();
+                                this.MobileTopupPerformTopupPage.NavigateBack();
                                 await this.SelectProductPage.AssertOnPage();
                             });
 

@@ -497,12 +497,12 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Failed Validation Topup")]
-        public virtual void FailedValidationTopup()
+        [NUnit.Framework.DescriptionAttribute("Failed Validation Topup - No Amount")]
+        public virtual void FailedValidationTopup_NoAmount()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Failed Validation Topup", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Failed Validation Topup - No Amount", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 132
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -572,8 +572,8 @@ this.FeatureBackground();
                             "CustomerMobileNumber",
                             "TopupAmount"});
                 table22.AddRow(new string[] {
-                            "",
-                            "100000"});
+                            "123456789",
+                            ""});
 #line 155
  testRunner.When("I enter the following topup details", ((string)(null)), table22, "When ");
 #line hidden
@@ -583,28 +583,95 @@ this.FeatureBackground();
 #line 160
  testRunner.Then("The Topup Validation Error will be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Failed Validation Topup - No Mobile Number")]
+        public virtual void FailedValidationTopup_NoMobileNumber()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Failed Validation Topup - No Mobile Number", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 162
- testRunner.When("I click the back button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
-#line 164
- testRunner.Given("I tap on the Custom button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 4
+this.FeatureBackground();
+#line hidden
+#line 163
+ testRunner.Given("I am on the Login Screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 165
+ testRunner.When("I enter \'merchantuser@testmerchant1.co.uk\' as the Email Address", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 166
+ testRunner.And("I enter \'123456\' as the Password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 167
+ testRunner.And("I tap on Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 169
+ testRunner.Then("the Merchant Home Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 171
+ testRunner.And("the available balance is shown as 2000.00", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 173
+ testRunner.Given("I tap on the Transactions button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 174
+ testRunner.Then("the Transactions Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 176
+ testRunner.Given("I tap on the Mobile Topup button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 177
+ testRunner.Then("the Mobile Topup Select Operator Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 179
+ testRunner.Given("I tap on the Safaricom button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 180
+ testRunner.Then("the Mobile Topup Select Product Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 182
+ testRunner.Given("I tap on the Custom button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 183
  testRunner.Then("the Mobile Topup Topup Details Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
                 TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                             "CustomerMobileNumber",
                             "TopupAmount"});
                 table23.AddRow(new string[] {
-                            "123456789",
-                            ""});
-#line 167
+                            "",
+                            "100000"});
+#line 185
  testRunner.When("I enter the following topup details", ((string)(null)), table23, "When ");
 #line hidden
-#line 170
+#line 188
  testRunner.And("I tap on Perform Topup", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 172
+#line 190
  testRunner.Then("The Topup Validation Error will be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
