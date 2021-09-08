@@ -83,13 +83,14 @@
             String errorMessage = "Please enter a mobile number and Topup Amount to continue";
             var alertElement = this.GetAlert();
             alertElement.ShouldNotBeNull();
-            alertElement.Text.ShouldBe(errorMessage);
+            
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
                 alertElement.Click();
             }
             else
             {
+                alertElement.Text.ShouldBe(errorMessage);
                 IAlert alert = null;
                 Should.NotThrow(() =>
                                 {
