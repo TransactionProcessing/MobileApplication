@@ -115,7 +115,11 @@
             {
                 return AppiumDriver.AndroidDriver.FindElementByClassName("androidx.appcompat.widget.AppCompatTextView");
             }
-
+            else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                return AppiumDriver.iOSDriver.FindElement(By.Name("OK"));
+            }
+            
             return null;
         }
 

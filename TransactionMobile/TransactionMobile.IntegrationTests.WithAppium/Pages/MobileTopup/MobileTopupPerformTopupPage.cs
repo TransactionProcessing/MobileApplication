@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
     using Drivers;
     using OpenQA.Selenium;
     using Shouldly;
@@ -83,13 +84,20 @@
             var alertElement = this.GetAlert();
             alertElement.ShouldNotBeNull();
             alertElement.Text.ShouldBe(errorMessage);
-            IAlert alert = null;
-            Should.NotThrow(() =>
-                            {
-                                alert = this.SwitchToAlert();
-                                alert.ShouldNotBeNull();
-                                alert.Accept();
-                            });
+            if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+            {
+                alertElement.Click();
+            }
+            else
+            {
+                IAlert alert = null;
+                Should.NotThrow(() =>
+                                {
+                                    alert = this.SwitchToAlert();
+                                    alert.ShouldNotBeNull();
+                                    alert.Accept();
+                                });
+            }
         }
     }
 }
