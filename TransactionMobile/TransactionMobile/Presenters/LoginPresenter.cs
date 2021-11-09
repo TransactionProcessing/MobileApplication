@@ -18,6 +18,7 @@
     using Models;
     using Newtonsoft.Json;
     using Pages;
+    using Pages.Support;
     using Plugin.Toast;
     using Plugin.Toast.Abstractions;
     using SecurityService.Client;
@@ -301,7 +302,7 @@
                     this.TransactionProcessorAclClient = App.Container.Resolve<ITransactionProcessorACLClient>();
                     this.EstateClient = App.Container.Resolve<IEstateClient>();
                 }
-                //this.LoginViewModel.EmailAddress = "merchantuser@emulatormerchant.co.uk";
+                //this.LoginViewModel.EmailAddress = "merchantuser@v28emulatormerchant.co.uk";
                 //this.LoginViewModel.Password = "123456";
 
                 await this.Database.InsertLogMessage(DatabaseContext.CreateDebugLogMessage("About to Get Configuration"));
@@ -379,7 +380,8 @@
         private void MainPage_ReportsButtonClicked(Object sender,
                                                    EventArgs e)
         {
-            CrossToastPopUp.Current.ShowToastMessage("Reports Clicked");
+            IReportingPresenter reportingPresenter = App.Container.Resolve<IReportingPresenter>();
+            reportingPresenter.Start();
         }
 
         /// <summary>

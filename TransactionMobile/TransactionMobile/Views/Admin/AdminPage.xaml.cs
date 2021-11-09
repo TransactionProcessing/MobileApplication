@@ -5,6 +5,7 @@
     using Database;
     using Models;
     using Pages;
+    using Pages.Admin;
     using Syncfusion.XForms.Buttons;
     using ViewModels;
     using Xamarin.Forms;
@@ -14,7 +15,7 @@
     /// 
     /// </summary>
     /// <seealso cref="Xamarin.Forms.ContentPage" />
-    /// <seealso cref="TransactionMobile.Pages.IAdminPage" />
+    /// <seealso cref="IAdminPage" />
     /// <seealso cref="TransactionMobile.Pages.IPage" />
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [ExcludeFromCodeCoverage]

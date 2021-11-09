@@ -10,6 +10,7 @@
     using Database;
     using Database.Entities;
     using Pages;
+    using Pages.Support;
     using Xamarin.Forms;
     using LogMessage = Database.Entities.LogMessage;
 

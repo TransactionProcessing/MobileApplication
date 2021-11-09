@@ -68,6 +68,15 @@
             return null;
         }
 
+        public async Task<SwapMerchantDeviceResponse> SwapDeviceForMerchant(String accessToken,
+                                                                            Guid estateId,
+                                                                            Guid merchantId,
+                                                                            SwapMerchantDeviceRequest request,
+                                                                            CancellationToken cancellationToken)
+        {
+            return null;
+        }
+
         public async Task<AddProductToContractResponse> AddProductToContract(String accessToken,
                                                                              Guid estateId,
                                                                              Guid contractId,
@@ -203,6 +212,16 @@
         public async Task<List<MerchantBalanceHistoryResponse>> GetMerchantBalanceHistory(String accessToken,
                                                                                           Guid estateId,
                                                                                           Guid merchantId,
+                                                                                          DateTime startDateTime,
+                                                                                          DateTime endDateTime,
+                                                                                          CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<MerchantBalanceHistoryResponse>> GetMerchantBalanceHistory(String accessToken,
+                                                                                          Guid estateId,
+                                                                                          Guid merchantId,
                                                                                           CancellationToken cancellationToken)
         {
             return null;
@@ -286,6 +305,15 @@
                                                                            CancellationToken cancellationToken)
         {
             return null;
+        }
+
+        public async Task SetMerchantSettlementSchedule(String accessToken,
+                                                        Guid estateId,
+                                                        Guid merchantId,
+                                                        SetSettlementScheduleRequest setSettlementScheduleRequest,
+                                                        CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

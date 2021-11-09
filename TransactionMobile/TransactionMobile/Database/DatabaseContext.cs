@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Clients;
+    using Entities;
     using SQLite;
     using LogMessage = Entities.LogMessage;
 

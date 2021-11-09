@@ -11,14 +11,9 @@
     <PackageReference Include="SpecFlow.NUnit.Runners" Version="3.9.22" />
     <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.5" />
     <PackageReference Include="Appium.WebDriver" Version="4.3.1" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.22" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="19.2.0.57" />
     <PackageReference Include="System.Net.Mqtt" Version="0.6.16-beta" />
-    
-
-    
-
-    
-
-    
   </ItemGroup>
 
   <ItemGroup>

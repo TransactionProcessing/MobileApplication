@@ -20,6 +20,7 @@
             this.TransactionProcessorACL = "http://192.168.1.133:5003";
             this.EstateManagement = "http://192.168.1.133:5000";
             this.SecurityService = "http://192.168.1.133:5001";
+            this.EstateReporting = "http://192.168.1.133:5005";
             this.ClientId = "mobileAppClient";
             this.ClientSecret = "d192cbc46d834d0da90e8a9d50ded543";
             this.LogLevel = LogLevel.Debug;
@@ -67,6 +68,8 @@
         public LogLevel LogLevel { get; set; }
 
         public Boolean EnableAutoUpdates { get; set; }
+
+        public String EstateReporting { get; set; }
 
         #endregion
     }

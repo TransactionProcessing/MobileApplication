@@ -91,12 +91,19 @@
                 Android="LoginBackground.png"
                 WinPhone="LoginBackground.png" />
         </Setter>
+        <Setter Property="BackgroundColor" Value="{DynamicResource Gray-200}"/>
     </Style>
 
     <!--  Common style for labels  -->
     <Style x:Key="LabelStyle" TargetType="Label">
         <Setter Property="TextColor" Value="{DynamicResource Gray-900}" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="LineHeight" Value="1.25" />
+    </Style>
+
+    <Style x:Key="SmallLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource Gray-900}" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="LineHeight" Value="1.25" />
     </Style>
 
@@ -263,6 +270,13 @@
     <Style x:Key="HeaderLabelStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource Montserrat-Bold}"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="LineHeight" Value="1.5"/>
+        <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
+    </Style>
+
+    <Style x:Key="SmallHeaderLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource Montserrat-Bold}"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="LineHeight" Value="1.5"/>
         <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
     </Style>

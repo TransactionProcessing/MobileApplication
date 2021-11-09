@@ -5,10 +5,12 @@
     using NUnit.Framework;
     using Shouldly;
     using TransactionMobile.ViewModels;
+    using TransactionMobile.ViewModels.Transactions;
+    using Xunit;
 
     public class MobileTopupPerformTopupViewModelTests
     {
-        [Test]
+        [Fact]
         public void MobileTopupPerformTopupViewModel_TopupAmount_PropertyChangedFired()
         {
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();
@@ -17,7 +19,7 @@
             mobileTopupPerformTopupViewModel.TopupAmount.ShouldBe(TestData.TopupAmount);
         }
 
-        [Test]
+        [Fact]
         public void MobileTopupPerformTopupViewModel_CustomerMobileNumber_PropertyChangedFired()
         {
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();
@@ -26,7 +28,7 @@
             mobileTopupPerformTopupViewModel.CustomerMobileNumber.ShouldBe(TestData.CustomerMobileNumber);
         }
 
-        [Test]
+        [Fact]
         public void MobileTopupPerformTopupViewModel_OperatorName_OperatorNameSet()
         {
             MobileTopupPerformTopupViewModel mobileTopupPerformTopupViewModel = new MobileTopupPerformTopupViewModel();

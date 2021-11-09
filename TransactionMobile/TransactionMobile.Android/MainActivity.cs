@@ -16,6 +16,7 @@
     using Database;
     using EstateManagement.Client;
     using EstateManagement.DataTransferObjects.Responses;
+    using EstateReporting.Client;
     using IntegrationTestClients;
     using Java.Interop;
     using Java.Lang;
@@ -214,10 +215,20 @@
         {
             if (App.IsIntegrationTestMode == true)
             {
-                //ContractResponse contract = JsonConvert.DeserializeObject<ContractResponse>(contractData);
                 Contract contract = JsonConvert.DeserializeObject<Contract>(contractData);
                 TestEstateClient estateClient = App.Container.Resolve<IEstateClient>() as TestEstateClient;
                 estateClient.UpdateTestContract(contract);
+            }
+        }
+
+        [Export("UpdateSettlementData")]
+        public void UpdateSettlementData(String settlementFeeData)
+        {
+            if (App.IsIntegrationTestMode == true)
+            {
+                SettlementFee settlementFee = JsonConvert.DeserializeObject<SettlementFee>(settlementFeeData);
+                TestEstateReportingClient estateReportingClient = App.Container.Resolve<IEstateReportingClient>() as TestEstateReportingClient;
+                estateReportingClient.AddSettlementFee(settlementFee);
             }
         }
 

@@ -3,10 +3,11 @@
     using NUnit.Framework;
     using Shouldly;
     using TransactionMobile.ViewModels;
+    using Xunit;
 
     public class LoginViewModelsTests
     {
-        [Test]
+        [Fact]
         public void LoginViewModel_SetEmailAddress_PropertyChangedFired()
         {
             LoginViewModel loginViewModel = new LoginViewModel();
@@ -15,7 +16,7 @@
             loginViewModel.EmailAddress.ShouldBe(TestData.EmailAddress);
         }
 
-        [Test]
+        [Fact]
         public void LoginViewModel_SetPassword_PropertyChangedFired()
         {
             LoginViewModel loginViewModel = new LoginViewModel();

@@ -84,7 +84,37 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 await this.Backdoor.UpdateTestMerchant(merchant);
             }
         }
-        
+
+        [Given(@"the following transaction fees have been settled")]
+        public async Task GivenTheFollowingTransactionFeesHaveBeenSettled(Table table)
+        {
+            foreach (TableRow tableRow in table.Rows)
+            {
+                String estateName = SpecflowTableHelper.GetStringRowValue(tableRow, "EstateName");
+                String merchantName = SpecflowTableHelper.GetStringRowValue(tableRow, "MerchantName");
+                Decimal calculatedValue = SpecflowTableHelper.GetDecimalValue(tableRow, "CalculatedValue");
+                String settlementDateString = SpecflowTableHelper.GetStringRowValue(tableRow, "SettlementDate");
+                DateTime settlementDate = SpecflowTableHelper.GetDateForDateString(settlementDateString, DateTime.Today);
+                String operatorIdentifier = SpecflowTableHelper.GetStringRowValue(tableRow, "OperatorIdentifier");
+                String feeDescription = SpecflowTableHelper.GetStringRowValue(tableRow, "FeeDescription");
+
+                Merchant merchant = this.TestingContext.GetMerchant(estateName, merchantName);
+                var settlementFee = new SettlementFee
+                                    {
+                                        SettlementDate = settlementDate,
+                                        OperatorIdentifier = operatorIdentifier,
+                                        FeeDescription = feeDescription,
+                                        CalculatedValue = calculatedValue,
+                                        IsSettled = true,
+                                        MerchantName = merchantName,
+                                        MerchantId = merchant.MerchantId,
+                                        EstateId = merchant.EstateId
+                                    };
+                await this.Backdoor.UpdateSettlementData(settlementFee);
+            }
+        }
+
+
         [Given(@"I make the following manual merchant deposits")]
         public async Task GivenIMakeTheFollowingManualMerchantDeposits(Table table)
         {

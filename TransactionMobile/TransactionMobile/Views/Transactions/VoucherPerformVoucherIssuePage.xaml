@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+             xmlns:controls="clr-namespace:TransactionMobile.Controls;assembly=TransactionMobile"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+             xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             mc:Ignorable="d"
+             x:Class="TransactionMobile.Views.Transactions.VoucherPerformVoucherIssuePage"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToColorConverter x:Key="ColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout
+            Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
+                                                             PhoneLandscape='150,32',
+                                                             TabletPortrait='200,50',
+                                                             TabletLandscape='300,50',
+                                                             Desktop='30'}"
+            Spacing="0"
+            VerticalOptions="FillAndExpand"
+            WidthRequest="{OnPlatform Default='-1',
+                                          UWP='350'}">
+
+            <Label
+                FontFamily="{StaticResource Montserrat-SemiBold}"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                Style="{StaticResource LabelStyle}"
+                Text="Voucher Issue Details"
+                AutomationId="VoucherIssueDetailsLabel"
+                TextColor="{DynamicResource Gray-900}" />
+
+            <border:SfBorder
+                Grid.Row="2"
+                BackgroundColor="{DynamicResource Gray-White}"
+                BorderColor="{Binding Source={x:Reference RecipientMobileNumberEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                Style="{StaticResource SfBorderStyle}">
+                <controls:BorderlessEntry
+                    x:Name="RecipientMobileNumberEntry"
+                    Placeholder="Recipient Mobile Number"
+                    PlaceholderColor="{DynamicResource Gray-700}"
+                    Style="{StaticResource EntryStyle}"
+                    Text="{Binding RecipientMobileNumber}"
+                    TextColor="{DynamicResource Gray-900}"
+                    AutomationId="RecipientMobileNumberEntry"
+                    Keyboard="Numeric"/>
+            </border:SfBorder>
+
+            <border:SfBorder
+                Grid.Row="2"
+                BackgroundColor="{DynamicResource Gray-White}"
+                BorderColor="{Binding Source={x:Reference RecipientEmailAddressEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                Style="{StaticResource SfBorderStyle}">
+                <controls:BorderlessEntry
+                    x:Name="RecipientEmailAddressEntry"
+                    Placeholder="Recipient Email Address"
+                    PlaceholderColor="{DynamicResource Gray-700}"
+                    Style="{StaticResource EntryStyle}"
+                    Text="{Binding RecipientEmailAddress}"
+                    TextColor="{DynamicResource Gray-900}"
+                    AutomationId="RecipientEmailAddressEntry"
+                    Keyboard="Email"/>
+            </border:SfBorder>
+
+            <border:SfBorder
+                Grid.Row="2"
+                BackgroundColor="{DynamicResource Gray-White}"
+                BorderColor="{Binding Source={x:Reference CustomerEmailAddressEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                Style="{StaticResource SfBorderStyle}">
+                <controls:BorderlessEntry
+                    x:Name="CustomerEmailAddressEntry"
+                    Placeholder="Customer Email Address"
+                    PlaceholderColor="{DynamicResource Gray-700}"
+                    Style="{StaticResource EntryStyle}"
+                    Text="{Binding CustomerEmailAddress}"
+                    TextColor="{DynamicResource Gray-900}"
+                    AutomationId="CustomerEmailAddressEntry"
+                    Keyboard="Email"/>
+            </border:SfBorder>
+
+            <buttons:SfButton
+                x:Name="IssueVoucherButton"
+                Margin="0,16"
+                Style="{DynamicResource VoucherButtonStyle}"
+                Text="Issue Voucher"
+                AutomationId="IssueVoucherButton"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

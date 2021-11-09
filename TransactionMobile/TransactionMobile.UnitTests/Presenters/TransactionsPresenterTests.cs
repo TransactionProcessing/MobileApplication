@@ -8,14 +8,17 @@
     using Pages;
     using Services;
     using Shouldly;
+    using TransactionMobile.Pages.Admin;
+    using TransactionMobile.Pages.Transactions;
     using TransactionMobile.Presenters;
     using TransactionMobile.ViewModels;
+    using TransactionMobile.ViewModels.Transactions;
     using ViewModels;
+    using Xunit;
 
-    [TestFixture]
     public class TransactionsPresenterTests
     {
-        [Test]
+        [Fact]
         public void TransactionsPresenter_CanBeCreated_IsCreated()
         {
             Mock<ITransactionsPage> transactionsPage = new Mock<ITransactionsPage>();

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xForms="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
+             xmlns:converters="clr-namespace:TransactionMobile.Converters;assembly=TransactionMobile"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+             x:Class="TransactionMobile.Views.Reporting.MySettlementAnalysisPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DataMarkerConverter x:Key="converter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView HorizontalOptions="Center">
+            <ScrollView.VerticalOptions>
+                <OnIdiom
+                    x:TypeArguments="LayoutOptions"
+                    Default="CenterAndExpand"
+                    Phone="FillAndExpand" />
+            </ScrollView.VerticalOptions>
+
+<StackLayout Margin="{core:OnPlatformOrientationThickness PhonePortrait='20,32',
+                                                             PhoneLandscape='150,32',
+                                                             TabletPortrait='200,50',
+                                                             TabletLandscape='300,50',
+                                                             Desktop='30'}"
+                     Spacing="0"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="CenterAndExpand"
+                     WidthRequest="{OnPlatform Default='-1',
+                                          UWP='350'}">
+
+            <Label
+                FontFamily="{StaticResource Montserrat-SemiBold}"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                Style="{StaticResource LabelStyle}"
+                Text="My Settlements Analysis"
+                AutomationId="MySettlementAnalysisLabel"
+                TextColor="{DynamicResource Gray-900}" />
+
+            <xForms:SfChart x:Name="PercentageValue" HorizontalOptions="Center" VerticalOptions="Center">
+                <xForms:SfChart.Title>
+                    <xForms:ChartTitle Text="Settlement % of Total Value by Operator"/>
+                </xForms:SfChart.Title>
+                <xForms:SfChart.ChartBehaviors>
+                    <xForms:ChartTooltipBehavior/>
+                </xForms:SfChart.ChartBehaviors>
+                <xForms:SfChart.Legend>
+                    <xForms:ChartLegend IconHeight="14" IconWidth="14" OverflowMode="Wrap" DockPosition="Bottom"
+                                        ToggleSeriesVisibility="True"/>
+                </xForms:SfChart.Legend>
+                <xForms:SfChart.Series>
+                    <xForms:PieSeries x:Name="SettlementValueByOperator" EnableAnimation="True" ExplodeOnTouch="True">
+                        <xForms:PieSeries.ColorModel>
+                            <xForms:ChartColorModel Palette="Natural"/>
+                        </xForms:PieSeries.ColorModel>
+                        <xForms:PieSeries.DataMarker>
+                            <xForms:ChartDataMarker>
+                                <xForms:ChartDataMarker.LabelTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Vertical">
+                                            <Label FontSize="12" TextColor="White" HorizontalOptions="CenterAndExpand"
+                                                   Text="{Binding Converter={StaticResource converter}, ConverterParameter='Label'}"/>
+                                            <Label FontSize="12" TextColor="White" HorizontalOptions="CenterAndExpand"
+                                                   Text="{Binding Converter={StaticResource converter}}"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </xForms:ChartDataMarker.LabelTemplate>
+                            </xForms:ChartDataMarker>
+                        </xForms:PieSeries.DataMarker>
+                    </xForms:PieSeries>
+                </xForms:SfChart.Series>
+            </xForms:SfChart>
+
+            <xForms:SfChart x:Name="PercentageCount" HorizontalOptions="Center" VerticalOptions="Center">
+                <xForms:SfChart.Title>
+                    <xForms:ChartTitle Text="Settlement % of Total Count by Operator"/>
+                </xForms:SfChart.Title>
+                <xForms:SfChart.ChartBehaviors>
+                    <xForms:ChartTooltipBehavior/>
+                </xForms:SfChart.ChartBehaviors>
+                <xForms:SfChart.Legend>
+                    <xForms:ChartLegend IconHeight="14" IconWidth="14" OverflowMode="Wrap" DockPosition="Bottom"
+                                        ToggleSeriesVisibility="True"/>
+                </xForms:SfChart.Legend>
+                <xForms:SfChart.Series>
+                    <xForms:PieSeries x:Name="SettlementCountByOperator" EnableAnimation="True" ExplodeOnTouch="True">
+                        <xForms:PieSeries.ColorModel>
+                            <xForms:ChartColorModel Palette="Natural"/>
+                        </xForms:PieSeries.ColorModel>
+                        <xForms:PieSeries.DataMarker>
+                            <xForms:ChartDataMarker>
+                                <xForms:ChartDataMarker.LabelTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Vertical">
+                                            <Label FontSize="12" TextColor="White" HorizontalOptions="CenterAndExpand"
+                                                   Text="{Binding Converter={StaticResource converter}, ConverterParameter='Label'}"/>
+                                            <Label FontSize="12" TextColor="White" HorizontalOptions="CenterAndExpand"
+                                                   Text="{Binding Converter={StaticResource converter}}"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </xForms:ChartDataMarker.LabelTemplate>
+                            </xForms:ChartDataMarker>
+                        </xForms:PieSeries.DataMarker>
+                    </xForms:PieSeries>
+                </xForms:SfChart.Series>
+            </xForms:SfChart>
+        </StackLayout>
+            </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

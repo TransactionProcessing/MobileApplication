@@ -48,10 +48,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             element.Click();
         }
 
-        public void ClickReportsButton()
+        public async Task ClickReportsButton()
         {
-            //app.WaitForElement(this.ReportsButton);
-            //app.Tap(this.ReportsButton);
+            var element = await this.WaitForElementByAccessibilityId(this.ReportsButton);
+            element.Click();
         }
 
         public void ClickProfileButton()

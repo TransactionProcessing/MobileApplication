@@ -22,6 +22,12 @@
             await this.ExecuteBackdoor("SetIntegrationTestModeOn", "");
         }
 
+        public async Task UpdateSettlementData(SettlementFee settlementFee)
+        {
+            String settlementFeeData = JsonConvert.SerializeObject(settlementFee);
+            await this.ExecuteBackdoor("UpdateSettlementData", settlementFeeData);
+        }
+
         public async Task UpdateTestMerchant(Merchant merchant)
         {
             String merchantData = JsonConvert.SerializeObject(merchant);
