@@ -200,7 +200,9 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
                 await this.LoginPage.ClickTestModeButton();
-                
+
+                await this.TestModePage.AssertOnPage();
+
                 var m = this.TestingContext.GetMerchant();
                 var merchantData = JsonConvert.SerializeObject(m);
                 var c = this.TestingContext.GetContracts();
