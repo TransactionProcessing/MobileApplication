@@ -209,7 +209,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 var contractData = JsonConvert.SerializeObject(c);
                 await this.TestModePage.EnterPin("1234");
                 
-                //await this.TestModePage.EnterTestContractData(contractData);
+                await this.TestModePage.EnterTestContractData(contractData);
                 //await this.TestModePage.EnterTestMerchantData(merchantData);
                 //await this.TestModePage.ClickSetTestModeButton();
             }
