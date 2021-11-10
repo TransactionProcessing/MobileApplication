@@ -221,9 +221,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Successful Reconciliation")]
+        [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulReconciliation()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "PRTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Successful Reconciliation", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 41
