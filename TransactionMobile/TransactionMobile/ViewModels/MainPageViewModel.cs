@@ -38,6 +38,7 @@ namespace TransactionMobile.ViewModels
 
         private string testContractData;
         private string testMerchantData;
+        private string testSettlementData;
         public String PinNumber
         {
             get
@@ -74,6 +75,19 @@ namespace TransactionMobile.ViewModels
             {
                 this.testMerchantData = value;
                 this.OnPropertyChanged(nameof(this.TestMerchantData));
+            }
+        }
+
+        public String TestSettlementData
+        {
+            get
+            {
+                return this.testSettlementData;
+            }
+            set
+            {
+                this.testSettlementData = value;
+                this.OnPropertyChanged(nameof(this.TestSettlementData));
             }
         }
     }

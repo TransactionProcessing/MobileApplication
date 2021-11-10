@@ -68,12 +68,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         private readonly String TestContractDataEntry;
         private readonly String TestMerchantDataEntry;
 
+        private readonly String TestSettlementFeeDataEntry;
+
         private readonly String SetTestModeButton;
         public TestModePage()
         {
             this.PinEntry = "PinEntry";
             this.TestMerchantDataEntry = "TestMerchantDataEntry";
             this.TestContractDataEntry = "TestContractDataEntry";
+            this.TestSettlementFeeDataEntry = "TestSettlementFeeDataEntry";
             this.SetTestModeButton = "SetTestModeButton";
         }
 
@@ -92,6 +95,15 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             element.ShouldNotBeNull(this.TestMerchantDataEntry);
             
             element.SendKeys(testMerchantData);
+        }
+
+        public async Task EnterSettlementFeeData(String settlementFeeData)
+        {
+            this.HideKeyboard();
+            IWebElement element = await this.WaitForElementByAccessibilityId(this.TestSettlementFeeDataEntry);
+            element.ShouldNotBeNull(this.TestSettlementFeeDataEntry);
+
+            element.SendKeys(settlementFeeData);
         }
 
         public async Task EnterTestContractData(String testContractData)

@@ -33,6 +33,7 @@
     using Unity.Lifetime;
     using ContractProduct = EstateManagement.DataTransferObjects.Responses.ContractProduct;
     using System.IO.Compression;
+    using EstateReporting.Client;
 
     /// <summary>
     /// 
@@ -174,11 +175,27 @@
             // Read the test data
             var testMerchantData = this.TestModePageViewModel.TestMerchantData;
             var testContractData = this.TestModePageViewModel.TestContractData;
+            var testSettlementData = this.TestModePageViewModel.TestSettlementData;
 
             UpdateTestMerchant(testMerchantData);
             UpdateTestContracts(testContractData);
+            UpdateSettlementData(testSettlementData);
 
             await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+        private void UpdateSettlementData(String settlementData)
+        {
+            settlementData = StringCompression.Decompress(settlementData);
+            List<SettlementFee> settlementFees= JsonConvert.DeserializeObject<List<SettlementFee>>(settlementData);
+            if (settlementFees.Any())
+            {
+                TestEstateReportingClient estateReportingClient = App.Container.Resolve<IEstateReportingClient>() as TestEstateReportingClient;
+                foreach (SettlementFee settlementFee in settlementFees)
+                {
+                    estateReportingClient.AddSettlementFee(settlementFee);
+                }
+            }
         }
 
         private void UpdateTestContracts(String contractData)

@@ -78,7 +78,7 @@ Scenario: My Settlements List
 	| Today          | 6                 | 2.15               | 0     |
 	| Yesterday      | 6                 | 3.30               | 1     |
 
-#@PRTest
+@PRTest
 Scenario: My Settlements Analysis
 
 	Given I am on the Login Screen

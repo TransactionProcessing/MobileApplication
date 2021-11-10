@@ -11,6 +11,7 @@
             this.Operators = new List<Operator>();
             this.Merchants = new List<Merchant>();
             this.Contracts = new List<Contract>();
+            this.SettlementFees = new List<SettlementFee>();
         }
         public Guid EstateId { get; set; }
         public String EstateName { get; set; }
@@ -18,6 +19,7 @@
         public List<Operator> Operators;
         public List<Merchant> Merchants;
         public List<Contract> Contracts;
+        public List<SettlementFee> SettlementFees;
 
         public void AddOperator(Guid operatorId,
                                 String operatorName,
@@ -77,6 +79,11 @@
         public Operator GetOperator(String operatorName)
         {
             return this.Operators.Single(m => m.OperatorName == operatorName);
+        }
+
+        public void AddSettlementFee(SettlementFee settlementFee)
+        {
+            this.SettlementFees.Add(settlementFee);
         }
     }
 }

@@ -114,6 +114,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                                         MerchantId = merchant.MerchantId,
                                         EstateId = merchant.EstateId
                                     };
+                this.TestingContext.AddSettlementFee(settlementFee);
                 await this.Backdoor.UpdateSettlementData(settlementFee);
             }
         }
@@ -223,6 +224,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                     merchantData = StringCompression.Compress(merchantData);
                     await this.TestModePage.EnterTestMerchantData(merchantData);
                     stage = "6";
+                    var s = this.TestingContext.GetSettlementFees();
+                    var settlementFeeData = JsonConvert.SerializeObject(s);
+                    settlementFeeData = StringCompression.Compress(settlementFeeData);
+                    await this.TestModePage.EnterSettlementFeeData(settlementFeeData);
+                    stage = "7";
                     await this.TestModePage.ClickSetTestModeButton();
                 }
                 catch(Exception e)
