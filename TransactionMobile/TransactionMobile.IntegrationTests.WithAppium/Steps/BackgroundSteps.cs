@@ -211,7 +211,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 
                 await this.TestModePage.EnterTestContractData(contractData);
                 await this.TestModePage.EnterTestMerchantData(merchantData);
-                //await this.TestModePage.ClickSetTestModeButton();
+                await this.TestModePage.ClickSetTestModeButton();
             }
         }
     }
