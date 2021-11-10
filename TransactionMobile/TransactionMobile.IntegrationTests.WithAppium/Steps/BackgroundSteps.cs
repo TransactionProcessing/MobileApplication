@@ -210,7 +210,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 await this.TestModePage.EnterPin("1234");
                 
                 await this.TestModePage.EnterTestContractData(contractData);
-                //await this.TestModePage.EnterTestMerchantData(merchantData);
+                await this.TestModePage.EnterTestMerchantData(merchantData);
                 //await this.TestModePage.ClickSetTestModeButton();
             }
         }

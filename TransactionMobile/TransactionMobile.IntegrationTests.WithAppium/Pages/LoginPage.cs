@@ -78,6 +78,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.PinEntry);
+            element.ShouldNotBeNull(this.PinEntry);
             element.SendKeys(pinNumber);
         }
 
@@ -85,6 +86,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.TestMerchantDataEntry);
+            element.ShouldNotBeNull(this.TestMerchantDataEntry);
             element.SendKeys(testMerchantData);
         }
 
@@ -92,6 +94,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.TestContractDataEntry);
+            element.ShouldNotBeNull(this.TestContractDataEntry);
             element.SendKeys(testContractData);
         }
 
@@ -99,6 +102,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         {
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.SetTestModeButton);
+            element.ShouldNotBeNull(this.SetTestModeButton);
             element.Click();
         }
 
