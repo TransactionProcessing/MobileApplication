@@ -223,7 +223,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"Failed to find element. Stage {stage}");
+                    throw new Exception($"Failed to find element. Stage {stage}. Source [{AppiumDriver.iOSDriver.PageSource}]");
                 }
             }
         }
