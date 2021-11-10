@@ -2,6 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Common;
+    using Drivers;
     using OpenQA.Selenium;
     using Shouldly;
     using Steps;
@@ -69,28 +71,48 @@
         {
             IWebElement settlementList = null;
             IWebElement item = null;
-            await Retry.For(async () =>
-                            {
-                                settlementList = await this.WaitForElementByAccessibilityId(this.SettlementList);
-                                settlementList.ShouldNotBeNull();
+            String stage = "";
+            try
+            {
+                await Retry.For(async () =>
+                                {
+                                    stage = "1";
+                                    settlementList = await this.WaitForElementByAccessibilityId(this.SettlementList);
+                                    settlementList.ShouldNotBeNull();
+                                    stage = "2";
+                                    // Now find the correct item
+                                    var index = settlementDate.ToString("yyyyMMdd");
+                                    item = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItem, index));
+                                    item.ShouldNotBeNull();
+                                    stage = "3";
+                                    var settlementDateLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemSettlementDate, index));
+                                    settlementDateLabel.ShouldNotBeNull();
+                                    settlementDateLabel.Text.ShouldBe(settlementDate.ToString("dd MMM yyyy"));
+                                    stage = "4";
+                                    var numberOfFeesLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemNumberOfFeesSettled, index));
+                                    numberOfFeesLabel.ShouldNotBeNull();
+                                    numberOfFeesLabel.Text.ShouldBe(numberOfSettledFees.ToString());
+                                    stage = "5";
+                                    var valueOfFeesLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemValueOfFeesSettled, index));
+                                    valueOfFeesLabel.ShouldNotBeNull();
+                                    valueOfFeesLabel.Text.ShouldBe($"Value: {valueOfSettledFees} KES");
+                                    stage = "6";
+                                });
+            }
+            catch(Exception ex)
+            {
+                String source = "";
+                if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
+                {
+                    source = AppiumDriver.iOSDriver.PageSource;
+                }
+                else
+                {
+                    source = AppiumDriver.AndroidDriver.PageSource;
+                }
 
-                                // Now find the correct item
-                                var index = settlementDate.ToString("yyyyMMdd");
-                                item = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItem, index));
-                                item.ShouldNotBeNull();
-
-                                var settlementDateLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemSettlementDate, index));
-                                settlementDateLabel.ShouldNotBeNull();
-                                settlementDateLabel.Text.ShouldBe(settlementDate.ToString("dd MMM yyyy"));
-
-                                var numberOfFeesLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemNumberOfFeesSettled, index));
-                                numberOfFeesLabel.ShouldNotBeNull();
-                                numberOfFeesLabel.Text.ShouldBe(numberOfSettledFees.ToString());
-
-                                var valueOfFeesLabel = await this.WaitForElementByAccessibilityId(string.Format(this.SettlementListItemValueOfFeesSettled, index));
-                                valueOfFeesLabel.ShouldNotBeNull();
-                                valueOfFeesLabel.Text.ShouldBe($"Value: {valueOfSettledFees} KES");
-                            });
+                throw new Exception($"Element not found stage {stage}. source [{source}]");
+            }
         }
 
         #endregion
