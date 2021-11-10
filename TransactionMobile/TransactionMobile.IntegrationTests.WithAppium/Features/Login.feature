@@ -22,7 +22,7 @@ Background:
 
 	Given the application in in test mode
 
-#@PRTest
+@PRTest
 Scenario: Login as Merchant
 	Given I am on the Login Screen
 	When I enter 'merchantuser@testmerchant1.co.uk' as the Email Address
