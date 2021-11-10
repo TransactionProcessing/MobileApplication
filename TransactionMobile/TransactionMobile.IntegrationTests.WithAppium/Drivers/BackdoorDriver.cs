@@ -44,8 +44,8 @@
         {
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.Android)
             {
-                Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
-                AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
+                //Dictionary<String, Object> args = BackdoorDriver.CreateBackdoorArgs(methodName, value);
+                //AppiumDriver.AndroidDriver.ExecuteScript("mobile: backdoor", args);
             }
             else
             {

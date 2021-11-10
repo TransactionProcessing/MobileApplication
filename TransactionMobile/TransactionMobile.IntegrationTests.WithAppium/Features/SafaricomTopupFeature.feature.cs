@@ -312,9 +312,11 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Successful Safaricom Topup with Email Address Captured")]
+        [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void SuccessfulSafaricomTopupWithEmailAddressCaptured()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "PRTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Successful Safaricom Topup with Email Address Captured", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 71

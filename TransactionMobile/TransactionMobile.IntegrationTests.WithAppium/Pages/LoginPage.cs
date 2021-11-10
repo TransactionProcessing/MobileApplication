@@ -4,12 +4,15 @@ using System.Text;
 
 namespace TransactionMobile.IntegrationTests.WithAppium.Pages
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using Drivers;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Appium.Android;
     using OpenQA.Selenium.Appium.Android.UiAutomator;
     using OpenQA.Selenium.Appium.Enums;
     using OpenQA.Selenium.Appium.Interfaces;
+    using OpenQA.Selenium.Interactions;
     using Shouldly;
 
     public class LoginPage : BasePage
@@ -87,6 +90,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.TestMerchantDataEntry);
             element.ShouldNotBeNull(this.TestMerchantDataEntry);
+            
             element.SendKeys(testMerchantData);
         }
 
@@ -95,8 +99,13 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
             this.HideKeyboard();
             IWebElement element = await this.WaitForElementByAccessibilityId(this.TestContractDataEntry);
             element.ShouldNotBeNull(this.TestContractDataEntry);
+            //var chunks = Split(testContractData, 50);
+            //foreach (String chunk in chunks)
+            //{
+            //    element.SendKeys(chunk);
+            //}
             element.SendKeys(testContractData);
-        }
+         }
 
         public async Task ClickSetTestModeButton()
         {
@@ -107,5 +116,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Pages
         }
 
         protected override String Trait => "TestModeLabel";
+
+        static IEnumerable<string> Split(string str, int chunkSize)
+        {
+            return Enumerable.Range(0, str.Length / chunkSize)
+                             .Select(i => str.Substring(i * chunkSize, chunkSize));
+        }
     }
 }
