@@ -43,8 +43,6 @@ namespace TransactionMobile.IntegrationTests.WithAppium
         [Then(@"the following entries are displayed")]
         public async Task ThenTheFollowingEntriesAreDisplayed(Table table)
         {
-            var source = AppiumDriver.AndroidDriver.PageSource;
-
             foreach (TableRow tableRow in table.Rows)
             {
                 //| SettlementDate | NumberFeesSettled | ValueOfFeesSettled |
