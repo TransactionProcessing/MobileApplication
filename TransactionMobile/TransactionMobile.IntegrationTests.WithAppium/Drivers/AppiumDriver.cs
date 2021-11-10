@@ -75,7 +75,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 var apkPath = Path.Combine(binariesFolder, "TransactionMobile.iOS.app");
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
-                driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, false);
+                driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "XCUITest");
                 driverOptions.AddAdditionalCapability("useNewWDA", true);
                 driverOptions.AddAdditionalCapability("wdaLaunchTimeout", 999999999);
@@ -105,6 +105,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             }
             else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
+                AppiumDriver.iOSDriver.CloseApp();
                 AppiumDriver.iOSDriver.Quit();
             }
         }
