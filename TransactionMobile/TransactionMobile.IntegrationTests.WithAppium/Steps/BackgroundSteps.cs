@@ -199,19 +199,32 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
         {
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
-                await this.LoginPage.ClickTestModeButton();
-
-                await this.TestModePage.AssertOnPage();
-
-                var m = this.TestingContext.GetMerchant();
-                var merchantData = JsonConvert.SerializeObject(m);
-                var c = this.TestingContext.GetContracts();
-                var contractData = JsonConvert.SerializeObject(c);
-                await this.TestModePage.EnterPin("1234");
-                
-                await this.TestModePage.EnterTestContractData(contractData);
-                await this.TestModePage.EnterTestMerchantData(merchantData);
-                await this.TestModePage.ClickSetTestModeButton();
+                String stage = null;
+                try
+                {
+                    stage = "1";
+                    await this.LoginPage.ClickTestModeButton();
+                    stage = "2";
+                    await this.TestModePage.AssertOnPage();
+                    stage = "3";
+                    var m = this.TestingContext.GetMerchant();
+                    var merchantData = JsonConvert.SerializeObject(m);
+                    var c = this.TestingContext.GetContracts();
+                    var contractData = JsonConvert.SerializeObject(c);
+                    stage = "4";
+                    await this.TestModePage.EnterPin("1234");
+                    stage = "5";
+                    await this.TestModePage.EnterTestContractData(contractData);
+                    stage = "6";
+                    await this.TestModePage.EnterTestMerchantData(merchantData);
+                    stage = "7";
+                    await this.TestModePage.ClickSetTestModeButton();
+                    stage = "8";
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Failed to find element. Stage {stage}");
+                }
             }
         }
     }
