@@ -19,6 +19,7 @@
     using Syncfusion.ListView.XForms.iOS;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
+    using Syncfusion.XForms.iOS.ComboBox;
     using Syncfusion.XForms.iOS.TabView;
     using TransactionMobile.IntegrationTestClients;
     using UIKit;
@@ -88,6 +89,7 @@
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
             SfListViewRenderer.Init();
+            SfComboBoxRenderer.Init();
 
             this.LoadApplication(new App(this.Device, this.Database));
 
