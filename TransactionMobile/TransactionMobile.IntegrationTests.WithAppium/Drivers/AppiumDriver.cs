@@ -57,11 +57,11 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
                 driverOptions.AddAdditionalCapability("espressoBuildConfig",
                                                       "{ \"additionalAppDependencies\": [ \"com.google.android.material:material:1.0.0\", \"androidx.lifecycle:lifecycle-extensions:2.1.0\" ] }");
-
+                
                 //AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), driverOptions, TimeSpan.FromMinutes(5));
 
 
-                AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
+                AppiumDriver.AndroidDriver = new AndroidDriver<AndroidElement>(appiumService, driverOptions, TimeSpan.FromMinutes(10));
             }
 
             if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
@@ -75,18 +75,12 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
                 String binariesFolder = Path.Combine(assemblyFolder, "..", "..", "..", "..", @"TransactionMobile.iOS/bin/iPhoneSimulator/Release");
                 var apkPath = Path.Combine(binariesFolder, "TransactionMobile.iOS.app");
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.App, apkPath);
-                driverOptions.AddAdditionalCapability(MobileCapabilityType.NoReset, true);
+                driverOptions.AddAdditionalCapability(MobileCapabilityType.FullReset, true);
                 driverOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "XCUITest");
                 driverOptions.AddAdditionalCapability("useNewWDA", true);
                 driverOptions.AddAdditionalCapability("wdaLaunchTimeout", 999999999);
                 driverOptions.AddAdditionalCapability("wdaConnectionTimeout", 999999999);
                 driverOptions.AddAdditionalCapability("restart", true);
-                //driverOptions.AddAdditionalCapability("wdaStartupRetries", "10");
-                //driverOptions.AddAdditionalCapability("iosInstallPause", "8000");
-                //driverOptions.AddAdditionalCapability("wdaStartupRetryInterval", "20000");
-                //driverOptions.AddAdditionalCapability("showXcodeLog", true);
-                //driverOptions.AddAdditionalCapability("unicodeKeyboard", true);
-                //driverOptions.AddAdditionalCapability("resetKeyboard", true);
 
                 AppiumDriver.iOSDriver = new IOSDriver<IOSElement>(appiumService, driverOptions, TimeSpan.FromMinutes(5));
             }
@@ -105,6 +99,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Drivers
             }
             else if (AppiumDriver.MobileTestPlatform == MobileTestPlatform.iOS)
             {
+                AppiumDriver.iOSDriver.CloseApp();
                 AppiumDriver.iOSDriver.Quit();
             }
         }

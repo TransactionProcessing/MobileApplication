@@ -50,6 +50,19 @@
                     BackgroundColor="{DynamicResource Gray-White}"
                     Style="{StaticResource SfBorderStyle}">
                     <controls:BorderlessEntry
+                        x:Name="TestContractDataEntry"
+                        Placeholder="Contract Data"
+                        PlaceholderColor="{DynamicResource Gray-700}"
+                        Style="{StaticResource EntryStyle}"
+                        Text="{Binding TestContractData}"
+                        TextColor="{DynamicResource Gray-900}"
+                        AutomationId="TestContractDataEntry"/>
+                </border:SfBorder>
+
+                <border:SfBorder
+                    BackgroundColor="{DynamicResource Gray-White}"
+                    Style="{StaticResource SfBorderStyle}">
+                    <controls:BorderlessEntry
                         x:Name="TestMerchantDataEntry"
                         Placeholder="Merchant Data"
                         PlaceholderColor="{DynamicResource Gray-700}"
@@ -63,13 +76,13 @@
                     BackgroundColor="{DynamicResource Gray-White}"
                     Style="{StaticResource SfBorderStyle}">
                     <controls:BorderlessEntry
-                        x:Name="TestContractDataEntry"
-                        Placeholder="Contract Data"
+                        x:Name="TestSettlementFeeDataEntry"
+                        Placeholder="Settlement Fee Data"
                         PlaceholderColor="{DynamicResource Gray-700}"
                         Style="{StaticResource EntryStyle}"
-                        Text="{Binding TestContractData}"
+                        Text="{Binding TestSettlementData}"
                         TextColor="{DynamicResource Gray-900}"
-                        AutomationId="TestContractDataEntry"/>
+                        AutomationId="TestSettlementFeeDataEntry"/>
                 </border:SfBorder>
 
                 <buttons:SfButton

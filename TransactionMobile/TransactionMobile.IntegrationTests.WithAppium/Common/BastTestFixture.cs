@@ -67,4 +67,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         {
         }
     }
+
+    [TestFixture(MobileTestPlatform.Android, Category = "Android")]
+    [TestFixture(MobileTestPlatform.iOS, Category = "iOS")]
+    public partial class MySettlementsFeature : BaseTestFixture
+    {
+        public MySettlementsFeature(MobileTestPlatform mobileTestPlatform)
+            : base(mobileTestPlatform)
+        {
+        }
+    }
 }

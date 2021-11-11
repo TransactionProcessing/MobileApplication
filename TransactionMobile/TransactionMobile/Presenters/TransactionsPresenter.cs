@@ -9,13 +9,17 @@
     using Clients;
     using Common;
     using Database;
+    using Database.Entities;
     using Models;
     using Newtonsoft.Json;
     using Pages;
+    using Pages.Admin;
+    using Pages.Transactions;
     using Plugin.Toast;
     using TransactionProcessorACL.DataTransferObjects;
     using TransactionProcessorACL.DataTransferObjects.Responses;
     using ViewModels;
+    using ViewModels.Transactions;
     using Xamarin.Forms;
 
     /// <summary>

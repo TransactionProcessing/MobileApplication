@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <Configurations>Debug;Release;GooglePlay;TestAutomation</Configurations>
   </PropertyGroup>
@@ -23,7 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.4.1" />
-    <PackageReference Include="EstateManagement.Client" Version="1.0.11.1" />
+    <PackageReference Include="EstateManagement.Client" Version="1.0.16-build82" />
+    <PackageReference Include="EstateReporting.Client" Version="1.0.17.5" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.3.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.3.0" />
     <PackageReference Include="Microsoft.AppCenter.Distribute" Version="4.3.0" />
@@ -35,10 +36,12 @@
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="SecurityService.Client" Version="1.0.6.4" />
+    <PackageReference Include="SecurityService.Client" Version="1.0.8" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="19.2.0.57" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="19.2.0.57" />
     <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="19.2.0.57" />
-    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.10.2" />
+    <PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.13-build32" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="19.2.0.57" />
@@ -58,40 +61,49 @@
     <Compile Update="Views\Admin\AdminPage.xaml.cs">
       <DependentUpon>AdminPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reporting\MySettlementAnalysisPage.xaml.cs">
+      <DependentUpon>MySettlementAnalysisPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reporting\MySettlementListPage.xaml.cs">
+      <DependentUpon>MySettlementListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reporting\ReportingPage.xaml.cs">
+      <DependentUpon>ReportingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\TestModePage.xaml.cs">
       <DependentUpon>TestModePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MobileTopup\MobileTopupFailurePage.xaml.cs">
+    <Compile Update="Views\Transactions\MobileTopupFailurePage.xaml.cs">
       <DependentUpon>MobileTopupFailurePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MobileTopup\MobileTopupPerformTopupPage.xaml.cs">
+    <Compile Update="Views\Transactions\MobileTopupPerformTopupPage.xaml.cs">
       <DependentUpon>MobileTopupPerformTopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MobileTopup\MobileTopupSelectProductPage.xaml.cs">
+    <Compile Update="Views\Transactions\MobileTopupSelectProductPage.xaml.cs">
       <DependentUpon>MobileTopupSelectProductPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MobileTopup\MobileTopupSelectOperatorPage.xaml.cs">
+    <Compile Update="Views\Transactions\MobileTopupSelectOperatorPage.xaml.cs">
       <DependentUpon>MobileTopupSelectOperatorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MobileTopup\MobileTopupSuccessPage.xaml.cs">
+    <Compile Update="Views\Transactions\MobileTopupSuccessPage.xaml.cs">
       <DependentUpon>MobileTopupSuccessPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SupportPage.xaml.cs">
+    <Compile Update="Views\Support\SupportPage.xaml.cs">
       <DependentUpon>SupportPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TransactionsPage.xaml.cs">
+    <Compile Update="Views\Transactions\TransactionsPage.xaml.cs">
       <DependentUpon>TransactionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Voucher\VoucherFailurePage.xaml.cs">
+    <Compile Update="Views\Transactions\VoucherFailurePage.xaml.cs">
       <DependentUpon>VoucherFailurePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Voucher\VoucherSuccessPage.xaml.cs">
+    <Compile Update="Views\Transactions\VoucherSuccessPage.xaml.cs">
       <DependentUpon>VoucherSuccessPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Voucher\VoucherPerformVoucherIssuePage.xaml.cs">
+    <Compile Update="Views\Transactions\VoucherPerformVoucherIssuePage.xaml.cs">
       <DependentUpon>VoucherPerformVoucherIssuePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Voucher\VoucherSelectProductPage.xaml.cs">
+    <Compile Update="Views\Transactions\VoucherSelectProductPage.xaml.cs">
       <DependentUpon>VoucherSelectProductPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -100,13 +112,19 @@
     <EmbeddedResource Update="Views\MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MobileTopup\MobileTopupPerformTopupPage.xaml">
+    <EmbeddedResource Update="Views\Reporting\MySettlementAnalysisPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MobileTopup\MobileTopupSelectOperatorPage.xaml">
+    <EmbeddedResource Update="Views\Reporting\MySettlementListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TransactionsPage.xaml">
+    <EmbeddedResource Update="Views\Transactions\MobileTopupPerformTopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transactions\MobileTopupSelectOperatorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transactions\TransactionsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Themes\LightTheme.xaml">
@@ -115,7 +133,7 @@
     <EmbeddedResource Update="Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Voucher\VoucherSelectOperatorPage.xaml">
+    <EmbeddedResource Update="Views\Transactions\VoucherSelectOperatorPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

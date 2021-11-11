@@ -86,45 +86,45 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
         {
 #line 4
 #line hidden
-            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName"});
-            table24.AddRow(new string[] {
+            table34.AddRow(new string[] {
                         "Test Estate 1"});
 #line 6
- testRunner.Given("I have created the following estates", ((string)(null)), table24, "Given ");
+ testRunner.Given("I have created the following estates", ((string)(null)), table34, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "RequireCustomMerchantNumber",
                         "RequireCustomTerminalNumber"});
-            table25.AddRow(new string[] {
+            table35.AddRow(new string[] {
                         "Test Estate 1",
                         "Voucher",
                         "True",
                         "True"});
 #line 10
- testRunner.Given("I have created the following operators", ((string)(null)), table25, "Given ");
+ testRunner.Given("I have created the following operators", ((string)(null)), table35, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "ContractDescription"});
-            table26.AddRow(new string[] {
+            table36.AddRow(new string[] {
                         "Test Estate 1",
                         "Voucher",
                         "Healthcare Centre 1"});
 #line 14
- testRunner.Given("I create a contract with the following values", ((string)(null)), table26, "Given ");
+ testRunner.Given("I create a contract with the following values", ((string)(null)), table36, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
                         "EstateName",
                         "OperatorName",
                         "ContractDescription",
                         "ProductName",
                         "DisplayText",
                         "Value"});
-            table27.AddRow(new string[] {
+            table37.AddRow(new string[] {
                         "Test Estate 1",
                         "Voucher",
                         "Healthcare Centre 1",
@@ -132,16 +132,16 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "10 KES",
                         "10.00"});
 #line 18
- testRunner.When("I create the following Products", ((string)(null)), table27, "When ");
+ testRunner.When("I create the following Products", ((string)(null)), table37, "When ");
 #line hidden
-            TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table38 = new TechTalk.SpecFlow.Table(new string[] {
                         "MerchantName",
                         "EstateName",
                         "EmailAddress",
                         "Password",
                         "GivenName",
                         "FamilyName"});
-            table28.AddRow(new string[] {
+            table38.AddRow(new string[] {
                         "Test Merchant 1",
                         "Test Estate 1",
                         "merchantuser@testmerchant1.co.uk",
@@ -149,28 +149,28 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Features
                         "TestMerchant",
                         "User1"});
 #line 22
- testRunner.Given("I create the following merchants", ((string)(null)), table28, "Given ");
+ testRunner.Given("I create the following merchants", ((string)(null)), table38, "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table39 = new TechTalk.SpecFlow.Table(new string[] {
                         "Reference",
                         "Amount",
                         "DateTime",
                         "MerchantName",
                         "EstateName"});
-            table29.AddRow(new string[] {
+            table39.AddRow(new string[] {
                         "Deposit1",
                         "100.00",
                         "Today",
                         "Test Merchant 1",
                         "Test Estate 1"});
-            table29.AddRow(new string[] {
+            table39.AddRow(new string[] {
                         "Deposit2",
                         "100.00",
                         "Yesterday",
                         "Test Merchant 1",
                         "Test Estate 1"});
 #line 26
- testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table29, "Given ");
+ testRunner.Given("I make the following manual merchant deposits", ((string)(null)), table39, "Given ");
 #line hidden
 #line 31
  testRunner.Given("the application in in test mode", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
@@ -251,16 +251,16 @@ this.FeatureBackground();
 #line 55
  testRunner.Then("the Voucher Issue Page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table40 = new TechTalk.SpecFlow.Table(new string[] {
                             "RecipientMobile",
                             "RecipientEmail",
                             "CustomerEmailAddress"});
-                table30.AddRow(new string[] {
+                table40.AddRow(new string[] {
                             "123456789",
                             "",
                             ""});
 #line 57
- testRunner.When("I enter the following recipient details", ((string)(null)), table30, "When ");
+ testRunner.When("I enter the following recipient details", ((string)(null)), table40, "When ");
 #line hidden
 #line 61
  testRunner.And("I tap on Issue Voucher", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

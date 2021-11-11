@@ -82,6 +82,14 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             return contracts;
         }
 
+        public List<SettlementFee> GetSettlementFees()
+        {
+            EstateModel estate = this.Estates.Single();
+            List<SettlementFee> settlementFees= estate.SettlementFees;
+
+            return settlementFees;
+        }
+
         public void AddMerchantDeposit(String estateName,
                                        String merchantName,
                                        Decimal depositAmount,
@@ -122,5 +130,13 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             contractProduct.AddTransactionFee(contractProductTransactionFeeId, 0, feeDescription, value);
             return contract;
         }
+
+        public void AddSettlementFee(String estateName, SettlementFee settlementFee)
+        {
+            EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
+            estate.AddSettlementFee(settlementFee);
+        }
+
+        
     }
 }

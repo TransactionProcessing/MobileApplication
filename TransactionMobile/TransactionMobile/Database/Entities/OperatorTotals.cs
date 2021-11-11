@@ -1,4 +1,4 @@
-﻿namespace TransactionMobile.Database
+﻿namespace TransactionMobile.Database.Entities
 {
     using System;
     using SQLite;

@@ -49,6 +49,8 @@
         /// </value>
         String EstateManagement { get; set; }
 
+        String EstateReporting { get; set; }
+
         /// <summary>
         /// Gets or sets the log level.
         /// </summary>

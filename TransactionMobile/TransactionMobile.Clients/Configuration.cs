@@ -56,6 +56,9 @@
         [JsonProperty("estateManagementUri")]
         public String EstateManagement { get; set; }
 
+        [JsonProperty("estateReportingUri")]
+        public String EstateReporting { get; set; }
+
         /// <summary>
         /// Gets or sets the log level.
         /// </summary>

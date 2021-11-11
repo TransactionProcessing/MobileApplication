@@ -10,18 +10,26 @@
     using Clients;
     using Database;
     using EstateManagement.Client;
+    using EstateReporting.Client;
     using IntegrationTestClients;
     using Pages;
+    using Pages.Admin;
+    using Pages.Reporting;
+    using Pages.Support;
+    using Pages.Transactions;
     using Plugin.Toast;
     using Presenters;
     using SecurityService.Client;
     using Unity;
     using Unity.Lifetime;
     using ViewModels;
+    using ViewModels.Reporting;
+    using ViewModels.Transactions;
     using Views;
     using Views.Admin;
-    using Views.MobileTopup;
-    using Views.Voucher;
+    using Views.Reporting;
+    using Views.Support;
+    using Views.Transactions;
 
     [ExcludeFromCodeCoverage]
     public class Bootstrapper
@@ -54,6 +62,7 @@
                 container.RegisterSingleton<ISecurityServiceClient, TestSecurityServiceClient>();
                 container.RegisterSingleton<ITransactionProcessorACLClient, TestTransactionProcessorACLClient>();
                 container.RegisterSingleton<IEstateClient, TestEstateClient>();
+                container.RegisterSingleton<IEstateReportingClient, TestEstateReportingClient>();
             }
             else
             {
@@ -61,6 +70,7 @@
                 container.RegisterSingleton<ISecurityServiceClient, SecurityServiceClient>();
                 container.RegisterSingleton<ITransactionProcessorACLClient, TransactionProcessorACLClient>();
                 container.RegisterSingleton<IEstateClient, EstateClient>();
+                container.RegisterSingleton<IEstateReportingClient, EstateReportingClient>();
 
                 HttpClientHandler httpClientHandler = new HttpClientHandler
                                                       {
@@ -101,6 +111,11 @@
                             return config.EstateManagement;
                         }
 
+                        if (configSetting == "EstateReportingApi")
+                        {
+                            return config.EstateReporting;
+                        }
+
                         return string.Empty;
                     }
 
@@ -114,6 +129,7 @@
             container.RegisterType<ILoginPresenter, LoginPresenter>(new TransientLifetimeManager());
             container.RegisterType<ISupportPresenter, SupportPresenter>(new TransientLifetimeManager());
             container.RegisterType<ITransactionsPresenter, TransactionsPresenter>(new TransientLifetimeManager());
+            container.RegisterType<IReportingPresenter, ReportingPresenter>(new TransientLifetimeManager());
         }
 
         private static void RegisterViews(IUnityContainer container)
@@ -123,6 +139,7 @@
             container.RegisterType<ILoginPage, LoginPage>(new TransientLifetimeManager());
             container.RegisterType<ITestModePage, TestModePage>(new TransientLifetimeManager());
             container.RegisterType<ITransactionsPage, TransactionsPage>(new TransientLifetimeManager());
+            container.RegisterType<IReportingPage, ReportingPage>(new TransientLifetimeManager());
 
             // Mobile Topup
             container.RegisterType<IMobileTopupSelectOperatorPage, MobileTopupSelectOperatorPage>(new TransientLifetimeManager());
@@ -137,6 +154,10 @@
             container.RegisterType<IVoucherPerformVoucherIssuePage, VoucherPerformVoucherIssuePage>(new TransientLifetimeManager());
             container.RegisterType<IVoucherSuccessPage, VoucherSuccessPage>(new TransientLifetimeManager());
             container.RegisterType<IVoucherFailedPage, VoucherFailedPage>(new TransientLifetimeManager());
+
+            // Reporting
+            container.RegisterType<IMySettlementsListPage, MySettlementListPage>(new TransientLifetimeManager());
+            container.RegisterType<IMySettlementsAnalysisPage, MySettlementAnalysisPage>(new TransientLifetimeManager());
 
             // Support
             container.RegisterType<ISupportPage, SupportPage>(new TransientLifetimeManager());
@@ -160,6 +181,10 @@
             container.RegisterType<VoucherSelectOperatorViewModel>(new TransientLifetimeManager());
             container.RegisterType<VoucherSelectProductViewModel>(new TransientLifetimeManager());
             container.RegisterType<VoucherPerformVoucherIssueViewModel>(new TransientLifetimeManager());
+
+            // Settlement
+            container.RegisterType<MySettlementListViewModel>(new TransientLifetimeManager());
+            container.RegisterType<MySettlementAnalysisViewModel>(new TransientLifetimeManager());
         }
     }
 }
