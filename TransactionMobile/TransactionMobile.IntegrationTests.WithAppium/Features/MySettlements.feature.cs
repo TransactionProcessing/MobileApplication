@@ -413,9 +413,11 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("My Settlements Analysis")]
+        [NUnit.Framework.CategoryAttribute("PRTest")]
         public virtual void MySettlementsAnalysis()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "PRTest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("My Settlements Analysis", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 82

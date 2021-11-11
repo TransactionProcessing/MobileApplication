@@ -114,7 +114,7 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Steps
                                         MerchantId = merchant.MerchantId,
                                         EstateId = merchant.EstateId
                                     };
-                this.TestingContext.AddSettlementFee(settlementFee);
+                this.TestingContext.AddSettlementFee(estateName, settlementFee);
                 await this.Backdoor.UpdateSettlementData(settlementFee);
             }
         }

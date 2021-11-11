@@ -131,9 +131,10 @@ namespace TransactionMobile.IntegrationTests.WithAppium.Common
             return contract;
         }
 
-        public void AddSettlementFee(SettlementFee settlementFee)
+        public void AddSettlementFee(String estateName, SettlementFee settlementFee)
         {
-
+            EstateModel estate = this.Estates.Single(m => m.EstateName == estateName);
+            estate.AddSettlementFee(settlementFee);
         }
 
         
