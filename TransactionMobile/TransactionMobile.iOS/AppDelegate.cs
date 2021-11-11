@@ -15,6 +15,8 @@
     using Foundation;
     using Newtonsoft.Json;
     using SecurityService.Client;
+    using Syncfusion.ListView.XForms;
+    using Syncfusion.ListView.XForms.iOS;
     using Syncfusion.XForms.iOS.Border;
     using Syncfusion.XForms.iOS.Buttons;
     using Syncfusion.XForms.iOS.TabView;
@@ -85,8 +87,8 @@
             SfBorderRenderer.Init();
             SfButtonRenderer.Init();
             SfTabViewRenderer.Init();
-            
-            // TODO: fix this
+            SfListViewRenderer.Init();
+
             this.LoadApplication(new App(this.Device, this.Database));
 
             return base.FinishedLaunching(app, options);
