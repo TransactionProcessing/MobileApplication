@@ -18,6 +18,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
 
+    - name: Set Up Variables
+      run: echo "action_url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_ENV
+      
     - uses: malinskiy/action-android/install-sdk@release/0.1.1
     - run: sdkmanager "platform-tools" "platforms;android-29"
     - run: sdkmanager "build-tools;30.0.2"
@@ -56,3 +59,12 @@ jobs:
       with:
         name: screenshots
         path: /Users/runner/screenshots/**/*
+        
+    - uses: nashmaniac/create-issue-action@v1.1
+      if: ${{ failure() }}
+      name: Create an issue on build failure
+      with:
+        title: Investigate Nightly Build Failure
+        token: ${{secrets.GITHUB_TOKEN}}
+        labels: nightlybuild
+        body: Url is ${{env.action_url}}        
