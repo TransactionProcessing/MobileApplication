@@ -8,6 +8,7 @@
     using Database;
     using EstateReporting.Client;
     using EstateReporting.DataTransferObjects;
+    using Extensions;
     using Models;
     using Pages.Reporting;
     using Plugin.Toast;
@@ -81,26 +82,14 @@
 
             List<DatePeriod> datePeriods = new List<DatePeriod>();
 
-            Int32 daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-            // Create the current range
-            datePeriods.Add(new DatePeriod
-                            {
-                                DisplayText = $"{currentDate:MMMM yyyy}",
-                                StartDate = new DateTime(currentDate.Year, currentDate.Month, 1),
-                                EndDate = new DateTime(currentDate.Year, currentDate.Month, daysInMonth),
-                            });
+            List<(String displayText, DateTime startDate, DateTime endDate)> generatedPeriods = currentDate.GenerateDatePeriods(numberHistoricalMonths);
 
-            for (Int32 i = 1; i <= numberHistoricalMonths; i++)
-            {
-                DateTime nextdate = currentDate.AddMonths(i * -1);
-                daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-                datePeriods.Add(new DatePeriod
-                                {
-                                    DisplayText = $"{nextdate:MMMM yyyy}",
-                                    StartDate = new DateTime(nextdate.Year, nextdate.Month, 1),
-                                    EndDate = new DateTime(nextdate.Year, nextdate.Month, daysInMonth),
-                                });
-            }
+            generatedPeriods.ForEach(p => datePeriods.Add(new DatePeriod
+                                                          {
+                                                              DisplayText = p.displayText,
+                                                              EndDate = p.endDate,
+                                                              StartDate = p.startDate
+                                                          }));
 
             return datePeriods;
         }
