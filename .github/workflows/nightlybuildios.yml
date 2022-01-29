@@ -24,9 +24,6 @@ jobs:
     - name: Cache Simulator Data
       run: echo ::set-env name=IOSSIMULATORS::"$(xcrun simctl list devices --j | jq -c -j '.devices | to_entries[] | (.key | capture("com\\.apple\\.CoreSimulator\\.SimRuntime\\.iOS-(?<version>.+)")) as {$version} | .value[] | {name:"\(.name) (\($version|sub("-"; ".")))", udid}')"    
 
-    - name: log out simulators
-      run: xcrun instruments -s devices          
-
     - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
