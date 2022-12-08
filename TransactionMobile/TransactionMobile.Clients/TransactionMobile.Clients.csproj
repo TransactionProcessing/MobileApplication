@@ -7,7 +7,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ClientProxyBase" Version="1.0.14" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="TransactionProcessorACL.DataTransferObjects" Version="1.0.13-build32" />
 	</ItemGroup>
 </Project>
